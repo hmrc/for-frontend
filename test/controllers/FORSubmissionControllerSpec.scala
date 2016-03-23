@@ -70,7 +70,7 @@ class FORSubmissionControllerSpec extends FreeSpec with Matchers {
 		}
 
     def createController(submitter: StubSubmitBRI = null) = {
-      play.api.Play.start(FakeApplication())
+      play.api.Play.start(FakeApplication(additionalConfiguration = Map("auditing.enabled" -> false)))
       new TestController(submitter)
     }
   }
