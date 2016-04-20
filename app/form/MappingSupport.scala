@@ -127,12 +127,13 @@ object MappingSupport {
     Some((details.phone.get, details.email.get, details.emailConfirmed.get))
   ) verifying emailsMatch
 
-  val alternativeContactContactDetailsMapping = alternativeContactDetailsMapping verifying contactContactDetailsConstraint
-
   def alternativeContactMapping(prefix: String): Mapping[Contact] = mapping(
     "fullName" -> text(minLength = 1, maxLength = 50),
-    "contactDetails" -> alternativeContactContactDetailsMapping,
-    "address" -> addressMapping(s"$prefix.address"))(Contact.apply)(Contact.unapply)
+    "contactDetails" -> optional(alternativeContactDetailsMapping),
+    "address" -> optional(addressMapping(s"$prefix.address")))(Contact.apply)(Contact.unapply) verifying(
+    Errors.contactDetailsMissing,
+    c => c.contactDetails.isDefined || c.address.isDefined
+    )
 
   def parkingDetailsMapping(key: String): Mapping[ParkingDetails] = mapping(
     "openSpaces" -> default(number(min = 0), 0).verifying(Errors.maxLength, _ <= 9999),

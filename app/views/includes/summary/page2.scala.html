@@ -3,10 +3,14 @@
 @import models.pages._
 @import models.serviceContracts.submissions._
 
-@(p2: CustomerDetails, summary: Summary)(implicit requestHeader: RequestHeader,  lang: Lang)
+@(p2: CustomerDetails, summary: Summary)(implicit requestHeader: RequestHeader, lang: Lang)
 
 @underReview = @{
-  if(summary.isUnderReview){"<br />" + Messages("label.underReview")} else{""}
+    if(summary.isUnderReview) {
+        "<br />" + Messages("label.underReview")
+    } else {
+        ""
+    }
 }
 
 <li><h2 class="heading-medium no-margin-top">@Messages("section2.heading")</h2></li>
@@ -31,14 +35,20 @@
 }
 
 @if(p2.userType == UserTypeOwner || p2.userType == UserTypeOccupier) {
-    
+
     @p2.contactAddressType.map { cat =>
-        
+
         @summaryBlock(Messages("label.contactAddressType"), 2, "contactAddressType") {
             @cat match {
-                case ContactAddressTypeMain => { @Html(summary.address.get.multiLine) @Html(underReview) }
-                case ContactAddressTypeAlternativeAddress => { @Messages("label.alternativeAddress")  }
-                case ContactAddressTypeAlternativeContact => { @Messages("label.alternativeContact") }
+                case ContactAddressTypeMain => {
+                    @Html(summary.address.get.multiLine) @Html(underReview)
+                }
+                case ContactAddressTypeAlternativeAddress => {
+                    @Messages("label.alternativeAddress")
+                }
+                case ContactAddressTypeAlternativeContact => {
+                    @Messages("label.alternativeContact")
+                }
             }
         }
 
@@ -55,12 +65,16 @@
         @if(cat == ContactAddressTypeAlternativeContact) {
             @summaryBlock(Messages("label.alternativeContact"), 2, "alternativeContact_address_buildingNameNumber_text") {
                 @p2.alternativeContact.map { contact =>
-                        @Html(contact.fullname)<br />
-                        @contact.contactDetails.phone.map { p => @Html(p)<br />}
-                        @contact.contactDetails.email.map { e => @Html(e)<br />}
-                        <br />
-                    @defining(Seq[String](contact.address.buildingNameNumber, contact.address.street1.getOrElse(""), contact.address.street2.getOrElse(""), contact.address.postcode).filter(!_.isEmpty).mkString("<br />")) { ahtml =>
-                        @Html(ahtml)
+                    @Html(contact.fullname) <br />
+                    @contact.contactDetails.map { cd =>
+                        @cd.phone.map { p => @Html(p) <br /> }
+                        @cd.email.map { e => @Html(e) <br /> }
+                    }
+                <br />
+                    @contact.address.map { a =>
+                        @defining(Seq[String](a.buildingNameNumber, a.street1.getOrElse(""), a.street2.getOrElse(""), a.postcode).filterNot(_.isEmpty).mkString("<br />")) { address =>
+                            @Html(address)
+                        }
                     }
                 }
             }

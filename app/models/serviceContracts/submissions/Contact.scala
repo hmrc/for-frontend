@@ -16,4 +16,4 @@
 
 package models.serviceContracts.submissions
 
-case class Contact(fullname:String,contactDetails:ContactDetails,address:Address)
+case class Contact(fullname: String, contactDetails: Option[ContactDetails], address: Option[Address])
