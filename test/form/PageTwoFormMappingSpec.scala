@@ -168,7 +168,7 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
       .updated(errorKey.alternativeContactEmail2, "david@test.com")
       .updated(errorKey.alternativeContactBuildingName, "15")
       .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
-    validatePhone(pageTwoForm, data, "alternativeContact.contactDetails")
+    validateOptionalPhone(pageTwoForm, data, "alternativeContact.contactDetails")
   }
 
   it should "validate full name" in {
@@ -194,7 +194,7 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     }
   }
 
-  it should "restrict the alterantive contact's name to 50 characters" in {
+  it should "restrict the alternative contact's name to 50 characters" in {
     val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
       .updated(errorKey.alternativeContactFullName, "11111")
       .updated(errorKey.alternativeContactPhone, "12345 12345")
@@ -206,13 +206,35 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     validateLettersNumsSpecCharsUptoLength(errorKey.alternativeContactFullName, 50, pageTwoForm, formData)
   }
 
-  it should "not require alternative contact details when contact addres type is alternative contact IF the user is a type of agent" in {
+  it should "not require alternative contact details when contact address type is alternative contact IF the user is a type of agent" in {
     Seq(UserTypeOwnersAgent.name, UserTypeOccupiersAgent.name) foreach { agentType =>
       val d = baseFormData.updated(errorKey.userType, agentType)
         .updated(errorKey.contactAddressType, ContactAddressTypeAlternativeContact.name)
 
       mustBind(pageTwoForm.bind(d)) { x => assert(x.userType.name == agentType) }
     }
+  }
+
+  it should "only require one of phone, email, or address for alternative contact" in {
+    val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
+      .updated(errorKey.alternativeContactFullName, "11111")
+      .updated(errorKey.alternativeContactPhone, "12345 12345")
+      .updated(errorKey.alternativeContactEmail1, "david@test.com")
+      .updated(errorKey.alternativeContactEmail2, "david@test.com")
+      .updated(errorKey.alternativeContactBuildingName, "15")
+      .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
+
+    val noPhone = pageTwoForm.bind(formData - errorKey.alternativeContactPhone)
+    doesNotContainErrors(noPhone)
+
+    val noEmail = pageTwoForm.bind(formData - errorKey.alternativeContactEmail1 - errorKey.alternativeContactEmail2)
+    doesNotContainErrors(noEmail)
+
+    val noAddress = pageTwoForm.bind(formData - errorKey.alternativeContactBuildingName - errorKey.alternativeContactPostcode)
+    doesNotContainErrors(noAddress)
+
+    val noPhoneOrEmail = pageTwoForm.bind(formData - errorKey.alternativeContactPhone - errorKey.alternativeContactEmail1 - errorKey.alternativeContactEmail2)
+    doesNotContainErrors(noPhoneOrEmail)
   }
 
   object TestData {

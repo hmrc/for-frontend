@@ -28,8 +28,13 @@ object MappingSpecs extends DateMappingSpecs with DurationMappingSpecs with Addr
   }
 
   def validatePhone[T](form: Form[T], formData: Map[String, String], prefix: String) = {
+    validateOptionalPhone(form, formData, prefix)
     val fieldName = prefix + ".phone"
     verifyIsMandatory(fieldName, form, formData)
+  }
+
+  def validateOptionalPhone[T](form: Form[T], formData: Map[String, String], prefix: String) = {
+    val fieldName = prefix + ".phone"
     canOnlyContainNumbersAndSpecialCharacters(fieldName, form, formData)
     limitedToNChars(fieldName, 20, form, formData)
   }

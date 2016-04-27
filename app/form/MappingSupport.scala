@@ -38,7 +38,7 @@ object MappingSupport {
   }
   })
 
-  val contactContactDetailsConstraint: Constraint[ContactDetails] = Constraint("constraints.alt.contact.contact.details")({
+  val alternativeContactDetailsConstraint: Constraint[ContactDetails] = Constraint("constraints.alt.contact.contact.details")({
     contactDetails => {
       val cond = contactDetails.phone.isDefined || contactDetails.email.isDefined
       val fields = Seq("phone", "email1")
@@ -118,14 +118,14 @@ object MappingSupport {
   }
 
   val alternativeContactDetailsMapping = mapping(
-    "phone" -> nonEmptyTextOr("alternativeContact.contactDetails.phone", phoneNumber),
-    "email1" -> email,
-    "email2" -> email
+    "phone" -> optional(phoneNumber),
+    "email1" -> optional(email),
+    "email2" -> optional(email)
   )((p, e1, e2) =>
-    ContactDetails(Some(p), Some(e1), Some(e2))
+    ContactDetails(p, e1, e2)
   )(details =>
-    Some((details.phone.get, details.email.get, details.emailConfirmed.get))
-  ) verifying emailsMatch
+    Some((details.phone, details.email, details.emailConfirmed))
+  ) verifying emailsMatch verifying alternativeContactDetailsConstraint
 
   def alternativeContactMapping(prefix: String): Mapping[Contact] = mapping(
     "fullName" -> text(minLength = 1, maxLength = 50),
