@@ -152,6 +152,7 @@ label.phone=Phone number
 label.contactDetails.phone=Phone
 label.contactAddressType=Which address would you like us to use if we need to write to you in future?
 hint.contacts=In case we need to contact them about the property
+hint.alternative.contact=Please provide a name and one or more ways to contact them
 label.contactDetails.email1=Email
 label.alternativeAddress=Alternative address
 label.alternativeAddress.buildingNameNumber=Address line 1
