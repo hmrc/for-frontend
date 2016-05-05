@@ -20,13 +20,15 @@ import actions.RefNumAction
 import connectors.HODConnector._
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.{HeaderCarrier, Upstream4xxResponse}
+import uk.gov.hmrc.play.http.{BadRequestException, HeaderCarrier}
 
 import scala.concurrent.Future
 
 object AddressLookup extends FrontendController {
   def getAddress(postcode: String) = RefNumAction.async { implicit request =>
-    AddressLookupConnector.getAddress(postcode, hc) map { Ok(_) } recoverWith { case Upstream4xxResponse(_, 400, _, _) => BadRequest }
+    AddressLookupConnector.getAddress(postcode, hc) map { Ok(_) } recoverWith {
+      case b: BadRequestException => BadRequest
+    }
   }
 }
 
