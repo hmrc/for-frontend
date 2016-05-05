@@ -127,4 +127,8 @@ object Application extends FrontendController {
         InternalServerError(views.html.error.error500())
     }
   }
+
+  def docs = Action { implicit request =>
+    Ok(views.html.api.apidoc())
+  }
 }
