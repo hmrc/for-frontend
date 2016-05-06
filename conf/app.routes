@@ -65,4 +65,5 @@ GET         /inpagefeedbackThankyou    controllers.feedback.Feedback.inPageFeedb
 GET 		/inpagefeedbackNoLogin	   controllers.feedback.Feedback.inPageFeedbackNoLogin
 
 # AGENT API
-GET         /api/documentation         controllers.Application.docs
+GET         /api/documentation         controllers.AgentAPI.getDocs
+GET         /api/schema/*name              controllers.AgentAPI.getSchema(name)

@@ -19,7 +19,7 @@ package connectors
 import controllers.toFut
 import models.FORLoginResponse
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, JsValue}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 import useCases.ReferenceNumber
@@ -48,6 +48,10 @@ object HODConnector extends HODConnector with ServicesConfig {
     http.GET[Document](url(s"savedforlater/$r")).map(Some.apply) recoverWith {
       case n: NotFoundException => None
     }
+  }
+
+  def getSchema(schemaName: String)(implicit hc: HeaderCarrier): Future[JsValue] = {
+    http.GET[JsValue](url(s"schema/$schemaName"))
   }
 }
 
