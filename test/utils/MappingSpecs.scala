@@ -173,9 +173,9 @@ trait DateMappingSpecs { this: CommonSpecs =>
     val data = formData.updated(field + ".year", "2014")
 
     val invalid = Seq("-1", "0", "13", "25", "200", "2000000", "erkjl")
-    validateError(key, invalid, Errors.invalidDate, form, data) 
+    validateError(key, invalid, Errors.invalidDate, form, data)
 
-    val valid = (1 to 12).map(_.toString) 
+    val valid = (1 to 12).map(_.toString)
     validateNoError(field, valid, form, data)
   }
 

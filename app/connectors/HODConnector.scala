@@ -16,6 +16,7 @@
 
 package connectors
 
+import config.ForGlobal
 import controllers.toFut
 import models.FORLoginResponse
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -32,7 +33,7 @@ object HODConnector extends HODConnector with ServicesConfig {
 
   lazy val serviceUrl = baseUrl("for-hod-adapter")
 
-  val http = playconfig.WSHttp
+  val http = ForGlobal.forHttp
 
   private def url(path: String) = s"$serviceUrl/for/$path"
 

@@ -16,6 +16,7 @@
 
 package connectors
 
+import config.ForGlobal
 import models.serviceContracts.submissions.Submission
 import play.api.libs.json.{JsValue, Json}
 import playconfig.WSHttp
@@ -29,13 +30,14 @@ import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
   lazy val serviceUrl = baseUrl("for-hod-adapter")
+  val http = ForGlobal.forHttp
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] = {
-    WSHttp.PUT(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
+    http.PUT(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
   }
 
   def submit(refNum: String, submission: JsValue)(implicit hc: HeaderCarrier): Future[Result] = {
-    WSHttp.PUT(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
+    http.PUT(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
       Result(ResponseHeader(r.status), Enumerator(r.body.getBytes))
     }
   }
