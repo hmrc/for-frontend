@@ -33,6 +33,8 @@ import play.api.data.FormError
 import play.api.data.Form
 import form.PageSixForm._
 import play.api.data.Mapping
+
+
 class PageSixMappingSpec extends FlatSpec with Matchers {
 
   import PageSixForm._
@@ -288,6 +290,14 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
          .updated(getKeyStepped(v).stepTo + ".year", "2014")
       }
     }
+
+
+//   it should "stop users to continue to the next page if stepTo Date is before stepFrom Date" in{
+//      val d = new SimpleDateFormat("dd-MM-yyyy")
+//      val c = d.format("1-1-2015")
+//      toDateIsAfterFromDate("1-1-2014")
+//    }
+
 
   }
 }

@@ -24,6 +24,7 @@ import play.api.data.Forms.{mapping, nonEmptyText, optional}
 import play.api.data._
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
+import play.api.data.validation.Constraint
 
 object PageSixForm {
 
@@ -43,11 +44,18 @@ object PageSixForm {
     val rentOpenEnded = "rentOpenEnded"
   }
 
+  def toDateIsAfterFromDate(index: String): Constraint[SteppedDetails] = Constraint("constraints.steppedDetails.toAfterFrom") { steppedDetails => {
+    val cond = steppedDetails.stepTo.isAfter(steppedDetails.stepFrom)
+    createFieldConstraintFor(cond, Errors.toDateIsAfterFromDate, Seq(s"$index.${keys.to}.day"))
+  }
+  }
+
+
   val steppedDetailsMapping = (index: String) => mapping(
     (index + "." + keys.from) -> dateFieldsMapping(s"$index.stepFrom", allowFutureDates = true),
     (index + "." + keys.to) -> dateFieldsMapping(s"$index.stepTo", allowFutureDates = true),
     (index + "." + keys.amount) -> nonNegativeCurrency
-  )(SteppedDetails.apply)(SteppedDetails.unapply)
+  )(SteppedDetails.apply)(SteppedDetails.unapply).verifying(toDateIsAfterFromDate(index))
 
   val written = keys.writtenAgreement
 
