@@ -24,6 +24,7 @@ import models.pages.SummaryBuilder
 import org.joda.time.DateTime
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Writes
 import uk.gov.hmrc.crypto.{ApplicationCrypto, CompositeSymmetricCrypto}
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
@@ -56,6 +57,12 @@ object WSHttp extends WSGet with WSPut with WSPost with WSDelete with AppName {
     val hc2 = if (useDummyIp) hc.withExtraHeaders((trueClientIp, "")) else hc
     super.doGet(url)(hc2).map { res =>
       if (res.status == 401) throw Upstream4xxResponse(res.body, 401, 401, res.allHeaders) else res
+    }
+  }
+
+  override def doPut[A](url: String, body: A)(implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
+    super.doPut(url, body)(rds, hc) map { res =>
+      if (res.status == 400) throw new BadRequestException(res.body) else res
     }
   }
 }

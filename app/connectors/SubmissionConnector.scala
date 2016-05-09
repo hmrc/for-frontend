@@ -17,11 +17,13 @@
 package connectors
 
 import models.serviceContracts.submissions.Submission
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import playconfig.WSHttp
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.iteratee.Enumerator
+import play.api.mvc.{ResponseHeader, Result}
 
 import scala.concurrent.Future
 
@@ -30,6 +32,12 @@ object SubmissionConnector extends SubmissionConnector with ServicesConfig {
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] = {
     WSHttp.PUT(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
+  }
+
+  def submit(refNum: String, submission: JsValue)(implicit hc: HeaderCarrier): Future[Result] = {
+    WSHttp.PUT(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
+      Result(ResponseHeader(r.status), Enumerator(r.body.getBytes))
+    }
   }
 }
 

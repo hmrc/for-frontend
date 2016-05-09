@@ -16,10 +16,11 @@
 
 package controllers
 
-import connectors.HODConnector
-import play.api.mvc.Action
-import play.api.mvc.Results._
+import config.ForGlobal
+import connectors.{HODConnector, SubmissionConnector}
+import play.api.mvc.{Action, AnyContent, Request}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.{BadRequestException, HeaderCarrier, SessionKeys, Upstream4xxResponse}
 
 object AgentAPI extends FrontendController {
 
@@ -29,5 +30,21 @@ object AgentAPI extends FrontendController {
 
   def getSchema(name: String) = Action.async { implicit request =>
     HODConnector.getSchema(name) map { Ok(_) }
+  }
+
+  def submit(refNum: String, postcode: String): Action[AnyContent] = Action.async { implicit request =>
+    request.body.asJson.map { js =>
+      HODConnector.verifyCredentials(refNum.dropRight(3), refNum.takeRight(3), postcode).flatMap { lr =>
+        val hc = withAuthToken(request, lr.forAuthToken)
+        SubmissionConnector.submit(refNum, js)(hc)
+      }.recover {
+        case b: BadRequestException => BadRequest(b.message)
+        case Upstream4xxResponse(body, 401, _, _) => Unauthorized(body)
+      }
+    }.getOrElse(BadRequest)
+  }
+
+  private def withAuthToken(request: Request[_], authToken: String): HeaderCarrier = {
+    HeaderCarrier.fromHeadersAndSession(request.headers, request.session + (SessionKeys.authToken -> authToken))
   }
 }
