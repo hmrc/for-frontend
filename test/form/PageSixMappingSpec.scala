@@ -49,8 +49,8 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
         leaseAgreementHasBreakClause = true,
         breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
         agreementIsStepped = true,
-        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(2011, 12, 2), stepTo = new LocalDate(2012, 2, 12), amount = 123.45)),
-        startDate = new RoughDate(month = 1, year = 2014),
+        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(1900, 12, 2), stepTo = new LocalDate(2018, 2, 12), amount = 123.45)),
+        startDate = new RoughDate(month = 3, year = 2013),
         rentOpenEnded = false,
         leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
       )),
@@ -201,10 +201,6 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
     validateDate(getKeyStepped(0).stepFrom, pageSixForm, fullData)
   }
 
-  it should "validate stepped rent to date as a date" in {
-    validateDate(getKeyStepped(0).stepTo, pageSixForm, fullData)
-  }
-
   it should "validate the second stepped rent step amount as currency" in {
     validateCurrency(getKeyStepped(1).amount, pageSixForm, fullDataWithSecondRentStep)
   }
@@ -213,9 +209,6 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
     validateDate(getKeyStepped(1).stepFrom, pageSixForm, fullDataWithSecondRentStep)
   }
 
-  it should "validate the second stepped rent step to date as a date" in {
-    validateDate(getKeyStepped(1).stepTo, pageSixForm, fullDataWithSecondRentStep)
-  }
 
   it should "not allow more than 7 stepped rents" in {
     val with7SteppedRents = addSteppedRents(6, fullData)
@@ -224,6 +217,13 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
     val with8SteppedRents = addSteppedRents(7, fullData)
     val form = bind(with8SteppedRents)
     mustOnlyContainError(s"${keys.writtenAgreement}.steppedDetails", Errors.tooManySteppedRents, form)
+  }
+
+  it should "validate the step to date is not before the step from date" in {
+    val data = fullData.updated(getKeyStepped(0).stepFrom +".year", "2019")
+    val f = bind(data)
+    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day",Errors.toDateIsAfterFromDate,f)
+
   }
 
   object TestData {
@@ -259,13 +259,13 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
       writtenAgreementIsStepped -> "true",
       getKeyStepped(0).stepFrom + ".day" -> "2",
       getKeyStepped(0).stepFrom + ".month" -> "12",
-      getKeyStepped(0).stepFrom + ".year" -> "2011",
+      getKeyStepped(0).stepFrom + ".year" -> "1900",
       getKeyStepped(0).stepTo + ".day" -> "12",
       getKeyStepped(0).stepTo + ".month" -> "2",
-      getKeyStepped(0).stepTo + ".year" -> "2012",
+      getKeyStepped(0).stepTo + ".year" -> "2018",
       getKeyStepped(0).amount -> "123.45",
-      writtenStartDate + ".month" -> "1",
-      writtenStartDate + ".year" -> "2014",
+      writtenStartDate + ".month" -> "3",
+      writtenStartDate + ".year" -> "2013",
       writtenRentOpenEnded -> "false",
       writtenLeaseLength + ".years" -> "3",
       writtenLeaseLength + ".months" -> "4")
@@ -274,30 +274,21 @@ class PageSixMappingSpec extends FlatSpec with Matchers {
       updated(getKeyStepped(1).amount, "456.78").
       updated(getKeyStepped(1).stepFrom + ".day", "1").
       updated(getKeyStepped(1).stepFrom + ".month", "1").
-      updated(getKeyStepped(1).stepFrom + ".year", "2013").
+      updated(getKeyStepped(1).stepFrom + ".year", "1900").
       updated(getKeyStepped(1).stepTo + ".day", "1").
       updated(getKeyStepped(1).stepTo + ".month", "1").
-      updated(getKeyStepped(1).stepTo + ".year", "2014")
+      updated(getKeyStepped(1).stepTo + ".year", "2018")
 
     def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] = {
       (1 to n).foldLeft(data) { (s, v) =>
         s.updated(getKeyStepped(v).amount, "456.78")
          .updated(getKeyStepped(v).stepFrom + ".day", "1")
          .updated(getKeyStepped(v).stepFrom + ".month", "1")
-         .updated(getKeyStepped(v).stepFrom + ".year", "2013")
+         .updated(getKeyStepped(v).stepFrom + ".year", "1900")
          .updated(getKeyStepped(v).stepTo + ".day", "1")
          .updated(getKeyStepped(v).stepTo + ".month", "1")
-         .updated(getKeyStepped(v).stepTo + ".year", "2014")
+         .updated(getKeyStepped(v).stepTo + ".year", "2018")
       }
     }
-
-
-//   it should "stop users to continue to the next page if stepTo Date is before stepFrom Date" in{
-//      val d = new SimpleDateFormat("dd-MM-yyyy")
-//      val c = d.format("1-1-2015")
-//      toDateIsAfterFromDate("1-1-2014")
-//    }
-
-
   }
 }

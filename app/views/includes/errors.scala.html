@@ -1,29 +1,54 @@
 @import play.api.data._
-	@(form:Form[_], isAgent: Boolean)(implicit requestHeader: RequestHeader,  lang: Lang)
+@(form: Form[_], isAgent: Boolean)(implicit requestHeader: RequestHeader, lang: Lang)
 
-	@showError(error:FormError) = {
+@showError(error: FormError) = {
 
-		<li><a href="#@error.key.replace("[", "_").replace(".", "_").replace("]", "_").replace("__", "_")"><span>@if(isAgent){ @if(!Messages("label."+simplify(error.key)+".agent").endsWith("agent")){ @Html(Messages("label."+simplify(error.key)+".agent")) }else{ @Html(Messages("label."+simplify(error.key)+"")) }}else{@Html(Messages("label."+simplify(error.key)+""))}</span> - @Messages(simplify(error.message), error.args:_*)</a></li>
-	}
+    <li><a href="#@error.key.replace("[", "_").replace(".", "_").replace("]", "_").replace("__", "_")"><span>@if(isAgent) {
+        @if(!Messages("label." + simplify(error.key) + ".agent").endsWith("agent")) {
+            @Html(Messages("label." + simplify(error.key) + ".agent"))
+        } else {
+            @Html(Messages("label." + simplify(error.key) + ""))
+        }
+    } else {
+        @Html(Messages("label." + simplify(error.key) + ""))
+    }</span> - @Messages(stripIndices(error.message), error.args: _*)</a></li>
+}
 
-	@simplify(field: String)=@{
-		if (field.endsWith("day")) {"date.day"}
-		else if (field.endsWith("month")) {"date.month"}
-		else if (field.endsWith("year")) {"date.year"}
-			else if (field.endsWith("months")) {"date.months"}
-				else if (field.endsWith("years")) {"date.years"}
-					else {field.replaceAll("""\[[0-9]\]""", "")}
+@simplify(field: String) = @{
+    if(field.endsWith("day")) {
+        "date.day"
+    }
+    else if(field.endsWith("month")) {
+        "date.month"
+    }
+    else if(field.endsWith("year")) {
+            "date.year"
+        }
+        else if(field.endsWith("months")) {
+                "date.months"
+            }
+            else if(field.endsWith("years")) {
+                    "date.years"
+                }
+                else {
+                    field.replaceAll("""\[[0-9]\]""", "")
+                }
 
-	}
+}
 
-	@if(form.hasErrors) {
-		<div class="form-error alert alert-danger" tabindex="-1" role="group" aria-labelledby="error-summary-heading" >
-			<h2 id="error-summary-heading">@Messages("label.checkTheForm")</h2>
-			<p>@Messages("label.fixTheFollowing")</p>
-			<ul>
-			@for(error <- form.errors) {
-				@showError(error)
-			}
-			</ul>
-		</div>
-	}
+@stripIndices(field: String) = @{
+    field.replaceAll("""\[[0-9]\]""", "")
+}
+
+
+@if(form.hasErrors) {
+    <div class="form-error alert alert-danger" tabindex="-1" role="group" aria-labelledby="error-summary-heading" >
+        <h2 id="error-summary-heading">@Messages("label.checkTheForm")</h2>
+        <p>@Messages("label.fixTheFollowing")</p>
+        <ul>
+        @for(error <- form.errors) {
+            @showError(error)
+        }
+        </ul>
+    </div>
+}

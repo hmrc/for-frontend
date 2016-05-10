@@ -399,7 +399,7 @@ section10.heading=What the rent includes
 label.provideDetails=Please provide details in the text box below
 label.partRent=Is the rent paid for only part of the property?
 label.partRent.agent=Does your client pay rent for part of the property only?
-hint.partRent= By ''property'', we mean the part of the building covered by your rental/tenancy arrangement. For example, first floor only or one room
+hint.partRent= By ''part of the property'', we mean the part of the building covered by your rental/tenancy arrangement, for example, first floor only or one room
 label.otherProperty=Does this rent include any other property?
 hint.otherProperty=For example, a neighbouring property or part of another floor
 label.livingAccomodation=Does this rent include any living accommodation?
@@ -678,7 +678,9 @@ error.login.1attemptsleft=We are still having problems finding the details you h
 error.login.2attemptsleft=We are still having problems matching the details you have entered. For help, call our technical support line on 03000 508508 (8am to 5pm weekdays - local rates apply). You have two more attempts to enter the correct details, before you are locked out for 24 hours.
 error.login.3attemptsleft=We are still having problems matching the details you have entered. Please enter the reference number and postcode exactly as they are in the letter we sent you.
 error.login.lockedOut=You are now locked out. You can try again after 24 hours or call our technical support line on 03000 508508 (8am to 5pm weekdays - local rates apply) for help.
-error.writtenAgreement.steppedDetails.stepTo.day= ''Step  to'' date must be after ''Step from'' date
+writtenAgreement.steppedDetails.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day= ''Step  to'' date must be after ''Step from'' date
+
+
 
 
 #ERROR PAGES

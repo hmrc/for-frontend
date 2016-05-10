@@ -17,9 +17,7 @@
 package utils
 
 import form.Errors
-import org.scalatest
-import org.scalatest.{Matchers, Notifying, Alerting}
-import play.api.Logger
+import org.scalatest.Matchers
 import play.api.data.Form
 
 object FormBindingTestAssertions extends Matchers {

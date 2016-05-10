@@ -22,9 +22,9 @@ import models.pages.{PageSix, _}
 import models.serviceContracts.submissions._
 import play.api.data.Forms.{mapping, nonEmptyText, optional}
 import play.api.data._
+import play.api.data.validation.Constraint
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
-import play.api.data.validation.Constraint
 
 object PageSixForm {
 
@@ -46,7 +46,7 @@ object PageSixForm {
 
   def toDateIsAfterFromDate(index: String): Constraint[SteppedDetails] = Constraint("constraints.steppedDetails.toAfterFrom") { steppedDetails => {
     val cond = steppedDetails.stepTo.isAfter(steppedDetails.stepFrom)
-    createFieldConstraintFor(cond, Errors.toDateIsAfterFromDate, Seq(s"$index.${keys.to}.day"))
+    createFieldConstraintFor(cond,  Errors.toDateIsAfterFromDate, Seq (s"$index.${keys.to}.day"))
   }
   }
 

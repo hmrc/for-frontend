@@ -1,15 +1,3 @@
 @(error:FormError)(implicit requestHeader: RequestHeader,  lang: Lang)
 
-<p class="error">@Messages(simplify(error.message), error.args:_*)</p>
-
-
-    @simplify(field: String)=@{
-        if (field.endsWith("day")) {"date.day"}
-        else if (field.endsWith("month")) {"date.month"}
-        else if (field.endsWith("year")) {"date.year"}
-            else if (field.endsWith("months")) {"date.months"}
-                else if (field.endsWith("years")) {"date.years"}
-                    else {field.replaceAll("""\[[0-9]\]""", "")}
-
-    }
-
+<p class="error">@Messages(error.message, error.args:_*)</p>
