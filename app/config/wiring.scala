@@ -47,7 +47,9 @@ object FORAuditConnector extends AuditConnector with AppName {
   override lazy val auditingConfig = LoadAuditingConfig("auditing")
 }
 
-object WSHttp extends WSGet with WSPut with WSPost with WSDelete with AppName {
+object WSHttp extends ForHttp
+
+trait ForHttp extends WSGet with WSPut with WSPost with WSDelete with AppName {
   override val hooks = Seq.empty
   val useDummyIp = ForConfig.useDummyIp
 
@@ -55,16 +57,24 @@ object WSHttp extends WSGet with WSPut with WSPost with WSDelete with AppName {
   // An IP address needs to be injected because of the lockout mechanism
   override def doGet(url: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val hc2 = if (useDummyIp) hc.withExtraHeaders((trueClientIp, "")) else hc
-    super.doGet(url)(hc2).map { res =>
-      if (res.status == 401) throw Upstream4xxResponse(res.body, 401, 401, res.allHeaders) else res
+    get(url)(hc2).map { res =>
+      res.status match {
+        case 401 => throw Upstream4xxResponse(res.body, 401, 401, res.allHeaders)
+        case 409 => throw Upstream4xxResponse(res.body, 409, 409, res.allHeaders)
+        case _ => res
+      }
     }
   }
 
   override def doPut[A](url: String, body: A)(implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPut(url, body)(rds, hc) map { res =>
+    put(url, body)(rds, hc) map { res =>
       if (res.status == 400) throw new BadRequestException(res.body) else res
     }
   }
+
+  protected def get(url: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = super.doGet(url)(hc)
+
+  protected def put[A](url: String, body: A)(implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = super.doPut(url, body)(rds, hc)
 }
 
 object FormPartialProvider extends FormPartialRetriever {

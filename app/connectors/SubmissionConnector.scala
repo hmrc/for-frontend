@@ -16,7 +16,7 @@
 
 package connectors
 
-import config.ForGlobal
+import config.ForConfig
 import models.serviceContracts.submissions.Submission
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.iteratee.Enumerator
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
   lazy val serviceUrl = baseUrl("for-hod-adapter")
-  val http = play.api.Play.current.global.asInstanceOf[ForGlobal].forHttp
+  val http = ForConfig.http
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] = {
     http.PUT(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())

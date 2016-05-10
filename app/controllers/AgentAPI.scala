@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.ForGlobal
 import connectors.{HODConnector, SubmissionConnector}
 import play.api.mvc.{Action, AnyContent, Request}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -40,6 +39,7 @@ object AgentAPI extends FrontendController {
       }.recover {
         case b: BadRequestException => BadRequest(b.message)
         case Upstream4xxResponse(body, 401, _, _) => Unauthorized(body)
+        case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
       }
     }.getOrElse(BadRequest)
   }

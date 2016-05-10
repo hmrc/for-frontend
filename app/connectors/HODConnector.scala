@@ -16,7 +16,7 @@
 
 package connectors
 
-import config.ForGlobal
+import config.ForConfig
 import controllers.toFut
 import models.FORLoginResponse
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -24,16 +24,16 @@ import play.api.libs.json.{Format, JsValue}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 import useCases.ReferenceNumber
+import views.html.helper.urlEncode
 
 import scala.concurrent.Future
-import views.html.helper.urlEncode
 
 object HODConnector extends HODConnector with ServicesConfig {
   implicit val f: Format[Document] = Document.formats
 
   lazy val serviceUrl = baseUrl("for-hod-adapter")
 
-  val http = play.api.Play.current.global.asInstanceOf[ForGlobal].forHttp
+  val http = ForConfig.http
 
   private def url(path: String) = s"$serviceUrl/for/$path"
 

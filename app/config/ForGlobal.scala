@@ -23,7 +23,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Results._
 import play.api.mvc._
 import play.twirl.api.Html
-import playconfig.WSHttp
+import playconfig.{ForHttp, WSHttp}
 import uk.gov.hmrc.play.audit.filters.FrontendAuditFilter
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -40,7 +40,7 @@ import scala.concurrent.duration.Duration
 object ForGlobal extends ForGlobal
 
 trait ForGlobal extends DefaultFrontendGlobal {
-  lazy val forHttp: HttpGet with HttpPut with HttpPost with HttpDelete = WSHttp
+  lazy val forHttp: ForHttp = WSHttp
 
   def auditConnector: uk.gov.hmrc.play.audit.http.connector.AuditConnector = AuditServiceConnector
 

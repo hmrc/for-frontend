@@ -24,6 +24,7 @@ import scala.concurrent.duration._
 
 object ForConfig {
   val config = Play.current.configuration
+  val http = Play.current.global.asInstanceOf[ForGlobal].forHttp
 
   lazy val controllerConfigs = config.underlying.as[Config]("controllers")
   def metricsConfig: Option[Configuration] = config.getConfig("microservice.metrics")
