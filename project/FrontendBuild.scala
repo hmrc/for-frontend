@@ -61,7 +61,19 @@ private object AppDependencies {
     }.test
   }
 
-  def apply() = compile ++ Test()
+  object IntegrationTest {
+    def apply() = new TestDependencies {
+      override lazy val scope = "it"
+
+      override lazy val test = Seq(
+        "org.scalatestplus" %% "play" % "1.2.0",
+        "org.scalatest" %% "scalatest" % "2.2.2" % scope,
+        "org.pegdown" % "pegdown" % "1.4.2" % scope
+      )
+    }.test
+  }
+
+  def apply() = compile ++ Test() ++ IntegrationTest()
 
 }
 

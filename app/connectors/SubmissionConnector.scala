@@ -18,13 +18,12 @@ package connectors
 
 import config.ForGlobal
 import models.serviceContracts.submissions.Submission
-import play.api.libs.json.{JsValue, Json}
-import playconfig.WSHttp
-import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.iteratee.Enumerator
+import play.api.libs.json.JsValue
 import play.api.mvc.{ResponseHeader, Result}
+import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
 

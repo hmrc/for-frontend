@@ -37,12 +37,10 @@ import useCases.Now
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 
-object ForGlobal extends ForGlobal {
-  override val forHttp = WSHttp
-}
+object ForGlobal extends ForGlobal
 
 trait ForGlobal extends DefaultFrontendGlobal {
-  val forHttp: HttpGet with HttpPut with HttpPost with HttpDelete
+  lazy val forHttp: HttpGet with HttpPut with HttpPost with HttpDelete = WSHttp
 
   def auditConnector: uk.gov.hmrc.play.audit.http.connector.AuditConnector = AuditServiceConnector
 

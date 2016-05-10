@@ -1,33 +1,29 @@
 package aat
 
 import config.ForGlobal
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, FreeSpecLike, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FreeSpecLike, Matchers}
 import play.api.libs.json.{JsValue, Writes}
 import play.api.test.{FakeApplication, TestServer}
-import uk.gov.hmrc.play.http.{HeaderCarrier, _}
 import uk.gov.hmrc.play.http.hooks.HttpHook
-import uk.gov.hmrc.play.http.ws.{WSDelete, WSGet, WSPost, WSPut}
+import uk.gov.hmrc.play.http.{HeaderCarrier, _}
 
 import scala.concurrent.Future
 
 trait AcceptanceTest extends FreeSpecLike with Matchers with BeforeAndAfterAll {
 
-  val http: HttpGet with HttpPut with HttpPost with HttpDelete
+  val http = new TestHttpClient()
 
   val port = 9521
-  private var server: TestServer = null // scalastyle:ignore
 
-  override def beforeAll() = {
-    server = createServer()
-    server.start()
-  }
+  private var server: TestServer = null
 
-  private def createServer() = {
+  protected def startApp() = {
     val global = new ForGlobal {
-      override val forHttp: WSGet with WSPut with WSPost with WSDelete = http
+      override lazy val forHttp = http
     }
     val app = FakeApplication(withGlobal = Some(global))
-    TestServer(port, app)
+    server = TestServer(port, app)
+    server.start()
   }
 
   override def afterAll() = {
@@ -36,10 +32,11 @@ trait AcceptanceTest extends FreeSpecLike with Matchers with BeforeAndAfterAll {
 }
 
 class TestHttpClient extends HttpGet with HttpPut with HttpPost with HttpDelete {
+  private val baseForUrl = "http://localhost:9522/for"
   type Headers = Seq[(String, String)]
 
   private var stubbedGets: Seq[(String, Headers, HttpResponse)] = Nil // scalastyle:ignore
-  private var stubbedPuts: Seq[(String, Object, Headers, HttpResponse)] = Nil // scalastyle:ignore
+  private var stubbedPuts: Seq[(String, Any, Headers, HttpResponse)] = Nil // scalastyle:ignore
 
   def stubGet(url: String, headers: Seq[(String, String)], response: HttpResponse) = {
     stubbedGets :+= (url, headers, response)
@@ -50,11 +47,15 @@ class TestHttpClient extends HttpGet with HttpPut with HttpPost with HttpDelete 
   }
 
   def stubValidCredentials(ref1: String, ref2: String, postcode: String) = {
-    stubGet(s"http://localhost:9522/$ref1/$ref2/$postcode/verify", Nil, HttpResponse(200))
+    stubGet(s"$baseForUrl/$ref1/$ref2/$postcode/verify", Nil, HttpResponse(200))
   }
 
   def stubInvalidCredentials(ref1: String, ref2: String, postcode: String) = {
-    stubGet(s"http://localhost:9522/$ref1/$ref2/$postcode/verify", Nil, HttpResponse(401))
+    stubGet(s"$baseForUrl/$ref1/$ref2/$postcode/verify", Nil, HttpResponse(401))
+  }
+
+  def stubSubmission(refNum: String, submission: JsValue, headers: Seq[(String, String)], response: HttpResponse) = {
+    stubPut(s"$baseForUrl/submissions/$refNum", submission, headers, response)
   }
 
   override protected def doGet(url: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
@@ -81,7 +82,7 @@ class TestHttpClient extends HttpGet with HttpPut with HttpPost with HttpDelete 
 
   override protected def doDelete(url: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = ???
 
-  override val hooks: Seq[HttpHook] = _
+  override val hooks: Seq[HttpHook] = Nil
 }
 
 class HttpRequestNotStubbed(url: String, hc: HeaderCarrier) extends Exception(s"Request not stubbed: $url - ${hc.headers}")
