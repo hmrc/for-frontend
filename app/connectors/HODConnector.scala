@@ -33,7 +33,7 @@ object HODConnector extends HODConnector with ServicesConfig {
 
   lazy val serviceUrl = baseUrl("for-hod-adapter")
 
-  val http = ForGlobal.forHttp
+  val http = play.api.Play.current.global.asInstanceOf[ForGlobal].forHttp
 
   private def url(path: String) = s"$serviceUrl/for/$path"
 

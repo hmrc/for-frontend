@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
   lazy val serviceUrl = baseUrl("for-hod-adapter")
-  val http = ForGlobal.forHttp
+  val http = play.api.Play.current.global.asInstanceOf[ForGlobal].forHttp
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] = {
     http.PUT(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
@@ -37,7 +37,7 @@ object SubmissionConnector extends SubmissionConnector with ServicesConfig {
 
   def submit(refNum: String, submission: JsValue)(implicit hc: HeaderCarrier): Future[Result] = {
     http.PUT(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
-      Result(ResponseHeader(r.status), Enumerator(r.body.getBytes))
+      Result(ResponseHeader(r.status), Enumerator(Option(r.body).getOrElse("").getBytes))
     }
   }
 }

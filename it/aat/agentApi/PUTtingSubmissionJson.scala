@@ -1,9 +1,10 @@
 package aat.agentApi
 
 import aat.AcceptanceTest
-import play.api.libs.json.{JsNull, JsValue}
+import play.api.libs.json.{JsNull, JsValue, Json}
 import play.api.libs.ws.WS
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import uk.gov.hmrc.play.http.{HeaderNames, HttpResponse}
 
 class PUTtingSubmissionJson extends AcceptanceTest {
   import TestData._
@@ -12,12 +13,39 @@ class PUTtingSubmissionJson extends AcceptanceTest {
 
   "When PUTting a submission using invalid credentials" - {
     http.stubInvalidCredentials(invalid.ref1, invalid.ref2, invalid.postcode)
-    val res = AgentApi.submit(invalid.refNum, invalid.postcode, submissionJson)
+    val res = AgentApi.submit(invalid.refNum, invalid.postcode, validSubmission)
 
-    "A 401 Unauthorised response explaining that the credentials are invalid is returned" in {
+    "A 401 Unauthorised response" in {
       assert(res.status === 401)
-      assert(res.body === "")
     }
+  }
+
+  "When PUTting a submission using valid credentials" - {
+    http.stubValidCredentials(valid.ref1, valid.ref2, valid.postcode)
+
+    "When the submission json is invalid" - {
+      http.stubSubmission(valid.refNum, invalidSubmission, Seq(HeaderNames.authorisation -> "token"), HttpResponse(
+        responseStatus = 400
+      ))
+
+      val res = AgentApi.submit(valid.refNum, valid.postcode, invalidSubmission)
+
+      "A 400 Bad Request response is returned" in {
+        assert(res.status === 400)
+      }
+    }
+
+    "When the submission json is valid" - {
+      http.stubSubmission(valid.refNum, validSubmission, Seq(HeaderNames.authorisation -> "token"), HttpResponse(200))
+
+      val res = AgentApi.submit(valid.refNum, valid.postcode, validSubmission)
+
+      "A 200 Ok response is returned" in {
+        assert(res.status === 200)
+      }
+    }
+
+    
   }
 }
 
@@ -33,7 +61,8 @@ private object TestData {
   val valid = Credentials("9999000", "123", "AA11+1AA")
   val invalid = Credentials("1234567", "890", "AA11+1AA")
 
-  val submissionJson: JsValue = JsNull
+  val validSubmission: JsValue = JsNull
+  val invalidSubmission: JsValue = Json.parse("{}")
 }
 
 private case class Credentials(ref1: String, ref2: String, postcode: String) {
