@@ -55,7 +55,7 @@ object SummaryBuilder {
   private lazy val editedPageOneForm = Map("isAddressCorrect" -> "false", "address.buildingNameNumber" -> "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "address.postcode" -> "BN12 4AX")
   private lazy val pageOneData = PropertyAddress(true, None)
 
-  private lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None), Some(ContactAddressTypeMain), None, None)
+  private lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
 
   private lazy val propertyOwned = PageThree(
     propertyType = "property type",

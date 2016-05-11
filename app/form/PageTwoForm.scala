@@ -17,12 +17,10 @@
 package form
 
 
+import form.MappingSupport._
 import models.serviceContracts.submissions._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-import uk.gov.voa.play.form.ConditionalMappings._
-import uk.gov.voa.play.form._
-import MappingSupport._
 
 object PageTwoForm {
 
@@ -33,14 +31,6 @@ object PageTwoForm {
     "fullName" -> nonEmptyText(maxLength = 50),
     "userType" -> userType,
     "contactType" -> contactType,
-    "contactDetails" -> contactDetailsMappingFor("contactType"),
-    "contactAddressType" -> mandatoryAndOnlyIfAnyOf("userType", ownerAndOccupier, contactAddressTypeMapping),
-    "alternativeAddress" -> mandatoryIfEqual(
-      "contactAddressType", ContactAddressTypeAlternativeAddress.name, addressAbroadMapping("alternativeAddress")
-    ),
-    "alternativeContact" -> mandatoryIf(
-      isEqual("contactAddressType", ContactAddressTypeAlternativeContact.name) and isNotAnyOf("userType", agents),
-      alternativeContactMapping("alternativeContact")
-    )
+    "contactDetails" -> contactDetailsMappingFor("contactType")
   )(CustomerDetails.apply)(CustomerDetails.unapply))
 }
