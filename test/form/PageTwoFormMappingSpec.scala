@@ -60,14 +60,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     mustContainError(errorKey.contactType, Errors.noValueSelected, form)
   }
 
-  it should "return required error for contactAddressType if contactAddressType is empty and userType is owner or occupier" in {
-    Seq(UserTypeOwner.name, UserTypeOccupier.name).foreach { ut =>
-      val data = baseFormData.updated(errorKey.userType, ut) - errorKey.contactAddressType
-      val form = pageTwoForm.bind(data)
-
-      mustContainRequiredErrorFor(errorKey.contactAddressType, form)
-    }
-  }
 
   it should "not return a required error for contactAddressType if the userType is a type of agent" in {
     Seq(UserTypeOccupiersAgent.name, UserTypeOwnersAgent.name).foreach { ut =>
@@ -76,20 +68,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
 
       doesNotContainErrors(form)
     }
-  }
-
-  it should "bind to a PageTwoData if a full set of valid data is supplied" in {
-    val formData = baseFormData
-    val boundForm = pageTwoForm.bind(formData)
-    boundForm.hasErrors should be(false)
-    boundForm.value.isDefined should be(true)
-
-    val pageTwoData = boundForm.value.get
-
-    pageTwoData.fullName should be("Mr John Smith")
-    pageTwoData.userType should be(UserTypeOwner)
-    pageTwoData.contactType should be(ContactTypePhone)
-    pageTwoData.contactAddressType should be(Some(ContactAddressTypeMain))
   }
 
   it should "error if invalid userType is provided" in {
@@ -106,13 +84,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     mustContainError(errorKey.contactType, Errors.noValueSelected, form)
   }
 
-  it should "error if the contact's email addresses do not match" in {
-    val formData = baseFormData.updated("contactType", "both").updated("contactDetails.email2", "other@gmail.com")
-    val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
-
-    mustContainPrefixedError(errorKey.email1, Errors.emailMismatch, form)
-    mustContainPrefixedError(errorKey.email2, Errors.emailMismatch, form)
-  }
 
   it should "error if the contact type is Phone or Both but there is no phone number" in {
     ContactTypes.all.filter(_ != ContactTypeEmail).foreach { ct =>
@@ -132,71 +103,12 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     }
   }
 
-  it should "require an email, a phone number, or an address when alternative contact is specified" in {
-    val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
-      .updated(errorKey.alternativeContactFullName, "11111") -
-      errorKey.alternativeContactEmail1 - errorKey.alternativeContactEmail2 - errorKey.alternativeContactPhone -
-      errorKey.alternativeAddressBuilding - errorKey.alternativeAddressStreet1 - errorKey.alternativeAddressPostCode
-    val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
-
-    mustContainPrefixedError("alternativeContact.contactDetails.phone", Errors.contactDetailsMissing, form)
-    mustContainPrefixedError("alternativeContact.contactDetails.email1", Errors.contactDetailsMissing, form)
-    mustContainPrefixedError("alternativeContact.address.buildingNameNumber", Errors.contactDetailsMissing, form)
-  }
-
-  it should "validate alternative address when contact address type is alternative address" in {
-    val data = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeAddress.name)
-    validateOverseasAddress(pageTwoForm, data, "alternativeAddress")
-  }
-
   it should "validate the phone number when the preferred contact method is phone" in {
     validatePhone(pageTwoForm, baseFormData, "contactDetails")
   }
 
-  it should "validate the phone number when contact address type is alternative contact" in {
-    val data = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
-      .updated(errorKey.alternativeContactFullName, "CONTACT FULL NAME")
-      .updated(errorKey.alternativeContactPhone, "12345 12345")
-      .updated(errorKey.alternativeContactEmail1, "david@test.com")
-      .updated(errorKey.alternativeContactEmail2, "david@test.com")
-      .updated(errorKey.alternativeContactBuildingName, "15")
-      .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
-    validateOptionalPhone(pageTwoForm, data, "alternativeContact.contactDetails")
-  }
-
   it should "validate full name" in {
     validateLettersNumsSpecCharsUptoLength(errorKey.fullName, 50, pageTwoForm, baseFormData)
-  }
-
-  it should "bind to the alternative contact details when the contact address type is alternative contact" in {
-    val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
-      .updated(errorKey.alternativeContactFullName, "CONTACT FULL NAME")
-      .updated(errorKey.alternativeContactPhone, "12345 12345")
-      .updated(errorKey.alternativeContactEmail1, "david@test.com")
-      .updated(errorKey.alternativeContactEmail2, "david@test.com")
-      .updated(errorKey.alternativeContactBuildingName, "15")
-      .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
-    val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
-
-    mustBind(form) { pageTwoData =>
-      pageTwoData.contactAddressType should be(Some(ContactAddressTypeAlternativeContact))
-      pageTwoData.alternativeContact.get.contactDetails.get.phone.get should be("12345 12345")
-      pageTwoData.alternativeContact.get.contactDetails.get.email.get should be("david@test.com")
-      pageTwoData.alternativeContact.get.address.get.buildingNameNumber should be("15")
-      pageTwoData.alternativeContact.get.address.get.postcode should be("AA11 1AA")
-    }
-  }
-
-  it should "restrict the alternative contact's name to 50 characters" in {
-    val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
-      .updated(errorKey.alternativeContactFullName, "11111")
-      .updated(errorKey.alternativeContactPhone, "12345 12345")
-      .updated(errorKey.alternativeContactEmail1, "david@test.com")
-      .updated(errorKey.alternativeContactEmail2, "david@test.com")
-      .updated(errorKey.alternativeContactBuildingName, "15")
-      .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
-
-    validateLettersNumsSpecCharsUptoLength(errorKey.alternativeContactFullName, 50, pageTwoForm, formData)
   }
 
   it should "not require alternative contact details when contact address type is alternative contact IF the user is a type of agent" in {

@@ -23,65 +23,16 @@
 @summaryBlock(Messages("label.contactType"), 2, "contactType") {
     @Messages(s"contactType.${p2.contactType.name}")
 }
-@if(p2.contactType == ContactTypeEmail || p2.contactType == ContactTypeBoth) {
+@if(p2.contactType == ContactTypeEmail) {
     @summaryBlock(Messages("label.email1"), 2, "contactDetails_email1") {
         @p2.contactDetails.email
     }
 }
-@if(p2.contactType == ContactTypePhone || p2.contactType == ContactTypeBoth) {
+@if(p2.contactType == ContactTypePhone) {
     @summaryBlock(Messages("label.phone"), 2, "contactDetails_phone") {
         @p2.contactDetails.phone
     }
 }
-
-@if(p2.userType == UserTypeOwner || p2.userType == UserTypeOccupier) {
-
-    @p2.contactAddressType.map { cat =>
-
-        @summaryBlock(Messages("label.contactAddressType"), 2, "contactAddressType") {
-            @cat match {
-                case ContactAddressTypeMain => {
-                    @Html(summary.address.get.multiLine) @Html(underReview)
-                }
-                case ContactAddressTypeAlternativeAddress => {
-                    @Messages("label.alternativeAddress")
-                }
-                case ContactAddressTypeAlternativeContact => {
-                    @Messages("label.alternativeContact")
-                }
-            }
-        }
-
-        @if(cat == ContactAddressTypeAlternativeAddress) {
-            @summaryBlock(Messages("label.alternativeAddress"), 2, "alternativeAddress_buildingNameNumber") {
-                @p2.alternativeAddress.map { altAdd =>
-                    @defining(Seq[String](altAdd.buildingNameNumber, altAdd.street1.getOrElse(""), altAdd.street2.getOrElse(""), altAdd.postcode).filter(!_.isEmpty).mkString("<br />")) { ahtml =>
-                        @Html(ahtml)
-                    }
-                }
-            }
-        }
-
-        @if(cat == ContactAddressTypeAlternativeContact) {
-            @summaryBlock(Messages("label.alternativeContact"), 2, "alternativeContact_address_buildingNameNumber_text") {
-                @p2.alternativeContact.map { contact =>
-                    @Html(contact.fullname) <br />
-                    @contact.contactDetails.map { cd =>
-                        @cd.phone.map { p => @Html(p) <br /> }
-                        @cd.email.map { e => @Html(e) <br /> }
-                    }
-                <br />
-                    @contact.address.map { a =>
-                        @defining(Seq[String](a.buildingNameNumber, a.street1.getOrElse(""), a.street2.getOrElse(""), a.postcode).filterNot(_.isEmpty).mkString("<br />")) { address =>
-                            @Html(address)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 
 

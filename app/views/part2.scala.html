@@ -40,8 +40,6 @@
 
         @helper.CSRF.formField
 
-        
-
           <!-- Full name -->
         @inputText(
           field = theForm("fullName"),
@@ -85,8 +83,7 @@
           ),
           dataAttributes = Seq(
             ("email", "data-show-fields", "contactDetails.email1,contactDetails.email2"),
-            ("phone", "data-show-fields", "contactDetails.phone"),
-            ("both", "data-show-fields", "contactDetails.email1,contactDetails.email2,contactDetails.phone")
+            ("phone", "data-show-fields", "contactDetails.phone")
           )
         )
 
@@ -121,86 +118,6 @@
           )
         </div>
 
-          <!-- Contact Address Type -->
-
-        <div class="hidden userType">  
-        @inputRadioGroup(
-          field = theForm("contactAddressType"),
-          options = EnumOptions.originalContactAddressTypeOptions(summary.address.map(_.singleLine).getOrElse("") + underReview, lang),
-          args = Seq(
-            '_label -> Messages("label.contactAddressType"),
-            '_error -> theForm("contactAddressType").errors,
-            '_showConstraints -> false,
-            '_showErrors -> true,
-            '_legend -> true,
-            '_labelClass -> "form-label-bold",
-            '_fieldsetClass -> "",
-            '_nojsText -> Messages("label.noJs.contactDetails.contactAddressType")
-            
-          ),
-          dataAttributes = Seq(
-            ("mainAddress", "data-show-fields", ""),
-            ("alternativeAddress", "data-show-fields", "alternativeAddress.addresses"),
-            ("contactsAddress", "data-show-fields", "alternativeContact.fullName,alternativeContact.contactDetails.phone,alternativeContact.contactDetails.email1,alternativeContact.contactDetails.email2,alternativeContact.address.addresses")
-          )
-        )
-
-
-          <!-- Contact Address fields -->
-        <div data-show-fields-group="contactAddressType">
-
-        <div id="alternativeAddress_address">
-          @includes.lookupAddress(theForm, "alternativeAddress", "hidden", false, Messages("label.noJs.alternativeAddress.buildingNameNumber"), false)
-        </div>
-
-
-        <div id="alternativeContact_contactDetails">
-          @inputText(
-            field = theForm("alternativeContact.fullName"),
-            '_label -> Messages("label.alternativeContact.fullName"),
-            '_labelClass -> "form-label-bold",
-            'class -> "form-control",
-            '_help -> Messages("hint.alternative.contact"),
-            '_fieldsetClass -> "hidden",
-            '_nojsText -> Messages("label.noJs.alternativeContact.fullName")
-          )
-
-          @inputText(
-            field = theForm("alternativeContact.contactDetails.phone"),
-            '_label -> Messages("label.alternativeContact.number"),
-            '_labelClass -> "form-label-bold",
-            'class -> "form-control",
-            '_help -> Messages("hint.contacts"),
-            '_fieldsetClass -> "hidden",
-            '_nojsText -> Messages("label.noJs.alternativeContact.fullName")
-          )
-
-          @inputText(
-            field = theForm("alternativeContact.contactDetails.email1"),
-            '_label -> Messages("label.email1"),
-            '_labelClass -> "form-label-bold",
-            'class -> "form-control",
-            '_fieldsetClass -> "hidden",
-            '_nojsText -> Messages("label.noJs.alternativeContact.fullName")
-          )
-
-          @inputText(
-            field = theForm("alternativeContact.contactDetails.email2"),
-            '_label -> Messages("label.email2"),
-            '_labelClass -> "form-label-bold",
-            'class -> "form-control",
-            '_fieldsetClass -> "hidden"
-          )
-        </div>
-
-
-        <div id="alternativeContact_address">
-          @includes.lookupAddress(theForm, "alternativeContact.address", "hidden", false, Messages("label.noJs.alternativeContact.fullName"), false)
-        </div>
-
-         </div>
-
-        </div>
 
         @includes.continueButton()
 

@@ -243,7 +243,7 @@ class NextPageDeductionUsingPageSkippingSpec extends FlatSpec with Matchers with
 
   lazy val pageOneData = PropertyAddress(true, None)
 
-  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None), Some(ContactAddressTypeMain), None, None)
+  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
 
   lazy val pageThreeData = PageThree(
     propertyType = "property type",

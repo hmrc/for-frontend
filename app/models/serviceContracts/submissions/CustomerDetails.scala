@@ -20,8 +20,5 @@ case class CustomerDetails(
   fullName: String,
   userType: UserType,
   contactType: ContactType,
-  contactDetails: ContactDetails,
-  contactAddressType: Option[ContactAddressType],
-  alternativeAddress: Option[Address],
-  alternativeContact: Option[Contact]
+  contactDetails: ContactDetails
 )

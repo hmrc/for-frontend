@@ -110,10 +110,10 @@ object MappingSupport {
 
   def contactDetailsMappingFor(contactTypeField: String): Mapping[ContactDetails] = {
     mapping(
-      "phone" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypePhone.name, ContactTypeBoth.name),
+      "phone" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypePhone.name),
         nonEmptyTextOr("contactDetails.phone", phoneNumber)),
-      "email1" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypeEmail.name, ContactTypeBoth.name), email),
-      "email2" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypeEmail.name, ContactTypeBoth.name), email)
+      "email1" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypeEmail.name), email),
+      "email2" -> mandatoryIfAnyOf(contactTypeField, Seq(ContactTypeEmail.name), email)
     )(ContactDetails.apply)(ContactDetails.unapply) verifying emailsMatch
   }
 

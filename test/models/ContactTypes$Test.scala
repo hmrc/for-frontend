@@ -16,12 +16,12 @@
 
 package models
 
-import models.serviceContracts.submissions.{ContactTypeBoth, ContactTypeEmail, ContactType, ContactTypePhone}
+import models.serviceContracts.submissions.{ContactTypeEmail, ContactType, ContactTypePhone}
 import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.{JsSuccess, JsResult, Json}
 
 
-class ContactTypes$Test extends FlatSpec with Matchers{
+class ContactTypes$Test extends FlatSpec with Matchers {
 
   val jsonPhone = """"phone""""
   val jsonEmail = """"email""""
@@ -49,12 +49,5 @@ class ContactTypes$Test extends FlatSpec with Matchers{
   "ContactTypesEmail" should "map to contact type 'email' " in {
     fromJson(jsonEmail) should be(JsSuccess(ContactTypeEmail))
   }
-  "ContactTypes reader for 'both' " should "map to ContactTypesBoth" in {
-    toJson(ContactTypeBoth) should be(jsonBoth)
-  }
-
-  "ContactTypesBoth" should "map to contact type 'both' " in {
-    fromJson(jsonBoth) should be(JsSuccess(ContactTypeBoth))
-  }
-
 }
+

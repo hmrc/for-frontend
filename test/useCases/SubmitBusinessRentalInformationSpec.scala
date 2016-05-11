@@ -57,7 +57,7 @@ class SubmitBusinessRentalInformationSpec extends FreeSpec with Matchers {
   object TestData {
     val submission = Submission(
       Some(PropertyAddress(true, None)),
-      Some(CustomerDetails("fn", UserTypeOccupier, ContactTypeEmail, ContactDetails(None, None, None), Some(ContactAddressTypeMain), None, None)),
+      Some(CustomerDetails("fn", UserTypeOccupier, ContactTypeEmail, ContactDetails(None, None, None))),
       Some(TheProperty("Stuff", OccupierTypeIndividuals, None, None, false, None)),
       Some(Sublet(false, List.empty)),
       Some(Landlord("abc", Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionTypeNone, None)),

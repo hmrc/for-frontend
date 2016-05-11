@@ -22,9 +22,6 @@ sealed trait ContactType extends NamedEnum {
   val key = "contactType"
 }
 
-object ContactTypeBoth extends ContactType {
-  val name = "both"
-}
 
 object ContactTypePhone extends ContactType {
   val name = "phone"
@@ -35,5 +32,5 @@ object ContactTypeEmail extends ContactType {
 }
 
 object ContactTypes extends NamedEnumSupport[ContactType] {
-  val all = List(ContactTypeEmail, ContactTypePhone, ContactTypeBoth)
+  val all = List(ContactTypeEmail, ContactTypePhone)
 }

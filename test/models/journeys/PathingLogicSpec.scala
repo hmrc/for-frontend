@@ -138,7 +138,7 @@ class PathingLogicSpec extends FlatSpec with Matchers {
 
   lazy val pageOneData = PropertyAddress(true, None)
 
-  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None), Some(ContactAddressTypeMain), None, None)
+  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
 
   lazy val propertyOwned = PageThree(
     propertyType = "property type",
