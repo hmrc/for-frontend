@@ -4,8 +4,8 @@
         var text;
         if($('html').attr('lang') === 'en'){
             text = {
-                findPostcode: 'Find the address by postcode',
-                enterManual: 'Enter address manually',
+                findPostcode: 'Find the UK address by postcode',
+                enterManual: 'Enter UK/International address manually',
                 buttonUpdate: 'Update',
                 buttonContinue: 'Continue',
                 labelReveal: 'Press to reveal answer',

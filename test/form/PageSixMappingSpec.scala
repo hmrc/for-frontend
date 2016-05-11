@@ -16,31 +16,20 @@
 
 package form
 
-import models.serviceContracts.submissions._
-import org.joda.time.LocalDate
-import play.api.data._
-import play.api.data.Forms._
-import play.api.data.format._
-import play.api.data.validation.Constraint
-import play.api.data.validation.ValidationError
-import play.api.data.validation.Valid
-import play.api.data.validation.Invalid
 import models._
 import models.pages._
-import play.api.data.validation.ValidationResult
-import org.scalatest.{ Matchers, FlatSpec }
-import play.api.data.FormError
+import models.serviceContracts.submissions._
+import org.joda.time.LocalDate
+import org.scalatest.{FlatSpec, Matchers}
 import play.api.data.Form
-import form.PageSixForm._
-import play.api.data.Mapping
 
 
 class PageSixMappingSpec extends FlatSpec with Matchers {
 
   import PageSixForm._
-  import utils.MappingSpecs._
-  import utils.FormBindingTestAssertions._
   import TestData._
+  import utils.FormBindingTestAssertions._
+  import utils.MappingSpecs._
 
  "A page six form" should "bind to page six with a written agreement" in {
     val p6 = PageSix(

@@ -91,7 +91,7 @@ object MappingSupport {
   val responsibleTypeMapping: Mapping[ResponsibleType] = Forms.of[ResponsibleType]
   val contactAddressTypeMapping: Mapping[ContactAddressType] = Forms.of[ContactAddressType]
   val rentLengthType: Mapping[RentLengthType] = Forms.of[RentLengthType]
-  val postcode: Mapping[String] = text verifying(Errors.invalidPostcode, _.toUpperCase matches postcodeRegex)
+  val postcode: Mapping[String] = text
   val phoneNumber: Mapping[String] = nonEmptyText(maxLength = 20) verifying(Errors.invalidPhone, _ matches phoneRegex)
 
   def addressMapping(prefix: String): Mapping[Address] = mapping(

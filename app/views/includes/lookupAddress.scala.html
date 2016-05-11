@@ -49,7 +49,7 @@
 
       @helpers.inputText(
         field = theForm(prefix+".postcode"),
-        '_label -> Html(if(overseas){Messages("label.landlordOverseasAddress.postcode")}else{Messages("label.postcode")}),
+        '_label -> Messages("label.ukOrInternationalPostcode"),
         '_labelClass -> "form-label-bold",
         'class -> ("form-control postcode postcode-"+prefix),
         '_fieldsetClass -> "hidden address-field-postcode",
@@ -94,7 +94,7 @@
       <div class="postcode-results">
         <label class="form-label-bold" for="postcode_look_results_@{s"$prefix"}">@Messages("label.addressMatches")</label>
         <select class="form-control input-extra-large addressList" name="@{s"$prefix.addresses"}" id="postcode_look_results_@{s"$prefix"}">
-          
+
         </select>
     </div>
   </div>
@@ -103,9 +103,7 @@
 
     <div class="showHide-group show-if-no-js">
 
-  @if(abroadAddress == true){
-        <a href="#" class="address-abroad hide-if-no-js" style="margin-bottom: 30px;display:inline-block">@Messages("label.overseas.address")</a>
-  }
+
       @addressForm("hidden", false)
 
 
