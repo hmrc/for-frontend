@@ -567,7 +567,7 @@ saveForm.or=Or
 #SUMMARY
 ###############################
 label.print.summary=Print summary
-label.summary.text=Check your answers before sending your form
+label.summary.text=Check your answers before submitting your form
 
 #PDF
 ###############################
