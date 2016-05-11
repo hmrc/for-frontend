@@ -3,1226 +3,1374 @@
 <html>
     <title>RALD Agent API Documentation</title>
     <body>
-<div class="content-body">
-    <header class="page-header"><h1>Rent and Lease Details (DRAFT)</h1></header>
-    <p>This endpoint allows Forms of Return to be submitted to the VOA without using the web form.
-    </p>
-    <section id="resource" class="section flush--bottom">
-        <h2 class="heading-medium">Resource (Not yet live)</h2>
-        <pre class="snippet--block">POST /sending-rental-information/submit/{refNum}/{postcode}</pre>
-    </section>
-    <section id="path-parameters" class="section flush--bottom">
-        <h2 class="heading-medium">Path Parameters</h2>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Example</th><th>Description</th></tr></thead><tbody><tr><td class="snippet--inline">
+        <div class="content-body">
+            <header class="page-header"><h1>Rent and Lease Details (DRAFT)</h1></header>
+            <p>This endpoint allows Forms of Return to be submitted to the VOA without using the web form.
+            </p>
+            <section id="resource" class="section flush--bottom">
+                <h2 class="heading-medium">Resource</h2>
+                <pre class="snippet--block">POST /sending-rental-information/submit/{refNum}/{postcode}</pre>
+            </section>
+            <section id="path-parameters" class="section flush--bottom">
+                <h2 class="heading-medium">Path Parameters</h2>
+                <table><thead><tr><th>Name</th> <th>Type</th> <th>Example</th> <th>Description</th></tr></thead> <tbody><tr><td class="snippet--inline">
                         refNum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         9999000123
-                    </td><td>The 10 or 11 digit reference number on the letter, without the slash.</td></tr><tr><td class="snippet--inline">
+                </td> <td>The 10 or 11 digit reference number on the letter, without the slash.</td>
+                </tr> <tr><td class="snippet--inline">
                         postcode
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
-                        BN12 4AX
-                    </td><td>The post code from the letter. Must be a valid UK postcode.</td></tr></tbody></table>
-    </section>
-    <section id="authorisation" class="section flush--bottom">
-        <h2 class="heading-medium">Authorisation</h2>
-        Authorisation method currently undefined
-    </section>
-    <section id="content-types" class="section flush--bottom">
-        <h2 class="heading-medium">Accepted Media Types</h2>
-        <ul><li>
-                <code class="snippet--inline">application/json</code>
-            </li></ul>
-    </section>
-    <section id="data-types" class="section flush--bottom">
-        <h2 class="heading-medium">Additional Data Types Defined in the Schema</h2>
-        <p>Address</p>
-        <pre class="snippet--block">
+                </td> <td class="snippet--inline">
+                        AA11+1AA
+                </td> <td>The post code from the letter. Must be a valid UK postcode. Must be separated by a "+" instead of a space</td>
+                </tr>
+                </tbody></table>
+            </section>
+            <section id="authorisation" class="section flush--bottom">
+                <h2 class="heading-medium">Authorisation</h2>
+                Authorisation method currently undefined
+            </section>
+            <section id="content-types" class="section flush--bottom">
+                <h2 class="heading-medium">Accepted Media Types</h2>
+                <ul><li>
+                    <code class="snippet--inline">application/json</code>
+                </li>
+                </ul>
+            </section>
+            <section id="data-types" class="section flush--bottom">
+                <h2 class="heading-medium">Additional Data Types Defined in the Schema</h2>
+                <p>Address</p>
+                <pre class="snippet--block">
   {
-    "buildingNameNumber": "1",
-    "street1": "The Road",
-    "street2": "The Town",
-    "postcode": "AA11 1AA"
-  }
-</pre>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Example</th><th>Description</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td class="snippet--inline">
+                    "buildingNameNumber": "1",
+                    "street1": "The Road",
+                    "street2": "The Town",
+                    "postcode": "AA11 1AA"
+                    }
+                </pre>
+                <table><thead><tr><th>Name</th> <th>Type</th> <th>Example</th> <th>Description</th> <th>Required</th> <th>Notes</th></tr></thead> <tbody><tr><td class="snippet--inline">
                         buildingNameNumber
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         1
-                    </td><td>First line of address</td><td>Required</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>First line of address</td> <td>Required</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         street1
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         The Road
-                    </td><td>Second line of address</td><td>Optional</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Second line of address</td> <td>Optional</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         street2
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         The Town
-                    </td><td>Third line of address</td><td>Optional</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Third line of address</td> <td>Optional</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         postcode
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         AA11 1AA
-                    </td><td>Address post code</td><td>Required</td><td>Must be valid UK postcode</td></tr></tbody></table>
-        <p>RoughDate</p>
-        <pre class="snippet--block">
+                </td> <td>Address post code</td> <td>Required</td> <td>Must be valid UK postcode</td>
+                </tr>
+                </tbody></table>
+                <p>RoughDate</p>
+                <pre class="snippet--block">
   {
     "year": 2001,
     "month": 10
   }
-</pre>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Example</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td class="snippet--inline">
+                </pre>
+                <table><thead><tr><th>Name</th> <th>Type</th> <th>Example</th> <th>Required</th> <th>Notes</th></tr></thead> <tbody><tr><td class="snippet--inline">
                         year
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         2001
-                    </td><td>Required</td><td>Must be after 1899, and must not be in the future.</td></tr><tr><td class="snippet--inline">
+                </td> <td>Required</td> <td>Must be after 1899, and must not be in the future.</td>
+                </tr> <tr><td class="snippet--inline">
                         month
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         1
-                    </td><td>Required</td><td>Must be between 1 and 12. The combined month and year must not be in the future.</td></tr></tbody></table>
-        <p>Duration</p>
-        <pre class="snippet--block">
+                </td> <td>Required</td> <td>Must be between 1 and 12. The combined month and year must not be in the future.</td>
+                </tr>
+                </tbody></table>
+                <p>Duration</p>
+                <pre class="snippet--block">
   {
-    "years": 0,
-    "months": 2
-  }
-</pre>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Example</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td class="snippet--inline">
+                    "years": 0,
+                    "months": 2
+                    }
+                </pre>
+                <table><thead><tr><th>Name</th> <th>Type</th> <th>Example</th> <th>Required</th> <th>Notes</th></tr></thead> <tbody><tr><td class="snippet--inline">
                         years
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         1
-                    </td><td>Required</td><td>Must be between 0 and 999 inclusive</td></tr><tr><td class="snippet--inline">
+                </td> <td>Required</td> <td>Must be between 0 and 999 inclusive</td>
+                </tr> <tr><td class="snippet--inline">
                         months
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         11
-                    </td><td>Required</td><td>Must be between 0 and 12 inclusive</td></tr></tbody></table>
-    </section>
-    <section id="sample-request" class="section flush--bottom">
-        <h2 class="heading-medium">Example Request When Client Rents the Property</h2>
-        <pre class="snippet--block">{
- "referenceNumber": "9999000001",
- "propertyAddress": {
-   "isAddressCorrect": true
- },
- "customerDetails": {
-   "fullName": "bob",
-   "userType": "ownersAgent",
-   "contactType": "phone",
-   "contactDetails": {
-     "phone": "01234567890"
-   }
- },
- "theProperty": {
-   "propertyType": "shop",
-   "occupierType": "nobody",
-   "propertyOwnedByYou": false,
-   "propertyRentedByYou": true
- },
- "sublet": {
-  "propertyIsSublet": true,
-  "sublets": [
-    {
-      "tenantFullName": "bob",
-      "tenantAddress": {
-        "buildingNameNumber": "1",
-        "street1": "The Road",
-        "street2": "The Place",
-        "postcode": "AA11 1AA"
-      },
-      "subletPropertyPartDescription": "Second floor",
-      "subletPropertyReasonDescription": "Commercial use",
-      "annualRentExcludingVat": 1000.00,
-      "rentFixedDate": {
-        "year": 2011,
-        "month": 1
-      }
-    }
-  ]
- },
- "landlord": {
-  "landlordFullName": "bob",
-  "landlordAddress": {
-    "buildingNameNumber": "1",
-    "street1": "The Road",
-    "street2": "The Place",
-    "postcode": "AA11 1AA"
-  },
-  "landlordConnectionType": "noConnected"
- },
- "lease": {
-  "leaseAgreementType": "verbal",
-  "leaseAgreementHasBreakClause": false,
-  "agreementIsStepped": false,
-  "startDate": {
-    "year": 2011,
-    "month": 12
-  },
-  "rentOpenEnded": true
- },
- "rentReviews": {
-  "leaseContainsRentReviews": false
- },
- "rentAgreement": {
-  "wasRentFixedBetween": true,
-  "rentSetByType": "newLease"
- },
- "rent": {
-  "annualRentExcludingVat": 1,
-  "rentBecomePayable": "2011-01-01",
-  "rentActuallyAgreed": "2011-09-30",
-  "negotiatingNewRent": false,
-  "rentBasis": "openMarket"
- },
- "rentIncludes": {
-  "partRent": false,
-  "otherProperty": false,
-  "livingAccommodation": false,
-  "landOnly": false,
-  "shellUnit": false,
-  "parking": {
-    "rentIncludesParking": false,
-    "rentHasSeparateParking": false
-  }
- },
- "incentives": {
-  "rentFreePeriod": false,
-  "payCapitalSum": false,
-  "receiveCapitalSum": false
- },
- "responsibilities": {
-  "responsibleOutsideRepairs": "landlord",
-  "responsibleInsideRepairs": "landlord",
-  "responsibleBuildingInsurance": "landlord",
-  "ndrCharges": false,
-  "waterCharges": false,
-  "includedServices": false,
-  "includedServicesDetails": []
- },
- "alterations": {
-  "propertyAlterations": false,
-  "propertyAlterationsDetails": []
- },
- "otherFactors": {
-  "anyOtherFactors": false
- }
-}</pre>
-        <h2 class="heading-medium">Example Request When Client Owns the Property</h2>
-        <pre class="snippet--block">{
- "referenceNumber": "9999000001",
- "propertyAddress": {
-   "isAddressCorrect": true
- },
- "customerDetails": {
-   "fullName": "bob",
-   "userType": "ownersAgent",
-   "contactType": "phone",
-   "contactDetails": {
-     "phone": "01234567890"
-   }
- },
- "theProperty": {
-   "propertyType": "shop",
-   "occupierType": "nobody",
-   "propertyOwnedByYou": true
- },
-  "sublet": {
-   "propertyIsSublet": false,
-   "sublets": []
- }
-}</pre>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Example</th><th>Description</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td class="snippet--inline">
+                </td> <td>Required</td> <td>Must be between 0 and 12 inclusive</td>
+                </tr>
+                </tbody></table>
+            </section>
+            <section id="sample-request" class="section flush--bottom">
+                <h2 class="heading-medium">Example Request When Client Rents the Property</h2>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": true
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "01234567890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": false,
+                    "propertyRentedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": true,
+                    "sublets": [
+                    {
+                    "tenantFullName": "bob",
+                    "tenantAddress": {
+                    "buildingNameNumber": "1",
+                    "street1": "The Road",
+                    "street2": "The Place",
+                    "postcode": "AA11 1AA"
+                    },
+                    "subletPropertyPartDescription": "Second floor",
+                    "subletPropertyReasonDescription": "Commercial use",
+                    "annualRentExcludingVat": 1000.00,
+                    "rentFixedDate": {
+                    "year": 2011,
+                    "month": 1
+                    }
+                    }
+                    ]
+                    },
+                    "landlord": {
+                    "landlordFullName": "bob",
+                    "landlordAddress": {
+                    "buildingNameNumber": "1",
+                    "street1": "The Road",
+                    "street2": "The Place",
+                    "postcode": "AA11 1AA"
+                    },
+                    "landlordConnectionType": "noConnected"
+                    },
+                    "lease": {
+                    "leaseAgreementType": "verbal",
+                    "leaseAgreementHasBreakClause": false,
+                    "agreementIsStepped": false,
+                    "startDate": {
+                    "year": 2011,
+                    "month": 12
+                    },
+                    "rentOpenEnded": true
+                    },
+                    "rentReviews": {
+                    "leaseContainsRentReviews": false
+                    },
+                    "rentAgreement": {
+                    "wasRentFixedBetween": true,
+                    "rentSetByType": "newLease"
+                    },
+                    "rent": {
+                    "annualRentExcludingVat": 1,
+                    "rentBecomePayable": "2011-01-01",
+                    "rentActuallyAgreed": "2011-09-30",
+                    "negotiatingNewRent": false,
+                    "rentBasis": "openMarket"
+                    },
+                    "rentIncludes": {
+                    "partRent": false,
+                    "otherProperty": false,
+                    "livingAccommodation": false,
+                    "landOnly": false,
+                    "shellUnit": false,
+                    "parking": {
+                    "rentIncludesParking": false,
+                    "rentHasSeparateParking": false
+                    }
+                    },
+                    "incentives": {
+                    "rentFreePeriod": false,
+                    "payCapitalSum": false,
+                    "receiveCapitalSum": false
+                    },
+                    "responsibilities": {
+                    "responsibleOutsideRepairs": "landlord",
+                    "responsibleInsideRepairs": "landlord",
+                    "responsibleBuildingInsurance": "landlord",
+                    "ndrCharges": false,
+                    "waterCharges": false,
+                    "includedServices": false,
+                    "includedServicesDetails": []
+                    },
+                    "alterations": {
+                    "propertyAlterations": false,
+                    "propertyAlterationsDetails": []
+                    },
+                    "otherFactors": {
+                    "anyOtherFactors": false
+                    }
+                    }</pre>
+                <h2 class="heading-medium">Example Request When Client Owns the Property</h2>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": true
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "01234567890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <table><thead><tr><th>Name</th> <th>Type</th> <th>Example</th> <th>Description</th> <th>Required</th> <th>Notes</th></tr></thead> <tbody><tr><td class="snippet--inline">
                         referenceNumber
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         9999000123
-                    </td><td>10 or 11 character reference number from the letter, without the slash</td><td>Always required</td><td>Must be 10 or 11 numeric characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>10 or 11 character reference number from the letter, without the slash</td> <td>Always required</td> <td>Must be 10 or 11 numeric characters</td>
+                </tr> <tr><td class="snippet--inline">
                         propertyAddress
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Property address"</td><td>Always required</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Property address"</td> <td>Always required</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         propertyAddress.isAddressCorrect
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>Is the address on the form correct?</td><td>Required as part of propertyAddress</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>Is the address on the form correct?</td> <td>Required as part of propertyAddress</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         propertyAddress.address
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Address
-                    </td><td>See Address</td><td>The corrected address</td><td>Only required if isAddressCorrect is false</td><td>See Address</td></tr><tr><td class="snippet--inline">
+                </td> <td>See Address</td> <td>The corrected address</td> <td>Only required if isAddressCorrect is false</td> <td>See Address</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "About you"</td><td>Always required</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "About you"</td> <td>Always required</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.fullName
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         John Smith
-                    </td><td>Your name</td><td>Required as part of customerDetails</td><td>Maximum length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Your name</td> <td>Required as part of customerDetails</td> <td>Maximum length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.userType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         ownersOccupier
-                    </td><td>Your relationship to the property</td><td>Required as part of customerDetails</td><td>Must be one of "owner", "occupier", "ownerOccupier", "ownersAgent", or "occupiersAgent"</td></tr><tr><td class="snippet--inline">
+                </td> <td>Your relationship to the property</td> <td>Required as part of customerDetails</td> <td>Must be one of "owner", "occupier", "ownerOccupier", "ownersAgent", or "occupiersAgent"</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.contactType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         phone
-                    </td><td>"How would you like us to contact you?"</td><td>Required as part of customerDetails</td><td>Must be one of "phone", "email", or "both"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"How would you like us to contact you?"</td> <td>Required as part of customerDetails</td> <td>Must be one of "phone", "email", or "both"</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.contactDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Contact information such as phone and/or email address</td><td>Required as part of customerDetails</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Contact information such as phone and/or email address</td> <td>Required as part of customerDetails</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         contactDetails.phone
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         0123457890
-                    </td><td>Contact phone number</td><td>Only required if customerDetails.contactType is "phone" or "both"</td><td>Max 20 characters. Only digits, spaces, and +()[]- permitted</td></tr><tr><td class="snippet--inline">
+                </td> <td>Contact phone number</td> <td>Only required if customerDetails.contactType is "phone" or "both"</td> <td>Max 20 characters. Only digits, spaces, and +()[]- permitted</td>
+                </tr> <tr><td class="snippet--inline">
                         contactDetails.email
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         email@@address.com
-                    </td><td>Contact email address</td><td>Only required if customerDetails.contactType is "email" or "both"</td><td>Must be valid email address</td></tr><tr><td class="snippet--inline">
+                </td> <td>Contact email address</td> <td>Only required if customerDetails.contactType is "email" or "both"</td> <td>Must be valid email address</td>
+                </tr> <tr><td class="snippet--inline">
                         contactDetails.emailConfirmed
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         email@@address.com
-                    </td><td>Confirm email address</td><td>Only required if customerDetails.contactType is "email" or "both"</td><td>Must match contactDetails.email</td></tr><tr><td class="snippet--inline">
+                    </td> <td>Confirm email address</td> <td>Only required if customerDetails.contactType is "email" or "both"</td> <td>Must match contactDetails.email</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.contactAddressType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         mainAddress
-                    </td><td>"Which address would you like us to use if we need to write to you in future?"</td><td>Only required if userType is "owner", "occupier", or "ownerOccupier"</td><td>Must be one of "mainAddress", "alternativeAddress", or "contactAddress" (I want someone else
-                        to be contacted on my behalf)
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"Which address would you like us to use if we need to write to you in future?"</td> <td>Not required if userType is "ownersAgent" or "occupiersAgent"</td> <td>Must be one of "mainAddress", "alternativeAddress", or "contactAddress" (I want someone else
+                    to be contacted on my behalf)
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.alternativeAddress
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td>
+                </td> <td>
                         See Address
-                    </td><td>Alternative contact address details</td><td>Only required if contactAddressType is "alternativeAddress"</td><td>See Address</td></tr><tr><td class="snippet--inline">
+                </td> <td>Alternative contact address details</td> <td>Not required if userType is "ownersAgent" or "occupiersAgent"</td> <td>See Address</td>
+                </tr> <tr><td class="snippet--inline">
                         customerDetails.alternativeContact
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Alternative contact details</td><td>Only required if contactAddressType is "contactAddress"</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Alternative contact details</td> <td>Not required if userType is "ownersAgent" or "occupiersAgent"</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         theProperty
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "About the property"</td><td>Always required</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "About the property"</td> <td>Always required</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.propertyType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Shop
-                    </td><td>"What is the property used for?"</td><td>Required as part of theProperty</td><td>Max length 100 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"What is the property used for?"</td> <td>Required as part of theProperty</td> <td>Max length 100 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.occupierType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         company
-                    </td><td>"Who occupies the property?"</td><td>Required as part of theProperty</td><td>Must be one of "company", "individuals", or "nobody"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Who occupies the property?"</td> <td>Required as part of theProperty</td> <td>Must be one of "company", "individuals", or "nobody"</td>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.occupierName
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Some Company
-                    </td><td>
+                </td> <td>
                         Name of the primary occupier of the property
-                    </td><td>Not required if theProperty.occupierType is "nobody"</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Not required if theProperty.occupierType is "nobody"</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.firstOccupationDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>First occupation date of the primary occupier</td><td>Not required if theProperty.occupierType is "nobody"</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>First occupation date of the primary occupier</td> <td>Not required if theProperty.occupierType is "nobody"</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.propertyOwnedByYou
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Does your client own the property?"</td><td>Required as part of theProperty</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client own the property?"</td> <td>Required as part of theProperty</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         theProperty.propertyRentedByYou
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Does your client pay rent on the property?"</td><td>Only required if theProperty.propertyOwnedByYou is false</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client pay rent on the property?"</td> <td>Only required if theProperty.propertyOwnedByYou is false</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         sublet
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Lettings and sub-lettings"</td><td>Always required</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Lettings and sub-lettings"</td> <td>Always required</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         sublet.propertyIsSublet
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Does your client let or sub-let all or any part of the property?"</td><td>Required as part of sublet</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client let or sub-let all or any part of the property?"</td> <td>Required as part of sublet</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         sublet.sublets
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Array
-                    </td><td/><td>List of the sublets</td><td>If propertyIsSublet is true, at least one sublet must be provided. Otherwise, an empty array
-                        is expected
-                    </td><td>Maximum of 5 items</td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>List of the sublets</td> <td>If propertyIsSublet is true, at least one sublet must be provided. Otherwise, an empty array
+                    is expected
+                </td> <td>Maximum of 5 items</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].tenantFullName
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         John Smith
-                    </td><td>Name of the tenant</td><td>Required for each sublet</td><td>Max 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Name of the tenant</td> <td>Required for each sublet</td> <td>Max 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].tenantAddress
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Address
-                    </td><td>See Address</td><td>"Address of the property that is sublet"</td><td>Required for each sublet</td><td>See Address</td></tr><tr><td class="snippet--inline">
+                </td> <td>See Address</td> <td>"Address of the property that is sublet"</td> <td>Required for each sublet</td> <td>See Address</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].subletPropertyPartDescription
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Second floor
-                    </td><td>"What part of the property is sub-let"?</td><td>Required for each sublet</td><td>Max length 100 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"What part of the property is sub-let"?</td> <td>Required for each sublet</td> <td>Max length 100 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].subletPropertyReasonDescription
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Commercial use
-                    </td><td>"What is the sublet property used for?"</td><td>Required for each sublet</td><td>Max length 100 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"What is the sublet property used for?"</td> <td>Required for each sublet</td> <td>Max length 100 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].annualRentExcludingVat
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"How much rent does your client receive each year from this sub-let excluding VAT?"</td><td>Required for each sublet</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"How much rent does your client receive each year from this sub-let excluding VAT?"</td> <td>Required for each sublet</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         sublets[].rentFixedDate
-                    </td><td>
+                </td> <td>
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"When did your client's sub-let start?"</td><td>Required for each sublet</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When did your client's sub-let start?"</td> <td>Required for each sublet</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         landlord
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "The landlord"</td><td>Only required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "The landlord"</td> <td>Only required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         landlord.landlordFullName
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         John Smith
-                    </td><td>The landlord's full name</td><td>Required as part of landlord</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>The landlord's full name</td> <td>Required as part of landlord</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         landlord.landlordAddress
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Address
-                    </td><td>
+                </td> <td>
                         See Address
-                    </td><td>The landlord's address</td><td>Required as part of landlord</td><td>The postcode for this address does not need to be a valid UK postcode</td></tr><tr><td class="snippet--inline">
+                </td> <td>The landlord's address</td> <td>Optional</td> <td>The postcode for this address does not need to be a valid UK postcode</td>
+                </tr> <tr><td class="snippet--inline">
                         landlord.landlordConnectionType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         other
-                    </td><td>"Aside from your client's landlord/tenant relationship, do they have any personal or business
-                        connection?"
-                    </td><td>Required as part of landlord</td><td>Must be one of "family", "other", or "noConnected" (No connection)</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Aside from your client's landlord/tenant relationship, do they have any personal or business
+                    connection?"
+                </td> <td>Required as part of landlord</td> <td>Must be one of "family", "other", or "noConnected" (No connection)</td>
+                </tr> <tr><td class="snippet--inline">
                         landlord.landlordConnectText
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Business partners
-                    </td><td>Details of the landlord connection e.g. business relationship</td><td>Only required if landlordConnectionType is "other"</td><td>Max length 100 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Details of the landlord connection e.g. business relationship</td> <td>Only required if landlordConnectionType is "other"</td> <td>Max length 100 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         lease
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "The lease or agreement"</td><td>Only required if theProperty.propertyRentedByYou is true</td><td>All information provided must be regarding the primary lease - if there are multiple leases
-                        then you must contact the VOA to provide details of the other leases
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "The lease or agreement"</td> <td>Only required if theProperty.propertyRentedByYou is true</td> <td>All information provided must be regarding the primary lease - if there are multiple leases
+                    then you must contact the VOA to provide details of the other leases
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         lease.leaseAgreementType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         leaseTenancy
-                    </td><td>"What type of agreement does your client have?"</td><td>Required as part of lease</td><td>Must be one of "verbal" (no agreement or not in writing), "leaseTenancy" (single lease or
-                        tenancy agreement), or "licenseOther" (license or other type of written agreement)
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"What type of agreement does your client have?"</td> <td>Required as part of lease</td> <td>Must be one of "verbal" (no agreement or not in writing), "leaseTenancy" (single lease or
+                    tenancy agreement), or "licenceOther" (licence or other type of written agreement)
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         lease.leaseAgreementHasBreakClause
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is there a break clause?"</td><td>Not required if leaseAgreementType is "verbal"</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is there a break clause?"</td> <td>Not required if leaseAgreementType is "verbal"</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         lease.breakClauseDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Break clause details
-                    </td><td>"Provide details of the break clause"</td><td>Only required if leaseAgreementHasBreakClause is true</td><td>Max length 124 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Provide details of the break clause"</td> <td>Only required if leaseAgreementHasBreakClause is true</td> <td>Max length 124 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         lease.agreementIsStepped
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is your client's rent a stepped rent agreement?"</td><td>Not required if leaseAgreementType is "verbal"</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is your client's rent a stepped rent agreement?"</td> <td>Not required if leaseAgreementType is "verbal"</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         lease.steppedDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Array
-                    </td><td/><td>"Provide details of the stepped rent"</td><td>If agreementIsStepped is true then details of at least one step must be provided. Otherwise,
-                        an empty array is expected.
-                    </td><td>Maximum of 7 steps</td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>"Provide details of the stepped rent"</td> <td>If agreementIsStepped is true then details of at least one step must be provided. Otherwise,
+                    an empty array is expected.
+                </td> <td>Maximum of 7 steps</td>
+                </tr> <tr><td class="snippet--inline">
                         steppedDetails[].stepFrom
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         2001-01-02
-                    </td><td>Step from</td><td>Required for each rent step</td><td>Must be a valid date in the format YYYY-MM-DD</td></tr><tr><td class="snippet--inline">
+                </td> <td>Step from</td> <td>Required for each rent step</td> <td>Must be a valid date in the format YYYY-MM-DD</td>
+                </tr> <tr><td class="snippet--inline">
                         steppedDetails[].stepTo
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         2001-02-01
-                    </td><td>Step to</td><td>Required for each rent step</td><td>Must be a valid date in the format YYYY-MM-DD</td></tr><tr><td class="snippet--inline">
+                </td> <td>Step to</td> <td>Required for each rent step</td> <td>Must be a valid date in the format YYYY-MM-DD</td>
+                </tr> <tr><td class="snippet--inline">
                         steppedDetails[].amount
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"Total amount for this step excluding VAT"</td><td>Required for each rent step</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Total amount for this step excluding VAT"</td> <td>Required for each rent step</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         lease.startDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"When did your client's license or written agreement start?"</td><td>Not required if leaseAgreementType is "verbal"</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When did your client's license or written agreement start?"</td> <td>Not required if leaseAgreementType is "verbal"</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         lease.rentOpenEnded
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is your client's license or written agreement open ended?"</td><td>Not required if leaseAgreementType is "verbal"</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is your client's license or written agreement open ended?"</td> <td>Not required if leaseAgreementType is "verbal"</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         lease.leaseLength
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Duration
-                    </td><td>See Duration</td><td>"How long was your client's license or written agreement granted for?"</td><td>Only required if lease.rentOpenEnded is false</td><td>See Duration</td></tr><tr><td class="snippet--inline">
+                </td> <td>See Duration</td> <td>"How long was your client's license or written agreement granted for?"</td> <td>Only required if lease.rentOpenEnded is false</td> <td>See Duration</td>
+                </tr> <tr><td class="snippet--inline">
                         rentReviews
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page "Rent reviews"</td><td>Only required if theProperty.propertyRentedByYou is true and lease.leaseAgreementType is not
-                        "verbal"
-                    </td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page "Rent reviews"</td> <td>Only required if theProperty.propertyRentedByYou is true and lease.leaseAgreementType is not
+                    "verbal"
+                </td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentReviews.leaseContainsRentReviews
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Does your client's licence or written agreement include any rent reviews?"</td><td>Required as part of rentReviews</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client's licence or written agreement include any rent reviews?"</td> <td>Required as part of rentReviews</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentReviews.rentReviewDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Contains details of the rent reviews</td><td>Only required if leaseContainsRentReviews is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Contains details of the rent reviews</td> <td>Only required if leaseContainsRentReviews is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentReviewDetails.reviewIntervalTypeSpecify
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Duration
-                    </td><td>
+                </td> <td>
                         See Duration
-                    </td><td>"How often is the rent reviewed?"</td><td>Required as part of rentReviewDetails</td><td>See Duration</td></tr><tr><td class="snippet--inline">
+                </td> <td>"How often is the rent reviewed?"</td> <td>Required as part of rentReviewDetails</td> <td>See Duration</td>
+                </tr> <tr><td class="snippet--inline">
                         rentReviewDetails.lastReviewDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"When was the last review date?"</td><td>Not required if the rent has not yet been reviewed</td><td>See Duration</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When was the last review date?"</td> <td>Not required if the rent has not yet been reviewed</td> <td>See Duration</td>
+                </tr> <tr><td class="snippet--inline">
                         rentReviewDetails.canRentReduced
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Can the rent be reduced on review?"</td><td>Required as part of rentReviewDetails</td><td>If the rent can only go up, this should be false</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Can the rent be reduced on review?"</td> <td>Required as part of rentReviewDetails</td> <td>If the rent can only go up, this should be false</td>
+                </tr> <tr><td class="snippet--inline">
                         rentReviewDetails.rentResultOfRentReview
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is the rent on this property the result of a rent review?"</td><td>Required as part of rentReviewDetails</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is the rent on this property the result of a rent review?"</td> <td>Required as part of rentReviewDetails</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentReviewDetails.reviewDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Details of the rent review</td><td>Only required if rentResultOfRentReview is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Details of the rent review</td> <td>Only required if rentResultOfRentReview is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         reviewDetails.whenWasRentReview
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"When was this rent review?"</td><td>Required as part of reviewDetails</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When was this rent review?"</td> <td>Required as part of reviewDetails</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         reviewDetails.rentAgreedBetween
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Was the rent agreed between your client (or you) and the landlord?"</td><td>Required as part of reviewDetails</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Was the rent agreed between your client (or you) and the landlord?"</td> <td>Required as part of reviewDetails</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         reviewDetails.rentFixedBy
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         arbitrator
-                    </td><td>How the rent was agreed, if not between the client and the landlord</td><td>Only required if rentAgreedBetween is false</td><td>Must be one of "independent" (an independent expert) or "arbitrator" (someone specifically
-                        acting as an arbitrator)
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>How the rent was agreed, if not between the client and the landlord</td> <td>Only required if rentAgreedBetween is false</td> <td>Must be one of "independent" (an independent expert) or "arbitrator" (someone specifically
+                    acting as an arbitrator)
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rentAgreement
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "How your client's rent was fixed, if not by review"</td><td>Only required if theProperty.propertyRentedByYou is true and leaseContainsRentReviews is
-                        false
-                    </td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "How your client's rent was fixed, if not by review"</td> <td>Only required if theProperty.propertyRentedByYou is true and leaseContainsRentReviews is
+                    false
+                </td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentAgreement.wasRentFixedBetween
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Was the rent fixed between your client (or you) and the landlord?"</td><td>Required as part of rentAgreement</td><td/></tr><tr><td class="snippet--inline">
-                        rentAgreement.notRentReviewFixed
-                    </td><td class="snippet--inline">
+                </td> <td>"Was the rent fixed between your client (or you) and the landlord?"</td> <td>Required as part of rentAgreement</td> <td/>
+                </tr> <tr><td class="snippet--inline">
+                        rentAgreement.notReviewRentFixed
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         interim
-                    </td><td>How the rent was fixed, if not between the client and the landlord</td><td>Only required if rentAgreement.wasRentFixedBetween is false</td><td>Must be one of "finalJudge" (a final judgement by a court) or "interim" (an interim rent set
-                        by a court)
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>How the rent was fixed, if not between the client and the landlord</td> <td>Only required if rentAgreement.wasRentFixedBetween is false</td> <td>Must be one of "finalJudge" (a final judgement by a court) or "interim" (an interim rent set
+                    by a court)
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rentAgreement.rentSetByType
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         newLease
-                    </td><td>"Is this rent [a ...]"</td><td>Required as part of rentAgreement</td><td>Must be one of "surrender" (a surrender and renewal), "leaseback" (a sale and leaseback),
-                        "newLease", or "renewedLease"
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"Is this rent [a ...]"</td> <td>Required as part of rentAgreement</td> <td>Must be one of "surrender" (a surrender and renewal), "leaseback" (a sale and leaseback),
+                    "newLease", or "renewedLease"
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rent
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "The rent"</td><td>Only required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "The rent"</td> <td>Only required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rent.annualRentExcludingVat
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>Annual rent paid, excluding VAT</td><td>Required as part of rent</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>Annual rent paid, excluding VAT</td> <td>Required as part of rent</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         rent.rentBecomePayable
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         2001-01-01
-                    </td><td>"When did your client start paying this rent?"</td><td>Required as part of rent</td><td>Must be a valid date in the format YYYY-MM-DD</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When did your client start paying this rent?"</td> <td>Required as part of rent</td> <td>Must be a valid date in the format YYYY-MM-DD</td>
+                </tr> <tr><td class="snippet--inline">
                         rent.rentActuallyAgreed
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         2001-01-01
-                    </td><td>"When was the rent amount agreed or set?"</td><td>Required as part of rent</td><td>Must be a valid date in the format YYYY-MM-DD</td></tr><tr><td class="snippet--inline">
+                </td> <td>"When was the rent amount agreed or set?"</td> <td>Required as part of rent</td> <td>Must be a valid date in the format YYYY-MM-DD</td>
+                </tr> <tr><td class="snippet--inline">
                         rent.negotiatingNewRent
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Are you negotiating a new rent on behalf of your client?"</td><td>Required as part of rent</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Are you negotiating a new rent on behalf of your client?"</td> <td>Required as part of rent</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rent.rentBasis
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         openMarket
-                    </td><td>"What is the rent based on?"</td><td>Required as part of rent</td><td>Must be one of "openMarket" (open market value), "percentageOpenMarket" (a percentage of open
-                        market value), "percentageTurnover" (a percentage of turnover), "indexation", or "other"
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"What is the rent based on?"</td> <td>Required as part of rent</td> <td>Must be one of "openMarket" (open market value), "percentageOpenMarket" (a percentage of open
+                    market value), "percentageTurnover" (a percentage of turnover), "indexation", or "other"
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rent.rentBasisOtherDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         50% of open market value
-                    </td><td>Details of rent basis</td><td>Not required if rentBasis is "openMarket"</td><td>Max length 250 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Details of rent basis</td> <td>Not required if rentBasis is "openMarket"</td> <td>Max length 250 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "What the rent includes"</td><td>Only required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "What the rent includes"</td> <td>Only required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.partRent
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Does your client pay rent for part of the property only?"</td><td>Required as part of rentIncludes</td><td>Form hint: "For example, first floor only or one room"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client pay rent for part of the property only?"</td> <td>Required as part of rentIncludes</td> <td>Form hint: "For example, first floor only or one room"</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.otherProperty
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Does this rent include any other property?"</td><td>Required as part of rentIncludes</td><td>Form hint: "For example, a neighbouring property or part of another floor"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Does this rent include any other property?"</td> <td>Required as part of rentIncludes</td> <td>Form hint: "For example, a neighbouring property or part of another floor"</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.livingAccommodation
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Does this rent include any living accommodation?"</td><td>Required as part of rentIncludes</td><td>Form hint: "For example, a flat over a shop or caretaker's accommodation"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Does this rent include any living accommodation?"</td> <td>Required as part of rentIncludes</td> <td>Form hint: "For example, a flat over a shop or caretaker's accommodation"</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.landOnly
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Was your client's rent based on land use only?"</td><td>Required as part of rentIncludes</td><td>Form hint: "For example, there are no buildings on the site, or you put up your own
-                        building"
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"Was your client's rent based on land use only?"</td> <td>Required as part of rentIncludes</td> <td>Form hint: "For example, there are no buildings on the site, or you put up your own
+                    building"
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.shellUnit
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Was your client's rent based on an empty (shell) building without fixtures and fittings?"
-                    </td><td>Required as part of rentIncludes</td><td>Form hint: "For example, a new but unfinished property which needs fitting out with items such
-                        as internal walls, toilets, services (heating, lighting, etc), or finishes (plaster, paint,
-                        carpet, etc)"
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td>"Was your client's rent based on an empty (shell) building without fixtures and fittings?"
+                </td> <td>Required as part of rentIncludes</td> <td>Form hint: "For example, a new but unfinished property which needs fitting out with items such
+                    as internal walls, toilets, services (heating, lighting, etc), or finishes (plaster, paint,
+                    carpet, etc)"
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.rentDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Rent only includes the first floor
-                    </td><td>Details of what the rent includes</td><td>Required if any of partRent, otherProperty, livingAccommodation, landOnly, or shellUnit are
-                        true
-                    </td><td>Max length 249 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Details of what the rent includes</td> <td>Required if any of partRent, otherProperty, livingAccommodation, landOnly, or shellUnit are
+                    true
+                </td> <td>Max length 249 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludes.parking
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Information about parking</td><td>Required as part of rentIncludes</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Information about parking</td> <td>Required as part of rentIncludes</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         parking.rentIncludesParking
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is the cost of parking spaces and garages included in your client's rent?"</td><td>Required as part of parking</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is the cost of parking spaces and garages included in your client's rent?"</td> <td>Required as part of parking</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         parking.rentIncludedParkingDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>"How many parking spaces or garages are included in the rent?"</td><td>Only required if rentIncludesParking is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>"How many parking spaces or garages are included in the rent?"</td> <td>Only required if rentIncludesParking is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludedParkingDetails.openSpaces
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         0
-                    </td><td>Open parking spaces included in the rent</td><td>Required as part of rentIncludedParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Open parking spaces included in the rent</td> <td>Required as part of rentIncludedParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludedParkingDetails.coveredSpaces
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         3
-                    </td><td>Covered parking spaces included in the rent</td><td>Required as part of rentIncludedParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Covered parking spaces included in the rent</td> <td>Required as part of rentIncludedParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         rentIncludedParkingDetails.garages
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         1
-                    </td><td>Garages included in the rent</td><td>Required as part of rentIncludedParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Garages included in the rent</td> <td>Required as part of rentIncludedParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         parking.rentHasSeparateParking
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Does your client pay extra for parking spaces or garages?"</td><td>Required as part of parking</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Does your client pay extra for parking spaces or garages?"</td> <td>Required as part of parking</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         parking.rentSeparateParkingDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>"How many extra parking spaces or garages does your client pay for?"</td><td>Only required if rentHasSeparateParking is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>"How many extra parking spaces or garages does your client pay for?"</td> <td>Only required if rentHasSeparateParking is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentSeparateParkingDetails.openSpaces
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         0
-                    </td><td>Additional open parking spaces paid for</td><td>Required as part of rentSeparateParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Additional open parking spaces paid for</td> <td>Required as part of rentSeparateParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         rentSeparateParkingDetails.coveredSpaces
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         3
-                    </td><td>Additional covered parking spaces paid for</td><td>Required as part of rentSeparateParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Additional covered parking spaces paid for</td> <td>Required as part of rentSeparateParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         rentSeparateParkingDetails.garages
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         1
-                    </td><td>Additional garages paid for</td><td>Required as part of rentSeparateParkingDetails</td><td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td></tr><tr><td class="snippet--inline">
+                </td> <td>Additional garages paid for</td> <td>Required as part of rentSeparateParkingDetails</td> <td>Must be a positive integer, and at least one of openSpaces, coveredSpaces, and garages must be greater than 0</td>
+                </tr> <tr><td class="snippet--inline">
                         parking.annualSeparateParkingAmount
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"Fixed annual amount paid for parking and garages over and above the rent excluding VAT"
-                    </td><td>Only required if rentHasSeparateParking is true</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Fixed annual amount paid for parking and garages over and above the rent excluding VAT"
+                </td> <td>Only required if rentHasSeparateParking is true</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         parking.annualSeparateParkingFixedDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>See RoughDate</td><td>"When was this payment fixed?"</td><td>Only required if rentHasSeparateParking is true</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>See RoughDate</td> <td>"When was this payment fixed?"</td> <td>Only required if rentHasSeparateParking is true</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         incentives
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Incentives and payments"</td><td>Only required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Incentives and payments"</td> <td>Only required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         incentives.rentFreePeriod
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Was your client given a rent free period when the lease or agreement started?"</td><td>Required as part of incentives</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Was your client given a rent free period when the lease or agreement started?"</td> <td>Required as part of incentives</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         incentives.rentFreePeriodDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Rent free period details</td><td>Only required if rentFreePeriod is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Rent free period details</td> <td>Only required if rentFreePeriod is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         rentFreePeriodDetails.lengthInMonths
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Integer
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         6
-                    </td><td>"How many months was the rent free period?"</td><td>Required as part of rentFreePeriodDetails</td><td>Minimum value of 1</td></tr><tr><td class="snippet--inline">
+                </td> <td>"How many months was the rent free period?"</td> <td>Required as part of rentFreePeriodDetails</td> <td>Minimum value of 1</td>
+                </tr> <tr><td class="snippet--inline">
                         rentFreePeriodDetails.description
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Repairs
-                    </td><td>"Why was your client given a rent-free period?"</td><td>Required as part of rentFreePeriodDetails</td><td>Max length 250 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Why was your client given a rent-free period?"</td> <td>Required as part of rentFreePeriodDetails</td> <td>Max length 250 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         incentives.payCapitalSum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Did your client pay a capital sum?"</td><td>Required as part of incentives</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Did your client pay a capital sum?"</td> <td>Required as part of incentives</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         incentives.capitalPaidDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Details of capital sum paid</td><td>Only required if payCapitalSum is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Details of capital sum paid</td> <td>Only required if payCapitalSum is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         capitalPaidDetails.capitalSum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"Amount of capital sum paid excluding VAT"</td><td>Required as part of capitalPaidDetails</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Amount of capital sum paid excluding VAT"</td> <td>Required as part of capitalPaidDetails</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         capitalPaidDetails.paymentDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"Date payment made"</td><td>Required as part of capitalPaidDetails</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Date payment made"</td> <td>Required as part of capitalPaidDetails</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         incentives.receiveCapitalSum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Did your client pay a capital sum?"</td><td>Required as part of incentives</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Did your client pay a capital sum?"</td> <td>Required as part of incentives</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         incentives.capitalReceivedDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Details of capital sum received</td><td>Only required if receiveCapitalSum is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Details of capital sum received</td> <td>Only required if receiveCapitalSum is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         capitalReceivedDetails.capitalSum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"Amount of capital sum received excluding VAT"</td><td>Required as part of capitalReceivedDetails</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Amount of capital sum received excluding VAT"</td> <td>Required as part of capitalReceivedDetails</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         capitalReceivedDetails.paymentDate
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"Date payment made"</td><td>Required as part of capitalReceivedDetails</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Date payment made"</td> <td>Required as part of capitalReceivedDetails</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Responsibilities and costs"</td><td>Required if theProperty.propertyRentedByYou is false</td><td>The tenant is considered to be responsible if the landlord uses the tenant's money to pay for
-                        the costs
-                    </td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Responsibilities and costs"</td> <td>Required if theProperty.propertyRentedByYou is false</td> <td>The tenant is considered to be responsible if the landlord uses the tenant's money to pay for
+                    the costs
+                </td>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.responsibleOutsideRepairs
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         tenant
-                    </td><td>"Who is responsible for paying for repairs outside?"</td><td>Required as part of responsibilities</td><td>Must be one of "landlord", "tenant", or "both"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Who is responsible for paying for repairs outside?"</td> <td>Required as part of responsibilities</td> <td>Must be one of "landlord", "tenant", or "both"</td>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.responsibleInsideRepairs
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         landlord
-                    </td><td>"Who is responsible for paying for repairs inside?"</td><td>Required as part of responsibilities</td><td>Must be one of "landlord", "tenant", or "both"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Who is responsible for paying for repairs inside?"</td> <td>Required as part of responsibilities</td> <td>Must be one of "landlord", "tenant", or "both"</td>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.responsibleBuildingInsurance
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Enum
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         both
-                    </td><td>"Who is responsible for paying for buildings insurance?"</td><td>Required as part of responsibilities</td><td>Must be one of "landlord", "tenant", or "both"</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Who is responsible for paying for buildings insurance?"</td> <td>Required as part of responsibilities</td> <td>Must be one of "landlord", "tenant", or "both"</td>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.ndrCharges
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Are the business rates included in the rent?"</td><td>Required as part of responsibilities</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Are the business rates included in the rent?"</td> <td>Required as part of responsibilities</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.waterCharges
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         false
-                    </td><td>"Are water charges included in the rent?"</td><td>Required as part of responsibilities</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Are water charges included in the rent?"</td> <td>Required as part of responsibilities</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.includedServices
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Is the cost of services included in the rent?"</td><td>Required as part of responsibilities</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Is the cost of services included in the rent?"</td> <td>Required as part of responsibilities</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         responsibilities.includedServicesDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Array
-                    </td><td/><td>Details of all services included in the rent</td><td>If includedServices, waterCharges, or ndrCharges is true, details must be provided for these.
-                        Otherwise, an empty array is expected
-                    </td><td>Maximum of 10 items</td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Details of all services included in the rent</td> <td>If includedServices, waterCharges, or ndrCharges is true, details must be provided for these.
+                    Otherwise, an empty array is expected
+                </td> <td>Maximum of 10 items</td>
+                </tr> <tr><td class="snippet--inline">
                         includedServicesDetails[].chargeDescription
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Maintenance
-                    </td><td>Details of included service</td><td>Required for each service</td><td>Max length 50 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>Details of included service</td> <td>Required for each service</td> <td>Max length 50 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         includedServicesDetails[].chargeCost
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">999.99</td><td>"Amount per year included in the rent excluding VAT"</td><td>Required for each service</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td class="snippet--inline">999.99</td> <td>"Amount per year included in the rent excluding VAT"</td> <td>Required for each service</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         alterations
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Alterations and improvements"</td><td>Required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Alterations and improvements"</td> <td>Required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         alterations.propertyAlterations
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Has your client carried out any major alterations to the property?"</td><td>Required as part of alterations</td><td>If the lease started more than 15 years ago, this should be false</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Has your client carried out any major alterations to the property?"</td> <td>Required as part of alterations</td> <td>If the lease started more than 15 years ago, this should be false</td>
+                </tr> <tr><td class="snippet--inline">
                         alterations.propertyAlterationsDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Array
-                    </td><td/><td>Details of property alterations</td><td>If propertyAlterations is true, details of at least one alteration must be provided.
-                        Otherwise, an empty array is expected
-                    </td><td>Maximum of 10 alterations</td></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Details of property alterations</td> <td>If propertyAlterations is true, details of at least one alteration must be provided.
+                    Otherwise, an empty array is expected
+                </td> <td>Maximum of 10 alterations</td>
+                </tr> <tr><td class="snippet--inline">
                         propertyAlterationsDetails[].description
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Refurbishment
-                    </td><td>"Work carried out"</td><td>Required for each property alteration</td><td>Maximum 250 characters</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Work carried out"</td> <td>Required for each property alteration</td> <td>Maximum 250 characters</td>
+                </tr> <tr><td class="snippet--inline">
                         propertyAlterationsDetails[].cost
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Currency
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         999.99
-                    </td><td>"Cost of work excluding VAT"</td><td>Required for each alteration</td><td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Cost of work excluding VAT"</td> <td>Required for each alteration</td> <td>Maximum value of 9,999,999.99. Must be positive. Maximum of 2 decimal places.</td>
+                </tr> <tr><td class="snippet--inline">
                         propertyAlterationsDetails[].date
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         RoughDate
-                    </td><td>
+                </td> <td>
                         See RoughDate
-                    </td><td>"Approximate date of works"</td><td>Required for each alteration</td><td>See RoughDate</td></tr><tr><td class="snippet--inline">
+                </td> <td>"Approximate date of works"</td> <td>Required for each alteration</td> <td>See RoughDate</td>
+                </tr> <tr><td class="snippet--inline">
                         otherFactors
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Object
-                    </td><td/><td>Form page: "Any other factors"</td><td>Required if theProperty.propertyRentedByYou is true</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td/> <td>Form page: "Any other factors"</td> <td>Required if theProperty.propertyRentedByYou is true</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         otherFactors.anyOtherFactors
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Boolean
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         true
-                    </td><td>"Has anything else affected the rent that your client pays?"</td><td>Required as part of otherFactors</td><td/></tr><tr><td class="snippet--inline">
+                </td> <td>"Has anything else affected the rent that your client pays?"</td> <td>Required as part of otherFactors</td> <td/>
+                </tr> <tr><td class="snippet--inline">
                         otherFactors.anyOtherFactorsDetails
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         String
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Permitted use of the property is very restricted
-                    </td><td>"Give details [of the other factors that affect the rent]"</td><td>Required if anyOtherFactors is true</td><td>Max length 124 characters</td></tr></tbody></table>
-    </section>
-    <section id="error-responses" class="section flush--bottom">
-        <h2 class="heading-medium">Error Scenarios</h2>
-        <table><thead><tr><th>Scenario</th><th>Code</th><th>Status</th><th>Example error message</th></tr></thead><tbody><tr><td>Invalid refNum or postcode</td><td class="snippet--inline">
+                </td> <td>"Give details [of the other factors that affect the rent]"</td> <td>Required if anyOtherFactors is true</td> <td>Max length 124 characters</td>
+                </tr>
+                </tbody></table>
+            </section>
+            <section id="error-responses" class="section flush--bottom">
+                <h2 class="heading-medium">Error Scenarios</h2>
+                <table><thead><tr><th>Scenario</th> <th>Code</th> <th>Status</th> <th>Example error message</th></tr></thead> <tbody><tr><td>Invalid refNum or postcode</td> <td class="snippet--inline">
                         401
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Unauthorised
-                    </td><td/></tr><tr><td>Form already submitted for given refNum</td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
+                        {"error": "invalid credentials: 9999000123 - AA11+1AA", "numberOfRemainingTriesUntilIPLockout":4}
+                </td></tr> <tr><td>Form already submitted for given refNum</td> <td class="snippet--inline">
                         409
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Conflict
-                    </td><td/></tr><tr><td>Invalid request JSON</td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
+                        {"error":"Duplicate submission. 1234567890"}
+                </td></tr> <tr><td>IP address is temporarily locked out due to too many failed logins</td> <td class="snippet--inline">
+                        401
+                </td> <td class="snippet--inline">
+                        Unauthorised
+                </td> <td class="snippet--inline">
+                        {"error":"This IP address is locked out for 24 hours due to too many failed login attempts"}
+                </td></tr> <tr><td>Invalid request JSON</td> <td class="snippet--inline">
                         400
-                    </td><td class="snippet--inline">
+                </td> <td class="snippet--inline">
                         Bad Request
-                    </td><td>See Below</td></tr></tbody></table>
-        <h2 class="heading-medium">Examples of invalid JSON and response error messages</h2>
-        <p>Request with invalid value for propertyAddress.isAddressCorrect</p>
-        <pre class="snippet--block">{
- "referenceNumber": "9999000001",
- "propertyAddress": {
-   "isAddressCorrect": "yes"
- },
- "customerDetails": {
-   "fullName": "bob",
-   "userType": "ownersAgent",
-   "contactType": "phone",
-   "contactDetails": {
-     "phone": "01234567890"
-   }
- },
- "theProperty": {
-   "propertyType": "shop",
-   "occupierType": "nobody",
-   "propertyOwnedByYou": true
-  },
-  "sublet": {
-   "propertyIsSublet": false,
-   "sublets": []
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "/propertyAddress/isAddressCorrect",
-    "error": "instance type (string) does not match any allowed primitive type (allowed: [\"boolean\"])",
-    "schemaUsed": "doesNotRentSchema.json"
-  }]
-}</pre>
-        <p>Request JSON with required property "propertyAddress.isAddressCorrect" missing</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
+                </td> <td>See Below</td></tr>
+                </tbody></table>
+                <h2 class="heading-medium">Examples of invalid JSON and response error messages</h2>
+                <p>Request with invalid value for propertyAddress.isAddressCorrect</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": "yes"
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "01234567890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "/propertyAddress/isAddressCorrect",
+                    "error": "instance type (string) does not match any allowed primitive type (allowed: [\"boolean\"])",
+                    "schemaUsed": "doesNotRentSchema.json"
+                    }]
+                    }</pre>
+                <p>Request JSON with required property "propertyAddress.isAddressCorrect" missing</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "0123457890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "/propertyAddress",
+                    "error": "object has missing required properties ([\"isAddressCorrect\"])",
+                    "schemaUsed": "doesNotRentSchema.json"
+                    }]
+                    }</pre>
+                <p>Request JSON with required property "sublet" missing</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": true
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {"phone": "1"}
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "",
+                    "error": "object has missing required properties ([\"alterations\",\"incentives\",\"landlord\",\"lease\",\"otherFactors\",\"rent\",\"rentAgreement\",\"rentIncludes\",\"rentReviews\",\"responsibilities\",\"sublet\"])",
+                    "schemaUsed": "defaultSchema.json"
+                    }]
+                    }</pre>
+                <p>Request JSON with unexpected property "customerDetails.contactDetails.fax"</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": true
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "01234567890",
+                    "fax": "01234567891"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "",
+                    "error": "object instance has properties which are not allowed by the schema: [\"fax\"]",
+                    "schemaUsed": "doesNotRentSchema.json"
+                    }]
+                    }</pre>
+                <p>Request JSON with invalid date for "rent.rentActuallyAgreed"</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    ...
+                    "rent": {
+                    "annualRentExcludingVat": 1,
+                    "rentBecomePayable": "2011-01-01",
+                    "rentActuallyAgreed": "2011-09-31",
+                    "negotiatingNewRent": false,
+                    "rentBasis": "openMarket"
+                    },
+                    ...
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "error": "Cannot parse \"2011-09-31\": Value 31 for dayOfMonth must be in the range [1,30]"
+                    }</pre>
+                <p>Request JSON with expected property "propertyAddress.address" missing</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": false
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "0123457890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "/propertyAddress",
+                    "error": "object has missing required properties ([\"address\"])",
+                    "reason": "addressIsCorrect is false"
+                    }]
+                    }</pre>
+                <p>Request JSON with multiple expected properties missing</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": false
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": []
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "/propertyAddress",
+                    "error": "object has missing required properties ([\"address\"])",
+                    "reason": "addressIsCorrect is false"
+                    }, {
+                    "field": "/customerDetails/contactDetails",
+                    "error": "object has missing required properties ([\"contactDetails.phone\"])",
+                    "reason": "contactType is \"phone\""
+                    }]
+                    }</pre>
+                <p>Request JSON with required property "tenantAddress" missing from a "sublets" instance</p>
+                <pre class="snippet--block">{
+                    "referenceNumber": "9999000001",
+                    "propertyAddress": {
+                    "isAddressCorrect": true
+                    },
+                    "customerDetails": {
+                    "fullName": "bob",
+                    "userType": "ownersAgent",
+                    "contactType": "phone",
+                    "contactDetails": {
+                    "phone": "01234567890"
+                    }
+                    },
+                    "theProperty": {
+                    "propertyType": "shop",
+                    "occupierType": "nobody",
+                    "propertyOwnedByYou": true
+                    },
+                    "sublet": {
+                    "propertyIsSublet": false,
+                    "sublets": [{
+                    "tenantFullName": "John Smith",
+                    "subletPropertyPartDescription": "First floor",
+                    "subletPropertyReasonDescription": "Commercial use",
+                    "annualRentExcludingVat": 500,
+                    "rentFixedDate": {
+                    "year": 2011,
+                    "month": 1
+                    }
+                    }]
+                    }
+                    }</pre>
+                <p>Error message</p>
+                <pre class="snippet--block">{
+                    "errors": [{
+                    "field": "/sublet/sublets/0",
+                    "error": "object has missing required properties ([\"tenantAddress\"])",
+                    "schemaUsed": "doesNotRentSchema.json"
+                    }]
+                    }</pre>
 
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {
-      "phone": "0123457890"
-    }
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  },
-  "sublet": {
-    "propertyIsSublet": false,
-    "sublets": []
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "/propertyAddress",
-    "error": "object has missing required properties ([\"isAddressCorrect\"])",
-    "schemaUsed": "doesNotRentSchema.json"
-  }]
-}</pre>
-        <p>Request JSON with required property "sublet" missing</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
-    "isAddressCorrect": true
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {"phone": "1"}
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "",
-    "error": "object has missing required properties ([\"alterations\",\"incentives\",\"landlord\",\"lease\",\"otherFactors\",\"rent\",\"rentAgreement\",\"rentIncludes\",\"rentReviews\",\"responsibilities\",\"sublet\"])",
-    "schemaUsed": "defaultSchema.json"
-  }]
-}</pre>
-        <p>Request JSON with unexpected property "customerDetails.contactDetails.fax"</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
-    "isAddressCorrect": true
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {
-      "phone": "01234567890",
-      "fax": "01234567891"
-    }
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  },
-  "sublet": {
-    "propertyIsSublet": false,
-    "sublets": []
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "",
-    "error": "object instance has properties which are not allowed by the schema: [\"fax\"]",
-    "schemaUsed": "doesNotRentSchema.json"
-  }]
-}</pre>
-        <p>Request JSON with invalid date for "rent.rentActuallyAgreed"</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-...
-  "rent": {
-    "annualRentExcludingVat": 1,
-    "rentBecomePayable": "2011-01-01",
-    "rentActuallyAgreed": "2011-09-31",
-    "negotiatingNewRent": false,
-    "rentBasis": "openMarket"
-  },
-...
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "error": "Cannot parse \"2011-09-31\": Value 31 for dayOfMonth must be in the range [1,30]"
-}</pre>
-        <p>Request JSON with expected property "propertyAddress.address" missing</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
-    "isAddressCorrect": false
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {
-      "phone": "0123457890"
-    }
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  },
-  "sublet": {
-    "propertyIsSublet": false,
-    "sublets": []
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "/propertyAddress",
-    "error": "object has missing required properties ([\"address\"])",
-    "reason": "addressIsCorrect is false"
-  }]
-}</pre>
-        <p>Request JSON with multiple expected properties missing</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
-    "isAddressCorrect": false
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {
+            </section>
+        </div>
 
-    }
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  },
-  "sublet": {
-    "propertyIsSublet": false,
-    "sublets": []
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "/propertyAddress",
-    "error": "object has missing required properties ([\"address\"])",
-    "reason": "addressIsCorrect is false"
-  }, {
-    "field": "/customerDetails/contactDetails",
-    "error": "object has missing required properties ([\"contactDetails.phone\"])",
-    "reason": "contactType is \"phone\""
-  }]
-}</pre>
-        <p>Request JSON with required property "tenantAddress" missing from a "sublets" instance</p>
-        <pre class="snippet--block">{
-  "referenceNumber": "9999000001",
-  "propertyAddress": {
-    "isAddressCorrect": true
-  },
-  "customerDetails": {
-    "fullName": "bob",
-    "userType": "ownersAgent",
-    "contactType": "phone",
-    "contactDetails": {
-      "phone": "01234567890"
-    }
-  },
-  "theProperty": {
-    "propertyType": "shop",
-    "occupierType": "nobody",
-    "propertyOwnedByYou": true
-  },
-  "sublet": {
-    "propertyIsSublet": false,
-    "sublets": [{
-      "tenantFullName": "John Smith",
-      "subletPropertyPartDescription": "First floor",
-      "subletPropertyReasonDescription": "Commercial use",
-      "annualRentExcludingVat": 500,
-      "rentFixedDate": {
-        "year": 2011,
-        "month": 1
-      }
-    }]
-  }
-}</pre>
-        <p>Error message</p>
-        <pre class="snippet--block">{
-  "errors": [{
-    "field": "/sublet/sublets/0",
-    "error": "object has missing required properties ([\"tenantAddress\"])",
-    "schemaUsed": "doesNotRentSchema.json"
-  }]
-}</pre>
-        
-    </section>
-</div>
-</body>
-    </html>
+    </body>
+</html>
