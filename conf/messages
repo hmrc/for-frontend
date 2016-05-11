@@ -351,6 +351,7 @@ hint.leaseContainsRentReviews=Rent reviews are usually written in the lease or a
 label.rentReviewDetails.reviewIntervalTypeSpecify=Specify the rent review interval
 label.rentReviewDetails.lastReviewDate=When was the last review date?
 hint.canRentReduced=The lease or agreement will have a specific clause saying whether the rent can go down as well as up. Select <span class="font-bold">''Yes''</span> if the rent can go up or down, <span class="font-bold">''No''</span> if the rent can only go up.
+hint.rentOnThisPropertyTheResultOf=If your rent has been reviewed but remains unchanged, please select ''Yes''
 label.rentReviewDetails.rentReviewResultsDetails.whenWasRentReview=When was this rent review?
 label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy=It was fixed by
 label.rentReviewDetails.reviewIntervalType=How often is the rent reviewed?
