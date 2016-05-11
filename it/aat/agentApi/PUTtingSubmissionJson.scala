@@ -1,6 +1,7 @@
 package aat.agentApi
 
 import aat.AcceptanceTest
+import models.serviceContracts.submissions._
 import play.api.libs.json.{JsNull, JsValue, Json}
 import play.api.libs.ws.WS
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
@@ -17,6 +18,7 @@ class PUTtingSubmissionJson extends AcceptanceTest {
 
     "A 401 Unauthorised response is returned" in {
       assert(res.status === 401)
+      assert(res.body === jsonBody(s"""{"error": "invalid credentials: ${invalid.refNum} - ${invalid.postcode}", "numberOfRemainingTriesUntilIPLockout":4}"""))
     }
   }
 
@@ -71,11 +73,20 @@ private object AgentApi extends FutureAwaits with DefaultAwaitTimeout {
 }
 
 private object TestData {
+  import models._
+
   val valid = Credentials("9999000", "123", "AA11+1AA")
   val invalid = Credentials("1234567", "890", "AA11+1AA")
   val conflicting = Credentials("0000999", "321", "AA11+1AA")
 
-  val validSubmission: JsValue = JsNull
+  val validSubmission: JsValue = Json.toJson(
+    Submission(
+      Some(PropertyAddress(true, None)),
+      Some(CustomerDetails("bob", UserTypeOwnersAgent, ContactTypePhone, ContactDetails(Some("1"), None, None), None, None, None)),
+      Some(TheProperty("shop", OccupierTypeNobody, None, None, true, None)),
+      Some(Sublet(false, Nil)),
+      None, None, None, None, None, None, None, None, None, None, Some("9999000123"))
+  )
   val invalidSubmission: JsValue = Json.parse("{}")
 
   val invalidSubmissionError = Json.parse(

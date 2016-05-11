@@ -59,7 +59,9 @@ class TestHttpClient extends ForHttp {
   }
 
   def stubInvalidCredentials(ref1: String, ref2: String, postcode: String) = {
-    stubGet(s"$baseForUrl/$ref1/$ref2/${urlEncode(postcode)}/verify", Nil, HttpResponse(401, responseJson = Some(Json.parse("{}"))))
+    stubGet(s"$baseForUrl/$ref1/$ref2/${urlEncode(postcode)}/verify", Nil, HttpResponse(
+      responseStatus = 401,
+      responseJson = Some(Json.parse("""{"numberOfRemainingTriesUntilIPLockout":4}"""))))
   }
 
   def stubConflictingCredentials(ref1: String, ref2: String, postcode: String) = {
