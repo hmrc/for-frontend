@@ -70,6 +70,19 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     }
   }
 
+  it should "bind to a PageTwoData if a full set of valid data is supplied" in {
+    val formData = baseFormData
+    val boundForm = pageTwoForm.bind(formData)
+    boundForm.hasErrors should be(false)
+    boundForm.value.isDefined should be(true)
+
+    val pageTwoData = boundForm.value.get
+
+    pageTwoData.fullName should be("Mr John Smith")
+    pageTwoData.userType should be(UserTypeOwner)
+    pageTwoData.contactType should be(ContactTypePhone)
+  }
+
   it should "error if invalid userType is provided" in {
     val formData = baseFormData.updated("userType", "owner1")
     val form = pageTwoForm.bind(formData)
@@ -84,6 +97,13 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     mustContainError(errorKey.contactType, Errors.noValueSelected, form)
   }
 
+  it should "error if the contact's email addresses do not match" in {
+    val formData = baseFormData.updated("contactType", "email").updated("contactDetails.email2", "other@gmail.com")
+    val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
+
+    mustContainPrefixedError(errorKey.email1, Errors.emailMismatch, form)
+    mustContainPrefixedError(errorKey.email2, Errors.emailMismatch, form)
+  }
 
   it should "error if the contact type is Phone or Both but there is no phone number" in {
     ContactTypes.all.filter(_ != ContactTypeEmail).foreach { ct =>
@@ -120,28 +140,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     }
   }
 
-  it should "only require one of phone, email, or address for alternative contact" in {
-    val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
-      .updated(errorKey.alternativeContactFullName, "11111")
-      .updated(errorKey.alternativeContactPhone, "12345 12345")
-      .updated(errorKey.alternativeContactEmail1, "david@test.com")
-      .updated(errorKey.alternativeContactEmail2, "david@test.com")
-      .updated(errorKey.alternativeContactBuildingName, "15")
-      .updated(errorKey.alternativeContactPostcode, "AA11 1AA")
-
-    val noPhone = pageTwoForm.bind(formData - errorKey.alternativeContactPhone)
-    doesNotContainErrors(noPhone)
-
-    val noEmail = pageTwoForm.bind(formData - errorKey.alternativeContactEmail1 - errorKey.alternativeContactEmail2)
-    doesNotContainErrors(noEmail)
-
-    val noAddress = pageTwoForm.bind(formData - errorKey.alternativeContactBuildingName - errorKey.alternativeContactPostcode)
-    doesNotContainErrors(noAddress)
-
-    val noPhoneOrEmail = pageTwoForm.bind(formData - errorKey.alternativeContactPhone - errorKey.alternativeContactEmail1 - errorKey.alternativeContactEmail2)
-    doesNotContainErrors(noPhoneOrEmail)
-  }
-
   object TestData {
     val errorKey = new {
       val fullName: String = "fullName"
@@ -151,18 +149,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
       val phone = "contactDetails.phone"
       val email1 = "contactDetails.email1"
       val email2 = "contactDetails.email2"
-      val alternativeAddressBuilding = "alternativeAddress.buildingNameNumber"
-      val alternativeAddressStreet1 = "alternativeAddress.street1"
-      val alternativeAddressStreet2 = "alternativeAddress.street2"
-      val alternativeAddressPostCode = "alternativeAddress.postcode"
-      val alternativeContactBuildingName = "alternativeContact.address.buildingNameNumber"
-      val alternativeContactStreet1 = "alternativeContact.address.street1"
-      val alternativeContactStreet2 = "alternativeContact.address.street2"
-      val alternativeContactPostcode = "alternativeContact.address.postcode"
-      val alternativeContactEmail1 = "alternativeContact.contactDetails.email1"
-      val alternativeContactEmail2 = "alternativeContact.contactDetails.email2"
-      val alternativeContactPhone = "alternativeContact.contactDetails.phone"
-      val alternativeContactFullName = "alternativeContact.fullName"
       val contactDetailsPhone = "contactDetails.phone"
     }
 
