@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.ForConfig
 import connectors.{HODConnector, SubmissionConnector}
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Request}
@@ -33,16 +34,24 @@ object AgentAPI extends FrontendController {
   }
 
   def submit(refNum: String, postcode: String): Action[AnyContent] = Action.async { implicit request =>
-    request.body.asJson.map { js =>
-      HODConnector.verifyCredentials(refNum.dropRight(3), refNum.takeRight(3), postcode).flatMap { lr =>
-        val hc = withAuthToken(request, lr.forAuthToken)
-        SubmissionConnector.submit(refNum, js)(hc)
-      }.recover {
-        case b: BadRequestException => BadRequest(b.message)
-        case Upstream4xxResponse(body, 401, _, _) => Unauthorized(badCredentialsError(body, refNum, postcode))
-        case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
-      }
-    }.getOrElse(BadRequest)
+    if(ForConfig.agentApiEnabled) {
+      request.body.asJson.map { js =>
+        checkCredentialsAndSubmit(js, refNum, postcode)(request)
+      }.getOrElse(BadRequest)
+    } else {
+      NotFound
+    }
+  }
+
+  private def checkCredentialsAndSubmit(submission: JsValue, refNum: String, postcode: String)(implicit request: Request[_]) = {
+    HODConnector.verifyCredentials(refNum.dropRight(3), refNum.takeRight(3), postcode).flatMap { lr =>
+      val hc = withAuthToken(request, lr.forAuthToken)
+      SubmissionConnector.submit(refNum, submission)(hc)
+    }.recover {
+      case b: BadRequestException => BadRequest(b.message)
+      case Upstream4xxResponse(body, 401, _, _) => Unauthorized(badCredentialsError(body, refNum, postcode))
+      case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
+    }
   }
 
   private def withAuthToken(request: Request[_], authToken: String): HeaderCarrier = {

@@ -33,6 +33,7 @@ object ForConfig {
   lazy val useDummyIp = getBoolean("useDummyTrueIP")
   lazy val startPageRedirect = getBoolean("startPageRedirect")
   lazy val govukStartPage = getString("govukStartPage")
+  lazy val agentApiEnabled = getBoolean("agentApiEnabled")
 
   val analytics = new {
     val ga = new {
