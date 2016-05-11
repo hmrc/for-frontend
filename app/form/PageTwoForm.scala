@@ -36,7 +36,7 @@ object PageTwoForm {
     "contactDetails" -> contactDetailsMappingFor("contactType"),
     "contactAddressType" -> mandatoryAndOnlyIfAnyOf("userType", ownerAndOccupier, contactAddressTypeMapping),
     "alternativeAddress" -> mandatoryIfEqual(
-      "contactAddressType", ContactAddressTypeAlternativeAddress.name, addressMapping("alternativeAddress")
+      "contactAddressType", ContactAddressTypeAlternativeAddress.name, addressAbroadMapping("alternativeAddress")
     ),
     "alternativeContact" -> mandatoryIf(
       isEqual("contactAddressType", ContactAddressTypeAlternativeContact.name) and isNotAnyOf("userType", agents),

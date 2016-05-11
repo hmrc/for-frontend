@@ -132,16 +132,6 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
     }
   }
 
-  it should "error if user type is owner or occupier and the contact address type is alternative address but there is no alternative address" in {
-    Seq(UserTypeOwner.name, UserTypeOccupier.name).foreach { ut =>
-      val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeAddress.name).updated("userType", ut)
-      val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
-
-      val requiredFields = Seq(errorKey.alternativeAddressBuilding, errorKey.alternativeAddressPostCode)
-      mustOnlyContainRequiredErrorsFor(requiredFields, form)
-    }
-  }
-
   it should "require an email, a phone number, or an address when alternative contact is specified" in {
     val formData = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeContact.name)
       .updated(errorKey.alternativeContactFullName, "11111") -
@@ -156,7 +146,7 @@ class PageTwoFormMappingSpec extends FlatSpec with Matchers {
 
   it should "validate alternative address when contact address type is alternative address" in {
     val data = baseFormData.updated("contactAddressType", ContactAddressTypeAlternativeAddress.name)
-    validateAddress(pageTwoForm, data, "alternativeAddress")
+    validateOverseasAddress(pageTwoForm, data, "alternativeAddress")
   }
 
   it should "validate the phone number when the preferred contact method is phone" in {

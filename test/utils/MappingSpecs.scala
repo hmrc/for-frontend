@@ -363,7 +363,7 @@ trait AddressMappingSpecs extends PostcodeMappingSpecs { this: CommonSpecs =>
   def validateOverseasAddress[T](form: Form[T], formData: Map[String, String], fieldPrefix: String) {
     val prefix = fieldPrefix + "."
     val dwa = withAddressValues(formData, prefix)
-    validateAddressLine(prefix + addressKeys.buildingNameOrNumber, form, dwa, isMandatory = false)
+    validateAddressLine(prefix + addressKeys.buildingNameOrNumber, form, dwa, isMandatory = true)
     validateAddressLine(prefix + addressKeys.street1, form, dwa)
     validateAddressLine(prefix + addressKeys.street2, form, dwa)
     validateLettersNumsSpecCharsUptoLength(prefix + addressKeys.postcode, 10, form, dwa)

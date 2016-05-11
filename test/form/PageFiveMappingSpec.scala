@@ -66,11 +66,6 @@ class PageFiveMappingSpec extends FlatSpec with Matchers {
     doesNotContainErrors(form)
   }
 
-  it should "validate a full UK address when the address is not marked as overseas" in {
-    val data = baseData.updated("overseas", "false")
-    validateAddress(pageFiveForm, data, "landlordAddress")
-  }
-
   it should "validate landlord's address as an overseas address when the address is marked as overseas" in {
     val data = baseData.updated("overseas", "true")
     validateOverseasAddress(pageFiveForm, data, "landlordAddress")

@@ -16,19 +16,18 @@
 
 package form
 
+import form.MappingSupport._
 import models.pages.PageFive
 import models.serviceContracts.submissions.LandlordConnectionTypeOther
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, optional}
 import uk.gov.voa.play.form.ConditionalMappings._
-import ConditionalMapping.ifTrueElse
-import MappingSupport._
 
 object PageFiveForm {
   val pageFiveForm = Form(mapping(
     "overseas" -> mandatoryBoolean,
     "landlordFullName" -> nonEmptyText(maxLength = 50),
-    "landlordAddress" -> ifTrueElse("overseas", optional(addressAbroadMapping("landLordAddress")), optional(addressMapping("landlordAddress"))),
+    "landlordAddress" -> (optional(addressAbroadMapping("landlordAddress"))),
     "landlordConnectType" -> landlordConnectionType,
     "landlordConnectText" -> mandatoryIfEqual(
       "landlordConnectType", LandlordConnectionTypeOther.name, nonEmptyText(maxLength = 100)
