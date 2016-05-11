@@ -70,6 +70,12 @@ class TestHttpClient extends ForHttp {
       responseJson = Some(Json.parse("{\"error\":\"Duplicate submission. 1234567890\"}"))))
   }
 
+  def stubIPLockout(ref1: String, ref2: String, postcode: String) = {
+    stubGet(s"$baseForUrl/$ref1/$ref2/${urlEncode(postcode)}/verify", Nil, HttpResponse(
+      responseStatus = 401,
+      responseJson = Some(Json.parse("""{"numberOfRemainingTriesUntilIPLockout":0}"""))))
+  }
+
   def stubSubmission(refNum: String, submission: JsValue, headers: Seq[(String, String)], response: HttpResponse) = {
     stubPut(s"$baseForUrl/submissions/$refNum", submission, headers, response)
   }

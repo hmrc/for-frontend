@@ -17,7 +17,7 @@
 package controllers
 
 import connectors.{HODConnector, SubmissionConnector}
-import play.api.libs.json.{JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Request}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.{BadRequestException, HeaderCarrier, SessionKeys, Upstream4xxResponse}
@@ -51,6 +51,8 @@ object AgentAPI extends FrontendController {
 
   private def badCredentialsError(body: String, refNum: String, postcode: String): String = {
     val js = Json.parse(body) match {
+      case JsObject(s) if s.headOption.contains("numberOfRemainingTriesUntilIPLockout" -> JsNumber(BigDecimal(0))) =>
+        JsObject(Seq("error" -> JsString(s"This IP address is locked out for 24 hours due to too many failed login attempts")))
       case JsObject(fields) => JsObject(Seq("error" -> JsString(s"invalid credentials: $refNum - $postcode")) ++ fields)
       case other => other
     }

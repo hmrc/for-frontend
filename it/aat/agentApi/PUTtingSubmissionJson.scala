@@ -61,6 +61,17 @@ class PUTtingSubmissionJson extends AcceptanceTest {
     }
   }
 
+  "When PUTting a submission using a locked out IP" - {
+    http.stubIPLockout(lockedOut.ref1, lockedOut.ref2, lockedOut.postcode)
+
+    val res = AgentApi.submit(lockedOut.refNum, lockedOut.postcode, validSubmission)
+
+    "A 401 Unauthorised response explaining that the IP is locked out is returned" in {
+      assert(res.status === 401)
+      assert(res.body === jsonBody("""{"error":"This IP address is locked out for 24 hours due to too many failed login attempts"}"""))
+    }
+  }
+
   private def jsonBody(body: String) = Json.prettyPrint(Json.parse(body))
 }
 
@@ -78,6 +89,7 @@ private object TestData {
   val valid = Credentials("9999000", "123", "AA11+1AA")
   val invalid = Credentials("1234567", "890", "AA11+1AA")
   val conflicting = Credentials("0000999", "321", "AA11+1AA")
+  val lockedOut = Credentials("9999999", "999", "AA11+1AA")
 
   val validSubmission: JsValue = Json.toJson(
     Submission(
