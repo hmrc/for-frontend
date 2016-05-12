@@ -18,7 +18,7 @@ package useCases
 
 import connectors.{Document, SubmissionConnector}
 import form.persistence.FormDocumentRepository
-import models.journeys.Journey
+import models.journeys.{Journey, Paths}
 import models.pages._
 import models.serviceContracts.submissions._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -57,11 +57,8 @@ trait SubmissionBuilder {
 object SubmissionBuilder extends SubmissionBuilder {
 
   def build(doc: Document): Submission = {
-    implicit val s: Summary = SummaryBuilder.build(doc)
-    Journey.lastPageFor(s) match {
-      case 4 => buildShortSubmission(s, doc)
-      case _ => buildSubmission(s, doc)
-    }
+    val s: Summary = SummaryBuilder.build(doc)
+    if (Paths.isShortPath(s)) buildShortSubmission(s, doc) else buildSubmission(s, doc)
   }
 
   private def buildShortSubmission(summary: Summary, doc: Document) = {

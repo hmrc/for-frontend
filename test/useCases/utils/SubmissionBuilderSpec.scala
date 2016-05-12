@@ -88,8 +88,8 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
   it should "set occupier name as first 50 chars of (company name + contact name) if a company occupies the property" in {
     val ks = PageThreeForm.keys
     val p3 = page3FormData.updated(ks.occupierType, Seq(OccupierTypeCompany.name))
-                          .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
-                          .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
+    .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
+    .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
     val sub = SubmissionBuilder.build(doc1.add(Page(3, p3)))
     assert(sub.theProperty.flatMap(_.occupierName).value === "Jimmy Choo Enterprise Integration Ventures - Kyle ")
   }
@@ -97,9 +97,25 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
   it should "set occupier name as main occupier's name if 'one or more individuals' occupies the property" in {
     val ks = PageThreeForm.keys
     val p3 = page3FormData.updated(ks.occupierType, Seq(OccupierTypeIndividuals.name))
-                          .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
+    .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
     val sub = SubmissionBuilder.build(doc1.add(Page(3, p3)))
     assert(sub.theProperty.flatMap(_.occupierName).value === "Jimmy Choo")
+  }
+
+  it should "remove all non-short path information if the user is on the short path (they may have previoysly been on a different path)" in {
+    val fullSubmission = doc1
+    val convertedToShortPath = fullSubmission.add(Page(3, page3ShortPath))
+    val sub = SubmissionBuilder.build(convertedToShortPath)
+    assert(sub.landlord.isEmpty)
+    assert(sub.lease.isEmpty)
+    assert(sub.rentReviews.isEmpty)
+    assert(sub.rentAgreement.isEmpty)
+    assert(sub.rent.isEmpty)
+    assert(sub.rentIncludes.isEmpty)
+    assert(sub.incentives.isEmpty)
+    assert(sub.responsibilities.isEmpty)
+    assert(sub.alterations.isEmpty)
+    assert(sub.otherFactors.isEmpty)
   }
 
   object TestData {
@@ -143,10 +159,10 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
     lazy val docWithWeeklyRent = doc1.add(Page(9, page9WeeklyRentData))
     lazy val docWithMonthlyRent = doc1.add(Page(9, page9MonthlyRentData))
     lazy val docWithQuarterlyRent = doc1.add(Page(9, page9QuarterlyRentData))
-    
+
     lazy val docWithNdrChargesAndWaterCharges = doc1.add(Page(12, page12NdrAndWaterChargesData))
     lazy val docWithTenantsPropertyAddressAndOverridenMainAddress = doc1.add(Page(1, page1AlternativeAddressData))
-      .add(Page(4, page4TenantsPropertyAddressData))
+    .add(Page(4, page4TenantsPropertyAddressData))
     lazy val docWithTenantsPropertyAddressAndNoOverridenMainAddress = doc1.add(Page(4, page4TenantsPropertyAddressData))
     lazy val submission1 = Submission(
       Some(propertyAddress), Some(customerDetails), Some(theProperty), Some(sublet), Some(landlord),
@@ -192,10 +208,16 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
       p3ks.firstOccupationDate + ".year" -> Seq("2013"), p3ks.propertyOwnedByYou -> Seq("false"),
       p3ks.propertyRentedByYou -> Seq("true"))
 
+    lazy val page3ShortPath = Map(p3ks.propertyType -> Seq("Stuff"), p3ks.occupierType -> Seq("individuals"),
+      p3ks.mainOccupierName -> Seq("Mike Ington"),
+      p3ks.occupierCompanyName -> Seq("company name"), p3ks.firstOccupationDate + ".month" -> Seq("7"),
+      p3ks.firstOccupationDate + ".year" -> Seq("2013"), p3ks.propertyOwnedByYou -> Seq("false"),
+      p3ks.propertyRentedByYou -> Seq("false"))
+
     lazy val page4FormData = Map("propertyIsSublet" -> Seq("true"), "sublet[0].tenantFullName" -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" -> Seq("Some Company"),
-      "sublet[0].tenantAddress.street1" -> Seq("Some Road"), 
-      "sublet[0].tenantAddress.street2" -> Seq(""), 
+      "sublet[0].tenantAddress.street1" -> Seq("Some Road"),
+      "sublet[0].tenantAddress.street2" -> Seq(""),
       "sublet[0].tenantAddress.postcode" -> Seq("AA11 1AA"),
       "sublet[0].subletPropertyPartDescription" -> Seq("basement"),
       "sublet[0].subletPropertyReasonDescription" -> Seq("commercial"), "sublet[0].annualRent" -> Seq("200"),
@@ -203,8 +225,8 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
 
     lazy val page4WeeklySubletRentData = Map("propertyIsSublet" -> Seq("true"), "sublet[0].tenantFullName" -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" -> Seq("Some Company"),
-      "sublet[0].tenantAddress.street1" -> Seq("Some Road"), 
-      "sublet[0].tenantAddress.street2" -> Seq(""), 
+      "sublet[0].tenantAddress.street1" -> Seq("Some Road"),
+      "sublet[0].tenantAddress.street2" -> Seq(""),
       "sublet[0].tenantAddress.postcode" -> Seq("AA11 1AA"),
       "sublet[0].subletPropertyPartDescription" -> Seq("basement"),  "sublet[0].subletPropertyReasonDescription" -> Seq("commercial"),
       "sublet[0].annualRent" -> Seq("480"),
@@ -212,13 +234,14 @@ class SubmissionBuilderSpec extends FlatSpec with Matchers {
 
     lazy val page4TenantsPropertyAddressData = Map("propertyIsSublet" -> Seq("true"), "sublet[0].tenantFullName" -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" ->  Seq("1"),
-      "sublet[0].tenantAddress.street1" -> Seq("The Street"), 
-      "sublet[0].tenantAddress.street2"-> Seq("worthing"), 
+      "sublet[0].tenantAddress.street1" -> Seq("The Street"),
+      "sublet[0].tenantAddress.street2"-> Seq("worthing"),
       "sublet[0].tenantAddress.postcode" -> Seq("AA11 1AA"),
       "sublet[0].subletPropertyPartDescription" -> Seq("basement"),
       "sublet[0].subletPropertyReasonDescription" -> Seq("commercial"),
       "sublet[0].annualRent" -> Seq("480"),
       "sublet[0].rentFixedDate.month" -> Seq("2"), "sublet[0].rentFixedDate.year" -> Seq("2011"))
+
 
     lazy val page5FormData = Map("landlordFullName" -> Seq("Graham Goose"), "landlordAddress.buildingNameNumber" -> Seq("Some Company"),
       "landlordAddress.street1" -> Seq("Some Road"), "landlordAddress.street2" -> Seq(""), "landlordAddress.postcode" -> Seq("AA11 1AA"),
