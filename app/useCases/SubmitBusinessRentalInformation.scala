@@ -18,6 +18,7 @@ package useCases
 
 import connectors.{Document, SubmissionConnector}
 import form.persistence.FormDocumentRepository
+import models.journeys.Journey
 import models.pages._
 import models.serviceContracts.submissions._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -57,6 +58,20 @@ object SubmissionBuilder extends SubmissionBuilder {
 
   def build(doc: Document): Submission = {
     implicit val s: Summary = SummaryBuilder.build(doc)
+    Journey.lastPageFor(s) match {
+      case 4 => buildShortSubmission(s, doc)
+      case _ => buildSubmission(s, doc)
+    }
+  }
+
+  private def buildShortSubmission(summary: Summary, doc: Document) = {
+    implicit val s: Summary = summary
+    Submission(s.propertyAddress, s.customerDetails, s.theProperty.map(toTheProperty), s.sublet.map(toSublet), None,
+      None, None, None, None, None, None, None, None, None, Some(doc.referenceNumber))
+  }
+
+  private def buildSubmission(summary: Summary, doc: Document) = {
+    implicit val s: Summary = summary
     Submission(s.propertyAddress, s.customerDetails, s.theProperty.map(toTheProperty), s.sublet.map(toSublet), s.landlord.map(toLandlord),
       s.lease.map(toLeaseOrAgreement), s.rentReviews.map(toRentReviews), s.rentAgreement,
       s.rent.map(toRent), s.rentIncludes, s.incentives, s.responsibilities.map(toResponsibilities),
