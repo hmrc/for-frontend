@@ -18,12 +18,15 @@ package controllers
 
 import config.ForConfig
 import connectors.{HODConnector, SubmissionConnector}
+import org.joda.time.DateTime
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Request}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.mvc.{Action, AnyContent, Controller, Request}
+import playconfig.Audit
 import uk.gov.hmrc.play.http.{BadRequestException, HeaderCarrier, SessionKeys, Upstream4xxResponse}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-object AgentAPI extends FrontendController {
+object AgentAPI extends Controller {
+  implicit def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers, request.session)
 
   def getDocs = Action { implicit request =>
     Ok(views.html.api.apidoc())
@@ -44,14 +47,16 @@ object AgentAPI extends FrontendController {
   }
 
   private def checkCredentialsAndSubmit(submission: JsValue, refNum: String, postcode: String)(implicit request: Request[_]) = {
-    HODConnector.verifyCredentials(refNum.dropRight(3), refNum.takeRight(3), postcode).flatMap { lr =>
-      val hc = withAuthToken(request, lr.forAuthToken)
-      SubmissionConnector.submit(refNum, submission)(hc)
-    }.recover {
-      case b: BadRequestException => BadRequest(b.message)
-      case Upstream4xxResponse(body, 401, _, _) => Unauthorized(badCredentialsError(body, refNum, postcode))
-      case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
-    }
+    for {
+      lr <- HODConnector.verifyCredentials(refNum.dropRight(3), refNum.takeRight(3), postcode)
+      hc = withAuthToken(request, lr.forAuthToken)
+      res <- SubmissionConnector.submit(refNum, submission)(hc)
+      _ <- Audit("APISubmission", Map("referenceNumber" -> refNum, "submitted" -> DateTime.now.toString))
+    } yield res
+  } recover {
+    case b: BadRequestException => BadRequest(b.message)
+    case Upstream4xxResponse(body, 401, _, _) => Unauthorized(badCredentialsError(body, refNum, postcode))
+    case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
   }
 
   private def withAuthToken(request: Request[_], authToken: String): HeaderCarrier = {
