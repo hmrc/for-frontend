@@ -37,7 +37,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
     "uk.gov.hmrc" %% "play-partials" % "4.2.0",
     "uk.gov.hmrc" %% "url-builder" % "1.0.0",
-    "uk.gov.hmrc" %% "frontend-bootstrap" % "6.3.0",
+    "uk.gov.hmrc" %% "frontend-bootstrap" % "6.4.0",
     "uk.gov.hmrc" %% "play-json-logger" % "2.1.0",
     "uk.gov.hmrc" %% "http-caching-client" % "5.3.0",
     "it.innove" %  "play2-pdf"        % "1.1.3",
