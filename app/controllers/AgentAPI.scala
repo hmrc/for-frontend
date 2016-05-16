@@ -44,12 +44,11 @@ object AgentAPI extends Controller with HeaderValidator {
   }
 
   def submit(refNum: String, postcode: String): Action[AnyContent] = mustHaveValidAcceptHeader.async { implicit request =>
-    if(ForConfig.agentApiEnabled) {
-      request.body.asJson.map { js =>
-        checkCredentialsAndSubmit(js, refNum, postcode)(request)
-      }.getOrElse(BadRequest)
-    } else {
-      NotFound
+    (ForConfig.agentApiEnabled, ForConfig.apiTestAccountsOnly) match {
+      case (false, _) => NotFound
+      case (true, true) if !refNum.startsWith(ForConfig.apiTestAccountPrefix) => mustUseTestCredentials(refNum, postcode)
+      case (true, _) =>
+        request.body.asJson.map(checkCredentialsAndSubmit(_, refNum, postcode)) getOrElse BadRequest
     }
   }
 
@@ -90,6 +89,14 @@ object AgentAPI extends Controller with HeaderValidator {
       case other => other
     }
     Json.prettyPrint(js)
+  }
+
+  private def mustUseTestCredentials(refNum: String, postcode: String): Result = {
+    Unauthorized(
+      Json.prettyPrint(
+        Json.parse(s"""{"code": "INVALID_CREDENTIALS", "message": "Invalid credentials: $refNum - $postcode"}""")
+      )
+    )
   }
 
   private def internalServerError: Result = {

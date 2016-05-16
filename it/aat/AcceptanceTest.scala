@@ -13,7 +13,7 @@ import uk.gov.hmrc.play.http.{HeaderCarrier, _}
 import scala.concurrent.Future
 
 trait AcceptanceTest extends FreeSpecLike with Matchers with BeforeAndAfterAll {
-  private lazy val testConfigs = Map("auditing.enabled" -> false)
+  private lazy val testConfigs = Map("auditing.enabled" -> false, "agentApi.testAccountsOnly" -> true)
 
   lazy val http: TestHttpClient = new TestHttpClient()
 

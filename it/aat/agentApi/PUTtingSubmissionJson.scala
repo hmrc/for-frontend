@@ -95,6 +95,19 @@ class PUTtingSubmissionJson extends AcceptanceTest {
     }
   }
 
+  "When PUTting a submission using a non-test account when only test accounts are allowed" - {
+    http.stubValidCredentials(nonTestAccount.ref1, nonTestAccount.ref2, nonTestAccount.postcode)
+
+    val res = AgentApi.submit(nonTestAccount.refNum, nonTestAccount.postcode, validSubmission)
+
+    "A formatted 401 Unauthorised response explaining that the credentials are invalid is returned" in {
+      assert(res.status === 401)
+      assert(res.body === jsonBody(
+        s"""{"code": "INVALID_CREDENTIALS", "message": "Invalid credentials: ${nonTestAccount.refNum} - ${nonTestAccount.postcode}"}""")
+      )
+    }
+  }
+
   private def jsonBody(body: String) = Json.prettyPrint(Json.parse(body))
 }
 
@@ -120,17 +133,17 @@ private object AgentApi extends FutureAwaits with DefaultAwaitTimeout {
 private object TestData {
   import models._
 
-  val valid = Credentials("9999000", "123", "AA11+1AA")
-  val invalid = Credentials("1234567", "890", "AA11+1AA")
-  val conflicting = Credentials("0000999", "321", "AA11+1AA")
-  val lockedOut = Credentials("9999999", "999", "AA11+1AA")
-  val internalServerError = Credentials("7654321", "098", "AA11+1AA")
-  val missingAcceptHeader = Credentials("1112223", "334", "AA11+1AA")
+  val valid = Credentials("9999000", "001", "AA11+1AA")
+  val invalid = Credentials("9999000", "002", "AA11+1AA")
+  val conflicting = Credentials("9999000", "003", "AA11+1AA")
+  val lockedOut = Credentials("9999000", "004", "AA11+1AA")
+  val internalServerError = Credentials("9999000", "005", "AA11+1AA")
+  val nonTestAccount = Credentials("1234567", "890", "AA11+1AA")
 
   val validSubmission: JsValue = Json.toJson(
     Submission(
       Some(PropertyAddress(true, None)),
-      Some(CustomerDetails("bob", UserTypeOwnersAgent, ContactTypePhone, ContactDetails(Some("1"), None, None), None, None, None)),
+      Some(CustomerDetails("bob", UserTypeOwnersAgent, ContactTypePhone, ContactDetails(Some("1"), None, None))),
       Some(TheProperty("shop", OccupierTypeNobody, None, None, true, None)),
       Some(Sublet(false, Nil)),
       None, None, None, None, None, None, None, None, None, None, Some("9999000123"))
