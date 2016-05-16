@@ -16,9 +16,11 @@ class PUTtingSubmissionJson extends AcceptanceTest {
     http.stubInvalidCredentials(invalid.ref1, invalid.ref2, invalid.postcode)
     val res = AgentApi.submit(invalid.refNum, invalid.postcode, validSubmission)
 
-    "A 401 Unauthorised response is returned" in {
+    "A formatted 401 Unauthorised response is returned" in {
       assert(res.status === 401)
-      assert(res.body === jsonBody(s"""{"error": "invalid credentials: ${invalid.refNum} - ${invalid.postcode}", "numberOfRemainingTriesUntilIPLockout":4}"""))
+      assert(res.body === jsonBody(
+        s"""{"code": "INVALID_CREDENTIALS", "message": "Invalid credentials: ${invalid.refNum} - ${invalid.postcode}; 4 tries remaining until IP lockout"}""")
+      )
     }
   }
 
@@ -28,14 +30,14 @@ class PUTtingSubmissionJson extends AcceptanceTest {
     "When the submission json is invalid" - {
       http.stubSubmission(valid.refNum, invalidSubmission, Seq(HeaderNames.authorisation -> "token"), HttpResponse(
         responseStatus = 400,
-        responseJson = Some(invalidSubmissionError)
+        responseJson = Some(Json.parse(s"{$invalidSubmissionError}"))
       ))
 
       val res = AgentApi.submit(valid.refNum, valid.postcode, invalidSubmission)
 
-      "A 400 Bad Request response explaining the error is returned" in {
+      "A formatted 400 Bad Request response explaining the error is returned" in {
         assert(res.status === 400)
-        assert(res.body === Json.prettyPrint(invalidSubmissionError))
+        assert(res.body === jsonBody(s"""{"code": "INVALID_SUBMISSION", $invalidSubmissionError}"""))
       }
     }
 
@@ -50,14 +52,25 @@ class PUTtingSubmissionJson extends AcceptanceTest {
     }
   }
 
+  "When PUTting a submission and there is an internal server error" - {
+    http.stubInternalServerError(internalServerError.ref1, internalServerError.ref2, internalServerError.postcode)
+
+    val res = AgentApi.submit(internalServerError.refNum, internalServerError.postcode, validSubmission)
+
+    "A formatted 500 Internal Server Error response is returned" in {
+      assert(res.status === 500)
+      assert(res.body === jsonBody("""{"code": "INTERNAL_SERVER_ERROR", "message": "Internal server error"}"""))
+    }
+  }
+
   "When PUTting a submission using credentials that have already been used" - {
     http.stubConflictingCredentials(conflicting.ref1, conflicting.ref2, conflicting.postcode)
 
     val res = AgentApi.submit(conflicting.refNum, conflicting.postcode, validSubmission)
 
-    "A 409 Conflict response explaining the error is returned" in {
+    "A formatted 409 Conflict response explaining the error is returned" in {
       assert(res.status === 409)
-      assert(res.body === jsonBody("{\"error\":\"Duplicate submission. 1234567890\"}"))
+      assert(res.body === jsonBody(s"""{"code": "DUPLICATE_SUBMISSION", "message": "A submission already exists for ${conflicting.refNum}"}"""))
     }
   }
 
@@ -66,9 +79,9 @@ class PUTtingSubmissionJson extends AcceptanceTest {
 
     val res = AgentApi.submit(lockedOut.refNum, lockedOut.postcode, validSubmission)
 
-    "A 401 Unauthorised response explaining that the IP is locked out is returned" in {
+    "A formatted 401 Unauthorised response explaining that the IP is locked out is returned" in {
       assert(res.status === 401)
-      assert(res.body === jsonBody("""{"error":"This IP address is locked out for 24 hours due to too many failed login attempts"}"""))
+      assert(res.body === jsonBody("""{"code": "IP_LOCKOUT", "message":"This IP address is locked out for 24 hours due to too many failed login attempts"}"""))
     }
   }
 
@@ -90,6 +103,7 @@ private object TestData {
   val invalid = Credentials("1234567", "890", "AA11+1AA")
   val conflicting = Credentials("0000999", "321", "AA11+1AA")
   val lockedOut = Credentials("9999999", "999", "AA11+1AA")
+  val internalServerError = Credentials("7654321", "098", "AA11+1AA")
 
   val validSubmission: JsValue = Json.toJson(
     Submission(
@@ -101,8 +115,14 @@ private object TestData {
   )
   val invalidSubmission: JsValue = Json.parse("{}")
 
-  val invalidSubmissionError = Json.parse(
-    """{ "errors":[ {"field":"", "error":"object has missing required properties ([ \"alterations\",\"customerDetails\",\"incentives\",\"landlord\",\"lease\", \"otherFactors\",\"propertyAddress\",\"referenceNumber\",\"rent\", \"rentAgreement\",\"rentIncludes\",\"rentReviews\",\"responsibilities\", \"sublet\",\"theProperty\"])", "schemaUsed":"defaultSchema.json"}] }""")
+  val invalidSubmissionError =
+    """"errors":[
+      |{"field":"",
+      |"error":"object has missing required properties
+      |([ \"alterations\",\"customerDetails\",\"incentives\",\"landlord\",\"lease\", \"otherFactors\",
+      |\"propertyAddress\",\"referenceNumber\",\"rent\", \"rentAgreement\",\"rentIncludes\",\"rentReviews\",
+      |\"responsibilities\", \"sublet\",\"theProperty\"])", "schemaUsed":"defaultSchema.json"}
+      |]""".stripMargin.replaceAll("\n", "")
 }
 
 private case class Credentials(ref1: String, ref2: String, postcode: String) {

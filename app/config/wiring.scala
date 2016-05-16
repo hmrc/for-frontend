@@ -28,7 +28,7 @@ import play.api.libs.json.Writes
 import uk.gov.hmrc.crypto.{ApplicationCrypto, CompositeSymmetricCrypto}
 import uk.gov.hmrc.http.cache.client.{ShortLivedCache, ShortLivedHttpCaching}
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.config.{AppName, ServicesConfig}
 import uk.gov.hmrc.play.frontend.filters.SessionCookieCryptoFilter
@@ -85,7 +85,7 @@ object FormPartialProvider extends FormPartialRetriever {
 object Audit {
   val auditConnector = AuditServiceConnector
 
-  def apply(event: String, detail: Map[String, String]) = {
+  def apply(event: String, detail: Map[String, String]): Future[AuditResult] = {
     val de = DataEvent(auditSource = "for-frontend", auditType = event, detail = detail)
     auditConnector.sendEvent(de)
   }

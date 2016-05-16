@@ -19,11 +19,14 @@ package controllers
 import config.ForConfig
 import connectors.{HODConnector, SubmissionConnector}
 import org.joda.time.DateTime
+import play.api.Logger
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Controller, Request}
+import play.api.mvc._
 import playconfig.Audit
-import uk.gov.hmrc.play.http.{BadRequestException, HeaderCarrier, SessionKeys, Upstream4xxResponse}
+import uk.gov.hmrc.play.http._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.math.BigDecimal
 
 object AgentAPI extends Controller {
   implicit def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers, request.session)
@@ -54,9 +57,10 @@ object AgentAPI extends Controller {
       _ <- Audit("APISubmission", Map("referenceNumber" -> refNum, "submitted" -> DateTime.now.toString))
     } yield res
   } recover {
-    case b: BadRequestException => BadRequest(b.message)
+    case b: BadRequestException => BadRequest(invalidSubmission(b.message))
     case Upstream4xxResponse(body, 401, _, _) => Unauthorized(badCredentialsError(body, refNum, postcode))
-    case Upstream4xxResponse(body, 409, _, _) => Conflict(body)
+    case Upstream4xxResponse(_, 409, _, _) => Conflict(duplicateSubmission(refNum))
+    case Upstream5xxResponse(_, 500, _) => internalServerError
   }
 
   private def withAuthToken(request: Request[_], authToken: String): HeaderCarrier = {
@@ -66,10 +70,39 @@ object AgentAPI extends Controller {
   private def badCredentialsError(body: String, refNum: String, postcode: String): String = {
     val js = Json.parse(body) match {
       case JsObject(s) if s.headOption.contains("numberOfRemainingTriesUntilIPLockout" -> JsNumber(BigDecimal(0))) =>
-        JsObject(Seq("error" -> JsString(s"This IP address is locked out for 24 hours due to too many failed login attempts")))
-      case JsObject(fields) => JsObject(Seq("error" -> JsString(s"invalid credentials: $refNum - $postcode")) ++ fields)
+        JsObject(
+          Seq(
+            "code" -> JsString("IP_LOCKOUT"),
+            "message" -> JsString(s"This IP address is locked out for 24 hours due to too many failed login attempts")
+          )
+        )
+      case JsObject(Seq(("numberOfRemainingTriesUntilIPLockout", n))) =>
+        JsObject(
+          Seq(
+            "code" -> JsString("INVALID_CREDENTIALS"),
+            "message" -> JsString(s"Invalid credentials: $refNum - $postcode; $n tries remaining until IP lockout")
+          )
+        )
       case other => other
     }
     Json.prettyPrint(js)
+  }
+
+  private def internalServerError: Result = {
+    InternalServerError(Json.prettyPrint(Json.parse("""{"code": "INTERNAL_SERVER_ERROR", "message": "Internal server error"}""")))
+  }
+
+  private def invalidSubmission(msg: String): String = {
+    val js = Json.parse(msg) match {
+      case JsObject(s) => JsObject(Seq("code" -> JsString("INVALID_SUBMISSION")) ++ s)
+      case other => other
+    }
+    Json.prettyPrint(js)
+  }
+
+  private def duplicateSubmission(refNum: String): String = {
+    Json.prettyPrint(
+      Json.parse(s"""{"code": "DUPLICATE_SUBMISSION", "message": "A submission already exists for $refNum"}""")
+    )
   }
 }

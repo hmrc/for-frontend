@@ -13,6 +13,7 @@ import uk.gov.hmrc.play.http.{HeaderCarrier, _}
 import scala.concurrent.Future
 
 trait AcceptanceTest extends FreeSpecLike with Matchers with BeforeAndAfterAll {
+  private lazy val testConfigs = Map("auditing.enabled" -> false)
 
   lazy val http: TestHttpClient = new TestHttpClient()
 
@@ -24,7 +25,8 @@ trait AcceptanceTest extends FreeSpecLike with Matchers with BeforeAndAfterAll {
     val global = new ForGlobal {
       override lazy val forHttp = http
     }
-    val app = FakeApplication(withGlobal = Some(global))
+
+    val app = FakeApplication(withGlobal = Some(global), additionalConfiguration = testConfigs)
     server = TestServer(port, app)
     server.start()
   }
@@ -74,6 +76,12 @@ class TestHttpClient extends ForHttp {
     stubGet(s"$baseForUrl/$ref1/$ref2/${urlEncode(postcode)}/verify", Nil, HttpResponse(
       responseStatus = 401,
       responseJson = Some(Json.parse("""{"numberOfRemainingTriesUntilIPLockout":0}"""))))
+  }
+
+  def stubInternalServerError(ref1: String, ref2: String, postcode: String) = {
+    stubGet(s"$baseForUrl/$ref1/$ref2/${urlEncode(postcode)}/verify", Nil, HttpResponse(
+      responseStatus = 500
+    ))
   }
 
   def stubSubmission(refNum: String, submission: JsValue, headers: Seq[(String, String)], response: HttpResponse) = {
