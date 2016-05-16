@@ -12,6 +12,16 @@ class PUTtingSubmissionJson extends AcceptanceTest {
 
   startApp()
 
+  "When PUTting a submission without a valid accept header" - {
+    http.stubValidCredentials(valid.ref1, valid.ref2, valid.postcode)
+    val res = AgentApi.submitWithoutAcceptHeader(valid.refNum, valid.postcode, validSubmission)
+
+    "A formatted 406 Not Acceptable response is returned" in {
+      assert(res.status === 406)
+      assert(res.body === jsonBody("""{"code": "ACCEPT_HEADER_INVALID", "message": "The header Accept is missing or invalid"}"""))
+    }
+  }
+
   "When PUTting a submission using invalid credentials" - {
     http.stubInvalidCredentials(invalid.ref1, invalid.ref2, invalid.postcode)
     val res = AgentApi.submit(invalid.refNum, invalid.postcode, validSubmission)
@@ -92,7 +102,18 @@ private object AgentApi extends FutureAwaits with DefaultAwaitTimeout {
   import play.api.Play.current
 
   def submit(refNum: String, postcode: String, submission: JsValue) = {
-    await(WS.url(s"http://localhost:9521/sending-rental-information/api/submit/$refNum/$postcode").put(submission))
+    await(WS
+      .url(s"http://localhost:9521/sending-rental-information/api/submit/$refNum/$postcode")
+      .withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
+      .put(submission)
+    )
+  }
+
+  def submitWithoutAcceptHeader(refNum: String, postcode: String, submission: JsValue) = {
+    await(WS
+      .url(s"http://localhost:9521/sending-rental-information/api/submit/$refNum/$postcode")
+      .put(submission)
+    )
   }
 }
 
@@ -104,6 +125,7 @@ private object TestData {
   val conflicting = Credentials("0000999", "321", "AA11+1AA")
   val lockedOut = Credentials("9999999", "999", "AA11+1AA")
   val internalServerError = Credentials("7654321", "098", "AA11+1AA")
+  val missingAcceptHeader = Credentials("1112223", "334", "AA11+1AA")
 
   val validSubmission: JsValue = Json.toJson(
     Submission(

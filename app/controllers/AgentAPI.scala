@@ -22,13 +22,17 @@ import org.joda.time.DateTime
 import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
+import play.api.mvc.Results._
 import playconfig.Audit
 import uk.gov.hmrc.play.http._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
+import scala.concurrent.Future
 import scala.math.BigDecimal
+import scala.util.matching.Regex
+import scala.util.matching.Regex.Match
 
-object AgentAPI extends Controller {
+object AgentAPI extends Controller with HeaderValidator {
   implicit def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers, request.session)
 
   def getDocs = Action { implicit request =>
@@ -39,7 +43,7 @@ object AgentAPI extends Controller {
     HODConnector.getSchema(name) map { Ok(_) }
   }
 
-  def submit(refNum: String, postcode: String): Action[AnyContent] = Action.async { implicit request =>
+  def submit(refNum: String, postcode: String): Action[AnyContent] = mustHaveValidAcceptHeader.async { implicit request =>
     if(ForConfig.agentApiEnabled) {
       request.body.asJson.map { js =>
         checkCredentialsAndSubmit(js, refNum, postcode)(request)
@@ -104,5 +108,30 @@ object AgentAPI extends Controller {
     Json.prettyPrint(
       Json.parse(s"""{"code": "DUPLICATE_SUBMISSION", "message": "A submission already exists for $refNum"}""")
     )
+  }
+}
+
+trait HeaderValidator {
+  val validateVersion: String => Boolean = _ == "1.0"
+  val matchHeader: String => Option[Match] = new Regex("""^application/vnd[.]hmrc[.](.*?)[+]json""", "version") findFirstMatchIn
+
+  val acceptHeaderRules: Option[String] => Boolean =
+    _ flatMap { a => a == "application/vnd.hmrc.1.0+json" } getOrElse false
+    //_ flatMap { a => matchHeader(a) map { res => validateVersion(res.group("version"))} } getOrElse false
+
+  def mustHaveValidAcceptHeader = new ActionBuilder[Request] {
+    def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]) = {
+      Logger.info(request.headers.get("Accept").toString)
+      if(acceptHeaderRules(request.headers.get("Accept")))
+        block(request)
+      else
+        Future.successful(
+          NotAcceptable(
+            Json.prettyPrint(Json.parse(
+              """{"code": "ACCEPT_HEADER_INVALID", "message": "The header Accept is missing or invalid"}""")
+            )
+          )
+        )
+    }
   }
 }
