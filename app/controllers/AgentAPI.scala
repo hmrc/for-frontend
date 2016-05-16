@@ -116,8 +116,7 @@ trait HeaderValidator {
   val matchHeader: String => Option[Match] = new Regex("""^application/vnd[.]hmrc[.](.*?)[+]json""", "version") findFirstMatchIn
 
   val acceptHeaderRules: Option[String] => Boolean =
-    _ flatMap { a => a == "application/vnd.hmrc.1.0+json" } getOrElse false
-    //_ flatMap { a => matchHeader(a) map { res => validateVersion(res.group("version"))} } getOrElse false
+    _ flatMap { a => matchHeader(a) map { res => validateVersion(res.group("version"))} } getOrElse false
 
   def mustHaveValidAcceptHeader = new ActionBuilder[Request] {
     def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]) = {
