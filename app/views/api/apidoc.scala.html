@@ -29,13 +29,13 @@
         </td><td class="snippet--inline">
             String
         </td><td class="snippet--inline">
-            BN12 4AX
-        </td><td>The post code from the letter. Must be a valid UK postcode.</td></tr></tbody></table>
+            AA11+1AA
+        </td><td>The post code from the letter. Must be a valid UK postcode. Must be separated by a "+" instead of a space</td></tr></tbody></table>
     </section>
     <section id="content-types" class="section flush--bottom">
         <h2 class="heading-medium">Accepted Media Types</h2>
         <ul><li>
-            <code class="snippet--inline">application/json</code>
+            <code class="snippet--inline">application/vnd.hmrc.1.0+json</code>
         </li></ul>
     </section>
     <section id="data-types" class="section flush--bottom">
@@ -289,7 +289,7 @@
             String
         </td><td class="snippet--inline">
             phone
-        </td><td>"How would you like us to contact you?"</td><td>Required as part of customerDetails</td><td>Must be one of "phone", "email", or "both"</td></tr><tr><td class="snippet--inline">
+        </td><td>"How would you like us to contact you?"</td><td>Required as part of customerDetails</td><td>Must be one of "phone", "email"</td></tr><tr><td class="snippet--inline">
             customerDetails.contactDetails
         </td><td class="snippet--inline">
             Object
@@ -299,37 +299,19 @@
             String
         </td><td class="snippet--inline">
             0123457890
-        </td><td>Contact phone number</td><td>Only required if customerDetails.contactType is "phone" or "both"</td><td>Max 20 characters. Only digits, spaces, and +()[]- permitted</td></tr><tr><td class="snippet--inline">
+        </td><td>Contact phone number</td><td>Only required if customerDetails.contactType is "phone"</td><td>Max 20 characters. Only digits, spaces, and +()[]- permitted</td></tr><tr><td class="snippet--inline">
             contactDetails.email
         </td><td class="snippet--inline">
             String
         </td><td class="snippet--inline">
             email@@address.com
-        </td><td>Contact email address</td><td>Only required if customerDetails.contactType is "email" or "both"</td><td>Must be valid email address</td></tr><tr><td class="snippet--inline">
+        </td><td>Contact email address</td><td>Only required if customerDetails.contactType is "email"</td><td>Must be valid email address</td></tr><tr><td class="snippet--inline">
             contactDetails.emailConfirmed
         </td><td class="snippet--inline">
             String
         </td><td class="snippet--inline">
             email@@address.com
-        </td><td>Confirm email address</td><td>Only required if customerDetails.contactType is "email" or "both"</td><td>Must match contactDetails.email</td></tr><tr><td class="snippet--inline">
-            customerDetails.contactAddressType
-        </td><td class="snippet--inline">
-            String
-        </td><td class="snippet--inline">
-            mainAddress
-        </td><td>"Which address would you like us to use if we need to write to you in future?"</td><td>Only required if userType is "owner", "occupier", or "ownerOccupier"</td><td>Must be one of "mainAddress", "alternativeAddress", or "contactAddress" (I want someone else
-            to be contacted on my behalf)
-        </td></tr><tr><td class="snippet--inline">
-            customerDetails.alternativeAddress
-        </td><td class="snippet--inline">
-            String
-        </td><td>
-            See Address
-        </td><td>Alternative contact address details</td><td>Only required if contactAddressType is "alternativeAddress"</td><td>See Address</td></tr><tr><td class="snippet--inline">
-            customerDetails.alternativeContact
-        </td><td class="snippet--inline">
-            Object
-        </td><td/><td>Alternative contact details</td><td>Only required if contactAddressType is "contactAddress"</td><td/></tr><tr><td class="snippet--inline">
+        </td><td>Confirm email address</td><td>Only required if customerDetails.contactType is "email"</td><td>Must match contactDetails.email</td></tr><tr><td class="snippet--inline">
             theProperty
         </td><td class="snippet--inline">
             Object
@@ -437,7 +419,7 @@
             Address
         </td><td>
             See Address
-        </td><td>The landlord's address</td><td>Required as part of landlord</td><td>The postcode for this address does not need to be a valid UK postcode</td></tr><tr><td class="snippet--inline">
+        </td><td>The landlord's address</td><td>Optional</td><td>The postcode for this address does not need to be a valid UK postcode</td></tr><tr><td class="snippet--inline">
             landlord.landlordConnectionType
         </td><td class="snippet--inline">
             Enum
@@ -464,7 +446,7 @@
         </td><td class="snippet--inline">
             leaseTenancy
         </td><td>"What type of agreement does your client have?"</td><td>Required as part of lease</td><td>Must be one of "verbal" (no agreement or not in writing), "leaseTenancy" (single lease or
-            tenancy agreement), or "licenseOther" (license or other type of written agreement)
+            tenancy agreement), or "licenceOther" (licence or other type of written agreement)
         </td></tr><tr><td class="snippet--inline">
             lease.leaseAgreementHasBreakClause
         </td><td class="snippet--inline">
@@ -501,7 +483,7 @@
             String
         </td><td class="snippet--inline">
             2001-02-01
-        </td><td>Step to</td><td>Required for each rent step</td><td>Must be a valid date in the format YYYY-MM-DD</td></tr><tr><td class="snippet--inline">
+        </td><td>Step to</td><td>Required for each rent step</td><td>Must be a valid date in the format YYYY-MM-DD. Must be after steppedDetails[].stepFrom</td></tr><tr><td class="snippet--inline">
             steppedDetails[].amount
         </td><td class="snippet--inline">
             Currency
@@ -600,7 +582,7 @@
         </td><td class="snippet--inline">
             false
         </td><td>"Was the rent fixed between your client (or you) and the landlord?"</td><td>Required as part of rentAgreement</td><td/></tr><tr><td class="snippet--inline">
-            rentAgreement.notRentReviewFixed
+            rentAgreement.notReviewRentFixed
         </td><td class="snippet--inline">
             Enum
         </td><td class="snippet--inline">
@@ -958,18 +940,34 @@
     </section>
     <section id="error-responses" class="section flush--bottom">
         <h2 class="heading-medium">Error Scenarios</h2>
-        <table><thead><tr><th>Scenario</th><th>Code</th><th>Status</th><th>Example error message</th></tr></thead><tbody><tr><td>Invalid refNum or postcode</td><td class="snippet--inline">
-            401
+        <table><thead><tr><th>Scenario</th><th>HTTP Status</th><th>Code</th><th>Example error message</th></tr></thead><tbody><tr><td>Invalid refNum or postcode</td><td class="snippet--inline">
+            401 (Unauthorized)
         </td><td class="snippet--inline">
-            Unauthorised
-        </td><td/></tr><tr><td>Form already submitted for given refNum</td><td class="snippet--inline">
-            409
+            INVALID_CREDENTIALS
         </td><td class="snippet--inline">
-            Conflict
-        </td><td/></tr><tr><td>Invalid request JSON</td><td class="snippet--inline">
-            400
+            {"code": "INVALID_CREDENTIALS", "message": "Invalid credentials: 9999000123 - AA11+1AA; 4 tries remaining until IP lockout"}
+        </td></tr><tr><td>Form already submitted for given refNum</td><td class="snippet--inline">
+            409 (Conflict)
         </td><td class="snippet--inline">
-            Bad Request
+            DUPLICATE_SUBMISSION
+        </td><td class="snippet--inline">
+            {"code": "DUPLICATE_SUBMISSION", "message" :"A submission already exists for 9999000123"}
+        </td></tr><tr><td>IP address is temporarily locked out due to too many failed logins</td><td class="snippet--inline">
+            401 (Unauthorized)
+        </td><td class="snippet--inline">
+            IP_LOCKOUT
+        </td><td class="snippet--inline">
+            {"code": "IP_LOCKOUT", "message":"This IP address is locked out for 24 hours due to too many failed login attempts"}
+        </td></tr><tr><td>Invalid or missing Accept header</td><td class="snippet--inline">
+            406 (Not Acceptable)
+        </td><td class="snippet--inline">
+            ACCEPT_HEADER_INVALID
+        </td><td class="snippet--inline">
+            {"code": "ACCEPT_HEADER_INVALID", "message": "The header Accept is missing or invalid"}
+        </td></tr><tr><td>Invalid request JSON</td><td class="snippet--inline">
+            400 (Bad Request)
+        </td><td class="snippet--inline">
+            INVALID_SUBMISSION
         </td><td>See Below</td></tr></tbody></table>
         <h2 class="heading-medium">Examples of invalid JSON and response error messages</h2>
         <p>Request with invalid value for propertyAddress.isAddressCorrect</p>
@@ -1000,13 +998,12 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "/propertyAddress/isAddressCorrect",
-      "error": "instance type (string) does not match any allowed primitive type (allowed: [\"boolean\"])",
-      "schemaUsed": "doesNotRentSchema.json"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "/propertyAddress/isAddressCorrect",
+    "error": "instance type (string) does not match any allowed primitive type (allowed: [\"boolean\"])",
+    "schemaUsed": "doesNotRentSchema.json"
+  }]
 }</pre>
         <p>Request JSON with required property "propertyAddress.isAddressCorrect" missing</p>
                 <pre class="snippet--block code">
@@ -1034,13 +1031,12 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "/propertyAddress",
-      "error": "object has missing required properties ([\"isAddressCorrect\"])",
-      "schemaUsed": "doesNotRentSchema.json"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "/propertyAddress",
+    "error": "object has missing required properties ([\"isAddressCorrect\"])",
+    "schemaUsed": "doesNotRentSchema.json"
+  }]
 }</pre>
         <p>Request JSON with required property "sublet" missing</p>
                 <pre class="snippet--block code">
@@ -1066,13 +1062,12 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "",
-      "error": "object has missing required properties ([\"alterations\",\"incentives\",\"landlord\",\"lease\",\"otherFactors\",\"rent\",\"rentAgreement\",\"rentIncludes\",\"rentReviews\",\"responsibilities\",\"sublet\"])",
-      "schemaUsed": "defaultSchema.json"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "",
+    "error": "object has missing required properties ([\"alterations\",\"incentives\",\"landlord\",\"lease\",\"otherFactors\",\"rent\",\"rentAgreement\",\"rentIncludes\",\"rentReviews\",\"responsibilities\",\"sublet\"])",
+    "schemaUsed": "defaultSchema.json"
+  }]
 }</pre>
         <p>Request JSON with unexpected property "customerDetails.contactDetails.fax"</p>
                 <pre class="snippet--block code">
@@ -1103,13 +1098,12 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "",
-      "error": "object instance has properties which are not allowed by the schema: [\"fax\"]",
-      "schemaUsed": "doesNotRentSchema.json"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "",
+    "error": "object instance has properties which are not allowed by the schema: [\"fax\"]",
+    "schemaUsed": "doesNotRentSchema.json"
+  }]
 }</pre>
         <p>Request JSON with invalid date for "rent.rentActuallyAgreed"</p>
                 <pre class="snippet--block code">
@@ -1128,7 +1122,8 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "error": "Cannot parse \"2011-09-31\": Value 31 for dayOfMonth must be in the range [1,30]"
+  "code": "INVALID_SUBMISSION",
+  "message": "Cannot parse \"2011-09-31\": Value 31 for dayOfMonth must be in the range [1,30]"
 }</pre>
         <p>Request JSON with expected property "propertyAddress.address" missing</p>
                 <pre class="snippet--block code">
@@ -1158,13 +1153,12 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "/propertyAddress",
-      "error": "object has missing required properties ([\"address\"])",
-      "reason": "addressIsCorrect is false"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "/propertyAddress",
+    "error": "object has missing required properties ([\"address\"])",
+    "reason": "addressIsCorrect is false"
+  }]
 }</pre>
         <p>Request JSON with multiple expected properties missing</p>
                 <pre class="snippet--block code">
@@ -1192,18 +1186,17 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "/propertyAddress",
-      "error": "object has missing required properties ([\"address\"])",
-      "reason": "addressIsCorrect is false"
-    },
-    {
-      "field": "/customerDetails/contactDetails",
-      "error": "object has missing required properties ([\"contactDetails.phone\"])",
-      "reason": "contactType is \"phone\""
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "/propertyAddress",
+    "error": "object has missing required properties ([\"address\"])",
+    "reason": "addressIsCorrect is false"
+   },
+   {
+    "field": "/customerDetails/contactDetails",
+    "error": "object has missing required properties ([\"contactDetails.phone\"])",
+    "reason": "contactType is \"phone\""
+  }]
 }</pre>
         <p>Request JSON with required property "tenantAddress" missing from a "sublets" instance</p>
                 <pre class="snippet--block code">
@@ -1244,15 +1237,13 @@
         <p>Error message</p>
                 <pre class="snippet--block code">
 {
-  "errors": [
-    {
-      "field": "/sublet/sublets/0",
-      "error": "object has missing required properties ([\"tenantAddress\"])",
-      "schemaUsed": "doesNotRentSchema.json"
-    }
-  ]
+  "code": "INVALID_SUBMISSION",
+  "message": [{
+    "field": "/sublet/sublets/0",
+    "error": "object has missing required properties ([\"tenantAddress\"])",
+    "schemaUsed": "doesNotRentSchema.json"
+  }]
 }</pre>
-
     </section>
 </main>
 }
