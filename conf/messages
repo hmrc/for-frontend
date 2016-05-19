@@ -541,7 +541,7 @@ error.declaration=You must agree to proceed
 #SAVE
 ###############################
 saveForLater.heading=Your information has been saved<br />but not submitted
-saveForLater.paragraph=We will keep any unsubmitted information for three months before deleting it.
+saveForLater.paragraph=We will delete any unsubmitted information on
 saveForLater.info=Please make a note of these details - <strong>including the new password</strong> - as you will need them to access and make changes to your information.
 saveForLater.continue=Continue completing this form
 saveForLater.return=Return to GOV.UK

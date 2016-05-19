@@ -4,7 +4,9 @@
 @import org.joda.time.DateTime
 @import _root_.template.FormatRefNum
 @import controllers.dataCapturePages.UrlFor
+@import java.util.Locale
 
+@import java.time.format.DateTimeFormatter
 @(summary: Summary, password: String)(implicit requestHeader: RequestHeader,  lang: Lang)
 
 @headExtra = {
@@ -40,7 +42,7 @@
 
       <p class="form-error alert alert-save-for-later" style="color:#b10e1e; margin-top: 1em">@Html(Messages("saveForLater.info"))</p>
 
-      <p class="icon-important" style="margin-top:2em">@Messages("saveForLater.retrievalWarning") @Html(Messages("saveForLater.paragraph"))</p>
+      <p class="icon-important" style="margin-top:2em">@Messages("saveForLater.retrievalWarning") @Html(Messages("saveForLater.paragraph")) <strong>@java.time.LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd-MMM-yyyy" + ".", new Locale("Wales", "cy_GB")))</strong> <p>
 
       <p><a href="@routes.SaveForLater.immediateResume" class="button button-primary">@Messages("saveForLater.continue")</a></p>
 
