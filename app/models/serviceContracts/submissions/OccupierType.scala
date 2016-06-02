@@ -33,7 +33,10 @@ object OccupierTypeIndividuals extends OccupierType {
 object OccupierTypeNobody extends OccupierType {
   val name = "nobody"
 }
+object NoRelationVacated extends OccupierType {
+  val name = "vacated"
+}
 
 object OccupierTypes extends NamedEnumSupport[OccupierType] {
-  val all: List[OccupierType] = List(OccupierTypeIndividuals, OccupierTypeCompany, OccupierTypeNobody)
+  val all: List[OccupierType] = List(OccupierTypeIndividuals, OccupierTypeCompany, OccupierTypeNobody, NoRelationVacated)
 }
