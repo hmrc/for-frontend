@@ -50,7 +50,7 @@ object MappingSupport {
     .verifying("error.BigDecimal_negative", _ >= 0.0000)
     .transform({ s: BigDecimal => s.abs }, { v: BigDecimal => v })
 
-  val decimalRegex = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
+  val decimalRegex = """^[0-9]{1,}\.?[0-9]{0,2}$"""
   val cdbMaxCurrencyAmount = 9999999.99
   val cdbMaxCurrencyAmountOver10Million = 99999999.99
 

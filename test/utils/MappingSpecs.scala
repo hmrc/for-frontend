@@ -57,14 +57,20 @@ trait CurrencySpecs { this: CommonSpecs =>
   val invalidCurrencyValues = Seq(
     "1.123", "33.305", "15000.999", "not a number", "aa.32", "-1.11", "11.22.22", "45,000.11,1,"
   )
-
+  val invalidCurrencyValuesOver10Million = Seq(
+    "1.123", "33.305", "15000.999", "not a number", "aa.32", "-1.11", "11.22.22", "45,000.11,1,"
+  )
   val excessiveCurrencyValues = Seq(
     "1111111111.11", "12345678.0", "12345678.00", "10000000.00"
   )
-
+  val excessiveCurrencyValuesOver10Mil = Seq(
+    "111111111111.11","123456789.0", "123456789.00", "100000000.00"
+  )
   val maxCurrencyAmount = 9999999
 
   val validCurrencyValues = Seq("1", "22.2", "24.35", "10000.88", "20000", "2222222.22", "22,000.55", "9999999.99")
+
+  val validCurrencyValuesOver10Million = Seq("1", "22.2", "24.35", "10000.88", "20000", "2222222.22", "22,000.55", "9999999.99")
 
   def validateAnnualRent[T](field: String, form: Form[T], formData: Map[String, String]) {
     validateWeeklyRentalPeriod(field, form, formData)
@@ -74,7 +80,7 @@ trait CurrencySpecs { this: CommonSpecs =>
 
   private def validateWeeklyRentalPeriod[T](field: String, form: Form[T], formData: Map[String, String]) {
     val data = formData.updated(s"$field.rentLengthType", RentLengthTypeWeekly.name)
-    
+
     val valid = Seq("192307.69", "1", "250", "55421")
     validateNoError(s"$field.annualRentExcludingVat", valid, form, data)
 
@@ -84,7 +90,7 @@ trait CurrencySpecs { this: CommonSpecs =>
 
   private def validateMonthlyRentalPeriod[T](field: String, form: Form[T], formData: Map[String, String]) {
     val data = formData.updated(s"$field.rentLengthType", RentLengthTypeMonthly.name)
-    
+
     val valid = Seq("833333.33", "1", "250", "55421")
     validateNoError(s"$field.annualRentExcludingVat", valid, form, data)
 
@@ -94,7 +100,7 @@ trait CurrencySpecs { this: CommonSpecs =>
 
   private def validateQuarterlyRentalPeriod[T](field: String, form: Form[T], formData: Map[String, String]) {
     val data = formData.updated(s"$field.rentLengthType", RentLengthTypeQuarterly.name)
-    
+
     val valid = Seq("2499999.99", "1", "250", "55421")
     validateNoError(s"$field.annualRentExcludingVat", valid, form, data)
 
@@ -108,11 +114,21 @@ trait CurrencySpecs { this: CommonSpecs =>
     validateDoesNotExceedMaxCurrencyAmount(field, form, formData)
   }
 
+  def validateCurrencyUpTo10Million(field: String, form: Form[_], formData: Map[String, String]): Unit = {
+    validateError(field, invalidCurrencyValuesOver10Million, Errors.invalidCurrency, form, formData)
+    validateNoError(field, validCurrencyValuesOver10Million, form, formData)
+    validateDoesNotExceed10MillionMaxCurrencyAmount(field, form, formData)
+  }
+
   def validateNonNegativeCurrency[T](field: String, form: Form[T], formData: Map[String, String]) {
     validateError(field, invalidCurrencyValues, Errors.invalidCurrency, form, formData)
     val valid = validCurrencyValues ++ Seq("0", "0.05", "0.99", "0.01")
     validateNoError(field, valid, form, formData)
     validateDoesNotExceedMaxCurrencyAmount(field, form, formData)
+  }
+
+  def validateDoesNotExceed10MillionMaxCurrencyAmount[T](field: String, form: Form[T], formData: Map[String, String]): Unit = {
+    validateError(field, excessiveCurrencyValuesOver10Mil, Errors.maxCurrencyAmountExceeded, form, formData)
   }
 
   def validateDoesNotExceedMaxCurrencyAmount[T](field: String, form: Form[T], formData: Map[String, String]): Unit = {
