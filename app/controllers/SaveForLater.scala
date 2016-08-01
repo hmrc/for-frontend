@@ -17,6 +17,7 @@
 package controllers
 
 import actions.{RefNumAction, RefNumRequest}
+import connectors.HODConnector
 import controllers.dataCapturePages.{RedirectTo, UrlFor}
 import form.persistence.FormDocumentRepository
 import models.journeys._
@@ -45,11 +46,15 @@ object SaveForLater extends FrontendController {
   def saveForLater = RefNumAction.async { implicit request =>
     repository.findById(SessionId(hc), request.refNum).flatMap {
       case Some(doc) =>
-        s4l(hc)(doc, hc).map { pw =>
+        s4l(hc)(doc, hc).flatMap { pw =>
           val sum = SummaryBuilder.build(doc)
           audit(sum, pw)
           val expiryDate = LocalDate.now.plusDays(90)
-          Ok(views.html.savedForLater(sum, pw, expiryDate))
+          val email = sum.customerDetails.flatMap(_.contactDetails.email)
+            HODConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, sum.customerDetails.flatMap(_.contactDetails.email)) map {
+              _ =>
+              Ok(views.html.savedForLater(sum, pw, expiryDate))
+            }
         }
       case None =>
         InternalServerError(views.html.error.error500())
