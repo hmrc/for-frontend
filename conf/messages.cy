@@ -213,6 +213,7 @@ label.noJs.occupierCompanyName=Dylech ond ateb hyn os ydych wedi dewis ‘Cwmni�
 label.noJs.firstOccupationDate=Dylech ond ateb hyn os ydych wedi dewis ‘Un neu fwy o unigolion’ neu ‘Cwmni’
 label.noJs.propertyRentedBy=Dylech ond ateb hyn os ydych wedi dewis ‘Nac ydy ’
 label.noRentDetails=Dywedwch wrthym pam nad ydych yn talu rhent ar yr eiddo yma
+label.noRentDetails.agent=Dywedwch wrthym pam nad oes gan eich cleient i dalu rhent ar yr eiddo hwn
 
 #SECTION 4
 ###############################
