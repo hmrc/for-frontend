@@ -60,7 +60,6 @@ object HODConnector extends HODConnector with ServicesConfig {
           |},
           |"force": false
           |}""".stripMargin)
-    println(json)
     http.POST(s"$emailUrl/send-templated-email/", json).map( _ => ())
     } getOrElse Future.successful()
   }
