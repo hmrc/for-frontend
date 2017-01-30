@@ -126,7 +126,7 @@ and email us at <a href="{0}">formhelp@voa.gsi.gov.uk</a>. \
 Please provide <strong>only</strong> your reference number and contact details, we will then contact you for more information.
 
 ex-occupier.mail.link=mailto:formhelp@voa.gsi.gov.uk?subject={0}&body={1}
-ex-occupier.mail.subject=Ex-occupier form
+ex-occupier.mail.subject=Ex-owners/occupiers form
 ex-occupier.mail.body=Please email us your reference number, email address and/or telephone number only. \
 We will then contact you for further details.
 
