@@ -50,8 +50,9 @@ object MappingSupport {
     .verifying("error.BigDecimal_negative", _ >= 0.0000)
     .transform({ s: BigDecimal => s.abs }, { v: BigDecimal => v })
 
-  val decimalRegex = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
+  val decimalRegex = """^[0-9]{1,}\.?[0-9]{0,2}$"""
   val cdbMaxCurrencyAmount = 9999999.99
+  val cdbMaxCurrencyAmountOver10Million = 99999999.99
 
   lazy val annualRent: Mapping[AnnualRent] = mapping(
     "rentLengthType" -> rentLengthType,
@@ -62,6 +63,11 @@ object MappingSupport {
     .verifying(Errors.invalidCurrency, x => (x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)
     .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
     .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmount)
+
+  val currencyOver10Million: Mapping[BigDecimal] = text
+    .verifying(Errors.invalidCurrency, x => (x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)
+    .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
+    .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmountOver10Million)
 
   val nonNegativeCurrency: Mapping[BigDecimal] = text
     .verifying(Errors.invalidCurrency, x => (x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)

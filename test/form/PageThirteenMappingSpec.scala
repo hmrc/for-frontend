@@ -122,7 +122,7 @@ class PageThirteenMappingSpec extends FlatSpec with Matchers {
   }
 
   it should "validate the cost of the first property alteration" in {
-    validateCurrency("propertyAlterationsDetails[0].cost", pageThirteenForm, baseData)
+    validateCurrencyUpTo10Million("propertyAlterationsDetails[0].cost", pageThirteenForm, baseData)
   }
 
   it should "validate the date of the second property alteration" in {
@@ -134,7 +134,7 @@ class PageThirteenMappingSpec extends FlatSpec with Matchers {
   }
 
   it should "validate the cost of the second property alteration" in {
-    validateCurrency(indexedKey(1).alterationDetailsCost, pageThirteenForm, dataWithSecondAlteration)
+    validateCurrencyUpTo10Million(indexedKey(1).alterationDetailsCost, pageThirteenForm, dataWithSecondAlteration)
   }
 
   object TestData {
