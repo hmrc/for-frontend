@@ -16,7 +16,7 @@
 
 @import models.pages.Summary
 @import org.joda.time.LocalDate
-@(summary: Summary, password: String, expiryDate: LocalDate)(implicit requestHeader: RequestHeader, messages: Messages)
+@(summary: Summary, password: String, expiryDate: LocalDate, hasTimedout: Boolean = false)(implicit requestHeader: RequestHeader, messages: Messages)
 
 @headExtra = {
 @views.html.includes.stylesheets()
@@ -27,7 +27,7 @@
 @views.html.includes.analytics(summary)
 }
 
-@main(title = Messages("project.name"), headExtra = headExtra, bodyEnd = bodyEnd, showAccountInfo = false, showBackButton = false) {
+@main(title = Messages("project.name"), headExtra = headExtra, bodyEnd = bodyEnd, showAccountInfo = false, showBackButton = false, needsTimeoutWarning=false) {
 
 
     <main id="content" tabindex="-1">
@@ -36,37 +36,43 @@
 
                 <a href="@routes.Application.summary" id="back" name="back_button" class="button-link link-back declaration-back" role="button">@Messages("button.label.back")</a>
 
+
                 <h1 class="form-title heading-large">
-                @Html(Messages("saveForLater.heading"))
+                    <p class="font-xsmall">@Messages("saveForLater.preHeader")</p>
+                    @Html(Messages("saveForLater.heading"))
                 </h1>
-
-                <p><strong>@Messages("saveForLater.retrievalInfo")</strong></p>
-
-                <div class="save-for-later">
-
-                    <span>@Messages("saveForLater.password"):</span> <strong>@password</strong>
-                </div>
-
-                <div class="form-error alert alert-save-for-later" style="color: #b10e1e;
-                    margin-top: 1em">
-                    <p>@Html(Messages("saveForLater.info"))</p>
-                    <p>@Html(Messages("saveForLater.info.p.2"))</p>
-                </div>
 
                 <p class="notice">
                     <i class="icon icon-important">
                         <span class="visually-hidden">Warning</span>
                     </i>
-                    <strong class="bold-small">
-                        @Messages("saveForLater.retrievalWarning") @Html(Messages("saveForLater.paragraph")) <strong>@{
-                        s"${expiryDate.getDayOfMonth} ${Messages(s"month.${expiryDate.monthOfYear.getAsText}")} ${expiryDate.getYear}"
-                        }</strong>
+                    <strong>
+                        @Html(Messages("saveForLater.info"))
                     </strong>
                 </p>
 
+                <p class="save-for-later">
+
+                    <span>@Messages("saveForLater.password"):</span> <strong>@password</strong>
+                </p>
+
                 <p>
-                    <a href="@routes.SaveForLater.immediateResume" class="button button-primary">@Messages("saveForLater.continue")</a>
-                    <a href="@routes.SaveForLater.logout" class="button button-primary">@Messages("saveForLater.logout")</a>
+                    @Html(Messages("saveForLater.info.p.2"))
+                </p>
+                <p>
+                    @Html(Messages("saveForLater.paragraph"))
+                    @{
+                        s"${expiryDate.getDayOfMonth} ${Messages(s"month.${expiryDate.monthOfYear.getAsText}")} ${expiryDate.getYear}"
+                    }
+                </p>
+
+                <p>
+                    @if(!hasTimedout) {
+                        <a href="@routes.SaveForLater.immediateResume" class="button button-primary">@Messages("saveForLater.continue")</a>
+                        <a href="@routes.SaveForLater.logout" class="button button-primary">@Messages("saveForLater.logout")</a>
+                    } else {
+                        <a class="button" href=@routes.LoginController.show>@Messages("content.timeout.login")</a>
+                    }
                 </p>
                 
                 <form action="@routes.SaveForLater.resume()" method="post">
