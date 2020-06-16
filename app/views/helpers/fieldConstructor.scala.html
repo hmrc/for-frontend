@@ -21,7 +21,7 @@ Example usage:
 '_help -> "Custom help",                        (shows help text)
 '_labelClass -> "form-label-bold",              (extra class for labels)
 '_legend -> true,                               (shows legend/label)
-'_optional -> true,                             (shows optional/required for screen readers)
+'_optional -> true,                             (shows optional/required for screen readers - deprecated)
 '_helpIndent -> "help text",                    (shows helptext with indent class)
 '_pound -> true,                                (shows pound sign on inputs)
 '_add' -> true,                                 (shows add/remove links)
@@ -45,7 +45,11 @@ Example usage:
 
                     @elements.args.get('_optional) match {
                         case Some(true) => { <span class="visuallyhidden">(@Messages("label.optional"))</span> }
-                        case _ => { <span class="visuallyhidden">(@Messages("label.required"))</span>}
+                        case _ => { }
+                    }
+
+                    @elements.args.get('_help).map { helpText =>
+                    <span class="form-hint">@helpText</span>
                     }
 
                 </legend> 
@@ -54,10 +58,14 @@ Example usage:
 			<div id="@elements.id" class="@elements.args.get('_fieldsetClass) form-group @if(elements.hasErrors) {has-error}">
 				<label class="@elements.args.get('_labelClass)" for="@(elements.id)_text" ><span class="label-span">@elements.label</span>
 
-            @elements.args.get('_optional) match {
-                case Some(true) => { <span class="visuallyhidden">(@Messages("label.optional"))</span> }
-                case _ => { <span class="visuallyhidden">(@Messages("label.required"))</span>}
-            }
+                    @elements.args.get('_optional) match {
+                        case Some(true) => { <span class="visuallyhidden">(@Messages("label.optional"))</span> }
+                        case _ => { }
+                    }
+
+                    @elements.args.get('_help).map { helpText =>
+                        <span class="form-hint">@helpText</span>
+                    }
                 </label> 
 		}
     }
@@ -93,11 +101,6 @@ Example usage:
     	<div class="@if(elements.hasErrors) {form-grouped-error}">
     		<p class="error">@elements.errors.mkString(", ")</p>
     }
-
-    @elements.args.get('_help).map { helpText => 
-    		<span class="form-hint">@helpText</span>
-    }
-   
 
     @elements.args.get('_pound) match {
         case Some(true) => { <span class="pound">£</span> }
