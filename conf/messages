@@ -627,10 +627,12 @@ label.finish=Finish
 label.satisfactionSurvey=Overall, how would you describe your experience with the form?
 label.satisfaction=Overall, how would you describe your experience with the form?
 label.details=How can we improve this service?
+label.detailsOptional=How can we improve this service? (Optional)
 hint.limit=Limit is 1200 characters
 text.survey.bottomCopy=Don’t include any personal or financial information, for example your National Insurance or credit card numbers.
 text.survey.bottomImprove=To help us improve this service, include as much information as possible. For example if a question was confusing, let us know which one.
 confirm.link.feedback=What did you think of this service? (takes 30 seconds)
+confirm.link.feedbackNoSeconds=What did you think of this service?
 #SURVEY THANKYOU
 ###############################
 heading.feedback.thankyou=Thank you for your feedback

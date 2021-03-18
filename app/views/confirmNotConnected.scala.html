@@ -15,6 +15,7 @@
  *@
 
 @import models.pages.Summary
+@import controllers.feedback.routes
 @import play.api.data._
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Panel, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -46,9 +47,79 @@
     <p class="govuk-body">@messages("notConnected.whatNext2")</p>
     <p class="govuk-body">@messages("notConnected.whatNext3")</p>
 
-    <p class="govuk-body"><a href="@routes.LoginController.show">@messages("label.submitAnotherForm")</a></p>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-    <a  class="govuk-link"
-        href="@controllers.feedback.routes.SurveyController.onPageView("not-connected")">@messages("confirm.link.feedback")</a>
+    <h2 class="govuk-heading-m">@messages("confirm.link.feedbackNoSeconds")</h2>
 
+@formWithCSRF(
+action = routes.FeedbackController.handleFeedbackSubmit,
+args = 'novalidate -> "novalidate" ) {
+
+<input type="hidden" name="feedback-name" value="Anonymous user"/>
+<input type="hidden" name="feedback-email" value="anonymous@@anonymous.com"/>
+<input type="hidden" name="referrer" value="@request.host@request.uri"/>
+<input type="hidden" name="service"  value="RALD">
+<input type="hidden" name="canOmitComments"  value="true">
+<input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(NormalJourney.name)"/>
+
+@govukRadios(
+Radios(
+name = "feedback-rating",
+idPrefix="feedback-rating",
+items = Seq(
+"5" -> messages("feedback.rating.5"),
+"4" -> messages("feedback.rating.4"),
+"3" -> messages("feedback.rating.3"),
+"2" -> messages("feedback.rating.2"),
+"1" -> messages("feedback.rating.1")
+).map(radioItem => RadioItem(
+content = Text(radioItem._2),
+checked = radioItem._1.equals(theForm("feedback-rating").value.getOrElse("")),
+value = Option(radioItem._1)
+)
+),
+
+fieldset = Option(
+Fieldset(
+legend = Option(
+Legend(
+content = Text(messages("feedback.satisfaction.label")),
+isPageHeading = true,
+classes = "govuk-fieldset__legend--s"
+)
+)
+)
+)
+)
+)
+
+@govukCharacterCount(
+CharacterCount(
+id = "feedback-comments",
+name = "feedback-comments",
+value = theForm("feedback-comments").value,
+rows = 8,
+maxLength = 1200,
+
+label = Label(
+classes = "govuk-!-font-weight-bold",
+content = Text(messages("label.feedback.comments"))
+),
+hint = Hint(content = Text(messages("text.survey.bottomCopy")))
+)
+)
+
+
+<p class="govuk-body">
+    @govukButton(
+    Button(
+    attributes = Map("id" -> "send", "novalidate" -> "novalidate"),
+    content = Text(messages("button.label.submit")),
+    name = "send",
+    value = "send",
+    inputType = "submit"
+    )
+    )
+</p>
+}
 }
