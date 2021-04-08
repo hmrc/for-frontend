@@ -83,7 +83,7 @@ class SaveForLaterController @Inject()
               Ok(savedForLater(sum, pw, expiryDate))
             }
           } else {
-            Ok(customPasswordSaveForLaterView(sum, expiryDate, CustomUserPasswordForm.customUserPassword, exitPath)) //TODO - pass path
+            Ok(customPasswordSaveForLaterView(sum, expiryDate, CustomUserPasswordForm.customUserPassword, exitPath))
           }
       }
       case None =>

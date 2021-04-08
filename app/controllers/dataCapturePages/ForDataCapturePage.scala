@@ -102,7 +102,7 @@ abstract class ForDataCapturePage[T] ( refNumAction: RefNumAction,
           RedirectTo(Journey.pageToResumeAt(summary), request.headers)
         }
       )
-      case controllers.dataCapturePages.ForDataCapturePage.Save => Redirect(controllers.routes.SaveForLaterController.saveForLater(request.path)) //TODO capture page number
+      case controllers.dataCapturePages.ForDataCapturePage.Save => Redirect(controllers.routes.SaveForLaterController.saveForLater(request.path))
       case controllers.dataCapturePages.ForDataCapturePage.Back => getPage(pageNumber - 1, summary, request)
       case controllers.dataCapturePages.ForDataCapturePage.Unknown => redirectToPage(pageNumber)
     }
