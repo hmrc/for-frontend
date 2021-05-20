@@ -6,9 +6,7 @@
 ->          /govuk-frontend            govuk.Routes
 ->         /hmrc-frontend              hmrcfrontend.Routes
 GET         /                          controllers.ApplicationController.index
-
 GET         /confirmation              controllers.feedback.SurveyController.confirmation
-GET         /print                     controllers.ApplicationController.print
 GET         /declaration               controllers.ApplicationController.declaration()
 GET         /declarationError          controllers.ApplicationController.declarationError
 POST        /declaration               controllers.FORSubmissionController.submit
