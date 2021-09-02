@@ -37,6 +37,7 @@ import playconfig.{FormPersistence, SessionId}
 import uk.gov.hmrc.audit.handler.HttpResult.Failure
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.partials.HtmlPartial.Success
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
 import useCases.SaveInProgressSubmissionForLater.SaveInProgressSubmissionForLater
 import useCases.{IncorrectPassword, PasswordsMatch, ReferenceNumber, SaveForLaterPassword}
@@ -143,6 +144,9 @@ class SaveForLaterController @Inject()
 
   def resume2 = refNumAction.async { implicit request =>
     saveForLaterForm.bindFromRequest.fold(
+      (formWithErrors: Form[SaveForLaterLogin]) =>
+        Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithErrors, mode))),
+      value => {
       case Success => {
       s4l => resumeSavedJourney(s4l.password, request.refNum)
     }
@@ -156,12 +160,13 @@ class SaveForLaterController @Inject()
       val formWithLoginErrors =
         saveForLaterForm
           .withError("password", Messages("error.invalid_password"))
-      Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors, mode)))
+      Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors)))
 
       }
     )
+  })
   }
-  
+
   def immediateResume = refNumAction.async { implicit request =>
     repository.findById(SessionId(hc), request.refNum).flatMap {
       case Some(doc) =>
