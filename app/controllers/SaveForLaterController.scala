@@ -21,6 +21,7 @@ import connectors.{Audit, EmailConnector, HODConnector}
 import controllers.dataCapturePages.{RedirectTo, UrlFor}
 import form.CustomUserPasswordForm
 import form.persistence.FormDocumentRepository
+
 import javax.inject.{Inject, Singleton}
 import models.journeys._
 import models.pages.{Summary, SummaryBuilder}
@@ -28,10 +29,12 @@ import org.joda.time.LocalDate
 import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages
 import play.api.libs.json.Json
 import views.html.{customPasswordSaveForLater, saveForLaterLogin, saveForLaterLoginFailed, saveForLaterResumeOptions, savedForLater}
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import playconfig.{FormPersistence, SessionId}
+import uk.gov.hmrc.audit.handler.HttpResult.Failure
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
@@ -138,6 +141,27 @@ class SaveForLaterController @Inject()
     )
   }
 
+  def resume2 = refNumAction.async { implicit request =>
+    saveForLaterForm.bindFromRequest.fold(
+      case Success => {
+      s4l => resumeSavedJourney(s4l.password, request.refNum)
+    }
+      case None => {
+      val formWithLoginErrors =
+        saveForLaterForm
+          .withError("password", Messages("error.invalid_password"))
+            Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors, mode)))
+    }
+      case Failure(_) => {
+      val formWithLoginErrors =
+        saveForLaterForm
+          .withError("password", Messages("error.invalid_password"))
+      Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors, mode)))
+
+      }
+    )
+  }
+  
   def immediateResume = refNumAction.async { implicit request =>
     repository.findById(SessionId(hc), request.refNum).flatMap {
       case Some(doc) =>

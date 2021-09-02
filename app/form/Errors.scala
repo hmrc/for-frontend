@@ -125,6 +125,7 @@ object Errors {
   val maxLength = "error.maxLength"
   val invalidPhone = "error.invalid_phone"
   val invalidCurrency = "error.invalid_currency"
+  val password = "error.invalid_password"
 
   //numeric errors
   val invalidNumber = "error.invalid_number"
