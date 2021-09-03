@@ -31,7 +31,7 @@
 )
 
 
-@()(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
+@(form: Form[SaveForLaterLogin])(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
 
 @main_template(pageHeading = messages("saveForLater.pleaseEnterPassword")) {
 

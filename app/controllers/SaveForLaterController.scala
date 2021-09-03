@@ -132,7 +132,7 @@ class SaveForLaterController @Inject()
   }
 
   def login = refNumAction.async { implicit request =>
-    Ok(saveForLaterLogin())
+    Ok(saveForLaterLogin(saveForLaterForm))
   }
 
   def resume = refNumAction.async { implicit request =>
@@ -145,27 +145,29 @@ class SaveForLaterController @Inject()
   def resume2 = refNumAction.async { implicit request =>
     saveForLaterForm.bindFromRequest.fold(
       (formWithErrors: Form[SaveForLaterLogin]) =>
-        Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(saveForLaterLogin(formWithErrors))),
       value => {
       case Success => {
-      s4l => resumeSavedJourney(s4l.password, request.refNum)
+      s4l => resumeSavedJourney("test", request.refNum)
     }
       case None => {
       val formWithLoginErrors =
         saveForLaterForm
           .withError("password", Messages("error.invalid_password"))
-            Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors, mode)))
+            Future.successful(BadRequest(saveForLaterLogin(formWithLoginErrors)))
     }
       case Failure(_) => {
       val formWithLoginErrors =
         saveForLaterForm
           .withError("password", Messages("error.invalid_password"))
-      Future.successful(BadRequest(saveForLaterLogin(appConfig, formWithLoginErrors)))
+      Future.successful(BadRequest(saveForLaterLogin(formWithLoginErrors)))
+      }
 
       }
     )
-  })
   }
+
+
 
   def immediateResume = refNumAction.async { implicit request =>
     repository.findById(SessionId(hc), request.refNum).flatMap {
@@ -212,6 +214,8 @@ class SaveForLaterController @Inject()
     "password" -> nonEmptyText
   )(SaveForLaterLogin.apply)(SaveForLaterLogin.unapply))
 
-  case class SaveForLaterLogin(password: String)
-
 }
+
+case class SaveForLaterLogin(password: String)
+
+

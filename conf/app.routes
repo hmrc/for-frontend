@@ -25,7 +25,7 @@ GET         /saved                     controllers.SaveForLaterController.saveFo
 POST        /saved                     controllers.SaveForLaterController.customPasswordSaveForLater(path: String)
 GET         /saved/login               controllers.SaveForLaterController.login
 GET         /savedForm                 controllers.SaveForLaterController.resumeOptions
-POST 		/resume					   controllers.SaveForLaterController.resume
+POST 		/resume					   controllers.SaveForLaterController.resume2
 GET 		/immediateresume		   controllers.SaveForLaterController.immediateResume
 GET         /timeout                   controllers.SaveForLaterController.timeout
 
