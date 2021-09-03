@@ -30,6 +30,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.Json
 import views.html.{customPasswordSaveForLater, saveForLaterLogin, saveForLaterLoginFailed, saveForLaterResumeOptions, savedForLater}
+import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import playconfig.{FormPersistence, SessionId}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -128,13 +129,19 @@ class SaveForLaterController @Inject()
   }
 
   def login = refNumAction.async { implicit request =>
-    Ok(saveForLaterLogin())
+    Ok(saveForLaterLogin(saveForLaterForm))
   }
 
   def resume = refNumAction.async { implicit request =>
     saveForLaterForm.bindFromRequest.fold(
-      error => BadRequest(saveForLaterLoginFailed()),
-      s4l => resumeSavedJourney(s4l.password, request.refNum)
+      formWithErrors => BadRequest(saveForLaterLogin(formWithErrors)),
+      s4l => continue(hc)(s4l.password, request.refNum) flatMap {
+        case PasswordsMatch(pageToResumeAt) => RedirectTo(pageToResumeAt, request.headers).flashing((s4lIndicator, s4lIndicator))
+        case IncorrectPassword => {
+          val formWithLoginErrors = saveForLaterForm.withError("password", Messages("saveForLater.invalidPassword"))
+          BadRequest(saveForLaterLogin(formWithLoginErrors))
+        }
+      }
     )
   }
 
@@ -172,17 +179,10 @@ class SaveForLaterController @Inject()
     }
   }
 
-  private def resumeSavedJourney(p: SaveForLaterPassword, r: ReferenceNumber)(implicit re: RefNumRequest[AnyContent]): Future[Result] = {
-    continue(hc)(p, r) flatMap {
-      case PasswordsMatch(pageToResumeAt) => RedirectTo(pageToResumeAt, re.headers).flashing((s4lIndicator, s4lIndicator))
-      case IncorrectPassword => BadRequest(saveForLaterLoginFailed())
-    }
-  }
-
   lazy val saveForLaterForm = Form(mapping(
     "password" -> nonEmptyText
   )(SaveForLaterLogin.apply)(SaveForLaterLogin.unapply))
 
-  case class SaveForLaterLogin(password: String)
-
 }
+
+case class SaveForLaterLogin(password: String)

@@ -31,9 +31,20 @@
 )
 
 
-@()(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
+@(theForm: Form[SaveForLaterLogin])(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
 
-@main_template(pageHeading = messages("saveForLater.pleaseEnterPassword")) {
+@title = @{
+    var title: String = (messages("saveForLater.pleaseEnterPassword") )
+    if(theForm.hasErrors)
+        title = (messages("label.error") + ": " ) + title
+    title
+}
+
+@main_template(
+    pageHeading = messages("saveForLater.pleaseEnterPassword"),
+    pageTitle = title,
+    theForm = theForm
+) {
 
     @formWithCSRF(
         action = routes.SaveForLaterController.resume,
