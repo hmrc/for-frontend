@@ -67,36 +67,36 @@
       )
     )
 
-    @govukRadios(
-      Radios(
-        name = "userType",
-        idPrefix = Option("userType"),
-        items = Seq(
-          "occupier" -> messages("userType.occupier"),
-          "owner" -> messages("userType.owner"),
-          "occupiersAgent" -> messages("userType.occupiersAgent"),
-          "ownersAgent" -> messages("userType.ownersAgent")
-        ).map( radioItem => RadioItem (
-          content = Text(radioItem._2),
-          checked = radioItem._1.equals(theForm("userType").value.getOrElse("")),
-          value=Option(radioItem._1),
-          id = Option(radioItem._1)
-        )
-        ),
-        hint = Hint(content = Text(messages("hint.occupierExplanation"))),
-        errorMessage = theForm.errors.asTextErrorMessageForField("userType"),
-        fieldset = Option(
-          Fieldset(
-            legend = Option(
-              Legend(
-                content = Text(messages("label.userType")),
-                classes = "govuk-!-font-weight-bold"
+      @govukRadios(
+          Radios(
+              name = "userType",
+              classes = "radio-button-that-show-hides",
+              idPrefix = Option("userType"),
+              items = Seq(
+                  "occupier" -> messages("userType.occupier"),
+                  "owner" -> messages("userType.owner"),
+                  "occupiersAgent" -> messages("userType.occupiersAgent"),
+                  "ownersAgent" -> messages("userType.ownersAgent")
+              ).map( radioItem => RadioItem (
+                  content = Text(radioItem._2),
+                  checked = radioItem._1.equals(theForm("userType").value.getOrElse("")),
+                  value=Option(radioItem._1)
               )
-            )
+              ),
+              hint = Hint(content = Text(messages("hint.occupierExplanation"))),
+              errorMessage = theForm.errors.asTextErrorMessageForField("userType"),
+              fieldset = Option(
+                  Fieldset(
+                      legend = Option(
+                          Legend(
+                              content = Text(messages("label.userType")),
+                              classes = "govuk-!-font-weight-bold"
+                          )
+                      )
+                  )
+              )
           )
-        )
       )
-    )
 
     @govukRadios(
           Radios(
