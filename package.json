@@ -25,7 +25,7 @@
     "grunt-nodemon": "^0.4.2",
     "grunt-sass": "^3.1.0",
     "grunt-text-replace": "^0.4.0",
-    "node-sass": "^4.14.1"
+    "node-sass": "^7.0.0"
   },
   "main": "Gruntfile.js",
   "directories": {
