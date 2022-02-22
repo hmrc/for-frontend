@@ -109,37 +109,33 @@
 
         @govukInput(
             Input(
-                id = "contactDetails.email1",
-                name = "contactDetails.email1",
-                value = theForm("contactDetails.email1").value,
                 classes = "govuk-input--width-20 ",
+                attributes = Map("maxlength" -> "50"),
                 label = Label(
                     content = Text(messages("label.email1") ),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("contactDetails.email1")
-            )
+                errorMessage = theForm.errors.asTextErrorMessageForField("contactDetails.email1")
+            ).withFormField(theForm("contactDetails.email1"))
         )
 
         @govukInput(
             Input(
-                id = "contactDetails.phone",
-                name = "contactDetails.phone",
-                value = theForm("contactDetails.phone").value,
                 classes = "govuk-input--width-20 ",
+                attributes = Map("maxlength" -> "20"),
                 label = Label(
                     content = Text(messages("label.phone") ),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("contactDetails.phone")
-            )
+                errorMessage = theForm.errors.asTextErrorMessageForField("contactDetails.phone")
+            ).withFormField(theForm("contactDetails.phone"))
         )
 
     </fieldset>
 
     @includes.continueSaveForLaterButtons(govukButton)
 
-    }
+  }
 
     @formHelp()
 }

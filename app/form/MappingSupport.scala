@@ -22,7 +22,7 @@ import play.api.data.Forms._
 import play.api.data.validation._
 import play.api.data.{FormError, Forms, Mapping}
 import ConditionalMapping._
-import play.api.data.validation.Constraints.{emailAddress, maxLength, nonEmpty}
+import play.api.data.validation.Constraints.{maxLength, minLength, nonEmpty, pattern}
 
 object MappingSupport {
 
@@ -109,8 +109,11 @@ object MappingSupport {
 
   val contactDetailsMapping: Mapping[ContactDetails] =
     mapping(
-      "phone" -> default(phoneNumber, "").verifying(
-        nonEmpty(errorMessage = Errors.contactPhoneRequired)
+      "phone" -> default(text, "").verifying(
+        nonEmpty(errorMessage = Errors.contactPhoneRequired),
+        pattern(phoneRegex.r, error = Errors.invalidPhone),
+        minLength(11, "error.contact.phone.minLength"),
+        maxLength(20, "error.contact.phone.maxLength")
       ),
       "email1" -> default(email, "").verifying(
         nonEmpty(errorMessage = Errors.contactEmailRequired),
