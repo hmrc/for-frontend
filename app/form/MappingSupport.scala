@@ -63,7 +63,6 @@ object MappingSupport {
   val postcodeRegex = """(GIR ?0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKPSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) ?[0-9][A-Z-[CIKMOV]]{2})""" //scalastyle:ignore
   val phoneRegex = """^^[0-9\s\+()-]+$"""
   val userType: Mapping[UserType] = Forms.of[UserType]
-  val contactType: Mapping[ContactType] = Forms.of[ContactType]
   val contactAddressType: Mapping[ContactAddressType] = Forms.of[ContactAddressType]
   val propertyType: Mapping[PropertyType] = Forms.of[PropertyType]
   val occupierType: Mapping[OccupierType] = Forms.of[OccupierType]

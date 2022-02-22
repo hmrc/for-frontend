@@ -59,7 +59,6 @@ object Formats {
   }
 
   implicit val userTypeFormat: Formatter[UserType] = namedEnumFormatter(UserTypes, Errors.userTypeRequired)
-  implicit val contactTypeFormat: Formatter[ContactType] = namedEnumFormatter(ContactTypes, Errors.contactTypeRequired)
   implicit val contactAddressTypeFormat: Formatter[ContactAddressType] = namedEnumFormatter(ContactAddressTypes, Errors.required)
   implicit val propertyTypeFormat: Formatter[PropertyType] = namedEnumFormatter(PropertyTypes, Errors.noValueSelected)
   implicit val occupierTypeFormat: Formatter[OccupierType] = namedEnumFormatter(OccupierTypes, Errors.occupierTypeRequired)

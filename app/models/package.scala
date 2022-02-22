@@ -44,7 +44,6 @@ package object models {
 
   implicit val formatPropertyType: Format[PropertyType] = generateFormat(PropertyTypes)
   implicit val formatContactAddressType: Format[ContactAddressType] = generateFormat(ContactAddressTypes)
-  implicit val formatContactType: Format[ContactType] = generateFormat(ContactTypes)
   implicit val formatUserType: Format[UserType] = generateFormat(UserTypes)
   implicit val formatOccupierType: Format[OccupierType] = generateFormat(OccupierTypes)
   implicit val format: Format[LandlordConnectionType] = generateFormat(LandlordConnectionTypes)

@@ -37,7 +37,6 @@ object Errors {
 
   //page 2
   val userTypeRequired = "error.userType.required"
-  val contactTypeRequired = "error.contactType.required"
   val contactDetailsMissing = "error.contact.details.missing"
   val contactPhoneRequired = "error.contact.phone.required"
   val contactEmailRequired = "error.contact.email.required"

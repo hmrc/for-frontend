@@ -157,13 +157,11 @@ section2.heading=About you
 section2.subheading=These should be the details of the person completing this.
 section2.heading.1=Due to data security, we are unable to pre-populate this form.
 label.fullName=Full name
-label.contactType=What are your contact details?
+label.contactDetails=What are your contact details?
 label.userType=I am (or represent) the
 hint.userType=If you are no longer the owner/occupier or have recently vacated the property, please click <a href="{0}" target="_self" id="inpageVacatedForm">here<span class="visuallyhidden"> ({1})</span></a> or continue below.
 hint.beforeyoustart=Before you start
 label.email1=Email address
-label.email2=Confirm email
-label.contactDetails.email2=Confirm email
 label.phone=Telephone number
 label.contactDetails.phone=Phone
 label.contactAddressType=Which address would you like us to use if we need to write to you in future?
@@ -181,7 +179,6 @@ label.alternativeContact.fullName=Contact’s full name
 label.alternativeContact.number=Contact number
 label.alternativeContact.contactDetails.phone=Contact number
 label.alternativeContact.contactDetails.email1=Email
-label.alternativeContact.contactDetails.email2=Confirm email
 label.alternativeContact.address.buildingNameNumber=Address line 1
 label.alternativeContact.address.street1=Address line 2
 label.alternativeContact.address.street2=Address line 3
@@ -201,7 +198,6 @@ alternativeContact.contactDetails.email1.error.contact.details.missing=At least 
 alternativeContact.address.buildingNameNumber.error.contact.details.missing=At least one of phone, email, or address must be provided
 
 error.userType.required=Select your connection to the property
-error.contactType.required=Select how you would like us to contact you
 
 #SECTION 3
 ##############################
@@ -809,9 +805,6 @@ userType.occupiersAgent=Occupier’s agent
 userType.owner=Owner or trustee for owner
 userType.ownersAgent=Owner’s agent
 userType.vacated=No longer the occupier or recently vacated
-contactType.email=Email
-contactType.phone=Phone
-contactType.both=Both
 leaseAgreementTypes.verbal= No agreement or a verbal agreement
 leaseAgreementTypes.leaseTenancy=A lease or tenancy agreement
 leaseAgreementTypes.licenceOther=Licence or other type of written agreement
@@ -858,13 +851,9 @@ error.required=This must be filled in
 error.boolean_missing=You must choose one
 error.no_value_selected=You must choose one
 contactDetails.email1.email.mismatch=Email addresses must match
-contactDetails.email2.email.mismatch=Email addresses must match
 alternativeContact.contactDetails.email1.email.mismatch=Email addresses must match
-alternativeContact.contactDetails.email2.email.mismatch=Email addresses must match
 contactDetails.email1.email.tooLong=Email address must be 50 characters or fewer
-contactDetails.email2.email.tooLong=Email address must be 50 characters or fewer
 alternativeContact.contactDetails.email1.email.tooLong=Email address must be 50 characters or fewer
-alternativeContact.contactDetails.email2.email.tooLong=Email address must be 50 characters or fewer
 error.contact.email.required = Enter your email address
 error.contact.phone.required = Enter your phone number
 error.contact.phone.minLength = Phone number must be between 11 and 20 characters

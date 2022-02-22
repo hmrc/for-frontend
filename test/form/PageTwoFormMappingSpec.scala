@@ -29,7 +29,7 @@ class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with Commo
 
   behavior of "page two form mapping"
 
-  "page two mapping" should "show required errors for fullName, userType, contactType and contactAddressType when given empty data" in {
+  "page two mapping" should "show required errors for fullName, userType, email and phone when given empty data" in {
     val formData: Map[String, String] = Map()
     val form = pageTwoForm.bind(formData)
 
