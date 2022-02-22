@@ -58,7 +58,7 @@ object SummaryBuilder {
   private lazy val pageZeroData = AddressConnectionTypeYes
   private lazy val pageOneData = Option.empty[Address]
 
-  private lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
+  private lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   private lazy val propertyOwned = PageThree(
     propertyType = "property type",

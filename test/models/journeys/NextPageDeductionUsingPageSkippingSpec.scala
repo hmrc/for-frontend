@@ -250,7 +250,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
   lazy val pageOneData = Option.empty[Address]
 
-  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
+  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   lazy val pageThreeData = PageThree(
     propertyType = "property type",

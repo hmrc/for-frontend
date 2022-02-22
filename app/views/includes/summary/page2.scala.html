@@ -37,17 +37,10 @@
     @summaryBlock(messages("label.userType"), 2, "userType") {
         @messages(s"userType.${p2.userType.name}")
     }
-    @summaryBlock(messages("label.contactType"), 2, "contactType") {
-        @messages(s"contactType.${p2.contactType.name}")
+    @summaryBlock(messages("label.email1"), 2, "contactDetails_email1") {
+        @p2.contactDetails.email
     }
-    @if(p2.contactType == ContactTypeEmail) {
-        @summaryBlock(messages("label.email1"), 2, "contactDetails_email1") {
-            @p2.contactDetails.email
-        }
-    }
-    @if(p2.contactType == ContactTypePhone) {
-        @summaryBlock(messages("label.phone"), 2, "contactDetails_phone") {
-            @p2.contactDetails.phone
-        }
+    @summaryBlock(messages("label.phone"), 2, "contactDetails_phone") {
+        @p2.contactDetails.phone
     }
 </dl>

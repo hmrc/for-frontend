@@ -143,7 +143,7 @@ private object TestData {
   val validSubmission: JsValue = Json.toJson(
     Submission(
       None,
-      Some(CustomerDetails("bob", UserTypeOwnersAgent, ContactTypePhone, ContactDetails(Some("1"), None, None))),
+      Some(CustomerDetails("bob", UserTypeOwnersAgent, ContactDetails("01234567890", "abc@mailinator.com"))),
       Some(TheProperty("shop", OccupierTypeNobody, None, None, true, None,None)),
       Some(Sublet(false, Nil)),
       None, None, None, None, None, None, None, None, None, None, Some("9999000123"))

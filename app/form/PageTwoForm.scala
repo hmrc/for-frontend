@@ -30,7 +30,6 @@ object PageTwoForm {
   val pageTwoForm: Form[CustomerDetails] = Form(mapping(
     "fullName" -> nonEmptyText(maxLength = 50),
     "userType" -> userType,
-    "contactType" -> contactType,
-    "contactDetails" -> contactDetailsMappingFor("contactType")
+    "contactDetails" -> contactDetailsMapping
   )(CustomerDetails.apply)(CustomerDetails.unapply))
 }

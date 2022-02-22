@@ -141,7 +141,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
 
   lazy val pageOneData = Option.empty[Address]
 
-  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactTypePhone, ContactDetails(None, None, None))
+  lazy val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   lazy val propertyOwned = PageThree(
     propertyType = "property type",

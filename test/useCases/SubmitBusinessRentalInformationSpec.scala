@@ -60,7 +60,7 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
   object TestData {
     val submission = Submission(
       None,
-      Some(CustomerDetails("fn", UserTypeOccupier, ContactTypeEmail, ContactDetails(None, None, None))),
+      Some(CustomerDetails("fn", UserTypeOccupier, ContactDetails("01234567890", "abc@mailinator.com"))),
       Some(TheProperty("Stuff", OccupierTypeIndividuals, None, None, false, None, None)),
       Some(Sublet(false, List.empty)),
       Some(Landlord(Some("abc"), Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionTypeNone, None)),

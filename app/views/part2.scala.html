@@ -98,34 +98,14 @@
           )
       )
 
-    @govukRadios(
-          Radios(
-              name = "contactType",
-              classes = "radio-button-that-show-hides",
-              idPrefix = Option("contactType"),
-              items = Seq(
-                  "email" -> messages("label.contactDetails.email1"),
-                  "phone" -> messages("label.contactDetails.phone")
-              ).map( radioItem => RadioItem (
-                  content = Text(radioItem._2),
-                  checked = radioItem._1.equals(theForm("contactType").value.getOrElse("")),
-                  value=Option(radioItem._1)
-              )
-              ),
-              hint = Hint(content = Text(messages("hint.anyQueries"))),
-              errorMessage = theForm.errors.asTextErrorMessageForField("contactType"),
-              fieldset = Option(
-                  Fieldset(
-                      legend = Option(
-                          Legend(
-                              content = Text(messages("label.contactType")),
-                              classes = "govuk-!-font-weight-bold"
-                          )
-                      )
-                  )
-              )
-          )
-      )
+    <fieldset class="govuk-fieldset" aria-describedby="contactDetails-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">@messages("label.contactType")</h2>
+        </legend>
+
+        <div id="contactDetails-hint" class="govuk-hint">
+            @messages("hint.anyQueries")
+        </div>
 
         @govukInput(
             Input(
@@ -133,29 +113,11 @@
                 name = "contactDetails.email1",
                 value = theForm("contactDetails.email1").value,
                 classes = "govuk-input--width-20 ",
-                attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "email"),
                 label = Label(
                     content = Text(messages("label.email1") ),
-                    attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "email"),
                     classes = "govuk-!-font-weight-bold"
                 ),
                 errorMessage =  theForm.errors.asTextErrorMessageForField("contactDetails.email1")
-            )
-        )
-
-        @govukInput(
-            Input(
-                id = "contactDetails.email2",
-                name = "contactDetails.email2",
-                value = theForm("contactDetails.email2").value,
-                classes = "govuk-input--width-20",
-                attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "email"),
-                label = Label(
-                    content = Text(messages("label.email2") ),
-                    attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "email"),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("contactDetails.email2")
             )
         )
 
@@ -165,16 +127,15 @@
                 name = "contactDetails.phone",
                 value = theForm("contactDetails.phone").value,
                 classes = "govuk-input--width-20 ",
-                attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "phone"),
                 label = Label(
                     content = Text(messages("label.phone") ),
-                    attributes = Map("data-hidden-by" -> "contactType", "data-show-when-value-equals" -> "phone"),
                     classes = "govuk-!-font-weight-bold"
                 ),
                 errorMessage =  theForm.errors.asTextErrorMessageForField("contactDetails.phone")
             )
         )
 
+    </fieldset>
 
     @includes.continueSaveForLaterButtons(govukButton)
 

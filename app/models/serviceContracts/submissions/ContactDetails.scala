@@ -16,4 +16,4 @@
 
 package models.serviceContracts.submissions
 
-case class ContactDetails(phone:Option[String],email:Option[String],emailConfirmed:Option[String])
+case class ContactDetails(phone: String, email: String)

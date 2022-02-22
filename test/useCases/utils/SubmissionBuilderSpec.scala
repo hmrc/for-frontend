@@ -204,12 +204,11 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     )
 
     lazy val page2FormData = Map(
-	"fullName" -> Seq("fn"),
-	 "userType" -> Seq("occupier"),
-	 "contactType" -> Seq("email"),
+      "fullName" -> Seq("fn"),
+      "userType" -> Seq("occupier"),
       "contactDetails.email1" -> Seq("abc@mailinator.com"),
-	 "contactDetails.email2" -> Seq("abc@mailinator.com"),
-      "contactAddressType" -> Seq("mainAddress"))
+      "contactDetails.phone" -> Seq("01234567890")
+    )
 
     val p3ks = PageThreeForm.keys
     lazy val page3FormData = Map(
@@ -470,7 +469,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
 
     val propertyAddress = Option.empty[Address]
     val alternatePropertyAddress = Some(tenantsPropertyAddress)
-    val customerDetails = CustomerDetails("fn", UserTypeOccupier, ContactTypeEmail, ContactDetails(None, Some("abc@mailinator.com"), Some("abc@mailinator.com")))
+    val customerDetails = CustomerDetails("fn", UserTypeOccupier, ContactDetails("01234567890", "abc@mailinator.com"))
     val theProperty = TheProperty("Stuff", OccupierTypeIndividuals, Some("Mike Ington"), Some(RoughDate(None, Some(7), 2013)), false, Some(true), None)
     val sublet = Sublet(true, List(SubletData("Jake Smythe", Address("Some Company", Some("Some Road"), None, "AA11 1AA"), SubletPart, Option("basement"), "commercial", Some(200), RoughDate(None, Some(2), 2011))))
     val landlord = Landlord(Some("Graham Goose"), Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionTypeOther, Some("magic"))
