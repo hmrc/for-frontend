@@ -21,8 +21,9 @@ import models.serviceContracts.submissions._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.FormError
+import utils.CommonSpecs
 
-class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with CommonSpecs {
 
   import TestData._
   import form.PageTwoForm._
@@ -63,19 +64,16 @@ class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "error if email adress is longer than 50 characters" in {
-    submissions.ContactTypes.all.filter(_ != ContactTypePhone).foreach { ct =>
-      val formData: Map[String, String] = baseFormData
-        .updated("contactType", ct.name)
-        .updated("contactDetails.email1", tooLongEmail)
-        .updated("contactDetails.email2", tooLongEmail)
-      val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
+    val formData: Map[String, String] = baseFormData
+      .updated("contactDetails.email1", tooLongEmail)
+    val form = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
 
-      mustContainError(errorKey.email1, errorKey.email1TooLong, form)
-    }
+    mustContainError(errorKey.email1, errorKey.email1TooLong, form)
   }
 
-  it should "validate the phone number when the preferred contact method is phone" in {
-    validateOptionalPhone(pageTwoForm, baseFormData, "contactDetails")
+  it should "validate the phone number" in {
+    val valid = Seq("012345678901", "+4412345678901", "012345 678 901", "012345-678-901", "(012345) 678 901")
+    validateNoError("contactDetails.phone", valid, pageTwoForm, baseFormData)
 
     val form = pageTwoForm.bind(baseFormData - errorKey.phone).convertGlobalToFieldErrors()
     mustContainError(errorKey.phone, Errors.contactPhoneRequired, form)
@@ -104,6 +102,7 @@ class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers {
     val tooLongEmail = "email_too_long_for_validation_againt_business_rules_specify_but_DB_constraints@something.co.uk"
     val baseFormData: Map[String, String] = Map(
       "userType" -> "owner",
+      "contactDetails.phone" -> "12345678901",
       "contactDetails.phone" -> "01234 123123",
       "contactDetails.email1" -> "blah.blah@test.com",
       "fullName" -> "Mr John Smith")
