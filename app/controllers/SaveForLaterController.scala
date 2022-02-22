@@ -75,7 +75,7 @@ class SaveForLaterController @Inject()
             val saveSubmissionForLater = playconfig.SaveForLater(doc.saveForLaterPassword.get)
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
               auditSavedForLater(sum, exitPath)
-              val email = sum.customerDetails.flatMap(_.contactDetails.email)
+              val email = sum.customerDetails.map(_.contactDetails.email)
               emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
               Ok(savedForLater(sum, pw, expiryDate))
@@ -102,7 +102,7 @@ class SaveForLaterController @Inject()
               val saveSubmissionForLater = playconfig.SaveForLater(validData.password)
               saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
                 auditSavedForLater(sum, exitPath)
-                val email = sum.customerDetails.flatMap(_.contactDetails.email)
+                val email = sum.customerDetails.map(_.contactDetails.email)
                 emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
                 Ok(savedForLater(sum, pw, expiryDate))
@@ -158,7 +158,7 @@ class SaveForLaterController @Inject()
           audit.sendExplicitAudit("UserTimeout", Json.obj(
             Audit.referenceNumber -> sum.referenceNumber))
           val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
-          val email = sum.customerDetails.flatMap(_.contactDetails.email)
+          val email = sum.customerDetails.map(_.contactDetails.email)
 
           emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
           Ok(savedForLater(sum, pw, expiryDate, hasTimedOut = true))
