@@ -326,7 +326,10 @@ label.landlordOverseasAddress.street2=Address line 3
 label.noJs.landlordConnect=Answer this only if you’ve selected ‘Other connection’
 intel.alert.landlordName=Are you sure this is correct? The landlord’s name is the same as the tenant’s.
 
-error.LandlordConnectionType.required=Select if there is a connection between the landlord and tenant
+error.landlordFullName.maxLength = Landlord’s name must be 50 characters or fewer
+error.LandlordConnectionType.required = Select if there is a connection between the landlord and tenant
+error.landlordConnectText.required = Enter the connection to the landlord
+error.landlordConnectText.maxLength = Connection to the landlord must be 100 characters or fewer
 
 #SECTION 6
 ###############################
@@ -914,7 +917,10 @@ error.login.lockedOut=You are now locked out. You can try again after 24 hours.
 
 error.buildingNameNumber.required = Enter the first line of the address
 error.buildingNameNumber.maxLength = First line of the address must be 50 characters or fewer
+error.line2.maxLength = Second line of address must be 50 characters or fewer
+error.line3.maxLength = Third line of address must be 50 characters or fewer
 error.postcode.required = Enter the postcode
+error.postcode.maxLength = Postcode must be 10 characters or fewer
 error.month.required = The date must include a month
 error.year.required = The date must include a year
 

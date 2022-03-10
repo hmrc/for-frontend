@@ -21,15 +21,21 @@ import models.pages.PageFive
 import models.serviceContracts.submissions.LandlordConnectionTypeOther
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import uk.gov.voa.play.form.ConditionalMappings._
 
 object PageFiveForm {
   val pageFiveForm = Form(mapping(
-    "landlordFullName" -> optional(text(maxLength = 50)),
+    "landlordFullName" -> optional(
+      text.verifying(maxLength(50, "error.landlordFullName.maxLength"))
+    ),
     "landlordAddress" -> optional(optionalAddressMapping("landlordAddress")),
     "landlordConnectType" -> landlordConnectionType,
     "landlordConnectText" -> mandatoryIfEqual(
-      "landlordConnectType", LandlordConnectionTypeOther.name, nonEmptyText(maxLength = 100)
+      "landlordConnectType", LandlordConnectionTypeOther.name, default(text, "").verifying(
+        nonEmpty(errorMessage = "error.landlordConnectText.required"),
+        maxLength(100, "error.landlordConnectText.maxLength")
+      )
     )
   )(PageFive.apply)(PageFive.unapply))
 }
