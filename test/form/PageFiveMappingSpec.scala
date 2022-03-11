@@ -39,7 +39,7 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "allow letters, numbers, spaces and special chars with upto 50 chars for landlord's name" in {
-    validateFullName(pageFiveForm, baseData, "landlordFullName")
+    validateFullName(pageFiveForm, baseData, "landlordFullName", Some("error.landlordFullName.maxLength"))
   }
 
   it should "allow address to be optional" in {
@@ -49,7 +49,7 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
 
 
   it should "allow letters, numbers, spaced and special chars up to 100 chars for connection details" in {
-    validateLettersNumsSpecCharsUptoLength("landlordConnectText", 100, pageFiveForm, baseData)
+    validateLettersNumsSpecCharsUptoLength("landlordConnectText", 100, pageFiveForm, baseData, Some("error.landlordConnectText.maxLength"))
   }
 
   it should "bind with the fields and return issues when connection type selection missing" in {
@@ -63,7 +63,7 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = baseData - "landlordConnectText"
     val form = bind(data)
 
-    mustOnlyContainRequiredErrorFor("landlordConnectText", form)
+    mustContainError("landlordConnectText", "error.landlordConnectText.required", form)
   }
 
   it should "bind with the fields and return with no errors" in {
