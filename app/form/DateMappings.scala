@@ -25,7 +25,6 @@ import play.api.data.Mapping
 
 import scala.util.Try
 import ConditionalMapping._
-import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object DateMappings {
 
