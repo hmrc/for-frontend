@@ -59,16 +59,16 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
   "Page Three mapping" should "allow up to 100 letters, numbers, spaces, and special characters for 'Other' property type details" in {
     validateLettersNumsSpecCharsUptoLength(keys.propertyType, 100, pageThreeForm, formData1, Some("error.propertyType.maxLength"))
   }
-//
-//  it should "validate the first occupation date when the occupier type is individuals" in {
-//    val formData = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name).updated(keys.mainOccupierName, "Jimmy Choo")
-//    validatePastDate("firstOccupationDate", pageThreeForm, formData, "error.invalid_date")
-//  }
-//
-//  it should "validate the first occupation date when the occupier type is company" in {
-//    val formData = formData1.updated(keys.occupierType, OccupierTypeCompany.name)
-//    validatePastDate("firstOccupationDate", pageThreeForm, formData, "error.invalid_date")
-//  }
+
+  it should "validate the first occupation date when the occupier type is individuals" in {
+    val formData = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name).updated(keys.mainOccupierName, "Jimmy Choo")
+    validatePastDate("firstOccupationDate", pageThreeForm, formData)
+  }
+
+  it should "validate the first occupation date when the occupier type is company" in {
+    val formData = formData1.updated(keys.occupierType, OccupierTypeCompany.name)
+    validatePastDate("firstOccupationDate", pageThreeForm, formData)
+  }
 
   it should "allow up to 50 letters, numbers, spaces, and special characters for Company name" in {
     validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyName, 50, pageThreeForm, formData1, Some("error.companyName.maxLength"))
