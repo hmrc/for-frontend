@@ -144,7 +144,7 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
     val form = bind(data)
 
     mustContainRequiredErrorFor(getKeyService(0).description, form)
-    mustContainInvalidCurrencyErrorFor(getKeyService(0).cost, form)
+    mustContainRequiredErrorFor(getKeyService(0).cost, form)
   }
 
   object TestData {

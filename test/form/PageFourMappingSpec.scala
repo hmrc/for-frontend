@@ -35,23 +35,25 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "allow letters, numbers, spaces and special chars with upto 50 chars for a name" in {
-    validateFullName(pageFourForm, fullData, keys.tenantFullName)
+    validateFullName(pageFourForm, fullData, keys.tenantFullName, Some("error.sublet.tenantFullName.maxLength"))
   }
 
   it should "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet" in {
-    validateLettersNumsSpecCharsUptoLength(keys.subletPropertyPartDescription, 100, pageFourForm, fullData)
+    validateLettersNumsSpecCharsUptoLength(keys.subletPropertyPartDescription, 100, pageFourForm, fullData,
+      Some("error.subletPropertyPartDescription.maxLength"))
   }
 
   it should "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet reason" in {
-    validateLettersNumsSpecCharsUptoLength(keys.subletPropertyReasonDescription, 100, pageFourForm, fullData)
+    validateLettersNumsSpecCharsUptoLength(keys.subletPropertyReasonDescription, 100, pageFourForm, fullData,
+      Some("error.subletPropertyReasonDescription.maxLength"))
   }
 
   it should "validate the annual rent as a valid annual rent" in {
-    validateCurrency(keys.annualRentExcludingVat, pageFourForm, fullData)
+    validateCurrency(keys.annualRentExcludingVat, pageFourForm, fullData, ".sublet.annualRent")
   }
 
   it should "only allow valid dates for the rent fixed date" in {
-    validatePastDate(keys.rentFixedDate, pageFourForm, fullData)
+    validatePastDate(keys.rentFixedDate, pageFourForm, fullData, ".sublet.rentFixedDate")
   }
 
   it should "return a required error for sublet type" in {
@@ -73,21 +75,19 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = Map(keys.propertyIsSublet -> "true")
     val form = bind(data)
 
-    val requiredFields = Seq(keys.rentFixedDateMonth, keys.rentFixedDateYear,
-      keys.subletPropertyReasonDescription
-    )
-
-    requiredFields foreach { mustContainRequiredErrorFor(_, form) }
-    //Radio buttons have different error code.
+    mustContainError(keys.rentFixedDateMonth, "error.sublet.rentFixedDate.month.required", form)
+    mustContainError(keys.rentFixedDateYear, "error.sublet.rentFixedDate.year.required", form)
+    mustContainError(keys.subletPropertyReasonDescription, "error.subletPropertyReasonDescription.required", form)
     mustContainError(keys.subletType, Errors.subletTypeRequired, form)
-
   }
 
   it should "return a required error for sublet tenant address when sublet address is tenants address" in {
     val data = fullData -- allAddressFields
     val form = bind(data)
 
-    mandatoryAddressFields foreach { mustContainRequiredErrorFor(_, form) }
+    mustContainError(keys.addrBuildingNameNumber, "error.buildingNameNumber.required", form)
+    mustContainError(keys.addrPostcode, "error.postcode.required", form)
+    mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
   }
 
   it should "bind to a PageFourData with no sublet information when the property is not sublet" in {
@@ -118,7 +118,7 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
     val submittedData = fullData - keys.tenantFullName
     val form = bind(submittedData)
 
-    mustContainRequiredErrorFor(keys.tenantFullName, form)
+    mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
   }
 
   it should "result in a validation error when the part of property is sublet but Property Part Description is missing" in {
@@ -149,7 +149,7 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
     val submittedData = fullData - keys.annualRentExcludingVat
     val form = bind(submittedData)
 
-    mustContainRequiredErrorFor(keys.annualRentExcludingVat, form)
+    mustContainError(keys.annualRentExcludingVat, "error.required.sublet.annualRent", form)
   }
 
   it should "result in a single validation error when the property is sublet but both rent fixed fields are missing" in {

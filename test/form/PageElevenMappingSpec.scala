@@ -105,7 +105,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainRequiredErrorFor("capitalPaidDetails.paymentDate.month", res)
+    mustContainError("capitalPaidDetails.paymentDate.month", "error.month.required", res)
   }
 
   it should "bind with the fields and return errors, when payment date year fields is not filled in when giving details about paying a capital sum" in {
@@ -113,7 +113,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    containsError(res.errors, "capitalPaidDetails.paymentDate.year", "error.required")
+    mustContainError("capitalPaidDetails.paymentDate.year", "error.year.required", res)
   }
 
   it should "bind with the fields and return errors, when payment amount field is not filled in when giving details about paying a capital sum" in {

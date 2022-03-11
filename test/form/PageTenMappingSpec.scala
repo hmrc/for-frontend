@@ -49,8 +49,8 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
     mustContainError("parking.rentIncludeParkingDetails", Errors.parkingRequired, f)
     mustContainError("parking.rentSeparateParkingDetails", Errors.parkingRequired, f)
     mustContainRequiredErrorFor("parking.annualSeparateParking", f)
-    mustContainRequiredErrorFor("parking.annualSeparateParkingDate.month", f)
-    mustContainRequiredErrorFor("parking.annualSeparateParkingDate.year", f)
+    mustContainError("parking.annualSeparateParkingDate.month", "error.month.required", f)
+    mustContainError("parking.annualSeparateParkingDate.year", "error.year.required", f)
   }
 
   it should "return a mandatory error when a value for rentIncludeParking is not supplied" in {
@@ -151,8 +151,8 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = fullData - annualSeparateParkingMonths - annualSeparateParkingYear
     val form = bind(data)
 
-    mustContainRequiredErrorFor(annualSeparateParkingMonths, form)
-    mustContainRequiredErrorFor(annualSeparateParkingYear, form)
+    mustContainError(annualSeparateParkingMonths, "error.month.required", form)
+    mustContainError(annualSeparateParkingYear, "error.year.required", form)
   }
 
   checkMissingField(Keys.partRent, Errors.isRentPaidForPartRequired)

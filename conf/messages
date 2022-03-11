@@ -283,6 +283,18 @@ subletType.part=Part of it
 
 error.propertyIsSublet.required=Select ‘Yes’ if any part of the property is let or sub-let to anyone else
 error.subletType.required=Select how much of the property is let or sub-let
+error.sublet.tenantFullName.required = Enter your tenant’s name
+error.sublet.tenantFullName.maxLength = Your tenant’s name must be 50 characters or fewer
+error.sublet.rentFixedDate.month.required = The date the let or sub-let started must include a month
+error.sublet.rentFixedDate.year.required = The date the let or sub-let started must include a year
+error.subletPropertyPartDescription.required = Enter what part of the property you let or sub-let
+error.subletPropertyPartDescription.maxLength = The part of the property you let or sub-let must be 100 characters or fewer
+error.subletPropertyReasonDescription.required = Enter what the property is used for
+error.subletPropertyReasonDescription.maxLength = The property use must be 100 characters or fewer
+error.required.sublet.annualRent = Enter how much rent is paid
+error.invalid_currency.sublet.annualRent = The rent paid must be a number
+error.date_must_be_in_past.sublet.rentFixedDate = The date the let or sub-let started must be in the past
+error.date_before_1900.sublet.rentFixedDate = The date the let or sub-let started must be after December 1899
 
 #SECTION 5
 ###############################
@@ -881,10 +893,10 @@ error.invalid_phone=Enter a phone number, like 01632 960 001
 error.email=Enter an email in the correct format, like name@example.com
 
 error.invalid_date = Enter a valid date
-error.date_must_be_in_past=Date must be in the past
+error.date_must_be_in_past = Date must be in the past
 error.number = This must be a number
 error.invalid_number = This must be a number
-error.date_before_1900=This must be from 1900 onwards
+error.date_before_1900 = Date must be after December 1899
 error.duration.years=This can be no more than 999
 error.duration.months=This can be no more than 12
 error.month.required = The date the property was occupied must include a month
@@ -899,6 +911,12 @@ error.login.failed=Enter the reference number and postcode as they appear in the
 error.login.attemptsleft=You have {0} remaining attempts to enter the correct details before your account is locked for 24 hours.
 error.login.1.attempt.left=You have one remaining attempt to enter the correct details before your account is locked for 24 hours.
 error.login.lockedOut=You are now locked out. You can try again after 24 hours.
+
+error.buildingNameNumber.required = Enter the first line of the address
+error.buildingNameNumber.maxLength = First line of the address must be 50 characters or fewer
+error.postcode.required = Enter the postcode
+error.month.required = The date must include a month
+error.year.required = The date must include a year
 
 4=four
 3=three

@@ -37,8 +37,11 @@ object MappingSupport {
     "annualRentExcludingVat" -> currency
   )(AnnualRent.apply)(AnnualRent.unapply).verifying(Errors.maxCurrencyAmountExceeded, _.amount <= cdbMaxCurrencyAmount)
 
-  val currency: Mapping[BigDecimal] = text
-    .verifying(Errors.invalidCurrency, x => (x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)
+  val currency: Mapping[BigDecimal] = currencyMapping()
+
+  def currencyMapping(fieldErrorPart: String = ""): Mapping[BigDecimal] = default(text, "")
+    .verifying(nonEmpty(errorMessage = Errors.required + fieldErrorPart))
+    .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
     .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
     .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmount)
 
@@ -86,17 +89,23 @@ object MappingSupport {
   val subletTypeMapping: Mapping[SubletType] = Forms.of[SubletType]
 
   def addressMapping: Mapping[Address] = mapping(
-    "buildingNameNumber" -> nonEmptyText(maxLength = 50),
+    "buildingNameNumber" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.buildingNameNumber.required"),
+      maxLength(50, "error.buildingNameNumber.maxLength")
+    ),
     "street1" -> optional(text(maxLength = 50)),
     "street2" -> optional(text(maxLength = 50)),
-    "postcode" ->  nonEmptyTextOr("postcode", postcode)
+    "postcode" ->  nonEmptyTextOr("postcode", postcode, "error.postcode.required")
   )(Address.apply)(Address.unapply)
 
   def addressMapping(prefix: String): Mapping[Address] = mapping(
-    "buildingNameNumber" -> nonEmptyText(maxLength = 50),
+    "buildingNameNumber" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.buildingNameNumber.required"),
+      maxLength(50, "error.buildingNameNumber.maxLength")
+    ),
     "street1" -> optional(text(maxLength = 50)),
     "street2" -> optional(text(maxLength = 50)),
-    "postcode" -> nonEmptyTextOr(s"$prefix.postcode", postcode)
+    "postcode" -> nonEmptyTextOr(s"$prefix.postcode", postcode, "error.postcode.required")
   )(Address.apply)(Address.unapply)
 
   def optionalAddressMapping(prefix: String): Mapping[Address] = mapping(

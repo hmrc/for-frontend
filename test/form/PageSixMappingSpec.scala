@@ -106,8 +106,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
     mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainRequiredErrorFor(writtenStartDate + ".year", form)
-    mustContainRequiredErrorFor(writtenStartDate + ".month", form)
+    mustContainError(writtenStartDate + ".year", "error.year.required", form)
+    mustContainError(writtenStartDate + ".month", "error.month.required", form)
     mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
   }
 
@@ -117,8 +117,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
     mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainRequiredErrorFor(writtenStartDate + ".year", form)
-    mustContainRequiredErrorFor(writtenStartDate + ".month", form)
+    mustContainError(writtenStartDate + ".year", "error.year.required", form)
+    mustContainError(writtenStartDate + ".month", "error.month.required", form)
     mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
   }
 

@@ -278,6 +278,18 @@ subletType.part=Rhan ohono
 
 error.propertyIsSublet.required=Dewiswch ‘Oes’ os oes unrhyw ran o’r eiddo yn cael ei osod neu ei is-osod i unrhyw un arall
 error.subletType.required=Dewiswch faint o'r eiddo sy'n cael ei osod neu ei is-osod
+error.sublet.tenantFullName.required = Mae’n rhaid llenwi hwn
+error.sublet.tenantFullName.maxLength = Rhaid i fod yn 50 nod neu lai
+error.sublet.rentFixedDate.month.required = Mae’n rhaid llenwi hwn
+error.sublet.rentFixedDate.year.required = Mae’n rhaid llenwi hwn
+error.subletPropertyPartDescription.required = Mae’n rhaid llenwi hwn
+error.subletPropertyPartDescription.maxLength = Rhaid i fod yn 100 nod neu lai
+error.subletPropertyReasonDescription.required = Mae’n rhaid llenwi hwn
+error.subletPropertyReasonDescription.maxLength = Rhaid i fod yn 100 nod neu lai
+error.required.sublet.annualRent = Mae’n rhaid llenwi hwn
+error.invalid_currency.sublet.annualRent = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.date_must_be_in_past.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
+error.date_before_1900.sublet.rentFixedDate = Mae’n rhaid i hwn fod o 1900 ymlaen
 
 #SECTION 5
 ###############################
@@ -903,6 +915,13 @@ error.login.failed=Nodwch y cyfeirnod a’r côd post fel y maent yn ymddangos y
 error.login.attemptsleft=Mae gennych chi {0} ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 24 awr.
 error.login.1.attempt.left=Mae gennych chi un ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 24 awr.
 error.login.lockedOut=Rydych wedi eich cloi allan nawr. Gallwch roi cynnig arall arni ar ôl 24 awr.
+
+error.buildingNameNumber.required = Mae’n rhaid llenwi hwn
+error.buildingNameNumber.maxLength = Rhaid i fod yn 50 nod neu lai
+error.postcode.required = Mae’n rhaid llenwi hwn
+error.month.required = Mae’n rhaid llenwi hwn
+error.year.required = Mae’n rhaid llenwi hwn
+
 4=bedwar
 3=dri
 2=ddau

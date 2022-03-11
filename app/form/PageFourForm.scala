@@ -19,25 +19,35 @@ package form
 import form.DateMappings._
 import models.pages.{PageFour, _}
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.{default, mapping, text}
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
 import MappingSupport._
 import models.serviceContracts.submissions.SubletPart
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object PageFourForm {
 
   val nonMandatoryFields = Seq("sublet.annualRentExcludingVat")
 
   val subletMapping = (index: String) => mapping(
-    s"$index.tenantFullName" -> nonEmptyText(maxLength = 50),
+    s"$index.tenantFullName" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.sublet.tenantFullName.required"),
+      maxLength(50, "error.sublet.tenantFullName.maxLength")
+    ),
     s"$index.tenantAddress" ->  addressMapping(s"$index.tenantAddress"),
     s"$index.subletType" ->  subletTypeMapping,
     s"$index.subletPropertyPartDescription" -> mandatoryIf(
-      isEqual(s"$index.subletType", SubletPart.name),nonEmptyText(maxLength = 100)),
-    s"$index.subletPropertyReasonDescription" -> nonEmptyText(maxLength = 100),
-    s"$index.annualRent" -> currency,
-    s"$index.rentFixedDate" -> monthYearRoughDateMapping(s"$index.rentFixedDate")
+      isEqual(s"$index.subletType", SubletPart.name), default(text, "").verifying(
+        nonEmpty(errorMessage = "error.subletPropertyPartDescription.required"),
+        maxLength(100, "error.subletPropertyPartDescription.maxLength")
+      )),
+    s"$index.subletPropertyReasonDescription" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.subletPropertyReasonDescription.required"),
+      maxLength(100, "error.subletPropertyReasonDescription.maxLength")
+    ),
+    s"$index.annualRent" -> currencyMapping(".sublet.annualRent"),
+    s"$index.rentFixedDate" -> monthYearRoughDateMapping(s"$index.rentFixedDate", ".sublet.rentFixedDate")
   )(SubletDetails.apply)(SubletDetails.unapply)
 
   val pageFourMapping  = mapping(

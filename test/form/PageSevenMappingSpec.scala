@@ -83,7 +83,7 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    containsError(res.errors, "rentReviewDetails.lastReviewDate.year", "error.required")
+    mustContainError("rentReviewDetails.lastReviewDate.year", "error.year.required", res)
   }
   "PageSevenData" should "bind with the fields and return issues when boolean can rent be reduced due to rent review value is missing" in {
     val data = baseData - "rentReviewDetails.canRentReduced"
@@ -105,7 +105,7 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.size should be(1)
     res.errors.isEmpty should be(false)
-    containsError(res.errors, "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.required")
+    mustContainError("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.year.required", res)
   }
 
   "PageSevenData" should "not bind with the fields and return an error when the person who agreed the rent input is not selected" in {

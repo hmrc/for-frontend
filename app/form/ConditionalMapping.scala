@@ -60,7 +60,8 @@ case class IfElseMapping[T](condition: Condition, trueMapping: Mapping[T], false
 }
 
 case class NonEmptyTextOrMapping(fieldName: String, wrapped: Mapping[String], keys: Set[String] = Set(),
-                                 constraints: Seq[Constraint[String]] = Nil, errorRequiredKey: String = "error.required") extends Mapping[String] {
+                                 constraints: Seq[Constraint[String]] = Nil,
+                                 errorRequiredKey: String = "error.required") extends Mapping[String] {
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 

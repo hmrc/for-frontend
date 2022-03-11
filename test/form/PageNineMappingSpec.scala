@@ -49,14 +49,14 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
   checkMissingField(keys.annualRentExcludingVat)
 
   checkMissingField(keys.rentActuallyAgreedDay)
-  checkMissingField(keys.rentActuallyAgreedYear)
-  checkMissingField(keys.rentActuallyAgreedMonth)
+  checkMissingField(keys.rentActuallyAgreedYear, "error.year.required")
+  checkMissingField(keys.rentActuallyAgreedMonth, "error.month.required")
 
   checkMissingField(keys.negotiatingNewRent, Errors.negotiatingNewRentRequired)
   checkMissingField(keys.rentBasedOn, Errors.rentBasedOnRequired)
   checkMissingField(keys.rentBecomePayableDay)
-  checkMissingField(keys.rentBecomePayableYear)
-  checkMissingField(keys.rentBecomePayableMonth)
+  checkMissingField(keys.rentBecomePayableYear, "error.year.required")
+  checkMissingField(keys.rentBecomePayableMonth, "error.month.required")
 
   RentBaseTypes.all.filter(x => (x != RentBaseTypeOpenMarket && x != RentBaseTypeIndexation) ).foreach { rentBasis =>
     "A form with 'rent basis' of '" + rentBasis.name + "' but a missing 'rent basis other' field" should "return required error for rent based on details" in {

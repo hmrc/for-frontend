@@ -94,7 +94,7 @@ class PageThirteenMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = baseData - indexedKey(0).alterationDetailsDateMonth - indexedKey(0).alterationDetailsDateYear
     val form = bind(testData)
 
-    mustContainRequiredErrorFor(indexedKey(0).alterationDetailsDateYear, form)
+    mustContainError(indexedKey(0).alterationDetailsDateYear, "error.year.required", form)
   }
 
   it should "return an error and not bind when multiple alterations are entered and one is missing the alterationType" in {

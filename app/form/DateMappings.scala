@@ -73,9 +73,10 @@ object DateMappings {
         Valid
     }
   }
+
   def monthYearRoughDateMapping(prefix: String, fieldErrorPart: String = ""): Mapping[RoughDate] = tuple(
     "month" -> nonEmptyTextOr(
-      prefix + ".month", text.verifying(Errors.invalidDateMonth, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 1 && x.trim.toInt <= 12),
+      prefix + ".month", text.verifying(Errors.invalidDate, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 1 && x.trim.toInt <= 12),
       s"error$fieldErrorPart.month.required"
     ),
     "year" -> nonEmptyTextOr(
