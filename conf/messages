@@ -236,6 +236,15 @@ label.noJs.propertyRentedBy=Answer this only if you’ve selected ‘No’
 label.noRentDetails.agent=Tell us why your client does not have to pay rent on this property
 label.noRentDetails=Tell us why you do not pay rent on this property
 
+error.propertyType.required=Enter what the property is used for
+error.propertyType.maxLength=The property use must be 100 characters or fewer
+error.companyName.required=Enter the company name
+error.companyName.maxLength=The company name must be 50 characters or fewer
+error.occupiersName.required=Enter the main occupier’s name
+error.occupiersName.maxLength=The Main Occupier's name must be 50 characters or fewer
+error.noRentDetails.required=Enter the reason you do not pay rent on this property
+error.noRentDetails.maxLength=The reason for not paying rent must be 249 characters or fewer
+
 error.occupierType.required=Select who occupies the property
 error.propertyOwnedByYou.required=Select ‘Yes’ if you own the property
 error.propertyRentedByYou.required=Select ‘Yes’ if you pay rent for the property
@@ -870,6 +879,7 @@ error.invalid_postcode=Enter a valid UK postcode
 error.invalid_currency = This must be a number greater than 0
 error.invalid_phone=Enter a phone number, like 01632 960 001
 error.email=Enter an email in the correct format, like name@example.com
+
 error.invalid_date = Enter a valid date
 error.date_must_be_in_past=Date must be in the past
 error.number = This must be a number
@@ -877,6 +887,9 @@ error.invalid_number = This must be a number
 error.date_before_1900=This must be from 1900 onwards
 error.duration.years=This can be no more than 999
 error.duration.months=This can be no more than 12
+error.month.required = The date the property was occupied must include a month
+error.year.required = The date the property was occupied must include a year
+
 error.too_many_stepped_rents=You can only provide 7 steps
 error.too_many_services=You can only provide details of 10 services
 error.too_many_alterations=You can only provide details of 10 alterations

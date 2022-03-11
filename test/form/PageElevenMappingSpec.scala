@@ -127,7 +127,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
   it should "validate the rent free period details" in {
     validateLettersNumsSpecCharsUptoLength("rentFreePeriodDetails.rentFreePeriodDetails", 250, pageElevenForm, baseData)
   }
-  
+
   it should "not bind and return errors when rent free duration has 'a' entered" in {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","a")
     val res = bind(testData)
@@ -138,13 +138,13 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","0")
     val res = bind(testData)
     containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.min")
-  } 
+  }
 
   it should "not bind and return errors when rent free duration has '-10' entered" in {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","-10")
     val res = bind(testData)
     containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.min")
-  }  
+  }
 
   it should "validate the capital sum paid" in {
     validateCurrency("capitalPaidDetails.capitalSum", pageElevenForm, baseData)

@@ -44,6 +44,12 @@ object Errors {
   val alternativeContactMissing  = "error.alternative.contact.missing"
 
   //page 3
+  val propertyTypeRequired = "error.propertyType.required"
+  val companyNameRequired = "error.companyName.required"
+  val occupiersNameRequired = "error.occupiersName.required"
+  val noRentDetailsRequired = "error.noRentDetails.required"
+
+
   val occupierTypeRequired = "error.occupierType.required"
   val propertyOwnedByYouRequired = "error.propertyOwnedByYou.required"
   val propertyRentedByYouRequired = "error.propertyRentedByYou.required"
@@ -134,6 +140,8 @@ object Errors {
   //Dates
   val dateBefore1900 = "error.date_before_1900"
   val invalidDate = "error.invalid_date"
+  val invalidDateMonth = "error.month.required"
+  val invalidDateYear = "error.year.required"
   val dateMustBeInPast = "error.date_must_be_in_past"
   val invalidDurationMonths = "error.duration.months"
   val invalidDurationYears = "error.duration.years"

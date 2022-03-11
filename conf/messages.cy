@@ -230,6 +230,15 @@ label.noJs.propertyRentedBy=Dylech ond ateb hyn os ydych wedi dewis ‘Nac ydy �
 label.noRentDetails=Dywedwch wrthym pam nad ydych yn talu rhent ar yr eiddo yma
 label.noRentDetails.agent=Dywedwch wrthym pam nad oes gan eich cleient i dalu rhent ar yr eiddo hwn
 
+error.propertyType.required=Enter what the property is used for
+error.propertyType.maxLength=The property use must be 100 characters or fewer
+error.companyName.required=Enter the company name
+error.companyName.maxLength=The company name must be 50 characters or fewer
+error.occupiersName.required=Enter the main occupier’s name
+error.occupiersName.maxLength=The Main Occupier's name must be 50 characters or fewer
+error.noRentDetails.required=Enter the reason you do not pay rent on this property
+error.noRentDetails.maxLength=The reason for not paying rent must be 249 characters or fewer
+
 error.occupierType.required=Dewiswch bwy sy’n meddiannu’r eiddo
 error.propertyOwnedByYou.required=Dewiswch ‘Ydw’ os taw chi sy’n berchen ar yr eiddo
 error.propertyRentedByYou.required=Dewiswch ‘Ydw’ os ydych chi’n talu rhent ar yr eiddo

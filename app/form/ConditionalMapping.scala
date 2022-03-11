@@ -24,8 +24,9 @@ object ConditionalMapping {
   def ifTrueElse[T](fieldName: String, trueMapping: Mapping[T], falseMapping: Mapping[T]): Mapping[T] =
     IfElseMapping(isTrue(fieldName), trueMapping, falseMapping)
 
-  def nonEmptyTextOr(fieldName: String, mapping: Mapping[String]): Mapping[String] =
-    NonEmptyTextOrMapping(fieldName, mapping)
+  def nonEmptyTextOr(fieldName: String, mapping: Mapping[String],
+                     errorRequiredKey: String = "error.required"): Mapping[String] =
+    NonEmptyTextOrMapping(fieldName, mapping, errorRequiredKey = errorRequiredKey)
 }
 
 case class IfElseMapping[T](condition: Condition, trueMapping: Mapping[T], falseMapping: Mapping[T],
@@ -59,7 +60,7 @@ case class IfElseMapping[T](condition: Condition, trueMapping: Mapping[T], false
 }
 
 case class NonEmptyTextOrMapping(fieldName: String, wrapped: Mapping[String], keys: Set[String] = Set(),
-                                 constraints: Seq[Constraint[String]] = Nil) extends Mapping[String] {
+                                 constraints: Seq[Constraint[String]] = Nil, errorRequiredKey: String = "error.required") extends Mapping[String] {
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
@@ -70,10 +71,10 @@ case class NonEmptyTextOrMapping(fieldName: String, wrapped: Mapping[String], ke
   }
 
   def bind(data: Map[String, String]): Either[Seq[FormError], String] = {
-    if (data.get(fieldName).map(_ != "").getOrElse(false)) {
+    if (data.get(fieldName).exists(_ != "")) {
       wrapped.bind(data)
     } else {
-      Left(Seq(FormError(wrapped.key, Seq("error.required"))))
+      Left(Seq(FormError(wrapped.key, Seq(errorRequiredKey))))
     }
   }
 
