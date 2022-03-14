@@ -243,6 +243,9 @@ error.occupierType.required=Dewiswch bwy sy’n meddiannu’r eiddo
 error.propertyOwnedByYou.required=Dewiswch ‘Ydw’ os taw chi sy’n berchen ar yr eiddo
 error.propertyRentedByYou.required=Dewiswch ‘Ydw’ os ydych chi’n talu rhent ar yr eiddo
 
+error.firstOccupationDate.month.required = Mae’n rhaid llenwi hwn
+error.firstOccupationDate.year.required = Mae’n rhaid llenwi hwn
+
 #SECTION 4
 ###############################
 section4.heading=Gosodiadau ac is-osodiadau
