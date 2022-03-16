@@ -83,7 +83,7 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainError("rentReviewDetails.lastReviewDate.year", "error.year.required", res)
+    mustContainError("rentReviewDetails.lastReviewDate.year", "error.lastRentReviewDate.year.required", res)
   }
   "PageSevenData" should "bind with the fields and return issues when boolean can rent be reduced due to rent review value is missing" in {
     val data = baseData - "rentReviewDetails.canRentReduced"
@@ -105,7 +105,7 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.size should be(1)
     res.errors.isEmpty should be(false)
-    mustContainError("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.year.required", res)
+    mustContainError("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.rentResultOfReview.year.required", res)
   }
 
   "PageSevenData" should "not bind with the fields and return an error when the person who agreed the rent input is not selected" in {
@@ -115,15 +115,15 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   "Page Seven Mapping" should "validate the Rent Interval duration" in {
-    validatesDuration("rentReviewDetails.reviewIntervalTypeSpecify", pageSevenForm, baseData)
+    validatesDuration("rentReviewDetails.reviewIntervalTypeSpecify", pageSevenForm, baseData, ".rentReviewIntervalOther")
   }
 
   it should "validate the last review date" in {
-    validatePastDate("rentReviewDetails.lastReviewDate", pageSevenForm, baseData)
+    validatePastDate("rentReviewDetails.lastReviewDate", pageSevenForm, baseData, ".lastRentReviewDate")
   }
 
   it should "validate the rent review date" in {
-    validatePastDate("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", pageSevenForm, baseData)
+    validatePastDate("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", pageSevenForm, baseData, ".rentResultOfReview")
   }
 
   it should "not validate the rent interval duration when only leaseContainsRentReviews is specified" in {

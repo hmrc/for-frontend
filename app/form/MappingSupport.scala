@@ -35,7 +35,7 @@ object MappingSupport {
   val cdbMaxCurrencyAmount = 9999999.99
 
   lazy val annualRent: Mapping[AnnualRent] = mapping(
-    "annualRentExcludingVat" -> currency
+    "annualRentExcludingVat" -> currencyMapping(".annualRentExcludingVat")
   )(AnnualRent.apply)(AnnualRent.unapply).verifying(Errors.maxCurrencyAmountExceeded, _.amount <= cdbMaxCurrencyAmount)
 
   val currency: Mapping[BigDecimal] = currencyMapping()
@@ -44,12 +44,7 @@ object MappingSupport {
     .verifying(nonEmpty(errorMessage = Errors.required + fieldErrorPart))
     .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
     .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
-    .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmount)
-
-  def currencyMappingAmountPaid(fieldErrorPart: String = ""): Mapping[BigDecimal] = default(text, "")
-    .verifying(nonEmpty(errorMessage = Errors.required + fieldErrorPart))
-    .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
-    .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
+    .verifying(Errors.maxCurrencyAmountExceeded + fieldErrorPart, _ <= cdbMaxCurrencyAmount)
     .verifying(Errors.numberBetween, _ <= cdbMaxCurrencyAmount)
     .verifying(Errors.numberBetween, _ >= cdbMinCurrencyAmount)
 
@@ -146,7 +141,8 @@ object MappingSupport {
     )(ContactDetails.apply)(ContactDetails.unapply)
 
   def parkingDetailsMapping(key: String): Mapping[ParkingDetails] = mapping(
-    "openSpaces" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredOpenSpaces, _ <= 9999),
+    "openSpaces" -> default(number(min = 0), 0)
+      .verifying(Errors.parkingRequiredOpenSpaces, _ <= 9999),
     "coveredSpaces" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredCoveredSpaces, _ <= 9999),
     "garages" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredGarages, _ <= 9999)
   )(ParkingDetails.apply)(ParkingDetails.unapply) verifying atLeastOneParkingDetailRequired(key)

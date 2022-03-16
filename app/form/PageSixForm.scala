@@ -21,9 +21,10 @@ import form.MappingSupport._
 import models.pages.{PageSix, _}
 import models.serviceContracts.submissions._
 import org.joda.time.LocalDate
-import play.api.data.Forms.{mapping, nonEmptyText, optional, tuple}
+import play.api.data.Forms.{default, mapping, optional, text, tuple}
 import play.api.data._
 import play.api.data.validation.Constraint
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
 
@@ -68,10 +69,10 @@ object PageSixForm {
 
   val steppedDetailsMapping = (index: String) => mapping(
     index -> tuple(
-      keys.from -> dateFieldsMapping(s"$index.stepFrom", allowFutureDates = true),
-      keys.to -> dateFieldsMapping(s"$index.stepTo", allowFutureDates = true)
+      keys.from -> dateFieldsMapping(s"$index.stepFrom", allowFutureDates = true, fieldErrorPart = ".writtenAgreement.steppedDetails.stepFrom"),
+      keys.to -> dateFieldsMapping(s"$index.stepTo", allowFutureDates = true, fieldErrorPart = ".writtenAgreement.steppedDetails.stepTo")
     ).verifying(toDateIsAfterFromDate),
-    (index + "." + keys.amount) -> currency
+    (index + "." + keys.amount) -> currencyMapping(".writtenAgreement.steppedDetails.amount")
   )((dates, amount) => SteppedDetails(dates._1, dates._2, amount))(stepped => Some(((stepped.stepFrom, stepped.stepTo), stepped.amount)))
 
   val written = keys.writtenAgreement
@@ -80,11 +81,17 @@ object PageSixForm {
     .verifying(Errors.tooManySteppedRents, _.length <= 7)
 
   val writtenAgreementMapping = mapping(
-    keys.startDate -> monthYearRoughDateMapping(s"$written.${keys.startDate}"),
+    keys.startDate -> monthYearRoughDateMapping(s"$written.${keys.startDate}", ".writtenAgreement.startDate"),
     keys.rentOpenEnded -> mandatoryBooleanWithError(Errors.leaseAgreementOpenEndedRequired),
-    keys.leaseLength -> mandatoryIfFalse(s"$written.${keys.rentOpenEnded}", monthsYearDurationMapping(s"$written.${keys.leaseLength}")),
+    keys.leaseLength -> mandatoryIfFalse(s"$written.${keys.rentOpenEnded}",
+      monthsYearDurationMapping(s"$written.${keys.leaseLength}", ".writtenAgreement.leaseLength")),
     keys.leaseAgreementHasBreakClause -> mandatoryBooleanWithError(Errors.leaseAgreementBreakClauseRequired),
-    keys.breakClauseDetails -> mandatoryIfTrue(s"$written.${keys.leaseAgreementHasBreakClause}", nonEmptyText(maxLength = 124)),
+    keys.breakClauseDetails -> mandatoryIfTrue(s"$written.${keys.leaseAgreementHasBreakClause}",
+      default(text, "").verifying(
+        nonEmpty(errorMessage = "error.writtenAgreement.breakClauseDetails.required"),
+        maxLength(124, "error.writtenAgreement.breakClauseDetails.maxLength")
+      )
+    ),
     keys.agreementIsStepped -> mandatoryBooleanWithError(Errors.leaseAgreementIsSteppedRequired),
     keys.steppedDetails -> onlyIfTrue(s"$written.${keys.agreementIsStepped}", steppedDetailsListMapping)
   )(WrittenAgreement.apply)(WrittenAgreement.unapply).verifying(noOverlappingSteps)

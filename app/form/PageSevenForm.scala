@@ -29,7 +29,7 @@ import uk.gov.voa.play.form.ConditionalMappings._
 object PageSevenForm {
 
   val rentReviewResultsDetailsMapping = mapping(
-    "whenWasRentReview" -> monthYearRoughDateMapping("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview"),
+    "whenWasRentReview" -> monthYearRoughDateMapping("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", ".rentResultOfReview"),
     "rentAgreedBetween" -> mandatoryBooleanWithError(Errors.rentWasAgreedBetweenRequired),
     "rentFixedBy" -> mandatoryIfFalse("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween", rentFixedByTypeMapping)
   )(RentReviewResultDetails.apply)(RentReviewResultDetails.unapply)
@@ -38,8 +38,8 @@ object PageSevenForm {
     "reviewIntervalType" -> reviewIntervalTypeMapping,
     "reviewIntervalTypeSpecify" ->
       mandatoryIfEqual("rentReviewDetails.reviewIntervalType", ReviewIntervalTypeOther.name,
-        monthsYearDurationMapping("rentReviewDetails.reviewIntervalTypeSpecify")),
-    "lastReviewDate" -> optional(monthYearRoughDateMapping("rentReviewDetails.lastReviewDate")),
+        monthsYearDurationMapping("rentReviewDetails.reviewIntervalTypeSpecify", ".rentReviewIntervalOther")),
+    "lastReviewDate" -> optional(monthYearRoughDateMapping("rentReviewDetails.lastReviewDate", ".lastRentReviewDate")),
     "canRentReduced" -> mandatoryBooleanWithError(Errors.rentCanBeReducedOnReviewRequired),
     "rentResultOfRentReview" -> mandatoryBooleanWithError(Errors.isRentResultOfReviewRequired),
     "rentReviewResultsDetails" -> mandatoryIfTrue("rentReviewDetails.rentResultOfRentReview", rentReviewResultsDetailsMapping)

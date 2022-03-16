@@ -243,6 +243,9 @@ error.occupierType.required=Dewiswch bwy sy’n meddiannu’r eiddo
 error.propertyOwnedByYou.required=Dewiswch ‘Ydw’ os taw chi sy’n berchen ar yr eiddo
 error.propertyRentedByYou.required=Dewiswch ‘Ydw’ os ydych chi’n talu rhent ar yr eiddo
 
+error.firstOccupationDate.month.required = Mae’n rhaid llenwi hwn
+error.firstOccupationDate.year.required = Mae’n rhaid llenwi hwn
+
 #SECTION 4
 ###############################
 section4.heading=Gosodiadau ac is-osodiadau
@@ -288,6 +291,7 @@ error.subletPropertyReasonDescription.required = Mae’n rhaid llenwi hwn
 error.subletPropertyReasonDescription.maxLength = Rhaid i fod yn 100 nod neu lai
 error.required.sublet.annualRent = Mae’n rhaid llenwi hwn
 error.invalid_currency.sublet.annualRent = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.maxCurrencyAmountExceeded.sublet.annualRent = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
 error.date_must_be_in_past.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 error.date_before_1900.sublet.rentFixedDate = Mae’n rhaid i hwn fod o 1900 ymlaen
 
@@ -414,6 +418,24 @@ error.leaseOpenEnded.required=Dewiswch ‘Ydy’ os yw’r cytundeb cyfredol yn 
 error.leaseHasBreakClause.required=Dewiswch ‘Ydy’ os gellir dod â’r cytundeb cyfredol i ben yn gynnar
 error.steppedRent.required=Dewiswch ‘Ydy’ os yw’r rhent yn seiliedig ar gytundeb rhent grisiog
 
+error.writtenAgreement.startDate.month.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.startDate.year.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.writtenAgreement.startDate = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.writtenAgreement.leaseLength.months.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.leaseLength.years.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.breakClauseDetails.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.breakClauseDetails.maxLength = Rhaid i fod yn 124 nod neu lai
+error.required.writtenAgreement.steppedDetails.amount = Mae’n rhaid llenwi hwn
+error.invalid_currency.writtenAgreement.steppedDetails.amount = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.writtenAgreement.steppedDetails.stepFrom.day.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepFrom.month.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepFrom.year.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepTo.day.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepTo.month.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepTo.year.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.writtenAgreement.steppedDetails.stepFrom = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_before_1900.writtenAgreement.steppedDetails.stepTo = Mae’n rhaid i hwn fod o 1900 ymlaen
+
 #SECTION 7
 ###############################
 section7.heading=Adolygiadau rhent
@@ -446,6 +468,15 @@ error.canRentBeReducedOnReview.required=Dewiswch ‘Oes’ os oes modd gostwng y
 error.isRentResultOfReview.required=Dewiswch ‘Ydy’ os yw’r rhent cyfredol yn ganlyniad adolygiad rhent
 error.rentWasAgreedBetween.required=Dewiswch ‘Do’ os cafodd y rhent ei bennu rhwng y tenant a’r landlord
 error.rentWasFixedBy.required=Dewiswch gan bwy y cafodd y rhent ei bennu
+
+error.rentReviewIntervalOther.years.required = Mae’n rhaid llenwi hwn
+error.rentReviewIntervalOther.months.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.lastRentReviewDate = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_must_be_in_past.lastRentReviewDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
+error.rentResultOfReview.month.required = Mae’n rhaid llenwi hwn
+error.rentResultOfReview.year.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.rentResultOfReview = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_must_be_in_past.rentResultOfReview = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 
 #SECTION 8
 ###############################
@@ -491,6 +522,25 @@ label.noJs.rentBasedOnDetails=Dylech ond ateb hyn os ydych wedi dewis ‘Arall�
 
 error.negotiatingNewRent.required=Dewiswch ‘Ydy’ os yw’r tenant neu’r asiant yn negodi rhent newydd
 error.rentBaseOn.required=Dewiswch beth mae’r rhent yn seiliedig arno
+
+error.required.annualRentExcludingVat = Mae’n rhaid llenwi hwn
+error.invalid_currency.annualRentExcludingVat = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.maxCurrencyAmountExceeded.annualRentExcludingVat = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
+
+error.rentBasedOnDetails.required = Mae’n rhaid llenwi hwn
+error.rentBasedOnDetails.maxLength = Rhaid i fod yn 250 nod neu lai
+
+error.rentBecomePayable.day.required = Mae’n rhaid llenwi hwn
+error.rentBecomePayable.month.required = Mae’n rhaid llenwi hwn
+error.rentBecomePayable.year.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.rentBecomePayable = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_must_be_in_past.rentBecomePayable = Mae’n rhaid i’r dyddiad fod yn y gorffennol
+
+error.rentActuallyAgreed.day.required = Mae’n rhaid llenwi hwn
+error.rentActuallyAgreed.month.required = Mae’n rhaid llenwi hwn
+error.rentActuallyAgreed.year.required = Mae’n rhaid llenwi hwn
+error.date_before_1900.rentActuallyAgreed = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_must_be_in_past.rentActuallyAgreed = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 
 #SECTION 10
 ###############################
@@ -908,6 +958,9 @@ error.invalid_number = Mae’n rhaid i hwn ddefnyddio rhifau
 error.date_before_1900=Mae’n rhaid i hwn fod o 1900 ymlaen
 error.duration.years=Ni all hwn fod yn fwy na 999
 error.duration.months=Ni all hwn fod yn fwy na 12
+error.months.required = Mae’n rhaid llenwi hwn
+error.years.required = Mae’n rhaid llenwi hwn
+
 error.too_many_stepped_rents=Gallwch ond rhoi saith cam
 error.too_many_services=Gallwch ond rhoi manylion 10 o wasanaethau
 error.too_many_alterations=Gallwch ond rhoi manylion 10 o addasiadau

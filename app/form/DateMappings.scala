@@ -42,32 +42,32 @@ object DateMappings {
       Valid
   }
 
-  private val fullDateIsAfter1900: Constraint[(String, String, String)] = Constraint("fullDateIsAfter1900") { x =>
+  private def fullDateIsAfter1900(fieldErrorPart: String): Constraint[(String, String, String)] = Constraint("fullDateIsAfter1900") { x =>
     val day = x._1.trim.toInt
     val month = x._2.trim.toInt
     val year = x._3.trim.toInt
 
     if(Try(new DateTime(year, month, day, 23, 59)).isFailure)
-      Invalid(Errors.invalidDate)
+      Invalid(Errors.invalidDate + fieldErrorPart)
     else if (new DateTime(year, month, day, 23, 59).isBefore(nineteenHundred))
-      Invalid(Errors.dateBefore1900)
+      Invalid(Errors.dateBefore1900 + fieldErrorPart)
     else
       Valid
   }
 
-  private val fullDateIsInPastAndAfter1900: Constraint[(String, String, String)] = Constraint("fullDateIsInPastAndAfter1900") { x =>
+  private def fullDateIsInPastAndAfter1900(fieldErrorPart: String): Constraint[(String, String, String)] = Constraint("fullDateIsInPastAndAfter1900") { x =>
     val day = x._1.trim.toInt
     val month = x._2.trim.toInt
     val year = x._3.trim.toInt
 
     if(Try(new DateTime(year, month, day, 23, 59)).isFailure)
-      Invalid(Errors.invalidDate)
+      Invalid(Errors.invalidDate + fieldErrorPart)
     else {
       val date = new DateTime(year, month, day, 23, 59)
       if (date.isAfterNow)
-        Invalid(Errors.dateMustBeInPast)
+        Invalid(Errors.dateMustBeInPast + fieldErrorPart)
       else if (date.isBefore(nineteenHundred))
-        Invalid(Errors.dateBefore1900)
+        Invalid(Errors.dateBefore1900 + fieldErrorPart)
       else
         Valid
     }
@@ -89,9 +89,10 @@ object DateMappings {
   )
 
   //  for precise dates, where all fields must be present and accurate
-  def dateFieldsMapping(prefix: String, allowFutureDates: Boolean = false, errorMessage: String = Errors.invalidDate, fieldErrorPart: String = ""): Mapping[LocalDate] = tuple(
+  def dateFieldsMapping(prefix: String, allowFutureDates: Boolean = false, fieldErrorPart: String = ""): Mapping[LocalDate] = tuple(
     "day" -> nonEmptyTextOr(
-      prefix + ".day", text.verifying(Errors.invalidDate, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 1 && x.trim.toInt <= 31)
+      prefix + ".day", text.verifying(Errors.invalidDate, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 1 && x.trim.toInt <= 31),
+      s"error$fieldErrorPart.day.required"
     ),
     "month" -> nonEmptyTextOr(
       prefix + ".month", text.verifying(Errors.invalidDate, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 1 && x.trim.toInt <= 12),
@@ -101,21 +102,23 @@ object DateMappings {
       prefix + ".year", text.verifying(Errors.invalidDate, x => x.trim.forall(Character.isDigit) && x.trim.length == 4),
       s"error$fieldErrorPart.year.required"
     )).verifying(
-      if(allowFutureDates) fullDateIsAfter1900 else fullDateIsInPastAndAfter1900
+      if (allowFutureDates) fullDateIsAfter1900(fieldErrorPart) else fullDateIsInPastAndAfter1900(fieldErrorPart)
     ).transform(
   { case (day, month, year) => new LocalDate(year.trim.toInt, month.trim.toInt, day.trim.toInt) },
   (date: LocalDate) => (date.getDayOfMonth.toString, date.getMonthOfYear.toString, date.getYear.toString)
   )
 
-  def monthsYearDurationMapping(prefix: String): Mapping[MonthsYearDuration] = tuple(
-    "months" -> nonEmptyTextOr(
-      prefix + ".months", text.verifying(Errors.invalidDurationMonths, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 0 && x.trim.toInt <= 12)
-    ),
+  def monthsYearDurationMapping(prefix: String, fieldErrorPart: String = ""): Mapping[MonthsYearDuration] = tuple(
     "years" -> nonEmptyTextOr(
-      prefix + ".years", text.verifying(Errors.invalidDurationYears, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 0 && x.trim.toInt <= 999)
+      prefix + ".years", text.verifying(Errors.invalidDurationYears, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 0 && x.trim.toInt <= 999),
+      s"error$fieldErrorPart.years.required"
+    ),
+    "months" -> nonEmptyTextOr(
+      prefix + ".months", text.verifying(Errors.invalidDurationMonths, x => x.trim.forall(Character.isDigit) && x.trim.toInt >= 0 && x.trim.toInt <= 12),
+      s"error$fieldErrorPart.months.required"
     )
   ).transform({
-    case (months, year) => MonthsYearDuration(months.trim.toInt, year.trim.toInt)
+    case (years, months) => MonthsYearDuration(months.trim.toInt, years.trim.toInt)
   }, (my: MonthsYearDuration) => (my.months.toString, my.years.toString))
 
 

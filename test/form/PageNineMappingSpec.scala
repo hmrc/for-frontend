@@ -46,24 +46,24 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
     doesNotContainErrors(res)
     res.value.get should be(expectedData)
   }
-  checkMissingField(keys.annualRentExcludingVat)
+  checkMissingField(keys.annualRentExcludingVat, "error.required.annualRentExcludingVat")
 
-  checkMissingField(keys.rentActuallyAgreedDay)
-  checkMissingField(keys.rentActuallyAgreedYear, "error.year.required")
-  checkMissingField(keys.rentActuallyAgreedMonth, "error.month.required")
+  checkMissingField(keys.rentActuallyAgreedDay, "error.rentActuallyAgreed.day.required")
+  checkMissingField(keys.rentActuallyAgreedYear, "error.rentActuallyAgreed.year.required")
+  checkMissingField(keys.rentActuallyAgreedMonth, "error.rentActuallyAgreed.month.required")
 
   checkMissingField(keys.negotiatingNewRent, Errors.negotiatingNewRentRequired)
   checkMissingField(keys.rentBasedOn, Errors.rentBasedOnRequired)
-  checkMissingField(keys.rentBecomePayableDay)
-  checkMissingField(keys.rentBecomePayableYear, "error.year.required")
-  checkMissingField(keys.rentBecomePayableMonth, "error.month.required")
+  checkMissingField(keys.rentBecomePayableDay, "error.rentBecomePayable.day.required")
+  checkMissingField(keys.rentBecomePayableYear, "error.rentBecomePayable.year.required")
+  checkMissingField(keys.rentBecomePayableMonth, "error.rentBecomePayable.month.required")
 
   RentBaseTypes.all.filter(x => (x != RentBaseTypeOpenMarket && x != RentBaseTypeIndexation) ).foreach { rentBasis =>
     "A form with 'rent basis' of '" + rentBasis.name + "' but a missing 'rent basis other' field" should "return required error for rent based on details" in {
       val testData = fullData.updated(keys.rentBasedOn, rentBasis.name) - keys.rentBasedOnDetails
       val res = bind(testData)
       
-      mustContainRequiredErrorFor("rentBasedOnDetails", res)
+      mustContainError("rentBasedOnDetails", "error.rentBasedOnDetails.required", res)
     }
   }
 
@@ -75,21 +75,19 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   "Page Nine mapping" should "validate the rent start date" in {
-    validateFullDateInPast("rentBecomePayable", pageNineForm, fullData)
+    validateFullDateInPast("rentBecomePayable", pageNineForm, fullData, ".rentBecomePayable")
   }
 
   it should "validate the rent agreed date" in {
-    validateFullDateInPast("rentActuallyAgreed", pageNineForm, fullData)
+    validateFullDateInPast("rentActuallyAgreed", pageNineForm, fullData, ".rentActuallyAgreed")
   }
 
-/*
   it should "validate the annual rent" in {
-    validateAnnualRent(keys.totalRent, pageNineForm, fullData)
+    validateAnnualRent(keys.totalRent, pageNineForm, fullData, ".annualRentExcludingVat")
   }
-*/
 
   it should "validate the rent based on ... details" in {
-    validateLettersNumsSpecCharsUptoLength(keys.rentBasedOnDetails, 250, pageNineForm, fullData)
+    validateLettersNumsSpecCharsUptoLength(keys.rentBasedOnDetails, 250, pageNineForm, fullData, Some("error.rentBasedOnDetails.maxLength"))
   }
 
   object TestData {

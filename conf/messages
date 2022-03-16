@@ -249,6 +249,9 @@ error.occupierType.required=Select who occupies the property
 error.propertyOwnedByYou.required=Select ‘Yes’ if you own the property
 error.propertyRentedByYou.required=Select ‘Yes’ if you pay rent for the property
 
+error.firstOccupationDate.month.required = The date the property was occupied must include a month
+error.firstOccupationDate.year.required = The date the property was occupied must include a year
+
 #SECTION 4
 ###############################
 section4.heading=Lettings and sub-lettings
@@ -293,6 +296,7 @@ error.subletPropertyReasonDescription.required = Enter what the property is used
 error.subletPropertyReasonDescription.maxLength = The property use must be 100 characters or fewer
 error.required.sublet.annualRent = Enter how much rent is paid
 error.invalid_currency.sublet.annualRent = The rent paid must be a number
+error.maxCurrencyAmountExceeded.sublet.annualRent = Maximum amount exceeded - please contact the VOA
 error.date_must_be_in_past.sublet.rentFixedDate = The date the let or sub-let started must be in the past
 error.date_before_1900.sublet.rentFixedDate = The date the let or sub-let started must be after December 1899
 
@@ -399,6 +403,24 @@ error.leaseOpenEnded.required=Select ‘Yes’ if the current agreement is open-
 error.leaseHasBreakClause.required=Select ‘Yes’ if the current agreement can be ended early
 error.steppedRent.required=Select ‘Yes’ if the rent is based on a stepped-rent agreement
 
+error.writtenAgreement.startDate.month.required = The date the current agreement started must include a month
+error.writtenAgreement.startDate.year.required = The date the current agreement started must include a year
+error.date_before_1900.writtenAgreement.startDate = The date the current agreement started must be after December 1899
+error.writtenAgreement.leaseLength.months.required = Enter how many months the current agreement is for
+error.writtenAgreement.leaseLength.years.required = Enter how many years the current agreement is for
+error.writtenAgreement.breakClauseDetails.required = Enter the details of the break clause
+error.writtenAgreement.breakClauseDetails.maxLength = Details of the break clause must be 124 characters or fewer
+error.required.writtenAgreement.steppedDetails.amount = Enter the current annual rent
+error.invalid_currency.writtenAgreement.steppedDetails.amount = The rent must be a number between 1 and 9999999
+error.writtenAgreement.steppedDetails.stepFrom.day.required = The date rent step starts must include a day
+error.writtenAgreement.steppedDetails.stepFrom.month.required = The date the rent step starts must include a month
+error.writtenAgreement.steppedDetails.stepFrom.year.required = The date the rent step starts must include a year
+error.writtenAgreement.steppedDetails.stepTo.day.required = The date rent step ends must include a day
+error.writtenAgreement.steppedDetails.stepTo.month.required = The date the rent step ends must include a month
+error.writtenAgreement.steppedDetails.stepTo.year.required = The date the rent step ends must include a year
+error.date_before_1900.writtenAgreement.steppedDetails.stepFrom = The date the rent step starts must be on or after 1 January 1900
+error.date_before_1900.writtenAgreement.steppedDetails.stepTo = The date the rent step ends must be on or after 1 January 1900
+
 #SECTION 7
 ###############################
 section7.heading=Rent reviews
@@ -431,6 +453,15 @@ error.canRentBeReducedOnReview.required=Select ‘Yes’ if the rent can be redu
 error.isRentResultOfReview.required=Select ‘Yes’ if the current rent is a result of a rent review
 error.rentWasAgreedBetween.required=Select ‘Yes’ if the rent was fixed between the tenant and landlord
 error.rentWasFixedBy.required=Select who the rent was fixed by
+
+error.rentReviewIntervalOther.years.required = Enter how many years between rent reviews
+error.rentReviewIntervalOther.months.required = Enter how many months between rent reviews
+error.date_before_1900.lastRentReviewDate = The last review date must be between January 1900 and today
+error.date_must_be_in_past.lastRentReviewDate = The last review date must be between January 1900 and today
+error.rentResultOfReview.month.required = Enter the month of the rent review
+error.rentResultOfReview.year.required = Enter the year of the rent review
+error.date_before_1900.rentResultOfReview = The rent review date must be between January 1900 and today
+error.date_must_be_in_past.rentResultOfReview = The rent review date must be between January 1900 and today
 
 #SECTION 8
 ###############################
@@ -477,6 +508,25 @@ label.noJs.rentBasedOnDetails=Answer this only if you’ve selected ‘Other’
 
 error.negotiatingNewRent.required=Select ‘Yes’ if the tenant or agent is negotiating a new rent
 error.rentBaseOn.required=Select what the rent is based on
+
+error.required.annualRentExcludingVat = Enter the current annual rent
+error.invalid_currency.annualRentExcludingVat = The rent must be a number between 1 and 9999999
+error.maxCurrencyAmountExceeded.annualRentExcludingVat = The rent must be a number between 1 and 9999999
+
+error.rentBasedOnDetails.required = Enter details of the rent basis
+error.rentBasedOnDetails.maxLength = Details of the rent basis must be 250 characters or fewer
+
+error.rentBecomePayable.day.required = Enter the date the tenant started paying the current rent
+error.rentBecomePayable.month.required = The date the tenant started paying the current rent must include a month
+error.rentBecomePayable.year.required = The date the tenant started paying the current rent must include a year
+error.date_before_1900.rentBecomePayable = The date the tenant started paying the current rent must be between 1 January 1900 and today
+error.date_must_be_in_past.rentBecomePayable = The date the tenant started paying the current rent must be between 1 January 1900 and today
+
+error.rentActuallyAgreed.day.required = Enter the date the rent amount was agreed
+error.rentActuallyAgreed.month.required = The date the rent amount was agreed must include a month
+error.rentActuallyAgreed.year.required = The date the rent amount was agreed must include a year
+error.date_before_1900.rentActuallyAgreed = The date the rent amount was agreed must be between 1 January 1900 and today
+error.date_must_be_in_past.rentActuallyAgreed = The date the rent amount was agreed must be between 1 January 1900 and today
 
 #SECTION 10
 ###############################
@@ -899,6 +949,7 @@ error.invalid_date = Enter a valid date
 error.date_must_be_in_past = Date must be in the past
 error.number = This must be a number
 error.invalid_number = This must be a number
+
 error.date_before_1900 = Date must be after December 1899
 error.date_before_1900.firstOccupationDate = Date must be after December 1899
 error.duration.years=This can be no more than 999
@@ -906,6 +957,13 @@ error.duration.months=This can be no more than 12
 error.p10.month.required = The date the payment was fixed must include a month
 error.p10.year.required= The date the property was fixed must include a year
 error.date_before_1900.p10=The date the payment was fixed must be between January 1900 and today
+
+error.date_before_1900 = Date must be on or after 1 January 1900
+error.duration.years = Years must be a number between 0 and  999
+error.duration.months = Months must be a number between 0 and 12
+error.months.required = Enter months amount
+error.years.required = Enter years amount
+
 error.too_many_stepped_rents=You can only provide 7 steps
 error.too_many_services=You can only provide details of 10 services
 error.too_many_alterations=You can only provide details of 10 alterations
@@ -940,6 +998,7 @@ error.line2.maxLength = Second line of address must be 50 characters or fewer
 error.line3.maxLength = Third line of address must be 50 characters or fewer
 error.postcode.required = Enter the postcode
 error.postcode.maxLength = Postcode must be 10 characters or fewer
+error.day.required = The date must include a day
 error.month.required = The date must include a month
 error.year.required = The date must include a year
 

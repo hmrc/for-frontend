@@ -85,8 +85,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     )
     val form = bind(data)
 
-    mustContainRequiredErrorFor(writtenLeaseLength + ".months", form)
-    mustContainRequiredErrorFor(writtenLeaseLength + ".years", form)
+    mustContainError(writtenLeaseLength + ".months", "error.writtenAgreement.leaseLength.months.required", form)
+    mustContainError(writtenLeaseLength + ".years", "error.writtenAgreement.leaseLength.years.required", form)
   }
 
   it should "require a lease length if the agreement is not open ended for a verbal contract" in {
@@ -96,8 +96,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     )
     val form = bind(data)
 
-    mustContainRequiredErrorFor(verbalLeaseLength + ".months", form)
-    mustContainRequiredErrorFor(verbalLeaseLength + ".years", form)
+    mustContainError(verbalLeaseLength + ".months", "error.months.required", form)
+    mustContainError(verbalLeaseLength + ".years", "error.years.required", form)
   }
 
   it should "require all fields to be mandatory if the lease agreement type is a tenancy agreement" in {
@@ -106,8 +106,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
     mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainError(writtenStartDate + ".year", "error.year.required", form)
-    mustContainError(writtenStartDate + ".month", "error.month.required", form)
+    mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
+    mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
     mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
   }
 
@@ -117,8 +117,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
     mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainError(writtenStartDate + ".year", "error.year.required", form)
-    mustContainError(writtenStartDate + ".month", "error.month.required", form)
+    mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
+    mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
     mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
   }
 
@@ -126,7 +126,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = fullData.updated(keys.leaseAgreementType, LeaseAgreementTypesLicenceOther.name) - writtenBreakClauseDetails
     val form = bind(testData)
 
-    mustContainRequiredErrorFor(writtenBreakClauseDetails, form)
+    mustContainError(writtenBreakClauseDetails, "error.writtenAgreement.breakClauseDetails.required", form)
   }
 
   it should "return a stepped details error when 'has stepped agreement' is true but there are no stepped agreement details" in {
@@ -147,15 +147,15 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = fullData.updated(writtenAgreementIsStepped, "true") - getKeyStepped(0).amount
 
     val form = bind(testData)
-    mustOnlyContainRequiredErrorFor(s"${keys.writtenAgreement}.steppedDetails[0].amount", form)
+    mustContainError(s"${keys.writtenAgreement}.steppedDetails[0].amount", "error.required.writtenAgreement.steppedDetails.amount", form)
   }
 
   it should "require a lease length when a rent agreed date is supplied" in {
     val d = fullData - writtenLeaseYears - writtenLeaseMonths
 
     val form = bind(d)
-    mustContainRequiredErrorFor(writtenLeaseYears, form)
-    mustContainRequiredErrorFor(writtenLeaseMonths, form)
+    mustContainError(writtenLeaseYears, "error.writtenAgreement.leaseLength.years.required", form)
+    mustContainError(writtenLeaseMonths, "error.writtenAgreement.leaseLength.months.required", form)
     form.errors.size should be(2)
   }
 
@@ -172,28 +172,29 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate the lease agreement start date as a date in the past" in {
-    validatePastDate(writtenStartDate, pageSixForm, fullData)
+    validatePastDate(writtenStartDate, pageSixForm, fullData, ".writtenAgreement.startDate")
   }
 
   it should "validate the lease duration" in {
-    validatesDuration(writtenLeaseLength, pageSixForm, fullData)
+    validatesDuration(writtenLeaseLength, pageSixForm, fullData, ".writtenAgreement.leaseLength")
   }
 
   it should "validate the break clause details as free text" in {
-    validateLettersNumsSpecCharsUptoLength(writtenBreakClauseDetails, 124, pageSixForm, fullData)
+    validateLettersNumsSpecCharsUptoLength(writtenBreakClauseDetails, 124, pageSixForm, fullData,
+      Some("error.writtenAgreement.breakClauseDetails.maxLength"))
   }
 
   it should "validate stepped rent amount as currency allowing non-negative amounts" in {
-    validateCurrency(getKeyStepped(0).amount, pageSixForm, fullData)
+    validateCurrency(getKeyStepped(0).amount, pageSixForm, fullData,".writtenAgreement.steppedDetails.amount")
   }
 
   it should "validate stepped rent from date as a date" in {
     val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
-    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData)
+    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
   it should "validate the second stepped rent step amount as currency" in {
-    validateCurrency(getKeyStepped(1).amount, pageSixForm, fullDataWithSecondRentStep)
+    validateCurrency(getKeyStepped(1).amount, pageSixForm, fullDataWithSecondRentStep, ".writtenAgreement.steppedDetails.amount")
   }
 
   it should "not allow more than 7 stepped rents" in {

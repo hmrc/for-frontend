@@ -43,8 +43,8 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
     val dataMap = formData1.updated(keys.occupierType, OccupierTypeCompany.name) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
     val form = bind(dataMap)
 
-    mustContainError(keys.firstOccupationDateMonth, "error.month.required", form)
-    mustContainError(keys.firstOccupationDateYear, "error.year.required",form)
+    mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
+    mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required",form)
     form.errors.size should be(2)
   }
 
@@ -52,8 +52,8 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
     val dataMap = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
     val form = bind(dataMap)
 
-    mustContainError(keys.firstOccupationDateMonth, "error.month.required", form)
-    mustContainError(keys.firstOccupationDateYear, "error.year.required",form)
+    mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
+    mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required",form)
   }
 
   "Page Three mapping" should "allow up to 100 letters, numbers, spaces, and special characters for 'Other' property type details" in {
@@ -62,12 +62,12 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate the first occupation date when the occupier type is individuals" in {
     val formData = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name).updated(keys.mainOccupierName, "Jimmy Choo")
-    validatePastDate("firstOccupationDate", pageThreeForm, formData)
+    validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
   }
 
   it should "validate the first occupation date when the occupier type is company" in {
     val formData = formData1.updated(keys.occupierType, OccupierTypeCompany.name)
-    validatePastDate("firstOccupationDate", pageThreeForm, formData)
+    validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
   }
 
   it should "allow up to 50 letters, numbers, spaces, and special characters for Company name" in {

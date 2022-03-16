@@ -84,7 +84,7 @@ object ParkingMapping {
       (Keys.rentIncludeParkingDetails, rentIncludeParkingMapping(pfx)),
       (Keys.rentSeparateParking, mandatoryBooleanWithError(Errors.tenantPaysForParkingRequired)),
       (Keys.rentSeparateParkingDetails, rentSeparateParkingDetailsMapping(pfx)),
-      (Keys.annualSeparateParking, mandatoryIfTrue(pfx + Keys.rentSeparateParking, currencyMappingAmountPaid(".parking.annualCost"))),
+      (Keys.annualSeparateParking, mandatoryIfTrue(pfx + Keys.rentSeparateParking, currencyMapping(".parking.annualCost"))),
       (Keys.annualSeparateParkingDate, mandatoryIfTrue(
         pfx + Keys.rentSeparateParking, monthYearRoughDateMapping(pfx + Keys.annualSeparateParkingDate, ".p10")))
     )(Parking.apply)(Parking.unapply)

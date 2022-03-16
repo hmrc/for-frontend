@@ -19,22 +19,27 @@ package form
 import models.pages.PageNine
 import models.serviceContracts.submissions.{RentBaseTypeOther, RentBaseTypePercentageOpenMarket, RentBaseTypePercentageTurnover}
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.{default, mapping, text}
 import uk.gov.voa.play.form.ConditionalMappings._
 import DateMappings._
 import MappingSupport._
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object PageNineForm {
 
   val pageNineMaping = mapping(
     "totalRent" -> annualRent,
-    "rentBecomePayable" -> dateFieldsMapping("rentBecomePayable"),
-    "rentActuallyAgreed" -> dateFieldsMapping("rentActuallyAgreed"),
+    "rentBecomePayable" -> dateFieldsMapping("rentBecomePayable", fieldErrorPart = ".rentBecomePayable"),
+    "rentActuallyAgreed" -> dateFieldsMapping("rentActuallyAgreed", fieldErrorPart = ".rentActuallyAgreed"),
     "negotiatingNewRent" -> mandatoryBooleanWithError(Errors.negotiatingNewRentRequired),
     "rentBasedOn" -> rentBaseTypeMapping,
     "rentBasedOnDetails" -> mandatoryAndOnlyIfAnyOf("rentBasedOn",
       Seq(RentBaseTypePercentageOpenMarket.name, RentBaseTypePercentageTurnover.name, RentBaseTypeOther.name),
-      nonEmptyText(maxLength = 250))
+      default(text, "").verifying(
+        nonEmpty(errorMessage = "error.rentBasedOnDetails.required"),
+        maxLength(250, "error.rentBasedOnDetails.maxLength")
+      )
+    )
   )(PageNine.apply)(PageNine.unapply)
 
   val pageNineForm = Form(pageNineMaping)
