@@ -95,7 +95,12 @@ object Errors {
   val rentBasedOnEmptyBuildingRequired = "error.rentBasedOnEmptyBuilding.required"
   val includesParkingRequired = "error.rentIncludesParking.required"
   val parkingRequired = "error.required.parking"
+  val parkingRequiredOpenSpaces = "error.required.parkingOpenSpaces"
+  val parkingRequiredCoveredSpaces = "error.required.parkingCoveredSpaces"
+  val parkingRequiredGarages = "error.required.parkingGarages"
   val tenantPaysForParkingRequired = "error.tenantPaysForParking.required"
+  val rentIncludesText = "error.required.rentIncludesText"
+  val numberBetween = "error.numberBetween.parking.annualCost"
 
   //Page 11
   val rentFreePeriodRequired = "error.rentFreePeriod.required"
@@ -136,6 +141,7 @@ object Errors {
   val invalidNumber = "error.invalid_number"
   val bigDecimalNegative = "error.BigDecimal_negative"
   val number = "error.number"
+  val OpenSpaces = "error.invalid_number.parkingOpenSpaceNumber"
 
   //Dates
   val dateBefore1900 = "error.date_before_1900"

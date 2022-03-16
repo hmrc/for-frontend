@@ -31,6 +31,7 @@ object MappingSupport {
     .transform({ s: BigDecimal => s.abs }, { v: BigDecimal => v })
 
   val decimalRegex = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
+  val cdbMinCurrencyAmount = 1.00
   val cdbMaxCurrencyAmount = 9999999.99
 
   lazy val annualRent: Mapping[AnnualRent] = mapping(
@@ -44,6 +45,13 @@ object MappingSupport {
     .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
     .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
     .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmount)
+
+  def currencyMappingAmountPaid(fieldErrorPart: String = ""): Mapping[BigDecimal] = default(text, "")
+    .verifying(nonEmpty(errorMessage = Errors.required + fieldErrorPart))
+    .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
+    .transform({ s: String => BigDecimal(s.replace(",", "")) }, { v: BigDecimal => v.toString })
+    .verifying(Errors.numberBetween, _ <= cdbMaxCurrencyAmount)
+    .verifying(Errors.numberBetween, _ >= cdbMinCurrencyAmount)
 
   val nonNegativeCurrency: Mapping[BigDecimal] = text
     .verifying(Errors.invalidCurrency, x => (x.replace(",", "") matches decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)
@@ -138,15 +146,21 @@ object MappingSupport {
     )(ContactDetails.apply)(ContactDetails.unapply)
 
   def parkingDetailsMapping(key: String): Mapping[ParkingDetails] = mapping(
-    "openSpaces" -> default(number(min = 0), 0).verifying(Errors.maxLength, _ <= 9999),
-    "coveredSpaces" -> default(number(min = 0), 0).verifying(Errors.maxLength, _ <= 9999),
-    "garages" -> default(number(min = 0), 0).verifying(Errors.maxLength, _ <= 9999)
+    "openSpaces" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredOpenSpaces, _ <= 9999),
+    "coveredSpaces" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredCoveredSpaces, _ <= 9999),
+    "garages" -> default(number(min = 0), 0).verifying(Errors.parkingRequiredGarages, _ <= 9999)
   )(ParkingDetails.apply)(ParkingDetails.unapply) verifying atLeastOneParkingDetailRequired(key)
 
   def atLeastOneParkingDetailRequired(key: String): Constraint[ParkingDetails] =
     Constraint[ParkingDetails]("constraints.parkingDetails") { pd =>
       if (pd.openSpaces > 0 || pd.coveredSpaces > 0 || pd.garages > 0) {
         Valid
+      } else if (pd.openSpaces == "") {
+        Invalid(ValidationError(Errors.parkingRequiredOpenSpaces))
+      } else if (pd.coveredSpaces == "") {
+        Invalid(ValidationError(Errors.parkingRequiredCoveredSpaces))
+      } else if (pd.garages == ""){
+        Invalid(ValidationError(Errors.parkingRequiredGarages))
       } else {
         Invalid(ValidationError(Errors.parkingRequired))
       }

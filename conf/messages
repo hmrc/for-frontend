@@ -900,16 +900,35 @@ error.date_must_be_in_past = Date must be in the past
 error.number = This must be a number
 error.invalid_number = This must be a number
 error.date_before_1900 = Date must be after December 1899
+error.date_before_1900.firstOccupationDate = Date must be after December 1899
 error.duration.years=This can be no more than 999
 error.duration.months=This can be no more than 12
-error.month.required = The date the property was occupied must include a month
-error.year.required = The date the property was occupied must include a year
-
+error.p10.month.required = The date the payment was fixed must include a month
+error.p10.year.required= The date the property was fixed must include a year
+error.date_before_1900.p10=The date the payment was fixed must be between January 1900 and today
 error.too_many_stepped_rents=You can only provide 7 steps
 error.too_many_services=You can only provide details of 10 services
 error.too_many_alterations=You can only provide details of 10 alterations
 error.too_many_sublets=You can only provide details of 5 sub-lets.
-error.required.parking=At least one must be filled in and greater than 0
+error.required.parking=Enter how many spaces or garages are included in the rent
+
+error.required.parkingOpenSpaces=Open spaces must be 9999 or fewer
+error.required.parkingCoveredSpaces=Covered spaces must be 9999 or fewer
+error.required.parkingGarages=Garages must be 9999 or fewer
+
+error.invalid_number.parkingOpenSpaceNumber=Open spaces must be a number
+error.invalid_number.parkingClosedSpaceNumber=Closed spaces must be a number
+error.invalid_number.parkingGaragesNumber=Garages must be a number
+
+error.required.rentIncludesText=Enter details about what the rent includes
+error.rentIncludesText.maxLength=Details about what the rent includes must be 249 characters or fewer
+
+error.required.parking.annualCost = Enter the amount paid
+error.invalid_currency.parking.annualCost = The amount paid must be a number
+error.numberBetween.parking.annualCost = Amount paid must be a number between 1 and 9999999
+error.invalid_currency.parkingOpenSpaceNumber=Open spaces must be a number
+
+
 error.login.failed=Enter the reference number and postcode as they appear in the letter we sent you.
 error.login.attemptsleft=You have {0} remaining attempts to enter the correct details before your account is locked for 24 hours.
 error.login.1.attempt.left=You have one remaining attempt to enter the correct details before your account is locked for 24 hours.

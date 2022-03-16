@@ -63,7 +63,7 @@ object PageThreeForm {
       mandatoryIfEqualToAny(
         keys.occupierType,
         Seq(OccupierTypeCompany.name,OccupierTypeIndividuals.name),
-        monthYearRoughDateMapping(keys.firstOccupationDate),
+        monthYearRoughDateMapping(keys.firstOccupationDate, ".firstOccupationDate"),
       ),
 
     keys.mainOccupierName -> mandatoryIfEqual(
