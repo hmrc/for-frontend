@@ -951,6 +951,7 @@ error.date_must_be_in_past = Date must be in the past
 error.number = This must be a number
 error.invalid_number = This must be a number
 error.date_before_1900 = Date must be on or after 1 January 1900
+error.date_before_1900.firstOccupationDate = Date must be on or after 1 January 1900
 error.duration.years = Years must be a number between 0 and  999
 error.duration.months = Months must be a number between 0 and 12
 error.months.required = Enter months amount
