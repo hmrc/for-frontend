@@ -951,7 +951,6 @@ error.number = This must be a number
 error.invalid_number = This must be a number
 
 error.date_before_1900.firstOccupationDate = Date must be after December 1899
-error.date_before_1900 = Date must be after December 1899
 error.duration.years=This can be no more than 999
 error.duration.months=This can be no more than 12
 error.p10.month.required = The date the payment was fixed must include a month
