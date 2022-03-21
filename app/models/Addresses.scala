@@ -18,6 +18,7 @@ package models
 
 import models.pages.Summary
 import models.serviceContracts.submissions.Address
+import play.api.libs.json.{JsObject, Json}
 
 object Addresses {
 
@@ -27,6 +28,13 @@ object Addresses {
       case None => throw new AddressMissing(summary.referenceNumber)
     }
   }
+
+  def addressJson(summary: Summary): JsObject =
+    summary.address.fold(Json.obj())(address => Json.obj("address" -> address)) ++
+      summary.propertyAddress
+        .filter(newAddress => !summary.address.contains(newAddress))
+        .fold(Json.obj())(newAddress => Json.obj("updatedAddress" -> newAddress))
+
 }
 
 class AddressMissing(referenceNumber: String) extends Exception(s"Reference number: $referenceNumber")

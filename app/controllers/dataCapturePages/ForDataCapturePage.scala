@@ -22,11 +22,12 @@ import controllers._
 import controllers.dataCapturePages.ForDataCapturePage._
 import form._
 import form.persistence.{BuildForm, FormDocumentRepository, SaveForm, SaveFormInRepository}
+import models.Addresses
 import models.journeys._
 import models.pages.{Summary, SummaryBuilder}
 import play.api.Logging
 import play.api.data.Form
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, JsObject, Json}
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import play.shaded.ahc.io.netty.handler.codec.http.QueryStringDecoder
@@ -89,14 +90,14 @@ abstract class ForDataCapturePage[T] (audit: Audit,
       case controllers.dataCapturePages.ForDataCapturePage.Continue => bindForm(savedFields).fold(
         formWithErrors => displayForm(formWithErrors, summary, request),
         pageData => {
-          auditFormSubmission(pageData)
+          auditFormSubmission(pageData, summary)
           getPage(pageNumber + 1, summary, request)
         }
       )
       case controllers.dataCapturePages.ForDataCapturePage.Update => bindForm(savedFields).fold(
         formWithErrors => displayForm(formWithErrors, summary, request),
         pageData => {
-          auditFormSubmission(pageData)
+          auditFormSubmission(pageData, summary)
           RedirectTo(Journey.pageToResumeAt(summary), request.headers)
         }
       )
@@ -106,10 +107,14 @@ abstract class ForDataCapturePage[T] (audit: Audit,
     }
   }
 
-  def auditFormSubmission(formData: T)(implicit request: RefNumRequest[AnyContent]): Unit = { //TODO maybe future?? or fire&forget
+  private def auditFormSubmission(formData: T, summary: Summary)(implicit request: RefNumRequest[AnyContent]): Unit = { //TODO maybe future?? or fire&forget
     //Get only form data, not additional POST data like CSRF token.
-    val data = emptyForm.fill(formData).data.+(Audit.referenceNumber -> request.refNum)
-    audit("ContinueNextPage", data)
+    val json = Json.toJson(emptyForm.fill(formData).data).as[JsObject] ++
+      Json.obj(Audit.referenceNumber -> request.refNum) ++ Addresses.addressJson(summary)
+
+    println(Json.prettyPrint(json))
+
+    audit.sendExplicitAudit("ContinueNextPage", json)
   }
 
   private def bindForm(requestData: Map[String, Seq[String]]) = emptyForm.bindFromRequest(requestData).convertGlobalToFieldErrors()
