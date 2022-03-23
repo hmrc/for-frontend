@@ -23,7 +23,7 @@ import form.CustomUserPasswordForm
 import form.persistence.FormDocumentRepository
 import javax.inject.{Inject, Singleton}
 import models.journeys._
-import models.pages.{Summary, SummaryBuilder}
+import models.pages.SummaryBuilder
 import org.joda.time.LocalDate
 import play.api.Configuration
 import play.api.data.Form
@@ -74,7 +74,7 @@ class SaveForLaterController @Inject()
           if (doc.saveForLaterPassword.isDefined) {
             val saveSubmissionForLater = playconfig.SaveForLater(doc.saveForLaterPassword.get)
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
-              auditSavedForLater(sum, exitPath)
+              audit.sendSavedForLater(sum, exitPath)
               val email = sum.customerDetails.map(_.contactDetails.email)
               emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
@@ -101,7 +101,7 @@ class SaveForLaterController @Inject()
             validData => {
               val saveSubmissionForLater = playconfig.SaveForLater(validData.password)
               saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
-                auditSavedForLater(sum, exitPath)
+                audit.sendSavedForLater(sum, exitPath)
                 val email = sum.customerDetails.map(_.contactDetails.email)
                 emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
@@ -114,12 +114,6 @@ class SaveForLaterController @Inject()
         case None =>
           InternalServerError(errorView(500))
       }
-  }
-
-  def auditSavedForLater(sum: Summary, exitPath: String)(implicit headerCarrier: HeaderCarrier) = {
-    audit(
-      "SavedForLater", sum, exitPath
-    )
   }
 
   def login = refNumAction.async { implicit request =>

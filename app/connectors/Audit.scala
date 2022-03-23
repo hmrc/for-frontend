@@ -17,11 +17,12 @@
 package connectors
 
 import com.google.inject.ImplementedBy
+import models.Addresses
 import models.pages.Summary
 
 import javax.inject.{Inject, Singleton}
 import models.serviceContracts.submissions.Submission
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{JsObject, Json, OWrites}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditResult, DatastreamMetrics}
@@ -54,12 +55,12 @@ trait Audit extends AuditConnector {
     Json.writes[Summary]
   }
 
-  def apply(even: String, sum: Summary, exitPath: String)(implicit hc: HeaderCarrier): Future[AuditResult] = {
-    val details = Json.toJson(sum)(summaryWriter)
+  def sendSavedForLater(summary: Summary, exitPath: String)(implicit hc: HeaderCarrier): Future[AuditResult] = {
+    val json = Json.toJson(summary)(summaryWriter).as[JsObject] ++ Addresses.addressJson(summary)
 
     val tags = hc.toAuditTags().+("exitPath" -> exitPath)
 
-    val dataEvent = ExtendedDataEvent(auditSource = AUDIT_SOURCE, auditType = even, tags = tags, detail = details)
+    val dataEvent = ExtendedDataEvent(auditSource = AUDIT_SOURCE, auditType = "SavedForLater", tags = tags, detail = json)
     sendExtendedEvent(dataEvent)
   }
 
