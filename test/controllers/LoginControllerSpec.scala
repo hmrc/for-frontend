@@ -17,6 +17,7 @@
 package controllers
 
 import connectors.Audit
+import form.persistence.FormDocumentRepository
 import models.serviceContracts.submissions.Address
 import org.joda.time.DateTime
 import org.mockito.scalatest.MockitoSugar
@@ -36,6 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class LoginControllerSpec extends AnyFlatSpec with should.Matchers with MockitoSugar {
   implicit val globalEc = scala.concurrent.ExecutionContext.Implicits.global
+  val documentRepo = mock[FormDocumentRepository]
 
   private val testAddress = Address("13", Some("Street"), Some("City"), "AA11 1AA")
 
@@ -54,7 +56,8 @@ class LoginControllerSpec extends AnyFlatSpec with should.Matchers with MockitoS
     val time = DateTime.now()
     when(loginToHod.apply(any[HeaderCarrier], any[ExecutionContext])).thenReturn(loginToHodFunction)
 
-    val loginController:LoginController = new LoginController(audit, loginToHod, stubMessagesControllerComponents(), mock[login], mock[views.html.error.error], mock[loginFailed], mock[views.html.lockedOut])
+    val loginController = new LoginController(audit, documentRepo, loginToHod, stubMessagesControllerComponents(),
+      mock[login], mock[views.html.error.error], mock[loginFailed], mock[views.html.lockedOut])
 
     val fakeRequest = FakeRequest()
     //should strip out all non digits then split string 3 from end to create ref1/ref2
@@ -72,7 +75,8 @@ class LoginControllerSpec extends AnyFlatSpec with should.Matchers with MockitoS
     val audit = mock[Audit]
     doNothing.when(audit).sendExplicitAudit(any[String], any[JsObject])(any[HeaderCarrier], any[ExecutionContext])
 
-    val loginController = new LoginController(audit, null, stubMessagesControllerComponents(), mock[login], mock[views.html.error.error], mock[loginFailed], mock[views.html.lockedOut])
+    val loginController = new LoginController(audit, documentRepo, null, stubMessagesControllerComponents(),
+      mock[login], mock[views.html.error.error], mock[loginFailed], mock[views.html.lockedOut])
 
     val fakeRequest = FakeRequest()
 

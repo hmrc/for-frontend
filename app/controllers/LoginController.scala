@@ -17,7 +17,10 @@
 package controllers
 
 import connectors.Audit
+import form.persistence.FormDocumentRepository
 import form.{Errors, MappingSupport}
+import models.Addresses
+import models.pages.SummaryBuilder
 import models.serviceContracts.submissions.Address
 
 import javax.inject.Inject
@@ -32,6 +35,7 @@ import playconfig.LoginToHODAction
 import security.{DocumentPreviouslySaved, NoExistingDocument}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import views.html.{login, loginFailed}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -59,8 +63,9 @@ object LoginController {
 
 
 class LoginController @Inject()(
-  audit: Audit, 
-  loginToHOD: LoginToHODAction, 
+  audit: Audit,
+  documentRepo: FormDocumentRepository,
+  loginToHOD: LoginToHODAction,
   cc: MessagesControllerComponents,
   login: login, 
   errorView: views.html.error.error,
@@ -78,7 +83,18 @@ class LoginController @Inject()(
 
   def logout = Action { implicit request =>
     val refNum = request.session.get("refNum").getOrElse("-")
-    audit.sendExplicitAudit("Logout", Json.obj(Audit.referenceNumber -> refNum))
+    val refNumJson = Json.obj(Audit.referenceNumber -> refNum)
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    hc.sessionId.map(sessionId =>
+      documentRepo.findById(sessionId.value, refNum).flatMap {
+        case Some(doc) => refNumJson ++ Addresses.addressJson(SummaryBuilder.build(doc))
+        case None => refNumJson
+      }.map(jsObject => audit.sendExplicitAudit("Logout", jsObject))
+    ).getOrElse {
+      audit.sendExplicitAudit("Logout", refNumJson)
+    }
+
     Redirect(routes.LoginController.show).withNewSession
   }
 

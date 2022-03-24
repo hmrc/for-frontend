@@ -21,6 +21,8 @@ import connectors.{Audit, EmailConnector, HODConnector}
 import controllers.dataCapturePages.{RedirectTo, UrlFor}
 import form.CustomUserPasswordForm
 import form.persistence.FormDocumentRepository
+import models.Addresses
+
 import javax.inject.{Inject, Singleton}
 import models.journeys._
 import models.pages.SummaryBuilder
@@ -145,19 +147,18 @@ class SaveForLaterController @Inject()
 
   def timeout = refNumAction.async { implicit request =>
     repository.findById(playconfig.SessionId(hc), request.refNum).flatMap {
-      case Some(doc) => {
+      case Some(doc) =>
         val saveSubmissionForLater = doc.saveForLaterPassword.fold(playconfig.SaveForLater())(playconfig.SaveForLater(_))
         saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
           val sum = SummaryBuilder.build(doc)
-          audit.sendExplicitAudit("UserTimeout", Json.obj(
-            Audit.referenceNumber -> sum.referenceNumber))
+          val json = Json.obj(Audit.referenceNumber -> sum.referenceNumber) ++ Addresses.addressJson(sum)
+          audit.sendExplicitAudit("UserTimeout", json)
           val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
           val email = sum.customerDetails.map(_.contactDetails.email)
 
           emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
           Ok(savedForLater(sum, pw, expiryDate, hasTimedOut = true))
         }
-      }
       case None => Redirect(routes.LoginController.logout)
     }
   }
