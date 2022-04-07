@@ -230,21 +230,21 @@ label.noJs.propertyRentedBy=Dylech ond ateb hyn os ydych wedi dewis ‘Nac ydy �
 label.noRentDetails=Dywedwch wrthym pam nad ydych yn talu rhent ar yr eiddo yma
 label.noRentDetails.agent=Dywedwch wrthym pam nad oes gan eich cleient i dalu rhent ar yr eiddo hwn
 
-error.propertyType.required=Enter what the property is used for
-error.propertyType.maxLength=The property use must be 100 characters or fewer
-error.companyName.required=Enter the company name
+error.propertyType.required=Nodwch at beth y caiff yr eiddo ei ddefnyddio
+error.propertyType.maxLength=Mae’n rhaid i ddefnydd yr eiddo fod yn 100 o gymeriadau neu lai
+error.companyName.required=Nodwch enw’r cwmni
 error.companyName.maxLength=The company name must be 50 characters or fewer
-error.occupiersName.required=Enter the main occupier’s name
+error.occupiersName.required=Nodwch enw olaf y prif feddiannydd
 error.occupiersName.maxLength=The Main Occupier's name must be 50 characters or fewer
-error.noRentDetails.required=Enter the reason you do not pay rent on this property
+error.noRentDetails.required=Nodwch y rheswm nad ydych yn talu rhent ar yr eiddo hwn
 error.noRentDetails.maxLength=The reason for not paying rent must be 249 characters or fewer
 
 error.occupierType.required=Dewiswch bwy sy’n meddiannu’r eiddo
 error.propertyOwnedByYou.required=Dewiswch ‘Ydw’ os taw chi sy’n berchen ar yr eiddo
 error.propertyRentedByYou.required=Dewiswch ‘Ydw’ os ydych chi’n talu rhent ar yr eiddo
 
-error.firstOccupationDate.month.required = Mae’n rhaid llenwi hwn
-error.firstOccupationDate.year.required = Mae’n rhaid llenwi hwn
+error.firstOccupationDate.month.required = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei feddiannu gynnwys mis
+error.firstOccupationDate.year.required = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei feddiannu gynnwys blwyddyn
 
 #SECTION 4
 ###############################
@@ -994,6 +994,7 @@ error.date_must_be_in_past=Mae’n rhaid i’r dyddiad fod yn y gorffennol
 error.number = Mae’n rhaid i hwn ddefnyddio rhifau
 error.invalid_number = Mae’n rhaid i hwn ddefnyddio rhifau
 error.date_before_1900=Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_before_1900.firstOccupationDate = Mae’n rhaid i hwn fod o 1900 ymlaen
 error.duration.years=Ni all hwn fod yn fwy na 999
 error.duration.months=Ni all hwn fod yn fwy na 12
 error.months.required = Mae’n rhaid llenwi hwn
