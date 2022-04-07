@@ -281,19 +281,19 @@ subletType.part=Rhan ohono
 
 error.propertyIsSublet.required=Dewiswch ‘Oes’ os oes unrhyw ran o’r eiddo yn cael ei osod neu ei is-osod i unrhyw un arall
 error.subletType.required=Dewiswch faint o'r eiddo sy'n cael ei osod neu ei is-osod
-error.sublet.tenantFullName.required = Mae’n rhaid llenwi hwn
-error.sublet.tenantFullName.maxLength = Rhaid i fod yn 50 nod neu lai
-error.sublet.rentFixedDate.month.required = Mae’n rhaid llenwi hwn
-error.sublet.rentFixedDate.year.required = Mae’n rhaid llenwi hwn
-error.subletPropertyPartDescription.required = Mae’n rhaid llenwi hwn
-error.subletPropertyPartDescription.maxLength = Rhaid i fod yn 100 nod neu lai
-error.subletPropertyReasonDescription.required = Mae’n rhaid llenwi hwn
-error.subletPropertyReasonDescription.maxLength = Rhaid i fod yn 100 nod neu lai
-error.required.sublet.annualRent = Mae’n rhaid llenwi hwn
-error.invalid_currency.sublet.annualRent = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.sublet.tenantFullName.required = Nodwch enw’ch tenant
+error.sublet.tenantFullName.maxLength = Mae’n rhaid i enw’ch tenant fod yn 50 o gymeriadau neu lai
+error.sublet.rentFixedDate.month.required = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei osod neu ei is-osod gynnwys mis
+error.sublet.rentFixedDate.year.required = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei osod neu ei is-osod gynnwys blwyddyn
+error.subletPropertyPartDescription.required = Nodwch pa ran o’r eiddo rydych yn ei gosod neu ei his-osod
+error.subletPropertyPartDescription.maxLength = Mae’n rhaid i ran yr eiddo rydych yn ei gosod neu ei his-osod fod yn 100 o gymeriadau neu lai
+error.subletPropertyReasonDescription.required = Nodwch at beth y caiff yr eiddo ei ddefnyddio
+error.subletPropertyReasonDescription.maxLength = Mae’n rhaid i ddefnydd yr eiddo fod yn 100 o gymeriadau neu lai
+error.required.sublet.annualRent = Nodwch faint o rent sy’n cael ei dalu
+error.invalid_currency.sublet.annualRent = Mae’n rhaid i’r rhent sy’n cael ei dalu fod yn rhif
 error.maxCurrencyAmountExceeded.sublet.annualRent = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
 error.date_must_be_in_past.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
-error.date_before_1900.sublet.rentFixedDate = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_before_1900.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei osod neu ei is-osod fod ar ôl Rhagfyr 1899
 
 #SECTION 5
 ###############################
@@ -1011,11 +1011,11 @@ error.login.attemptsleft=Mae gennych chi {0} ymgais ar ôl i nodi’r manylion c
 error.login.1.attempt.left=Mae gennych chi un ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 24 awr.
 error.login.lockedOut=Rydych wedi eich cloi allan nawr. Gallwch roi cynnig arall arni ar ôl 24 awr.
 
-error.buildingNameNumber.required = Mae’n rhaid llenwi hwn
-error.buildingNameNumber.maxLength = Rhaid i fod yn 50 nod neu lai
+error.buildingNameNumber.required = Nodwch linell gyntaf y cyfeiriad
+error.buildingNameNumber.maxLength = Mae’n rhaid i linell gyntaf y cyfeiriad fod yn 50 o gymeriadau neu lai
 error.line2.maxLength = Rhaid i fod yn 50 nod neu lai
 error.line3.maxLength = Rhaid i fod yn 50 nod neu lai
-error.postcode.required = Mae’n rhaid llenwi hwn
+error.postcode.required = Nodwch y cod post
 error.postcode.maxLength = Rhaid i fod yn 10 nod neu lai
 error.month.required = Mae’n rhaid llenwi hwn
 error.year.required = Mae’n rhaid llenwi hwn
