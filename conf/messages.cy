@@ -418,22 +418,22 @@ error.leaseOpenEnded.required=Dewiswch ‘Ydy’ os yw’r cytundeb cyfredol yn 
 error.leaseHasBreakClause.required=Dewiswch ‘Ydy’ os gellir dod â’r cytundeb cyfredol i ben yn gynnar
 error.steppedRent.required=Dewiswch ‘Ydy’ os yw’r rhent yn seiliedig ar gytundeb rhent grisiog
 
-error.writtenAgreement.startDate.month.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.startDate.year.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.startDate.month.required = Mae’n rhaid i’r dyddiad y dechreuodd y cytundeb presennol gynnwys mis
+error.writtenAgreement.startDate.year.required = Mae’n rhaid i’r dyddiad y dechreuodd y cytundeb presennol gynnwys blwyddyn
 error.date_before_1900.writtenAgreement.startDate = Mae’n rhaid i hwn fod o 1900 ymlaen
-error.writtenAgreement.leaseLength.months.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.leaseLength.years.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.breakClauseDetails.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.breakClauseDetails.maxLength = Rhaid i fod yn 124 nod neu lai
-error.required.writtenAgreement.steppedDetails.amount = Mae’n rhaid llenwi hwn
+error.writtenAgreement.leaseLength.months.required = Nodwch sawl mis y mae’r cytundeb presennol ar ei gyfer
+error.writtenAgreement.leaseLength.years.required = Nodwch sawl blwyddyn y mae’r cytundeb presennol ar ei gyfer
+error.writtenAgreement.breakClauseDetails.required = Nodwch fanylion y cymal torri
+error.writtenAgreement.breakClauseDetails.maxLength = Mae’n rhaid i fanylion y cymal torri fod yn 124 o gymeriadau neu lai
+error.required.writtenAgreement.steppedDetails.amount = Nodwch y rhent blynyddol presennol
 error.invalid_currency.writtenAgreement.steppedDetails.amount = Rhaid i hyn fod yn rhif sy’n fw y na 0
 error.maxCurrencyAmountExceeded.writtenAgreement.steppedDetails.amount = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
-error.writtenAgreement.steppedDetails.stepFrom.day.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.steppedDetails.stepFrom.month.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.steppedDetails.stepFrom.year.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.steppedDetails.stepTo.day.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.steppedDetails.stepTo.month.required = Mae’n rhaid llenwi hwn
-error.writtenAgreement.steppedDetails.stepTo.year.required = Mae’n rhaid llenwi hwn
+error.writtenAgreement.steppedDetails.stepFrom.day.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dechrau gynnwys diwrnod
+error.writtenAgreement.steppedDetails.stepFrom.month.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dechrau gynnwys mis
+error.writtenAgreement.steppedDetails.stepFrom.year.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dechrau gynnwys blwyddyn
+error.writtenAgreement.steppedDetails.stepTo.day.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dod i ben gynnwys diwrnod
+error.writtenAgreement.steppedDetails.stepTo.month.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dod i ben gynnwys mis
+error.writtenAgreement.steppedDetails.stepTo.year.required = Mae’n rhaid i’r dyddiad y mae’r rhent grisiog yn dod i ben gynnwys blwyddyn
 error.date_before_1900.writtenAgreement.steppedDetails.stepFrom = Mae’n rhaid i hwn fod o 1900 ymlaen
 error.date_before_1900.writtenAgreement.steppedDetails.stepTo = Mae’n rhaid i hwn fod o 1900 ymlaen
 
@@ -525,7 +525,7 @@ error.negotiatingNewRent.required=Dewiswch ‘Ydy’ os yw’r tenant neu’r as
 error.rentBaseOn.required=Dewiswch beth mae’r rhent yn seiliedig arno
 
 error.required.annualRentExcludingVat = Mae’n rhaid llenwi hwn
-error.invalid_currency.annualRentExcludingVat = Rhaid i hyn fod yn rhif sy’n fw y na 0
+error.invalid_currency.annualRentExcludingVat = Mae’n rhaid i’r rhent fod yn rhif rhwng 1 a 9999999
 error.maxCurrencyAmountExceeded.annualRentExcludingVat = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
 
 error.rentBasedOnDetails.required = Mae’n rhaid llenwi hwn
@@ -995,8 +995,8 @@ error.number = Mae’n rhaid i hwn ddefnyddio rhifau
 error.invalid_number = Mae’n rhaid i hwn ddefnyddio rhifau
 error.date_before_1900=Mae’n rhaid i hwn fod o 1900 ymlaen
 error.date_before_1900.firstOccupationDate = Mae’n rhaid i hwn fod o 1900 ymlaen
-error.duration.years=Ni all hwn fod yn fwy na 999
-error.duration.months=Ni all hwn fod yn fwy na 12
+error.duration.years=Mae’n rhaid i’r blynyddoedd fod yn rhif rhwng 0 a 999
+error.duration.months=Mae’n rhaid i’r misoedd fod yn rhif rhwng 0 a 12
 error.months.required = Mae’n rhaid llenwi hwn
 error.years.required = Mae’n rhaid llenwi hwn
 
