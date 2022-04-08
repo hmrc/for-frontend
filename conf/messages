@@ -517,13 +517,13 @@ error.maxCurrencyAmountExceeded.annualRentExcludingVat = The rent must be a numb
 error.rentBasedOnDetails.required = Enter details of the rent basis
 error.rentBasedOnDetails.maxLength = Details of the rent basis must be 250 characters or fewer
 
-error.rentBecomePayable.day.required = Enter the date the tenant started paying the current rent
+error.rentBecomePayable.day.required = The date the tenant started paying the current rent must include a day
 error.rentBecomePayable.month.required = The date the tenant started paying the current rent must include a month
 error.rentBecomePayable.year.required = The date the tenant started paying the current rent must include a year
 error.date_before_1900.rentBecomePayable = The date the tenant started paying the current rent must be between 1 January 1900 and today
 error.date_must_be_in_past.rentBecomePayable = The date the tenant started paying the current rent must be between 1 January 1900 and today
 
-error.rentActuallyAgreed.day.required = Enter the date the rent amount was agreed
+error.rentActuallyAgreed.day.required = The date the rent amount was agreed must include a day
 error.rentActuallyAgreed.month.required = The date the rent amount was agreed must include a month
 error.rentActuallyAgreed.year.required = The date the rent amount was agreed must include a year
 error.date_before_1900.rentActuallyAgreed = The date the rent amount was agreed must be between 1 January 1900 and today
