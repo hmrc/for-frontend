@@ -19,24 +19,28 @@ package form
 import models.pages._
 import models.serviceContracts.submissions.ChargeDetails
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.{default, mapping, nonEmptyText, text}
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
 import MappingSupport._
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object PageTwelveForm {
   val chargeDetailsMapping = (index: String) => mapping(
-    s"$index.chargeDescription" -> nonEmptyText(maxLength = 50),
-    s"$index.chargeCost" -> currency)(ChargeDetails.apply)(ChargeDetails.unapply)
+    s"$index.chargeDescription" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.detailsOfService.required"),
+      maxLength(50, "error.detailsOfService.maxLength")
+    ),
+    s"$index.chargeCost" -> currencyMapping(".serviceChargesPerYear"))(ChargeDetails.apply)(ChargeDetails.unapply)
 
   val pageTwelveMapping = mapping(
     "responsibleOutsideRepairs" -> responsibleTypeMapping,
     "responsibleInsideRepairs" -> responsibleTypeMapping,
     "responsibleBuildingInsurance" -> responsibleTypeMapping,
     "ndrCharges" -> mandatoryBooleanWithError(Errors.businessRatesRequired),
-    "ndrDetails" -> mandatoryIfTrue("ndrCharges", currency),
+    "ndrDetails" -> mandatoryIfTrue("ndrCharges", currencyMapping(".businessRatesPerYear")),
     "waterCharges" -> mandatoryBooleanWithError(Errors.waterChargesIncludedRequired),
-    "waterChargesCost" -> mandatoryIfTrue("waterCharges", currency),
+    "waterChargesCost" -> mandatoryIfTrue("waterCharges", currencyMapping(".waterChargesPerYear")),
     "includedServices" -> mandatoryBooleanWithError(Errors.serviceChargesIncludedRequired),
     "includedServicesDetails" -> onlyIfTrue(
       "includedServices", IndexedMapping("includedServicesDetails" , chargeDetailsMapping).verifying(Errors.tooManyServices, _.length <= 8)

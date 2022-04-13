@@ -42,7 +42,7 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = baseData - "ndrDetails"
     val form = bind(data).convertGlobalToFieldErrors()
 
-    mustContainRequiredErrorFor("ndrDetails", form)
+    mustContainError("ndrDetails", "error.required.businessRatesPerYear"  ,form)
   }
 
   it should "bind with the fields and return no errors, when the unnecessary details for other included services are not there" in {
@@ -55,14 +55,14 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = baseData - getKeyService(0).cost
     val form = bind(data)
 
-    mustOnlyContainRequiredErrorFor(getKeyService(0).cost, form)
+    mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
   }
 
   it should "bind with the fields and return errors, when the necessary description details for other included services are not there" in {
     val data = baseData - getKeyService(0).description
     val form = bind(data)
 
-    mustOnlyContainRequiredErrorFor(getKeyService(0).description, form)
+    mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
   }
 
   it should "allow upto 8 services" in {
@@ -112,39 +112,39 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = baseData - "waterChargesCost"
     val res = bind(data).convertGlobalToFieldErrors()
 
-    mustContainRequiredErrorFor("waterChargesCost", res)
+    mustContainError("waterChargesCost", "error.required.waterChargesPerYear", res)
   }
 
   it should "validate the included non-domestic rate amount" in {
-    validateCurrency("ndrDetails", pageTwelveForm, baseData)
+    validateCurrency("ndrDetails", pageTwelveForm, baseData, ".businessRatesPerYear")
   }
 
   it should "validate the included water services amount" in {
-    validateCurrency("waterChargesCost", pageTwelveForm, baseData)
+    validateCurrency("waterChargesCost", pageTwelveForm, baseData, ".waterChargesPerYear")
   }
 
   it should "validate the details of the first included service" in {
-    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, baseData)
+    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, baseData, Some("error.detailsOfService.maxLength"))
   }
 
   it should "validate the cost of the first included service" in {
-    validateCurrency(getKeyService(0).cost, pageTwelveForm, baseData)
+    validateCurrency(getKeyService(0).cost, pageTwelveForm, baseData, ".serviceChargesPerYear")
   }
 
   it should "validate the description of services is no more than 50 characters" in {
-    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, dataWithSecondService)
+    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, dataWithSecondService, Some("error.detailsOfService.maxLength"))
   }
 
   it should "validate the cost of the second included service" in {
-    validateCurrency(getKeyService(1).cost, pageTwelveForm, dataWithSecondService)
+    validateCurrency(getKeyService(1).cost, pageTwelveForm, dataWithSecondService, ".serviceChargesPerYear")
   }
 
   it should "show sub-field level errors for first service detail when service details are required" in {
     val data = baseData - getKeyService(0).description - getKeyService(0).cost
     val form = bind(data)
 
-    mustContainRequiredErrorFor(getKeyService(0).description, form)
-    mustContainRequiredErrorFor(getKeyService(0).cost, form)
+    mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
+    mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
   }
 
   object TestData {

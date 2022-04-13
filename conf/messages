@@ -677,6 +677,18 @@ error.businessRates.required=Select ‘Yes’ if the rent includes business rate
 error.waterChargesIncluded.required=Select ‘Yes’ if the rent includes water charges
 error.serviceChargesIncluded.required=Select ‘Yes’ if the rent includes service charges
 
+error.required.businessRatesPerYear=Enter the amount of business rates included in the rent per year
+error.maxCurrencyAmountExceeded.businessRatesPerYear=Amount must be a number between 1 and 9999999
+error.invalid_currency.businessRatesPerYear=This must be a number
+error.required.waterChargesPerYear=Enter the amount of water charges included in the rent per year
+error.maxCurrencyAmountExceeded.waterChargesPerYear=Amount must be a number between 1 and 9999999
+error.invalid_currency.waterChargesPerYear=This must be a number
+error.required.serviceChargesPerYear=Enter the amount of service charges included in the rent per year
+error.maxCurrencyAmountExceeded.serviceChargesPerYear=Amount must be a number between 1 and 9999999
+error.invalid_currency.serviceChargesPerYear=This must be a number
+error.detailsOfService.required=Enter the details of the services
+error.detailsOfService.maxLength=Details of the services must be 50 characters or fewer
+
 #SECTION 13
 ###############################
 section13.heading=Alterations and improvements
