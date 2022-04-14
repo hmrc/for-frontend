@@ -33,6 +33,7 @@ object MappingSupport {
   val decimalRegex = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
   val cdbMaxCurrencyAmount = 9999999.99
   val spacesIntRegex = """^\-?\d{1,10}$""".r
+  val intRegex = """^\d{1,3}$""".r
 
   lazy val annualRent: Mapping[AnnualRent] = mapping(
     "annualRentExcludingVat" -> currencyMapping(".annualRentExcludingVat")
@@ -150,6 +151,11 @@ object MappingSupport {
     .verifying(s"error.minValue.$key.$field", _ >= 0)
     .verifying(s"error.maxValue.$key.$field", _ <= 9999)
 
+  def intMapping(): Mapping[Int] = default(text, "0")
+    .verifying("error.maxValueRentFreeIsBlank.required", x => x == "0" || intRegex.findFirstIn(x).isDefined)
+    .transform[Int](_.replace(",", "").toInt, _.toString)
+    .verifying(s"error.empty.required", _ >= 1)
+
   def atLeastOneParkingDetailRequired(key: String): Constraint[ParkingDetails] =
     Constraint[ParkingDetails]("constraints.parkingDetails") { pd =>
       if (pd.openSpaces > 0 || pd.coveredSpaces > 0 || pd.garages > 0) {
@@ -158,6 +164,8 @@ object MappingSupport {
         Invalid(ValidationError(s"${Errors.required}.$key"))
       }
     }
+
+
 
   case class IndexedMapping[T](key: String, wrapped: (String => Mapping[T]), constraints: Seq[Constraint[List[T]]] = Nil,
                                allowEmpty: Boolean = false, alwaysValidateFirstIndex: Boolean = false) extends Mapping[List[T]] {

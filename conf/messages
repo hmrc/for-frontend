@@ -645,6 +645,21 @@ error.rentFreePeriod.required=Select ‘Yes’ if there was a rent-free period
 error.paidCapitalSum.required=Select ‘Yes’ if the tenant paid to take on the lease
 error.receivedCapitalSum.required=Select ‘Yes’ if the tenant was paid to take on the lease
 
+error.rentFreePeriod.required=Enter the reason for the rent-free period
+error.rentFreePeriod.maxLength=The reason for the rent-free period must be 250 characters or fewer
+
+error.required.amountPaidReceived=Enter the amount received
+error.maxCurrencyAmountExceeded.amountPaidReceived=Amount must be a number between 1 and 9999999
+error.invalid_currency.amountPaidReceived=This must be a number
+error.amountPaidReceived.month.required= The date the payment was received must include a month
+error.amountPaidReceived.year.required = The date the payment was received must include a year
+error.date_before_1900.amountPaidReceived=The date the payment was received must be between January 1900 and today
+
+error.minValueRentFree.required= Rent-free period must be a number between 1 and 999
+error.maxValueRentFree.required= Rent-free period must be a number between 1 and 999
+error.maxValueRentFreeIsBlank.required = This must be a number
+error.empty.required=Enter how many months the rent-free period was for
+
 #SECTION 12
 ###############################
 section12.heading=Responsibilities and costs

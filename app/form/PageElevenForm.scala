@@ -22,16 +22,21 @@ import play.api.data.Forms._
 import uk.gov.voa.play.form.ConditionalMappings._
 import MappingSupport._
 import DateMappings._
+import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object PageElevenForm {
 
   val freePeriodDetailsMapping = mapping(
-    "rentFreePeriodLength" -> number(min = 1),
-    "rentFreePeriodDetails" -> nonEmptyText(maxLength = 250))(FreePeriodDetails.apply)(FreePeriodDetails.unapply)
+    "rentFreePeriodLength" -> intMapping(),
+    "rentFreePeriodDetails" -> default(text, "").verifying(
+      nonEmpty(errorMessage = "error.rentFreePeriod.required"),
+      maxLength(250, "error.rentFreePeriod.maxLength")
+    )
+  )(FreePeriodDetails.apply)(FreePeriodDetails.unapply)
 
   private def capitalDetailsMapping(prefix: String) = mapping(
-    "capitalSum" -> currency,
-    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate"))(CapitalDetails.apply)(CapitalDetails.unapply)
+    "capitalSum" -> currencyMapping(".amountPaidReceived"),
+    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".amountPaidReceived"))(CapitalDetails.apply)(CapitalDetails.unapply)
 
 
   val pageElevenMapping = mapping(
