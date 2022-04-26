@@ -719,6 +719,7 @@ label.noJs.anyOtherFactorsDetails=Answer this only if you’ve selected ‘Yes�
 
 error.anyOtherFactorsDetails.required=Select ‘Yes’ if anything else has affected the rent
 error.anyOtherFactorsDetailsText.required=Enter what else has affected the rent
+error.anyOtherFactors.required=Enter what else has affected the rent
 error.anyOtherFactorsDetailsText.maxLength=Details about what else has affected the rent must be 124 characters or fewer
 
 #CONFIRMATION
