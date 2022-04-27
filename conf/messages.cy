@@ -752,7 +752,7 @@ error.invalid_currency.alternationCost = Mae’n rhaid i gost y gwaith fod yn rh
 error.maxCurrencyAmountExceeded.alternationCost = Mae’n rhaid i gost y gwaith fod yn rhif rhwng 0 a 9999999
 error.alternationCost.month.required= Mae’n rhaid i ddyddiad y gwaith gynnwys mis
 error.alternationCost.year.required = Mae’n rhaid i ddyddiad y gwaith gynnwys blwyddyn
-error.date_before_1900.alternationCost=Mae'n rhaid i ddyddiad y gwaith fod rhwng Ionawr 1900 a heddiw
+error.date_before_1900.alternationCost=Mae’n rhaid i ddyddiad y gwaith fod rhwng Ionawr 1900 a heddiw
 
 #SECTION 14
 ###############################
