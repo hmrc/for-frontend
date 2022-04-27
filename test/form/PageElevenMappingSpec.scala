@@ -84,14 +84,14 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    containsError(res.errors, "rentFreePeriodDetails.rentFreePeriodLength", "error.required")
+    containsError(res.errors, "rentFreePeriodDetails.rentFreePeriodLength", "error.empty.required")
   }
 
   it should "bind with the fields and return errors, when the rent free details are not present when the option for one was selected" in {
     val data = baseData - "rentFreePeriodDetails.rentFreePeriodLength" - "rentFreePeriodDetails.rentFreePeriodDetails"
     val res = bind(data).convertGlobalToFieldErrors()
-    mustContainRequiredErrorFor("rentFreePeriodDetails.rentFreePeriodLength", res)
-    mustContainRequiredErrorFor("rentFreePeriodDetails.rentFreePeriodDetails", res)
+    mustContainError("rentFreePeriodDetails.rentFreePeriodLength", "error.empty.required", res)
+    mustContainError("rentFreePeriodDetails.rentFreePeriodDetails", "error.rentFreePeriod.required", res)
   }
 
   it should "bind with the fields and return no error when there is no details for a capital sum payment when none is made" in {
@@ -105,7 +105,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainError("capitalPaidDetails.paymentDate.month", "error.month.required", res)
+    mustContainError("capitalPaidDetails.paymentDate.month", "error.amountPaidReceived.month.required", res)
   }
 
   it should "bind with the fields and return errors, when payment date year fields is not filled in when giving details about paying a capital sum" in {
@@ -113,7 +113,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainError("capitalPaidDetails.paymentDate.year", "error.year.required", res)
+    mustContainError("capitalPaidDetails.paymentDate.year", "error.amountPaidReceived.year.required", res)
   }
 
   it should "bind with the fields and return errors, when payment amount field is not filled in when giving details about paying a capital sum" in {
@@ -121,44 +121,44 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    containsError(res.errors, "capitalPaidDetails.capitalSum", "error.required")
+    containsError(res.errors, "capitalPaidDetails.capitalSum", "error.required.amountPaidReceived")
   }
 
   it should "validate the rent free period details" in {
-    validateLettersNumsSpecCharsUptoLength("rentFreePeriodDetails.rentFreePeriodDetails", 250, pageElevenForm, baseData)
+    validateLettersNumsSpecCharsUptoLength("rentFreePeriodDetails.rentFreePeriodDetails", 250, pageElevenForm, baseData, Some("error.rentFreePeriod.maxLength"))
   }
 
   it should "not bind and return errors when rent free duration has 'a' entered" in {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","a")
     val res = bind(testData)
-    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.number")
+    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.maxValueRentFreeIsBlank.required")
   }
 
   it should "not bind and return errors when rent free duration has '0' entered" in {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","0")
     val res = bind(testData)
-    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.min")
+    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.empty.required")
   }
 
   it should "not bind and return errors when rent free duration has '-10' entered" in {
     val testData = baseData.updated("rentFreePeriodDetails.rentFreePeriodLength","-10")
     val res = bind(testData)
-    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.min")
+    containsError(res.errors,"rentFreePeriodDetails.rentFreePeriodLength", "error.maxValueRentFreeIsBlank.required")
   }
 
   it should "validate the capital sum paid" in {
-    validateCurrency("capitalPaidDetails.capitalSum", pageElevenForm, baseData)
+    validateCurrency("capitalPaidDetails.capitalSum", pageElevenForm, baseData, ".amountPaidReceived")
   }
 
   it should "validate the capital sum payment date" in {
-    validatePastDate("capitalPaidDetails.paymentDate", pageElevenForm, baseData)
+    validatePastDate("capitalPaidDetails.paymentDate", pageElevenForm, baseData, ".amountPaidReceived")
   }
 
   it should "validate the capital sum received" in {
-    validateCurrency("capitalReceivedDetails.capitalSum", pageElevenForm, baseData)
+    validateCurrency("capitalReceivedDetails.capitalSum", pageElevenForm, baseData, ".amountPaidReceived")
   }
 
   it should "validate the capital sum received date" in {
-    validatePastDate("capitalReceivedDetails.paymentDate", pageElevenForm, baseData)
+    validatePastDate("capitalReceivedDetails.paymentDate", pageElevenForm, baseData, ".amountPaidReceived")
   }
 }

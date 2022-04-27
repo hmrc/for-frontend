@@ -593,19 +593,18 @@ error.rentBasedOnEmptyBuilding.required=Dewiswch ‘Ydy’ os yw’r rhent yn se
 error.rentIncludesParking.required=Dewiswch ‘Ydy’ os yw’r rhent yn cynnwys defnyddio mannau parcio
 error.tenantPaysForParking.required=Dewiswch ‘Ydy’ os yw’r tenant yn talu ychwanegol am unrhyw parcio
 
+error.rentDetails.required = Nodwch fanylion am yr hyn a gaiff ei gynnwys yn y rhent
+error.rentDetails.maxLength = Mae’n rhaid i fanylion am yr hyn a gaiff ei gynnwys yn y rhent fod yn 249 o gymeriadau neu lai
 
-error.rentDetails.required = Mae’n rhaid llenwi hwn
-error.rentDetails.maxLength = Rhaid i fod yn 249 nod neu lai
+error.required.parking.rentIncludeParkingDetails = Nodwch sawl man neu garej sydd wedi’u cynnwys yn y rhent
+error.required.parking.rentSeparateParkingDetails = Nodwch sawl man neu garej sydd wedi’u cynnwys yn y rhent
 
-error.required.parking.rentIncludeParkingDetails = Rhaid llenwi o leiaf un a gyda gwerth sy’n fwy na 0
-error.required.parking.rentSeparateParkingDetails = Rhaid llenwi o leiaf un a gyda gwerth sy’n fwy na 0
-
-error.invalid_number.parking.rentIncludeParkingDetails.openSpaces = Mae’n rhaid i hwn ddefnyddio rhifau
-error.invalid_number.parking.rentIncludeParkingDetails.coveredSpaces = Mae’n rhaid i hwn ddefnyddio rhifau
-error.invalid_number.parking.rentIncludeParkingDetails.garages = Mae’n rhaid i hwn ddefnyddio rhifau
-error.invalid_number.parking.rentSeparateParkingDetails.openSpaces = Mae’n rhaid i hwn ddefnyddio rhifau
-error.invalid_number.parking.rentSeparateParkingDetails.coveredSpaces = Mae’n rhaid i hwn ddefnyddio rhifau
-error.invalid_number.parking.rentSeparateParkingDetails.garages = Mae’n rhaid i hwn ddefnyddio rhifau
+error.invalid_number.parking.rentIncludeParkingDetails.openSpaces = Mae’n rhaid i’r man agored fod yn rhif
+error.invalid_number.parking.rentIncludeParkingDetails.coveredSpaces = Mae’n rhaid i’r mannau dan orchudd fod yn rhif
+error.invalid_number.parking.rentIncludeParkingDetails.garages = Rhaid i’r garejys fod yn rhif
+error.invalid_number.parking.rentSeparateParkingDetails.openSpaces = Mae’n rhaid i’r man agored fod yn rhif
+error.invalid_number.parking.rentSeparateParkingDetails.coveredSpaces = Mae’n rhaid i’r mannau dan orchudd fod yn rhif
+error.invalid_number.parking.rentSeparateParkingDetails.garages = Rhaid i’r garejys fod yn rhif
 
 error.minValue.parking.rentIncludeParkingDetails.openSpaces = Rhaid i hyn fod yn rhif sy’n fw y na 0
 error.minValue.parking.rentIncludeParkingDetails.coveredSpaces = Rhaid i hyn fod yn rhif sy’n fw y na 0
@@ -614,21 +613,21 @@ error.minValue.parking.rentSeparateParkingDetails.openSpaces = Rhaid i hyn fod y
 error.minValue.parking.rentSeparateParkingDetails.coveredSpaces = Rhaid i hyn fod yn rhif sy’n fw y na 0
 error.minValue.parking.rentSeparateParkingDetails.garages = Rhaid i hyn fod yn rhif sy’n fw y na 0
 
-error.maxValue.parking.rentIncludeParkingDetails.openSpaces = Rhaid i hyn fod yn rhif sy’n lai y na 9999
-error.maxValue.parking.rentIncludeParkingDetails.coveredSpaces = Rhaid i hyn fod yn rhif sy’n lai y na 9999
-error.maxValue.parking.rentIncludeParkingDetails.garages = Rhaid i hyn fod yn rhif sy’n lai y na 9999
-error.maxValue.parking.rentSeparateParkingDetails.openSpaces = Rhaid i hyn fod yn rhif sy’n lai y na 9999
-error.maxValue.parking.rentSeparateParkingDetails.coveredSpaces = Rhaid i hyn fod yn rhif sy’n lai y na 9999
-error.maxValue.parking.rentSeparateParkingDetails.garages = Rhaid i hyn fod yn rhif sy’n lai y na 9999
+error.maxValue.parking.rentIncludeParkingDetails.openSpaces = Mae’n rhaid i’r mannau agored fod yn 9999 neu lai
+error.maxValue.parking.rentIncludeParkingDetails.coveredSpaces = Mae’n rhaid i’r mannau dan orchudd fod yn 9999 neu lai
+error.maxValue.parking.rentIncludeParkingDetails.garages = Mae’n rhaid i’r garejys fod yn 9999 neu lai
+error.maxValue.parking.rentSeparateParkingDetails.openSpaces = Mae’n rhaid i’r mannau agored fod yn 9999 neu lai
+error.maxValue.parking.rentSeparateParkingDetails.coveredSpaces = Mae’n rhaid i’r mannau dan orchudd fod yn 9999 neu lai
+error.maxValue.parking.rentSeparateParkingDetails.garages = Mae’n rhaid i’r garejys fod yn 9999 neu lai
 
-error.required.annualSeparateParkingAmount = Mae’n rhaid llenwi hwn
-error.invalid_currency.annualSeparateParkingAmount = Rhaid i hyn fod yn rhif sy’n
-error.maxCurrencyAmountExceeded.annualSeparateParkingAmount = Rhaid i hyn fod yn rhif sy’n lai y na 9999999
+error.required.annualSeparateParkingAmount = Nodwch y swm a dalwyd
+error.invalid_currency.annualSeparateParkingAmount = Mae’n rhaid i’r swm a dalwyd fod yn rhif rhwng 1 neu 9999999
+error.maxCurrencyAmountExceeded.annualSeparateParkingAmount = Mae’n rhaid i’r swm a dalwyd fod yn rhif rhwng 1 neu 9999999
 
-error.annualSeparateParkingDate.month.required = Mae’n rhaid llenwi hwn
-error.annualSeparateParkingDate.year.required = Mae’n rhaid llenwi hwn
-error.date_before_1900.annualSeparateParkingDate = Mae’n rhaid i hwn fod o 1900 ymlaen
-error.date_must_be_in_past.annualSeparateParkingDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
+error.annualSeparateParkingDate.month.required = Mae’n rhaid i’r dyddiad y cafodd y taliad ei bennu gynnwys mis
+error.annualSeparateParkingDate.year.required = Mae’n rhaid i’r dyddiad y cafodd y taliad ei bennu gynnwys blwyddyn
+error.date_before_1900.annualSeparateParkingDate = Mae’n rhaid i’r dyddiad y cafodd y taliad ei bennu fod rhwng Ionawr 1900 a heddiw
+error.date_must_be_in_past.annualSeparateParkingDate = Mae’n rhaid i’r dyddiad y cafodd y taliad ei bennu fod rhwng Ionawr 1900 a heddiw
 
 #SECTION 11
 ###############################
@@ -661,6 +660,22 @@ error.rentFreePeriod.required=Dewiswch ‘Oedd’ os oedd cyfnod di-rent
 error.paidCapitalSum.required=Dewiswch ‘Do’ os talodd y tenant i ymgymryd â’r brydles
 error.receivedCapitalSum.required=Dewiswch ‘Do’ os talwyd y tenant i ymgymryd â’r brydles
 
+error.minValueRentFree.required= Mae’n rhaid i’r cyfnod di-rent fod yn rhif rhwng 1 a 999
+error.maxValueRentFree.required= Mae’n rhaid i’r cyfnod di-rent fod yn rhif rhwng 1 a 999
+error.maxValueRentFreeIsBlank.required = Mae’n rhaid i hwn ddefnyddio rhifau
+error.empty.required=Enter how many months the rent-free period was for
+error.empty.required=Nodwch sawl mis yr oedd y cyfnod di-rent ar ei gyfer
+
+error.rentFreePeriod.required=Nodwch y rheswm dros y cyfnod di-rent
+error.rentFreePeriod.maxLength=Mae’n rhaid i’r rheswm dros y cyfnod di-rent fod yn 250 o gymeriadau neu lai
+
+error.required.amountPaidReceived=Nodwch y swm a ddaeth i law
+error.maxCurrencyAmountExceeded.amountPaidReceived=Mae’n rhaid i’r swm a ddaeth i law fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.amountPaidReceived=Mae’n rhaid i hwn ddefnyddio rhifau
+error.amountPaidReceived.month.required= Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys mis
+error.amountPaidReceived.year.required = Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys blwyddyn
+error.date_before_1900.amountPaidReceived=Mae’n rhaid i’r dyddiad y daeth y taliad i law fod rhwng Ionawr 1900 a heddiw
+
 #SECTION 12
 ###############################
 section12.heading=Cyfrifoldebau a chostau
@@ -692,6 +707,18 @@ error.businessRates.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys tret
 error.waterChargesIncluded.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys taliadau dŵr
 error.serviceChargesIncluded.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys taliadau gwasanaeth
 
+error.required.businessRatesPerYear=Nodwch swm y trethi busnes a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.businessRatesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.businessRatesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.required.waterChargesPerYear=Nodwch swm y costau dŵr a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.waterChargesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.waterChargesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.required.serviceChargesPerYear=Nodwch swm y tâl gwasanaeth a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.serviceChargesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.serviceChargesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.detailsOfService.required=Nodwch fanylion y gwasanaethau
+error.detailsOfService.maxLength=Mae’n rhaid i fanylion y gwasanaethau fod yn 50 o gymeriadau neu lai
+
 #SECTION 13
 ###############################
 section13.heading=Addasiadau a gwelliannau
@@ -720,6 +747,13 @@ error.hasTenantDonePropertyAlterations.required=Dewiswch ‘ydy’ os yw’r ten
 error.tenantWasRequiredToMakeAlterations.required=Dewiswch ‘oedd’ os oedd rhaid i’r tenant gyflawni unrhyw waith
 error.whichWorksWereDone.required=Dewiswch ba waith a gyflawnwyd
 
+error.required.alternationCost = Nodwch gost y gwaith
+error.invalid_currency.alternationCost = Mae’n rhaid i gost y gwaith fod yn rhif rhwng 0 a 9999999
+error.maxCurrencyAmountExceeded.alternationCost = Mae’n rhaid i gost y gwaith fod yn rhif rhwng 0 a 9999999
+error.alternationCost.month.required= Mae’n rhaid i ddyddiad y gwaith gynnwys mis
+error.alternationCost.year.required = Mae’n rhaid i ddyddiad y gwaith gynnwys blwyddyn
+error.date_before_1900.alternationCost=Mae’n rhaid i ddyddiad y gwaith fod rhwng Ionawr 1900 a heddiw
+
 #SECTION 14
 ###############################
 section14.heading=Unrhyw ffactorau eraill
@@ -730,6 +764,9 @@ hint.anyOtherFactorsDetails=Er enghraifft, os yw’r brydles yn cael ei chontrac
 label.noJs.anyOtherFactorsDetails=Dylech ond ateb hyn os ydych wedi dewis ‘Oes’
 
 error.anyOtherFactors.required=Dewiswch ‘Oes’ os oes unrhyw beth arall wedi effeithio ar y rhent
+error.anyOtherFactorsDetailsText.required=Nodwch beth arall sydd wedi effeithio ar y rhent
+error.anyOtherFactors.required=Nodwch beth arall sydd wedi effeithio ar y rhent
+error.anyOtherFactorsDetailsText.maxLength=Mae’n rhaid i fanylion ynghylch beth arall sydd wedi effeithio ar y rhent fod yn 124 o gymeriadau neu lai
 
 #CONFIRMATION
 ###############################
