@@ -747,6 +747,13 @@ error.hasTenantDonePropertyAlterations.required=Dewiswch ‘ydy’ os yw’r ten
 error.tenantWasRequiredToMakeAlterations.required=Dewiswch ‘oedd’ os oedd rhaid i’r tenant gyflawni unrhyw waith
 error.whichWorksWereDone.required=Dewiswch ba waith a gyflawnwyd
 
+error.required.alternationCost = Nodwch gost y gwaith
+error.invalid_currency.alternationCost = Mae’n rhaid i gost y gwaith fod yn rhif rhwng 0 a 9999999
+error.maxCurrencyAmountExceeded.alternationCost = Mae’n rhaid i gost y gwaith fod yn rhif rhwng 0 a 9999999
+error.alternationCost.month.required= Mae’n rhaid i ddyddiad y gwaith gynnwys mis
+error.alternationCost.year.required = Mae’n rhaid i ddyddiad y gwaith gynnwys blwyddyn
+error.date_before_1900.alternationCost=Mae'n rhaid i ddyddiad y gwaith fod rhwng Ionawr 1900 a heddiw
+
 #SECTION 14
 ###############################
 section14.heading=Unrhyw ffactorau eraill
