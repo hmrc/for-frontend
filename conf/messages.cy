@@ -691,6 +691,18 @@ error.businessRates.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys tret
 error.waterChargesIncluded.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys taliadau dŵr
 error.serviceChargesIncluded.required=Dewiswch ‘Ydyn’ os yw’r rhent yn cynnwys taliadau gwasanaeth
 
+error.required.businessRatesPerYear=Nodwch swm y trethi busnes a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.businessRatesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.businessRatesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.required.waterChargesPerYear=Nodwch swm y costau dŵr a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.waterChargesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.waterChargesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.required.serviceChargesPerYear=Nodwch swm y tâl gwasanaeth a gaiff ei gynnwys yn y rhent bob blwyddyn
+error.maxCurrencyAmountExceeded.serviceChargesPerYear=Mae’n rhaid i’r swm fod yn rhif rhwng 1 a 9999999
+error.invalid_currency.serviceChargesPerYear=Mae’n rhaid i hwn ddefnyddio rhifau
+error.detailsOfService.required=Nodwch fanylion y gwasanaethau
+error.detailsOfService.maxLength=Mae’n rhaid i fanylion y gwasanaethau fod yn 50 o gymeriadau neu lai
+
 #SECTION 13
 ###############################
 section13.heading=Addasiadau a gwelliannau
