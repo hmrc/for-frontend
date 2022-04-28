@@ -35,9 +35,12 @@ object PageElevenForm {
   )(FreePeriodDetails.apply)(FreePeriodDetails.unapply)
 
   private def capitalDetailsMapping(prefix: String) = mapping(
-    "capitalSum" -> currencyMapping(".amountPaidReceived"),
-    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".amountPaidReceived"))(CapitalDetails.apply)(CapitalDetails.unapply)
+    "capitalSum" -> currencyMapping(".paid"),
+    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".received"))(CapitalDetails.apply)(CapitalDetails.unapply)
 
+  private def capitalDetailsReceivedMapping(prefix: String) = mapping(
+    "receivedSum" -> currencyMapping(".received"),
+    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".received"))(CapitalDetails.apply)(CapitalDetails.unapply)
 
   val pageElevenMapping = mapping(
     "rentFreePeriod" -> mandatoryBooleanWithError(Errors.rentFreePeriodRequired),
@@ -45,7 +48,7 @@ object PageElevenForm {
     "payCapitalSum" -> mandatoryBooleanWithError(Errors.paidCapitalSumRequired),
     "capitalPaidDetails" -> mandatoryIfTrue("payCapitalSum", capitalDetailsMapping("capitalPaidDetails")),
     "receiveCapitalSum" -> mandatoryBooleanWithError(Errors.receivedCapitalSumRequired),
-    "capitalReceivedDetails" -> mandatoryIfTrue("receiveCapitalSum", capitalDetailsMapping("capitalReceivedDetails"))
+    "capitalReceivedDetails" -> mandatoryIfTrue("receiveCapitalSum", capitalDetailsReceivedMapping("capitalReceivedDetails"))
     )(IncentivesAndPayments.apply)(IncentivesAndPayments.unapply)
 
   val pageElevenForm = Form(pageElevenMapping)

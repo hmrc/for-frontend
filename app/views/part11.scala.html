@@ -210,16 +210,16 @@
 
             @hmrcCurrencyInput(
                 CurrencyInput(
-                    id = "capitalReceivedDetails.capitalSum",
-                    name = "capitalReceivedDetails.capitalSum",
-                    value = theForm("capitalReceivedDetails.capitalSum").value,
+                    id = "capitalReceivedDetails.receivedSum",
+                    name = "capitalReceivedDetails.receivedSum",
+                    value = theForm("capitalReceivedDetails.receivedSum").value,
                     classes = "govuk-input--width-10",
                     label = Label(
-                        content = Text(messages("label.capitalReceivedDetails.capitalSum")),
+                        content = Text(messages("label.capitalReceivedDetails.receivedSum")),
                         classes = "govuk-!-font-weight-bold"
                     ),
                     autocomplete = Some("off"),
-                    errorMessage =  theForm.errors.asTextErrorMessageForField("capitalReceivedDetails.capitalSum")
+                    errorMessage =  theForm.errors.asTextErrorMessageForField("capitalReceivedDetails.receivedSum")
                 )
             )
 

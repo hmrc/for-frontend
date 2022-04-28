@@ -631,11 +631,13 @@ label.capitalPaidDetails.capitalSum=Amount paid (excluding VAT)
 label.capitalPaidDetails.paymentDate=Date payment made
 label.receiveCapitalSum=Did the tenant receive any money from the landlord or previous tenant to take on the lease?
 label.receiveCapitalSum.agent=Did your client receive a capital sum?
-label.capitalReceivedDetails.capitalSum=Amount received (excluding VAT)
 label.capitalReceivedDetails.paymentDate=Date payment received
 hint.rentFreePeriodDetails.rentFreePeriodLength=If the rent-free period was for less than 1 month, enter “1” and tell us more under ‘Why was there a rent-free period?’.
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=If your client’s rent free period was for less than 1 month, enter "1" and tell us more under ‘Why was your client given a rent-free period?’.
-label.noJs.capitalReceivedDetails.capitalSum=Answer this only if you’ve selected ‘Yes’
+
+label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
+label.noJs.capitalReceivedDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
+label.noJs.capitalReceivedDetails.receivedSum=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalPaidDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalPaidDetails.capitalSum=Answer this only if you’ve selected ‘Yes’
 label.noJs.rentFreePeriodDetails.rentFreePeriodDetails=Answer this only if you’ve selected ‘Yes’
@@ -648,12 +650,18 @@ error.receivedCapitalSum.required=Select ‘Yes’ if the tenant was paid to tak
 error.rentFreePeriod.required=Enter the reason for the rent-free period
 error.rentFreePeriod.maxLength=The reason for the rent-free period must be 250 characters or fewer
 
-error.required.amountPaidReceived=Enter the amount received
-error.maxCurrencyAmountExceeded.amountPaidReceived=Amount must be a number between 1 and 9999999
-error.invalid_currency.amountPaidReceived=This must be a number
-error.amountPaidReceived.month.required= The date the payment was received must include a month
-error.amountPaidReceived.year.required = The date the payment was received must include a year
-error.date_before_1900.amountPaidReceived=The date the payment was received must be between January 1900 and today
+error.required.paid=Enter the amount paid
+error.required.received=Enter the amount received
+error.maxCurrencyAmountExceeded.paid=Amount must be a number between 1 and 9999999
+error.maxCurrencyAmountExceeded.received=Amount must be a number between 1 and 9999999
+error.invalid_currency.paid=This must be a number
+error.invalid_currency.received=This must be a number
+error.received.month.required= The date the payment was received must include a month
+error.received.year.required = The date the payment was received must include a year
+error.paid.month.required= The date the payment was received must include a month
+error.paid.year.required = The date the payment was received must include a year
+error.date_before_1900.paid=The date the payment was received must be between January 1900 and today
+error.date_before_1900.received=The date the payment was received must be between January 1900 and today
 
 error.minValueRentFree.required= Rent-free period must be a number between 1 and 999
 error.maxValueRentFree.required= Rent-free period must be a number between 1 and 999
@@ -740,7 +748,6 @@ error.invalid_currency.alternationCost = Cost of work must be a number between 0
 error.maxCurrencyAmountExceeded.alternationCost = Cost of work must be a number between 0 and 9999999
 error.alternationCost.month.required= The date of the works must include a month
 error.alternationCost.year.required = The date of the works must include a year
-error.date_before_1900.alternationCost=The date of the works must be between January 1900 and today
 
 #SECTION 14
 ###############################
@@ -753,7 +760,6 @@ label.noJs.anyOtherFactorsDetails=Answer this only if you’ve selected ‘Yes�
 
 error.anyOtherFactorsDetails.required=Select ‘Yes’ if anything else has affected the rent
 error.anyOtherFactorsDetailsText.required=Enter what else has affected the rent
-error.anyOtherFactors.required=Enter what else has affected the rent
 error.anyOtherFactorsDetailsText.maxLength=Details about what else has affected the rent must be 124 characters or fewer
 
 #CONFIRMATION

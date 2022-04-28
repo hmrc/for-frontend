@@ -647,6 +647,9 @@ label.receiveCapitalSum=A gafodd y tenant unrhyw arian oddi wrth y landlord neu�
 label.receiveCapitalSum.agent=A gafodd eich cleient swm cyfalaf?
 label.capitalReceivedDetails.capitalSum=Y swm a gafwyd (ac eithrio TAW)
 label.capitalReceivedDetails.paymentDate=Dyddiad y cafwyd y taliad
+
+label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
+
 hint.rentFreePeriodDetails.rentFreePeriodLength=Os oedd y cyfnod di-rent wedi para am lai nag 1 mis, nodwch “1” a rhoi rhagor o wybodaeth o dan ‘Pam oedd cyfnod di-rent?’.
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=Os oedd cyfnod di-rent eich cleient wedi para am lai nag 1 mis, nodwch "1" a rhoi rhagor o wybodaeth o dan ‘Pam y rhoddwyd cyfnod di-rent i’ch cleient?’.
 hint.payCapitalSum=Heb gynnwys unrhyw rent, arian ar gyfer y busnes ei hun, ewyllys da, gosodiadau masnach neu flaendaliadau ad-daladwy.
@@ -669,6 +672,8 @@ error.empty.required=Nodwch sawl mis yr oedd y cyfnod di-rent ar ei gyfer
 error.rentFreePeriod.required=Nodwch y rheswm dros y cyfnod di-rent
 error.rentFreePeriod.maxLength=Mae’n rhaid i’r rheswm dros y cyfnod di-rent fod yn 250 o gymeriadau neu lai
 
+error.required.paid=Nodwch y swm a dalwyd
+error.required.received=Nodwch y swm a ddaeth i law
 error.required.amountPaidReceived=Nodwch y swm a ddaeth i law
 error.maxCurrencyAmountExceeded.amountPaidReceived=Mae’n rhaid i’r swm a ddaeth i law fod yn rhif rhwng 1 a 9999999
 error.invalid_currency.amountPaidReceived=Mae’n rhaid i hwn ddefnyddio rhifau
