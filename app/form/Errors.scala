@@ -28,6 +28,7 @@ object Errors {
   val invalidRefNum = "error.invalid_refnum"
   val maxCurrencyAmountExceeded = "error.maxCurrencyAmountExceeded"
   val toDateIsAfterFromDate = "error.writtenAgreement.steppedDetails.stepTo.day"
+  val fromDateIsAfterToDate = "error.writtenAgreement.steppedDetails.stepFrom.day"
   val overlappingDates = "error.steppedDetails.overlappingDates"
   val invalidPostcode = "error.invalid_postcode"
   val invalidPostcodeOnLetter = "error.invalid_postcode_as_on_letter"

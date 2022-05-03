@@ -41,7 +41,10 @@
         if(msg.isEmpty) {
             if(form.errors.exists(x => x.key.contains(field))){
                 val firstError = form.errors.find(x => x.key.contains(field))
-                msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", "")))))
+                if (firstError.get.args.size == 2)
+                    msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", ""), firstError.get.args(0), firstError.get.args(1)))))
+                else
+                    msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", "")))))
             }
         }
         msg

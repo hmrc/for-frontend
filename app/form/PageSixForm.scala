@@ -21,9 +21,10 @@ import form.MappingSupport._
 import models.pages.{PageSix, _}
 import models.serviceContracts.submissions._
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import play.api.data.Forms.{default, mapping, optional, text, tuple}
 import play.api.data._
-import play.api.data.validation.Constraint
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import uk.gov.voa.play.form.ConditionalMappings._
 import uk.gov.voa.play.form._
@@ -48,10 +49,22 @@ object PageSixForm {
 
   def toDateIsAfterFromDate: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.toAfterFrom") {
     case (stepFrom, stepTo) =>
-      val cond = stepTo.isAfter(stepFrom)
-      createFieldConstraintFor(cond, Errors.toDateIsAfterFromDate, Seq(s"${keys.to}.day"))
+      val condTo = stepTo.isAfter(stepFrom)
+      createFieldConstraintFor(condTo, Errors.toDateIsAfterFromDate, Seq(s"${keys.to}.day"))
+
   }
 
+  def toDateIsAfterTenYears: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.invalidRange") {
+    case (stepFrom, stepTo) =>
+      val dateFormatPattern = DateTimeFormat.forPattern("d MMMM YYYY")
+      val maxFutureDate = stepFrom.plusYears(10)
+
+      if (stepTo.isBefore(maxFutureDate.plusDays(1)))
+        Valid
+      else
+        Invalid(Seq(createFieldValidationError(s"${keys.to}.day", Errors.fromDateIsAfterToDate,
+          dateFormatPattern.print(stepFrom.plusDays(1)), dateFormatPattern.print(maxFutureDate))))
+  }
 
   def noOverlappingSteps: Constraint[WrittenAgreement] = Constraint("constraints.steppedDetails.overlappingSteps") { writtenAgreement => {
     val steppedDetails = writtenAgreement.steppedDetails
@@ -71,7 +84,7 @@ object PageSixForm {
     index -> tuple(
       keys.from -> dateFieldsMapping(s"$index.stepFrom", allowFutureDates = true, fieldErrorPart = ".writtenAgreement.steppedDetails.stepFrom"),
       keys.to -> dateFieldsMapping(s"$index.stepTo", allowFutureDates = true, fieldErrorPart = ".writtenAgreement.steppedDetails.stepTo")
-    ).verifying(toDateIsAfterFromDate),
+    ).verifying(toDateIsAfterFromDate, toDateIsAfterTenYears),
     (index + "." + keys.amount) -> currencyMapping(".writtenAgreement.steppedDetails.amount")
   )((dates, amount) => SteppedDetails(dates._1, dates._2, amount))(stepped => Some(((stepped.stepFrom, stepped.stepTo), stepped.amount)))
 
