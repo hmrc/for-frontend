@@ -425,7 +425,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "capitalPaidDetails.paymentDate.month" -> Seq("4"),
       "capitalPaidDetails.paymentDate.year" -> Seq("2010"),
       "receiveCapitalSum" -> Seq("true"),
-      "capitalReceivedDetails.capitalSum" -> Seq("200"),
+      "capitalReceivedDetails.receivedSum" -> Seq("200"),
       "capitalReceivedDetails.paymentDate.month" -> Seq("3"),
       "capitalReceivedDetails.paymentDate.year" -> Seq("2010")
     )

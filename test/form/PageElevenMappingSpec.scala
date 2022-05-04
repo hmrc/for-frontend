@@ -36,7 +36,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
   val capSumPaidDateYear = "capitalPaidDetails.paymentDate.year" -> "2012"
 
   val capReceived = "receiveCapitalSum" -> "true"
-  val capSumReceived = "capitalReceivedDetails.capitalSum" -> "99.99"
+  val capSumReceived = "capitalReceivedDetails.receivedSum" -> "99.99"
   val capSumReceiveDateMonth = "capitalReceivedDetails.paymentDate.month" -> "11"
   val capSumReceiveDateYear = "capitalReceivedDetails.paymentDate.year" -> "2012"
 
@@ -105,7 +105,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainError("capitalPaidDetails.paymentDate.month", "error.amountPaidReceived.month.required", res)
+    mustContainError("capitalPaidDetails.paymentDate.month", "error.received.month.required", res)
   }
 
   it should "bind with the fields and return errors, when payment date year fields is not filled in when giving details about paying a capital sum" in {
@@ -113,7 +113,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    mustContainError("capitalPaidDetails.paymentDate.year", "error.amountPaidReceived.year.required", res)
+    mustContainError("capitalPaidDetails.paymentDate.year", "error.received.year.required", res)
   }
 
   it should "bind with the fields and return errors, when payment amount field is not filled in when giving details about paying a capital sum" in {
@@ -121,7 +121,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
-    containsError(res.errors, "capitalPaidDetails.capitalSum", "error.required.amountPaidReceived")
+    mustContainError("capitalPaidDetails.capitalSum", "error.required.paid", res)
   }
 
   it should "validate the rent free period details" in {
@@ -147,18 +147,18 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate the capital sum paid" in {
-    validateCurrency("capitalPaidDetails.capitalSum", pageElevenForm, baseData, ".amountPaidReceived")
+    validateCurrency("capitalPaidDetails.capitalSum", pageElevenForm, baseData, ".paid")
   }
 
   it should "validate the capital sum payment date" in {
-    validatePastDate("capitalPaidDetails.paymentDate", pageElevenForm, baseData, ".amountPaidReceived")
+    validatePastDate("capitalPaidDetails.paymentDate", pageElevenForm, baseData, ".received")
   }
 
   it should "validate the capital sum received" in {
-    validateCurrency("capitalReceivedDetails.capitalSum", pageElevenForm, baseData, ".amountPaidReceived")
+    validateCurrency("capitalReceivedDetails.receivedSum", pageElevenForm, baseData, ".received")
   }
 
   it should "validate the capital sum received date" in {
-    validatePastDate("capitalReceivedDetails.paymentDate", pageElevenForm, baseData, ".amountPaidReceived")
+    validatePastDate("capitalReceivedDetails.paymentDate", pageElevenForm, baseData, ".received")
   }
 }
