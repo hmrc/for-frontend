@@ -631,11 +631,12 @@ label.capitalPaidDetails.capitalSum=Amount paid (excluding VAT)
 label.capitalPaidDetails.paymentDate=Date payment made
 label.receiveCapitalSum=Did the tenant receive any money from the landlord or previous tenant to take on the lease?
 label.receiveCapitalSum.agent=Did your client receive a capital sum?
-label.capitalReceivedDetails.paymentDate=Date payment received
 hint.rentFreePeriodDetails.rentFreePeriodLength=If the rent-free period was for less than 1 month, enter “1” and tell us more under ‘Why was there a rent-free period?’.
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=If your client’s rent free period was for less than 1 month, enter "1" and tell us more under ‘Why was your client given a rent-free period?’.
 
 label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
+
+label.capitalReceivedDetails.paymentDate=Date payment received
 label.noJs.capitalReceivedDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalReceivedDetails.receivedSum=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalPaidDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
