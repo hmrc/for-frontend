@@ -1066,6 +1066,15 @@ error.year.required = Mae’n rhaid llenwi hwn
 3=dri
 2=ddau
 1=un
+
+writtenAgreement.steppedDetails0.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails1.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails2.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails3.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails4.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails5.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails6.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
+writtenAgreement.steppedDetails7.stepTo.day.error.date.invalid.range.stepTo.day=Rhaid i’r dyddiad y daw’r rhent grisiog i ben fod rhwng {0} a {1}
 #ERROR PAGES
 ##############################
 error.404.heading=Nid oedd modd canfod y dudalen y gofynnwyd amdani. Rhowch gynnig arall arni.

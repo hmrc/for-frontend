@@ -1079,6 +1079,17 @@ writtenAgreement.steppedDetails4.stepTo.day.error.writtenAgreement.steppedDetail
 writtenAgreement.steppedDetails5.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Step to date must be after step from date
 writtenAgreement.steppedDetails6.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Step to date must be after step from date
 writtenAgreement.steppedDetails7.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Step to date must be after step from date
+
+writtenAgreement.steppedDetails.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails0.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails1.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails2.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails3.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails4.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails5.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails6.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+writtenAgreement.steppedDetails7.stepTo.day.error.writtenAgreement.steppedDetails.stepFrom.day=The date the rent step ends must be between {0} and {1}
+
 #ERROR PAGES
 ##############################
 error.404.heading=The page you requested cannot be found. Please try again.

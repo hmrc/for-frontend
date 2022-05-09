@@ -69,6 +69,7 @@ object Errors {
   val leaseAgreementOpenEndedRequired = "error.leaseOpenEnded.required"
   val leaseAgreementBreakClauseRequired = "error.leaseHasBreakClause.required"
   val leaseAgreementIsSteppedRequired = "error.steppedRent.required"
+  val toDateToFarFuture = "error.date.invalid.range.stepTo.day"
 
   //page 7
   val rentReviewDetailsRequired = "error.rentReviewDetails.required"
