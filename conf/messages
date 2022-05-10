@@ -635,14 +635,6 @@ hint.rentFreePeriodDetails.rentFreePeriodLength=If the rent-free period was for 
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=If your client’s rent free period was for less than 1 month, enter "1" and tell us more under ‘Why was your client given a rent-free period?’.
 
 label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> main
-=======
-
->>>>>>> 2a753b2ea0d3a005c6d167b706532d4c2c8df6d5
 label.capitalReceivedDetails.paymentDate=Date payment received
 label.noJs.capitalReceivedDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalReceivedDetails.receivedSum=Answer this only if you’ve selected ‘Yes’
@@ -670,7 +662,7 @@ error.made.month.required= The date the payment was made must include a month
 error.made.year.required = The date the payment was made must include a year
 error.made.month.required= The date the payment was made must include a month
 error.made.year.required = The date the payment was made must include a year
-error.date_before_1900.paid=The date the payment was received must be between January 1900 and today
+error.date_before_1900.made=The date the payment was made must be between January 1900 and today
 error.date_before_1900.received=The date the payment was received must be between January 1900 and today
 
 error.minValueRentFree.required= Rent-free period must be a number between 1 and 999
