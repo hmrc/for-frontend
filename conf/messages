@@ -658,8 +658,8 @@ error.invalid_currency.paid=This must be a number
 error.invalid_currency.received=This must be a number
 error.received.month.required= The date the payment was received must include a month
 error.received.year.required = The date the payment was received must include a year
-error.paid.month.required= The date the payment was received must include a month
-error.paid.year.required = The date the payment was received must include a year
+error.made.month.required= The date the payment was made must include a month
+error.made.year.required = The date the payment was made must include a year
 error.date_before_1900.paid=The date the payment was received must be between January 1900 and today
 error.date_before_1900.received=The date the payment was received must be between January 1900 and today
 

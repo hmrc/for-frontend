@@ -681,6 +681,11 @@ error.amountPaidReceived.month.required= Mae’n rhaid i’r dyddiad y daeth y t
 error.amountPaidReceived.year.required = Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys blwyddyn
 error.date_before_1900.amountPaidReceived=Mae’n rhaid i’r dyddiad y daeth y taliad i law fod rhwng Ionawr 1900 a heddiw
 
+error.received.month.required= Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys mis
+error.received.year.required = Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys blwyddyn
+error.made.month.required= Mae’n rhaid i’r dyddiad y cafodd y taliad ei wneud gynnwys mis
+error.made.year.required = Mae’n rhaid i’r dyddiad y cafodd y taliad ei wneud gynnwys blwyddyn
+
 #SECTION 12
 ###############################
 section12.heading=Cyfrifoldebau a chostau
