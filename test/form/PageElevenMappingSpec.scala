@@ -105,6 +105,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
+
     mustContainError("capitalPaidDetails.paymentDate.month", "error.made.month.required", res)
   }
 
@@ -113,6 +114,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     val res = bind(data)
     res.errors.isEmpty should be(false)
     res.errors.size should be(1)
+
     mustContainError("capitalPaidDetails.paymentDate.year", "error.made.year.required", res)
   }
 
