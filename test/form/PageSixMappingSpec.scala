@@ -39,7 +39,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
         leaseAgreementHasBreakClause = true,
         breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
         agreementIsStepped = true,
-        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(1900, 12, 2), stepTo = new LocalDate(2018, 2, 12), amount = 123.45)),
+        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(2001, 12, 2), stepTo = new LocalDate(2002, 2, 12), amount = 123.45)),
         startDate = new RoughDate(month = 3, year = 2013),
         rentOpenEnded = false,
         leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
@@ -179,7 +179,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     validatesDuration(writtenLeaseLength, pageSixForm, fullData, ".writtenAgreement.leaseLength")
   }
 
-  it should "validate the break clause details as free text" in {
+    it should "validate the break clause details as free text" in {
     validateLettersNumsSpecCharsUptoLength(writtenBreakClauseDetails, 124, pageSixForm, fullData,
       Some("error.writtenAgreement.breakClauseDetails.maxLength"))
   }
@@ -189,8 +189,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate stepped rent from date as a date" in {
-    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
-    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
+    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(0).getYear.toString)
+    validateDate(getKeyStepped(1).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
   it should "validate the second stepped rent step amount as currency" in {
@@ -214,7 +214,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate the stepped rent dates do not overlap" in {
     val data = fullDataWithSecondRentStep.updated(
-      getKeyStepped(0).stepTo + ".year", "2019"
+      getKeyStepped(0).stepTo + ".year", "2020"
     )
     val f = bind(data)
     mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepFrom.day", Errors.overlappingDates, f)
@@ -253,10 +253,10 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       writtenAgreementIsStepped -> "true",
       getKeyStepped(0).stepFrom + ".day" -> "2",
       getKeyStepped(0).stepFrom + ".month" -> "12",
-      getKeyStepped(0).stepFrom + ".year" -> "1900",
+      getKeyStepped(0).stepFrom + ".year" -> "2000",
       getKeyStepped(0).stepTo + ".day" -> "12",
       getKeyStepped(0).stepTo + ".month" -> "2",
-      getKeyStepped(0).stepTo + ".year" -> "2018",
+      getKeyStepped(0).stepTo + ".year" -> "2001",
       getKeyStepped(0).amount -> "123.45",
       writtenStartDate + ".month" -> "3",
       writtenStartDate + ".year" -> "2013",
@@ -271,7 +271,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       updated(getKeyStepped(1).stepFrom + ".year", "2019").
       updated(getKeyStepped(1).stepTo + ".day", "1").
       updated(getKeyStepped(1).stepTo + ".month", "1").
-      updated(getKeyStepped(1).stepTo + ".year", "2020")
+      updated(getKeyStepped(1).stepTo + ".year", "2018")
 
     def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] = {
       (1 to n).foldLeft(data) { (s, v) =>

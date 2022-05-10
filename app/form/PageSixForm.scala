@@ -54,7 +54,7 @@ object PageSixForm {
 
   }
 
-  def toDateIsAfterTenYears: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.invalidRange") {
+  def toDateIsAfterTenYears: Constraint[(LocalDate, LocalDate)] =  Constraint("constraints.steppedDetails.invalidRange") {
     case (stepFrom, stepTo) =>
       val dateFormatPattern = DateTimeFormat.forPattern("d MMMM YYYY")
       val maxFutureDate = stepFrom.plusYears(10)
@@ -62,7 +62,7 @@ object PageSixForm {
       if (stepTo.isBefore(maxFutureDate.plusDays(1)))
         Valid
       else
-        Invalid(Seq(createFieldValidationError(s"${keys.to}.day", Errors.fromDateIsAfterToDate,
+        Invalid(Seq(createFieldValidationError(s"${keys.to}.day", Errors.toDateToFarFuture,
           dateFormatPattern.print(stepFrom.plusDays(1)), dateFormatPattern.print(maxFutureDate))))
   }
 
