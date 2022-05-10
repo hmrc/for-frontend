@@ -636,9 +636,13 @@ hint.rentFreePeriodDetails.rentFreePeriodLength.agent=If your client’s rent fr
 
 label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> main
+=======
+
+>>>>>>> 2a753b2ea0d3a005c6d167b706532d4c2c8df6d5
 label.capitalReceivedDetails.paymentDate=Date payment received
 label.noJs.capitalReceivedDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalReceivedDetails.receivedSum=Answer this only if you’ve selected ‘Yes’
@@ -662,13 +666,10 @@ error.invalid_currency.paid=This must be a number
 error.invalid_currency.received=This must be a number
 error.received.month.required= The date the payment was received must include a month
 error.received.year.required = The date the payment was received must include a year
-<<<<<<< HEAD
 error.made.month.required= The date the payment was made must include a month
 error.made.year.required = The date the payment was made must include a year
-=======
-error.paid.month.required= The date the payment was received must include a month
-error.paid.year.required = The date the payment was received must include a year
->>>>>>> main
+error.made.month.required= The date the payment was made must include a month
+error.made.year.required = The date the payment was made must include a year
 error.date_before_1900.paid=The date the payment was received must be between January 1900 and today
 error.date_before_1900.received=The date the payment was received must be between January 1900 and today
 
