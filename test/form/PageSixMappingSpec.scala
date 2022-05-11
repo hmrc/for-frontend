@@ -39,7 +39,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
         leaseAgreementHasBreakClause = true,
         breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
         agreementIsStepped = true,
-        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(2001, 12, 2), stepTo = new LocalDate(2002, 2, 12), amount = 123.45)),
+        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(2000, 12, 2), stepTo = new LocalDate(2001, 2, 12), amount = 123.45)),
         startDate = new RoughDate(month = 3, year = 2013),
         rentOpenEnded = false,
         leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
@@ -189,7 +189,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate stepped rent from date as a date" in {
-    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(0).getYear.toString)
+    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
     validateDate(getKeyStepped(1).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
@@ -268,10 +268,10 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       updated(getKeyStepped(1).amount, "456.78").
       updated(getKeyStepped(1).stepFrom + ".day", "1").
       updated(getKeyStepped(1).stepFrom + ".month", "1").
-      updated(getKeyStepped(1).stepFrom + ".year", "2019").
+      updated(getKeyStepped(1).stepFrom + ".year", "2018").
       updated(getKeyStepped(1).stepTo + ".day", "1").
       updated(getKeyStepped(1).stepTo + ".month", "1").
-      updated(getKeyStepped(1).stepTo + ".year", "2018")
+      updated(getKeyStepped(1).stepTo + ".year", "2019")
 
     def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] = {
       (1 to n).foldLeft(data) { (s, v) =>
