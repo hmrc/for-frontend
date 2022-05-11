@@ -36,7 +36,7 @@ object PageElevenForm {
 
   private def capitalDetailsMapping(prefix: String) = mapping(
     "capitalSum" -> currencyMapping(".paid"),
-    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".received"))(CapitalDetails.apply)(CapitalDetails.unapply)
+    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".made"))(CapitalDetails.apply)(CapitalDetails.unapply)
 
   private def capitalDetailsReceivedMapping(prefix: String) = mapping(
     "receivedSum" -> currencyMapping(".received"),

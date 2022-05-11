@@ -676,10 +676,14 @@ error.required.paid=Nodwch y swm a dalwyd
 error.required.received=Nodwch y swm a ddaeth i law
 error.required.amountPaidReceived=Nodwch y swm a ddaeth i law
 error.maxCurrencyAmountExceeded.amountPaidReceived=Mae’n rhaid i’r swm a ddaeth i law fod yn rhif rhwng 1 a 9999999
-error.invalid_currency.amountPaidReceived=Mae’n rhaid i hwn ddefnyddio rhifau
-error.amountPaidReceived.month.required= Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys mis
-error.amountPaidReceived.year.required = Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys blwyddyn
-error.date_before_1900.amountPaidReceived=Mae’n rhaid i’r dyddiad y daeth y taliad i law fod rhwng Ionawr 1900 a heddiw
+error.invalid_currency.paid=Mae’n rhaid i hwn ddefnyddio rhifau
+error.invalid_currency.received=Mae’n rhaid i hwn ddefnyddio rhifau
+error.received.month.required= Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys mis
+error.received.year.required = Mae’n rhaid i’r dyddiad y daeth y taliad i law gynnwys blwyddyn
+error.made.month.required= Mae’n rhaid i’r dyddiad y cafodd y taliad ei wneud gynnwys mis
+error.made.year.required = Mae’n rhaid i’r dyddiad y cafodd y taliad ei wneud gynnwys blwyddyn
+error.date_before_1900.made=Mae’n rhaid i’r dyddiad y cafodd y taliad ei wneud fod rhwng Ionawr 1900 a heddiw
+error.date_before_1900.received=Mae’n rhaid i’r dyddiad y daeth y taliad i law fod rhwng Ionawr 1900 a heddiw
 
 #SECTION 12
 ###############################
