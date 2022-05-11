@@ -190,11 +190,11 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate stepped rent from date as a date" in {
     val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
-    validateDate(getKeyStepped(1).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
+    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
   it should "validate the second stepped rent step amount as currency" in {
-    validateCurrency(getKeyStepped(1).amount, pageSixForm, fullDataWithSecondRentStep, ".writtenAgreement.steppedDetails.amount")
+    validateCurrency(getKeyStepped(0).amount, pageSixForm, fullDataWithNoOverlap, ".writtenAgreement.steppedDetails.amount")
   }
 
   it should "not allow more than 7 stepped rents" in {
@@ -213,11 +213,9 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate the stepped rent dates do not overlap" in {
-    val data = fullDataWithSecondRentStep.updated(
-      getKeyStepped(0).stepTo + ".year", "2020"
-    )
+    val data = fullDataWithNoOverlap.updated(getKeyStepped(1).stepFrom +".year", "2020")
     val f = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepFrom.day", Errors.overlappingDates, f)
+    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepTo.day",Errors.toDateIsAfterFromDate,f)
   }
 
   object TestData {
@@ -265,6 +263,15 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       writtenLeaseLength + ".months" -> "4")
 
     val fullDataWithSecondRentStep = fullData.
+      updated(getKeyStepped(1).amount, "456.78").
+      updated(getKeyStepped(1).stepFrom + ".day", "1").
+      updated(getKeyStepped(1).stepFrom + ".month", "1").
+      updated(getKeyStepped(1).stepFrom + ".year", "2020").
+      updated(getKeyStepped(1).stepTo + ".day", "1").
+      updated(getKeyStepped(1).stepTo + ".month", "1").
+      updated(getKeyStepped(1).stepTo + ".year", "2019")
+
+    val fullDataWithNoOverlap = fullData.
       updated(getKeyStepped(1).amount, "456.78").
       updated(getKeyStepped(1).stepFrom + ".day", "1").
       updated(getKeyStepped(1).stepFrom + ".month", "1").
