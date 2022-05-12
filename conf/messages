@@ -652,8 +652,8 @@ error.rentFreePeriod.maxLength=The reason for the rent-free period must be 250 c
 
 error.required.paid=Enter the amount paid
 error.required.received=Enter the amount received
-error.maxCurrencyAmountExceeded.paid=Amount must be a number between 1 and 9999999
-error.maxCurrencyAmountExceeded.received=Amount must be a number between 1 and 9999999
+error.maxCurrencyAmountExceeded.paid=Amount paid must be a number between 1 and 9999999
+error.maxCurrencyAmountExceeded.received=Amount received must be a number between 1 and 9999999
 error.invalid_currency.paid=This must be a number
 error.invalid_currency.received=This must be a number
 error.received.month.required= The date the payment was received must include a month
