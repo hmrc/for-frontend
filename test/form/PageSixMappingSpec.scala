@@ -200,14 +200,14 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   it should "not allow more than 7 stepped rents" in {
     val with7SteppedRents = addSteppedRents(6, fullData)
     mustBind(bind(with7SteppedRents)) { _ => () }
-    
+
     val with8SteppedRents = addSteppedRents(7, fullData)
     val form = bind(with8SteppedRents)
     mustOnlyContainError(s"${keys.writtenAgreement}.steppedDetails", Errors.tooManySteppedRents, form)
   }
 
   it should "validate the step to date is not before the step from date" in {
-    val data = fullData.updated(getKeyStepped(0).stepFrom +".year", "2019")
+    val data = fullDataWithNoOverlap.updated(getKeyStepped(0).stepFrom +".year", "2019")
     val f = bind(data)
     mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day",Errors.toDateIsAfterFromDate,f)
   }
@@ -275,7 +275,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       updated(getKeyStepped(1).amount, "456.78").
       updated(getKeyStepped(1).stepFrom + ".day", "1").
       updated(getKeyStepped(1).stepFrom + ".month", "1").
-      updated(getKeyStepped(1).stepFrom + ".year", "2018").
+      updated(getKeyStepped(1).stepFrom + ".year", "2012").
       updated(getKeyStepped(1).stepTo + ".day", "1").
       updated(getKeyStepped(1).stepTo + ".month", "1").
       updated(getKeyStepped(1).stepTo + ".year", "2019")
