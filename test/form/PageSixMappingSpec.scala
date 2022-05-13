@@ -87,6 +87,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustContainError(writtenLeaseLength + ".months", "error.writtenAgreement.leaseLength.months.required", form)
     mustContainError(writtenLeaseLength + ".years", "error.writtenAgreement.leaseLength.years.required", form)
+    
   }
 
   it should "require a lease length if the agreement is not open ended for a verbal contract" in {
