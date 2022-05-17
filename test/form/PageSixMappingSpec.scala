@@ -143,7 +143,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     res.errors.size should be(3)
   }
 
-  it should "return a sepped price details error if 'has stepped agreement' is true but stepped agreement price details are missing" in {
+  it should "return a stepped price details error if 'has stepped agreement' is true but stepped agreement price details are missing" in {
     val testData = fullData.updated(writtenAgreementIsStepped, "true") - getKeyStepped(0).amount
 
     val form = bind(testData)
@@ -190,7 +190,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate stepped rent from date as a date" in {
     val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
-    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
+    val fieldSeq = Seq(getKeyStepped(0).stepFrom, getKeyStepped(0).stepTo)
+    validateDate(fieldSeq, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
   it should "validate the second stepped rent step amount as currency" in {
@@ -216,6 +217,42 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val data = fullDataWithNoOverlap.updated(getKeyStepped(1).stepFrom +".year", "2020")
     val f = bind(data)
     mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepTo.day",Errors.toDateIsAfterFromDate,f)
+  }
+
+  it should "validate that step to rent year is no more than 10 years ahead" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2011")
+    val f = bind(data)
+    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day",Errors.toDateToFarFuture,f)
+  }
+
+  it should "validate that step to rent month is no more than 10 years ahead" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "2")
+    val f = bind(data)
+    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day",Errors.toDateToFarFuture,f)
+  }
+
+  it should "validate that step to rent day is no more than 10 years ahead" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "31")
+    val f = bind(data)
+    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day",Errors.toDateToFarFuture,f)
+  }
+
+  it should "not provide an error when the stepped from and stepped to day is within 10 years" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "1")
+    val f = bind(data)
+    doesNotContainErrors(f)
+  }
+
+  it should "not provide an error when the stepped from and stepped to month is within 10 years" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "1")
+    val f = bind(data)
+    doesNotContainErrors(f)
+  }
+
+  it should "not provide an error when the stepped from and stepped to years are within 10 years" in {
+    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2005")
+    val f = bind(data)
+    doesNotContainErrors(f)
   }
 
   object TestData {
@@ -279,6 +316,15 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       updated(getKeyStepped(1).stepTo + ".day", "1").
       updated(getKeyStepped(1).stepTo + ".month", "1").
       updated(getKeyStepped(1).stepTo + ".year", "2019")
+
+    val dataOverTenYears = fullData.
+      updated(getKeyStepped(0).amount, "456.78").
+      updated(getKeyStepped(0).stepFrom + ".day", "1").
+      updated(getKeyStepped(0).stepFrom + ".month", "1").
+      updated(getKeyStepped(0).stepFrom + ".year", "2000").
+      updated(getKeyStepped(0).stepTo + ".day", "1").
+      updated(getKeyStepped(0).stepTo + ".month", "1").
+      updated(getKeyStepped(0).stepTo + ".year", "2010")
 
     def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] = {
       (1 to n).foldLeft(data) { (s, v) =>
