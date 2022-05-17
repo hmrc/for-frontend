@@ -190,7 +190,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate stepped rent from date as a date" in {
     val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
-    validateDate(getKeyStepped(0).stepFrom, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
+    val fieldSeq = Seq(getKeyStepped(0).stepFrom, getKeyStepped(0).stepTo)
+    validateDate(fieldSeq, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }
 
   it should "validate the second stepped rent step amount as currency" in {

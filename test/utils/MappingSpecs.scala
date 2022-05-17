@@ -118,10 +118,10 @@ trait DateMappingSpecs { this: CommonSpecs =>
     mustBeInPast(field, form, formData, fieldErrorPart)
   }
 
-  def validateDate[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = "") {
-    validateAnyDate(field, form, formData, fieldErrorPart)
-    validateDay(field, form, formData, fieldErrorPart)
-    dateMayBeInFuture(field, form, formData)
+  def validateDate[T](field: Seq[String], form: Form[T], formData: Map[String, String], fieldErrorPart: String = "") {
+    validateAnyDateStepRent(field, form, formData, fieldErrorPart)
+    validateDay(field(0), form, formData, fieldErrorPart)
+    dateMayBeInFuture(field(0), form, formData)
   }
 
   private def validateAnyDate[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String) {
@@ -131,6 +131,15 @@ trait DateMappingSpecs { this: CommonSpecs =>
     yearCanOnlyBe4Digits(field, form, formData)
     yearMustBe1900OrLater(field, form, formData, fieldErrorPart)
     ignoresLeadingAndTraillingWhitespace(field, form, formData)
+  }
+
+  private def validateAnyDateStepRent[T](field: Seq[String], form: Form[T], formData: Map[String, String], fieldErrorPart: String) {
+    monthCanOnlyBe1to12(field(0), form, formData)
+    containError(field(0) + ".month", s"error$fieldErrorPart.month.required", form, formData)
+    containError(field(0) + ".year", s"error$fieldErrorPart.year.required", form, formData)
+    yearCanOnlyBe4Digits(field(0), form, formData)
+    yearMustBe1900OrLaterStepRent(field, form, formData, fieldErrorPart)
+    ignoresLeadingAndTraillingWhitespace(field(0), form, formData)
   }
 
   private def validateDay[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String) {
@@ -179,11 +188,26 @@ trait DateMappingSpecs { this: CommonSpecs =>
     valid foreach { v => validateNoError(key, valid, form, formData) }
   }
 
+  private def yearMustBe1900OrLaterStepRent[T](field: Seq[String], form: Form[T], formData: Map[String, String], fieldErrorPart: String) {
+    val fromKey = field(0) + ".year"
+    val toKey = field(1) + ".year"
+
+    val invalid = Seq("1899", "1000", "0001")
+    invalid foreach { i => validateError(fromKey, invalid, Errors.dateBefore1900 + fieldErrorPart, form, formData, Some(field(0))) }
+
+    val valid = Seq("1900", "1901", "1955", "2014")
+    valid foreach { v =>
+      val d = formData.updated(fromKey, v).updated(toKey, DateTime.parse(v).plusYears(9).getYear.toString)
+      val f = form.bind(d).convertGlobalToFieldErrors()
+      doesNotContainErrors(f)
+    }
+  }
+
   private def ignoresLeadingAndTraillingWhitespace[T](field: String, form: Form[T], formData: Map[String, String]) {
     val yearKey = field + ".year"
     val monthKey = field + ".month"
 
-    val data = formData.updated(monthKey, " 1 ").updated(yearKey, " 2011 ")
+    val data = formData.updated(monthKey, " 1 ").updated(yearKey, " 2021 ")
     val f = form.bind(data)
     doesNotContainErrors(f)
   }
@@ -258,8 +282,8 @@ trait DateMappingSpecs { this: CommonSpecs =>
   def mustBeValidDayInMonth[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = "") {
 
     val invalid = Seq(
-      ("29", "2", "2015"),
-      ("31", "9", "2015")
+      ("29", "2", "2021"),
+      ("31", "9", "2021")
     )
     invalid foreach { iv =>
       val f = updateFullDateAndBind(field, iv, form, formData)
@@ -267,9 +291,9 @@ trait DateMappingSpecs { this: CommonSpecs =>
     }
 
     val valid = Seq(
-      ("29", "2", "2012"),
-      ("31", "8", "2015"),
-      ("30", "9", "2015")
+      ("29", "2", "2020"),
+      ("31", "8", "2021"),
+      ("30", "9", "2021")
     )
     valid foreach {v =>
       val f = updateFullDateAndBind(field, v, form, formData)
