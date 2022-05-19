@@ -16,13 +16,19 @@
 
 package useCases
 
+import actions.RefNumRequest
 import com.google.inject.ImplementedBy
 import connectors.{Document, SubmissionConnector}
 import form.persistence.FormDocumentRepository
+import helpers.AddressAuditing
+import models.Addresses
+
 import javax.inject.{Inject, Singleton}
 import models.journeys.Paths
 import models.pages._
 import models.serviceContracts.submissions._
+import play.api.Logging
+import play.api.libs.json.{JsObject, Json}
 import playconfig.SessionId
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,21 +36,62 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 @ImplementedBy(classOf[SubmitBusinessRentalInformationToBackendApi])
 trait SubmitBusinessRentalInformation {
-  def apply(refNum: String)(implicit hs: HeaderCarrier): Future[Submission]
+  def apply(refNum: String)(implicit hs: HeaderCarrier, request: RefNumRequest[_]): Future[Submission]
 }
 
 @Singleton
-class SubmitBusinessRentalInformationToBackendApi @Inject()(repository: FormDocumentRepository, builder: SubmissionBuilder,
-  subConnector: SubmissionConnector)(implicit ec: ExecutionContext) extends SubmitBusinessRentalInformation {
+class SubmitBusinessRentalInformationToBackendApi @Inject()(
+                                                             repository: FormDocumentRepository,
+                                                             builder: SubmissionBuilder,
+                                                             subConnector: SubmissionConnector,
+                                                             audit: connectors.Audit,
+                                                             auditAddresses: AddressAuditing
+                                                           )(implicit ec: ExecutionContext)
+  extends SubmitBusinessRentalInformation with Logging {
 
-  def apply(refNum: String)(implicit hc: HeaderCarrier): Future[Submission] = {
-    repository.findById(SessionId(hc), refNum) .flatMap {
-      case Some(doc) =>
-        val sub = builder.build(doc)
-        subConnector.submit(refNum, sub) map { _ => sub }
-      case None => Future.failed(RentalInformationCouldNotBeRetrieved(refNum))
+  def apply(refNum: String)(implicit hc: HeaderCarrier, request: RefNumRequest[_]): Future[Submission] = {
+    repository.findById(SessionId(hc), refNum).flatMap {
+      case someDoc @ Some(doc) =>
+        val submission = builder.build(doc)
+        subConnector.submit(refNum, submission).map(
+          _ => {
+            auditFormSubmissionAndAddress(success = true, submission, someDoc)
+            submission
+          }
+        ).recover {
+          case ex: Throwable =>
+            logger.error("Error on form submission", ex)
+            auditFormSubmissionAndAddress(success = false, submission, someDoc)
+            submission
+        }
+      case None =>
+        logger.error(s"Rental information could not be retrieved for reference: $refNum")
+        auditFormSubmissionAndAddress(success = false, JsObject.empty.as[Submission], None)
+        Future.failed(RentalInformationCouldNotBeRetrieved(refNum))
     }
   }
+
+  private def auditFormSubmissionAndAddress[T](success: Boolean, submission: Submission, docOpt: Option[Document])
+                                              (implicit hc: HeaderCarrier, request: RefNumRequest[T]): Future[Unit] = {
+    val auditType = if (success) {
+      "FormSubmission"
+    } else {
+      "FormSubmissionFailed"
+    }
+
+    val submissionJson = Json.toJson(submission).as[JsObject]
+
+    val jsObject = docOpt.map {
+      doc =>
+        val summary = SummaryBuilder.build(doc)
+        auditAddresses(summary, request)
+        submissionJson ++ Addresses.addressJson(summary)
+    }.getOrElse(submissionJson)
+
+    audit.sendExplicitAudit(auditType, jsObject)
+    Future.unit
+  }
+
 }
 
 @ImplementedBy(classOf[DefaultSubmissionBuilder])

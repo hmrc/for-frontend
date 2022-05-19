@@ -16,13 +16,16 @@
 
 package controllers
 
+import actions.RefNumRequest
 import form.persistence.FormDocumentRepository
+
 import javax.inject.Singleton
 import models.serviceContracts.submissions.Submission
 import org.scalatest.GivenWhenThen
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -32,12 +35,13 @@ import utils.stubs.StubFormDocumentRepoProvider
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
+import scala.language.postfixOps
 
 class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with GivenWhenThen with GuiceOneAppPerSuite {
 
   import TestData._
 
-  override def fakeApplication() = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
       bind[SubmitBusinessRentalInformation].to[StubSubmitBRI].in[Singleton],
       bind[FormDocumentRepository].toProvider[StubFormDocumentRepoProvider].in[Singleton]
@@ -88,13 +92,14 @@ object StubSubmitBRI {
 }
 
 class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers {
-  lazy val stubSubmission = Submission(
+
+  lazy val stubSubmission: Submission = Submission(
     None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
   )
 
   var submittedRefNums: Seq[String] = Seq.empty
 
-  def apply(refNum: String)(implicit hc: HeaderCarrier): Future[Submission] = {
+  def apply(refNum: String)(implicit hc: HeaderCarrier, request: RefNumRequest[_]): Future[Submission] = {
     Console.println(s"=== called apply with : ${refNum} ===")
     Future.successful {
       submittedRefNums = submittedRefNums :+ refNum;
@@ -102,7 +107,7 @@ class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers
     }
   }
 
-  def assertBRISubmittedFor(refNum: String) {
+  def assertBRISubmittedFor(refNum: String): Unit = {
     submittedRefNums should equal(Seq(refNum))
   }
 

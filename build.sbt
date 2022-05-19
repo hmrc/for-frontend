@@ -23,8 +23,8 @@ val compileDeps = Seq(
   filters,
   ws,
   "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "5.24.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "3.15.0-play-28",
-  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.63.0",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "3.17.0-play-28",
+  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.64.0",
   "uk.gov.hmrc" %% "http-caching-client" % "9.6.0-play-28",
   "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.11.0-play-28",
   "uk.gov.hmrc" %% "play-partials" % "8.3.0-play-28",
@@ -36,7 +36,7 @@ val compileDeps = Seq(
 )
 
 val scalatestPlusPlayVersion = "5.1.0"
-val scalatestVersion = "3.2.11"
+val scalatestVersion = "3.2.12"
 val mockitoScalaVersion = "1.17.5"
 val flexmarkVersion = "0.62.2"
 

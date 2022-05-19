@@ -85,18 +85,18 @@ class NotConnectedCheckYourAnswersController @Inject()
 
   def onPageSubmit = refNumAction.async { implicit request =>
     findSummary.flatMap {
-      case Some(summary) => {
+      case Some(summary) =>
         val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++ Addresses.addressJson(summary)
-        audit.sendExplicitAudit("NotConnectedSubmission", json)
         submitToHod(summary).map { _ =>
+          audit.sendExplicitAudit("NotConnectedSubmission", json)
           Redirect(routes.NotConnectedCheckYourAnswersController.onConfirmationView)
         }.recover {
-          case e: Exception => {
+          case e: Exception =>
             logger.error(s"Could not send data to HOD - ${request.refNum} - ${hc.sessionId}")
+            audit.sendExplicitAudit("NotConnectedSubmissionFailed", json)
             InternalServerError(errorView(500))
-          }
         }
-      }
+      case None => NotFound(errorView(404))
     }
   }
 

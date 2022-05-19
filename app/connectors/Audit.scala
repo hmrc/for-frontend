@@ -65,7 +65,7 @@ trait Audit extends AuditConnector {
   }
 
   def apply(event: String, submission: Submission)(implicit hc: HeaderCarrier): Future[AuditResult] = {
-    val sub = (implicitly[OWrites[Submission]]).writes(submission)
+    val sub = implicitly[OWrites[Submission]].writes(submission)
     val de = ExtendedDataEvent(auditSource = AUDIT_SOURCE, auditType = event, detail = sub)
     sendExtendedEvent(de)
   }
