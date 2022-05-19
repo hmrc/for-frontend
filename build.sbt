@@ -23,7 +23,7 @@ val compileDeps = Seq(
   filters,
   ws,
   "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "5.24.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "3.17.0-play-28",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "3.18.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.64.0",
   "uk.gov.hmrc" %% "http-caching-client" % "9.6.0-play-28",
   "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.11.0-play-28",
