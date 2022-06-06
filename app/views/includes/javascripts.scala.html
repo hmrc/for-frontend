@@ -25,13 +25,13 @@
     document.documentElement.className = document.documentElement.className.replace("no-js","js");
 </script>
 
-	<script src="@routes.Assets.at("javascripts/vendor/jquery-1.11.3.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/vendor/jquery-1.11.3.min.js")" type="text/javascript"></script>
 	@if(environment.mode == Dev){
-        <script src="@routes.Assets.at(s"javascripts/app.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned(s"javascripts/app.js")" type="text/javascript"></script>
     }else{
-        <script src="@routes.Assets.at("javascripts/app.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/app.min.js")" type="text/javascript"></script>
     }
-	<script src="@routes.Assets.at("javascripts/vendor/typeahead.bundle.min.js")" type="text/javascript"></script>
-	<script src="@routes.Assets.at("javascripts/vendor/jsconf.min.js")" type="text/javascript"></script>
-	<script src="@routes.Assets.at("javascripts/polyfills/details.polyfill.min.js")" type="text/javascript"></script>
-	<script src="@routes.Assets.at("javascripts/polyfills/toISOString.polyfill.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/vendor/typeahead.bundle.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/vendor/jsconf.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/polyfills/details.polyfill.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/polyfills/toISOString.polyfill.min.js")" type="text/javascript"></script>

@@ -15,7 +15,6 @@
  *@
 
 @import play.api.Environment
-@import play.api.Mode.Dev
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTimeoutDialogHelper
 
 @this(
@@ -25,7 +24,7 @@
 
 @(enableTimeoutDialog: Boolean)(implicit request: RequestHeader, messages: Messages)
 
-<link href='@controllers.routes.Assets.at("stylesheets/application2.css")' media="all" rel="stylesheet" type="text/css" />
+<link href='@routes.Assets.versioned("stylesheets/application2.min.css")' media="all" rel="stylesheet" type="text/css" />
 
 @if(enableTimeoutDialog) {
  @hmrcTimeoutDialogHelper(

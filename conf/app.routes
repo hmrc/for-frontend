@@ -49,7 +49,7 @@ GET         /page/:pageNumber          controllers.dataCapturePages.PageControll
 POST        /page/:pageNumber          controllers.dataCapturePages.PageController.savePage(pageNumber:Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file              controllers.Assets.at(path="/public", file)
+GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
 
 # ERROR PAGES
 GET         /404                       controllers.ApplicationController.error404
