@@ -91,7 +91,7 @@ class AgentAPI @Inject()(cc: MessagesControllerComponents,
 
     jsonBody.validate[IpLockout] match {
       case JsSuccess(IpLockout(0), _) =>
-        Json.parse("""{"code": "IP_LOCKOUT", "message": "This IP address is locked out for 24 hours due to too many failed login attempts"}""")
+        Json.parse("""{"code": "IP_LOCKOUT", "message": "This IP address is locked out for 2 hours due to too many failed login attempts"}""")
       case JsSuccess(IpLockout(count), _) =>
         Json.parse(s"""{"code": "INVALID_CREDENTIALS", "message": "Invalid credentials: $refNum - $postcode; $count tries remaining until IP lockout"}""")
       case other => jsonBody
