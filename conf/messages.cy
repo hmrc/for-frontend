@@ -1054,9 +1054,9 @@ error.too_many_sublets=Gallwch ond rhoi manylion 5 o is-osodiadau
 error.required.parking=Rhaid llenwi o leiaf un a gyda gwerth sy’n fwy na 0
 
 error.login.failed=Nodwch y cyfeirnod a’r côd post fel y maent yn ymddangos yn y llythyr yr anfonom atoch
-error.login.attemptsleft=Mae gennych chi {0} ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 24 awr.
-error.login.1.attempt.left=Mae gennych chi un ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 24 awr.
-error.login.lockedOut=Rydych wedi eich cloi allan nawr. Gallwch roi cynnig arall arni ar ôl 24 awr.
+error.login.attemptsleft=Mae gennych chi {0} ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 2 awr.
+error.login.1.attempt.left=Mae gennych chi un ymgais ar ôl i nodi’r manylion cywir cyn i’ch cyfrif cael ei gloi am 2 awr.
+error.login.lockedOut=Rydych wedi eich cloi allan nawr. Gallwch roi cynnig arall arni ar ôl 2 awr.
 
 error.buildingNameNumber.required = Nodwch linell gyntaf y cyfeiriad
 error.buildingNameNumber.maxLength = Mae’n rhaid i linell gyntaf y cyfeiriad fod yn 50 o gymeriadau neu lai

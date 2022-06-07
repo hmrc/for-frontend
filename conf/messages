@@ -1044,9 +1044,9 @@ error.too_many_alterations=You can only provide details of 10 alterations
 error.too_many_sublets=You can only provide details of 5 sub-lets.
 error.required.parking=At least one must be filled in and greater than 0
 error.login.failed=Enter the reference number and postcode as they appear in the letter we sent you.
-error.login.attemptsleft=You have {0} remaining attempts to enter the correct details before your account is locked for 24 hours.
-error.login.1.attempt.left=You have one remaining attempt to enter the correct details before your account is locked for 24 hours.
-error.login.lockedOut=You are now locked out. You can try again after 24 hours.
+error.login.attemptsleft=You have {0} remaining attempts to enter the correct details before your account is locked for 2 hours.
+error.login.1.attempt.left=You have one remaining attempt to enter the correct details before your account is locked for 2 hours.
+error.login.lockedOut=You are now locked out. You can try again after 2 hours.
 
 error.buildingNameNumber.required = Enter the first line of the address
 error.buildingNameNumber.maxLength = First line of the address must be 50 characters or fewer
