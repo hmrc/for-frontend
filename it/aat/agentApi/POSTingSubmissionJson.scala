@@ -99,7 +99,7 @@ class POSTingSubmissionJson extends AcceptanceTest {
       val res = AgentApi.submit(lockedOut.refNum, lockedOut.postcode, validSubmission)
 
       assert(res.status === 401)
-      assert(res.body === Json.parse("""{"code": "IP_LOCKOUT", "message":"This IP address is locked out for 24 hours due to too many failed login attempts"}""").toString)
+      assert(res.body === Json.parse("""{"code": "IP_LOCKOUT", "message":"This IP address is locked out for 2 hours due to too many failed login attempts"}""").toString)
   }
 
   "When POSTting a submission using a non-test account when only test accounts are allowed" should
