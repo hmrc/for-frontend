@@ -18,6 +18,7 @@ package template
 
 import play.twirl.api.Html
 import play.api.data.Field
+import views.html.includes.decorateWithId
 
 import scala.collection.immutable.IndexedSeq
 
@@ -32,15 +33,10 @@ object repeatWithIndex {
   private def buildHtml(field: Field, f: (Field, Int) => Html, numberOfExistingEntries: Int, index: Int): Html = {
     val html = f(field("[" + index + "]"), index)
     val id = IndexedFieldId(field.name, index)
-    if (index > 0 && index >= numberOfExistingEntries)
-      decorateWithJsDeleteAndId(html, id)
-    else
-      justDecorateWithId(html, id)
+    val deleteByJS = index > 0 && index >= numberOfExistingEntries
+    decorateWithId(id, html, deleteByJS)
   }
 
-  private def decorateWithJsDeleteAndId(h: Html, id: String) = Html(s"""<div id="$id" class="deleteifjs" >${h.toString()}</div>""")
-
-  private def justDecorateWithId(h: Html, id: String) = Html(s"""<div id="$id" >${h.toString()}</div>""")
 }
 
 object IndexedFieldId {

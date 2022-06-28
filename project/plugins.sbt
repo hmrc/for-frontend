@@ -11,7 +11,7 @@ addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.6.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "2.4.0")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.0-RC2")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.0")
 
 addSbtPlugin("io.github.irundaia" % "sbt-sassify" % "1.5.2")
 

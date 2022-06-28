@@ -39,7 +39,7 @@ val compileDeps = Seq(
 
 val scalatestPlusPlayVersion = "5.1.0"
 val scalatestVersion = "3.2.12"
-val mockitoScalaVersion = "1.17.5"
+val mockitoScalaVersion = "1.17.7"
 val flexmarkVersion = "0.62.2"
 
 def testDeps(scope: String) = Seq(
