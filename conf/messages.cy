@@ -117,7 +117,7 @@ button.label.save=Cadw ar gyfer nes ymlaen
 label.letter=Gallwch weld eich cyfeirnod a’ch cod post yn eich llythyr manylion rhent a phrydles.
 label.referenceNumber=Cyfeirnod
 hint.letter=Fel y mae’n ymddangos ar y llythyr cais am wybodaeth
-error.invalid_refnum=Rhowch y cyfeirnod fel y mae'n ymddangos ar eich llythyr
+error.invalid_refnum=Rhowch y cyfeirnod fel y mae’n ymddangos ar eich llythyr
 error.invalid_postcode_as_on_letter=Nodwch eich cod post fel mae’n ymddangos ar eich llythyr
 heading.login.lockedOut=Rydych wedi eich cloi allan nawr
 heading.login.loginFailed=Nid yw’r manylion yr ydych wedi eu nodi yn cyfateb gydag ein cofnodion    
@@ -183,7 +183,7 @@ label.alternativeContact.address.townCity=Tref neu ddinas
 label.alternativeContact.address.postcode=Cod post
 label.alternativeContact.contactDetails=Person cyswllt amgen
 label.alternativeContact.address=Cyfeiriad y person cyswllt amgen
-hint.anyQueries=Byddwn ond yn defnyddio'r manylion hyn i'ch diweddaru am eich ymholiad.
+hint.anyQueries=Byddwn ond yn defnyddio’r manylion hyn i’ch diweddaru am eich ymholiad.
 hint.occupierExplanation=Os ydych yn rhentu neu’n prydlesu’r eiddo, hyd yn oed fel elusen neu sefydliad di-elw, ystyrir mai chi yw’r meddiannydd.  Os mai chi yw’r perchennog a’r meddiannydd, dewiswch ‘Perchennog neu ymddiriedolwr ar ran y perchennog’.
 label.noJs.contactDetails.email1=Dylech ond ateb hyn os ydych wedi dewis ‘E-bost’ neu ‘Y ddau’
 label.noJs.contactDetails.phone=Dylech ond ateb hyn os ydych wedi dewis ‘Ffôn’ neu ‘Y ddau’
@@ -235,7 +235,7 @@ error.propertyType.maxLength=Mae’n rhaid i ddefnydd yr eiddo fod yn 100 o gyme
 error.companyName.required=Nodwch enw’r cwmni
 error.companyName.maxLength=The company name must be 50 characters or fewer
 error.occupiersName.required=Nodwch enw olaf y prif feddiannydd
-error.occupiersName.maxLength=The Main Occupier's name must be 50 characters or fewer
+error.occupiersName.maxLength=The Main Occupier’s name must be 50 characters or fewer
 error.noRentDetails.required=Nodwch y rheswm nad ydych yn talu rhent ar yr eiddo hwn
 error.noRentDetails.maxLength=The reason for not paying rent must be 249 characters or fewer
 
@@ -280,7 +280,7 @@ subletType.all=Y cyfan
 subletType.part=Rhan ohono
 
 error.propertyIsSublet.required=Dewiswch ‘Oes’ os oes unrhyw ran o’r eiddo yn cael ei osod neu ei is-osod i unrhyw un arall
-error.subletType.required=Dewiswch faint o'r eiddo sy'n cael ei osod neu ei is-osod
+error.subletType.required=Dewiswch faint o’r eiddo sy’n cael ei osod neu ei is-osod
 error.sublet.tenantFullName.required = Nodwch enw’ch tenant
 error.sublet.tenantFullName.maxLength = Mae’n rhaid i enw’ch tenant fod yn 50 o gymeriadau neu lai
 error.sublet.rentFixedDate.month.required = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei osod neu ei is-osod gynnwys mis
@@ -393,25 +393,25 @@ label.writtenAgreement.steppedDetails.hint=Rhowch y swm blynyddol hyd yn oed os 
 label.writtenAgreement.steppedDetails=Manylion rhent grisiog
 hint.leaseAgreementType=Ar gyfer prydlesi neu gytundebau tenantiaeth lluosog, nodwch fanylion y brydles sylfaenol ac yna cysylltwch â’r Swyddfa Brisio i roi manylion yn ymwneud â phrydlesi neu gytundebau eraill.
 
-writtenAgreement.steppedDetails.stepFrom.day.error.steppedDetails.overlappingDates= Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails0.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails1.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails2.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails3.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails4.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails5.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails6.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
-writtenAgreement.steppedDetails7.stepFrom.day.error.steppedDetails.overlappingDates=Mae'n rhaid i'r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails.stepFrom.day.error.steppedDetails.overlappingDates= Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails0.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails1.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails2.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails3.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails4.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails5.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails6.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
+writtenAgreement.steppedDetails7.stepFrom.day.error.steppedDetails.overlappingDates=Mae’n rhaid i’r dyddiad gris o fod ar ôl unrhyw ddyddiadau gris blaenorol
 
-writtenAgreement.steppedDetails.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails0.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails1.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails2.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails3.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails4.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails5.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails6.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
-writtenAgreement.steppedDetails7.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae'n rhaid i'r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails0.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails1.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails2.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails3.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails4.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails5.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails6.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
+writtenAgreement.steppedDetails7.stepTo.day.error.writtenAgreement.steppedDetails.stepTo.day=Mae’n rhaid i’r dyddiad gris i fod ar ôl y dyddiad gris o
 
 error.leaseType.required=Dewiswch y math o brydles neu gytundeb
 error.leaseOpenEnded.required=Dewiswch ‘Ydy’ os yw’r cytundeb cyfredol yn benagored
@@ -533,7 +533,7 @@ error.rentBasedOnDetails.maxLength = Mae’n rhaid i fanylion y rhent sylfaenol 
 
 error.rentBecomePayable.day.required = Mae’n rhaid i’r dyddiad y dechreuodd y tenant dalu’r rhent presennol gynnwys diwrnod
 error.rentBecomePayable.month.required = Mae’n rhaid i’r dyddiad y dechreuodd y tenant dalu’r rhent presennol gynnwys mis
-error.rentBecomePayable.year.required = Mae’n rhaid i'r dyddiad y dechreuodd y tenant dalu’r rhent presennol gynnwys blwyddyn
+error.rentBecomePayable.year.required = Mae’n rhaid i’r dyddiad y dechreuodd y tenant dalu’r rhent presennol gynnwys blwyddyn
 error.date_before_1900.rentBecomePayable = Mae’n rhaid i’r dyddiad y dechreuodd y tenant dalu’r rhent presennol fod rhwng 1 Ionawr 1900 a heddiw
 error.date_must_be_in_past.rentBecomePayable = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 
@@ -563,14 +563,14 @@ hint.landOnly=Er enghraifft, nid oes unrhyw adeiladau ar y safle, neu mae’r te
 label.shellUnit=A yw’r rhent hwn yn seiliedig ar adeilad gwag (cragen)?
 label.shellUnit.agent=Ai ar adeilad gwag (cragen) y mae rhent eich cleient yn seiliedig?
 hint.shellUnit=Er enghraifft, adeilad newydd heb waliau mewnol, toiledau, gwres, golau na gorffeniadau.
-label.rentDetails=Rhowch fanylion ar gyfer unrhyw gwestiynau lle gwnaethoch ateb ‘Ie’.
+label.rentDetails=Darparwch fwy o fanylion am yr hyn y mae’r rhent yn ei gynnwys.
 label.rentDetails.agent=Nodwch fanylion os ydych chi wedi ateb yn gadarnhaol i unrhyw un o’r cwestiynau hyn
 hint.rentDetails=Nodwch fanylion os gwnaethoch ddewis ‘Ydy/Oedd’ i unrhyw o’r cwestiynau yn yr adran hon.
-hint.rentDetails.livingAccommodation=
-hint.rentDetails.partRent=
-hint.rentDetails.otherProperty=
-hint.rentDetails.landOnly=
-hint.rentDetails.shellUnit=
+hint.rentDetails.livingAccommodation=Rhowch fanylion y llety, megis faint o ystafelloedd gwely sydd ganddo.
+hint.rentDetails.partRent=Dywedwch wrthym am ba rannau o’r eiddo rydych yn talu rhent.
+hint.rentDetails.otherProperty=Rhowch gyfeiriad yr eiddo busnes arall sydd wedi’i gynnwys yn y rhent hwn.
+hint.rentDetails.landOnly=Darparwch fanylion unrhyw adeiladau sydd wedi’u hadeiladu ers cytuno ar y brydles.
+hint.rentDetails.shellUnit=Rhowch fanylion y gwaith gosod a’r costau.
 label.parking.rentIncludeParking=A yw defnyddio garejis neu fannau parcio wedi’i gynnwys yn y rhent hwn?
 label.parking.rentIncludeParking.agent=A yw defnyddio garejis neu fannau parcio wedi’i gynnwys yn rhent eich cleient?
 hint.label.parking.rentIncludeParking=Os oes gan y tenant nifer amhenodol o fannau mewn maes parcio cymunol, nodwch frasamcan o nifer y mannau sydd ar gael iddo.
@@ -782,7 +782,7 @@ error.anyOtherFactorsDetailsText.maxLength=Mae’n rhaid i fanylion ynghylch bet
 ###############################
 label.confirm.heading=Diolch, cafodd eich ffurflen ei hanfon yn llwyddiannus
 label.confirm.subheading=Eich rhif cyflwyno ffurflen yw:
-label.button.download=Argraffwch gopi o'ch ffurflen (yn agor mewn tab newydd)
+label.button.download=Argraffwch gopi o’ch ffurflen (yn agor mewn tab newydd)
 label.email.sent=Anfonwn gopi o’ch cyflwyniad i’r cyfeiriad e-bost a roddwyd gennych.
 label.email.request=Bydd angen i chi darparu cyfeiriad e-bost os ydych am gael e-bost cadarnhau.
 label.whatNext=Beth sy’n digwydd nesaf
@@ -804,7 +804,7 @@ label.satisfaction.1=Ar y cyfan, sut oeddwch chi’n teimlo ynglŷn â’r gwasa
 hint.limit=Yr uchafswm yw 1200 o nodau
 text.survey.bottomCopy=Peidiwch â chynnwys unrhyw wybodaeth bersonol nac ariannol, er enghraifft eich rhif Yswiriant Gwladol neu rifau cardiau credyd.
 text.survey.bottomImprove=Er mwyn ein helpu i wella’r gwasanaeth hwn, dylech gynnwys cymaint o wybodaeth â phosibl. Er enghraifft, os oedd cwestiwn yn ddryslyd, gadewch i ni wybod pa un.
-confirm.link.feedback=Beth oeddech chi'n feddwl o'r gwasanaeth hwn? (mae’n cymryd 30 eiliad)
+confirm.link.feedback=Beth oeddech chi’n feddwl o’r gwasanaeth hwn? (mae’n cymryd 30 eiliad)
 
 #DECLARATION
 ###############################
@@ -836,7 +836,7 @@ saveForLater.validPassword=Rhaid i’r cyfrinair fod o leiaf 7 nod yn hir.
 saveForLater.print=Argraffwch y dudalen hon
 saveForLater.pleaseEnterPassword=Rhowch eich cyfrinair
 saveForLater.invalidPassword=Rhowch y cyfrinair cywir
-saveForLater.hint=Hwn fydd y cyfrinair a grëwyd gennych neu'r un a roddwyd ichi pan gawsoch eich amseru o'r gwasanaeth.
+saveForLater.hint=Hwn fydd y cyfrinair a grëwyd gennych neu’r un a roddwyd ichi pan gawsoch eich amseru o’r gwasanaeth.
 saveForLater.invalidPassword=Nid yw’r cyfrinair a roddwyd gennych yn gywir
 saveForLater.haveYouForgotten=Os ydych wedi anghofio eich cyfrinair, bydd angen i chi roi eich holl wybodaeth eto
 saveForLater.logout=Allgofnodi
@@ -925,8 +925,8 @@ feedback.rating.1=Anfodlon iawn
 label.feedback.comments=Sut fedrwn ni wella’r gwasanaeth hwn? (dewisol)
 feedback.comments.hint=Peidiwch â chynnwys unrhyw wybodaeth bersonol nac ariannol. Er enghraifft, eich rhif Yswiriant Gwladol neu rif eich cerdyn credyd.
 feedback.comments.label=Sylwadau (dewisol)
-feedback.rating.required=Dewiswch pa mor fodlon ydych chi gyda'r gwasanaeth hwn
-feedback.commments.maxLength=Rhaid i'r sylwadau fod yn 1200 nod neu lai
+feedback.rating.required=Dewiswch pa mor fodlon ydych chi gyda’r gwasanaeth hwn
+feedback.commments.maxLength=Rhaid i’r sylwadau fod yn 1200 nod neu lai
 
 #VACATED FORM
 ###############################
