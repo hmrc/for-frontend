@@ -25,7 +25,7 @@ import models.serviceContracts.submissions.Address
 
 import javax.inject.Inject
 import org.joda.time.DateTime
-import play.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.JodaForms._
@@ -33,6 +33,7 @@ import play.api.libs.json.{Format, Json}
 import play.api.mvc._
 import playconfig.LoginToHODAction
 import security.{DocumentPreviouslySaved, NoExistingDocument}
+import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -72,7 +73,7 @@ class LoginController @Inject()(
   loginFailedView: loginFailed,
   lockedOutView: views.html.lockedOut
 )
-(implicit ec: ExecutionContext) extends FrontendController(cc) {
+(implicit ec: ExecutionContext) extends FrontendController(cc) with Logging {
 
   import LoginController.loginForm
 
@@ -126,17 +127,27 @@ class LoginController @Inject()(
       case Upstream4xxResponse(_, 403, _, _) => Conflict(errorView(403))
       case Upstream4xxResponse(body, 401, _, _) =>
         val failed = Json.parse(body).as[FailedLoginResponse]
-        Logger.info(s"Failed login: RefNum: $ref1$ref2 Attempts remaining: ${failed.numberOfRemainingTriesUntilIPLockout}")
-        if (failed.numberOfRemainingTriesUntilIPLockout < 1)
+        val remainingAttempts = failed.numberOfRemainingTriesUntilIPLockout
+        logger.warn(s"Failed login: RefNum: $ref1$ref2 Attempts remaining: $remainingAttempts")
+        if (remainingAttempts < 1) {
+          val clientIP = r.headers.get(trueClientIp).getOrElse("")
+          auditLockedOut(cleanedRefNumber, cleanPostcode, clientIP)(hc2)
+
           Redirect(routes.LoginController.lockedOut)
-        else
-          Redirect(routes.LoginController.loginFailed(failed.numberOfRemainingTriesUntilIPLockout))
+        } else {
+          Redirect(routes.LoginController.loginFailed(remainingAttempts))
+        }
     }
   }
 
   private def auditLogin(refNumber: String, returnUser: Boolean, address: Address)(implicit hc: HeaderCarrier): Unit = {
     val json = Json.obj("returningUser" -> returnUser, Audit.referenceNumber -> refNumber, Audit.address -> address)
     audit.sendExplicitAudit("UserLogin", json)
+  }
+
+  private def auditLockedOut(refNumber: String, postcode: String, lockedIP: String)(implicit hc: HeaderCarrier): Unit = {
+    val detailJson = Json.obj(Audit.referenceNumber -> refNumber, "postcode" -> postcode, "lockedIP" -> lockedIP)
+    audit.sendExplicitAudit("LockedOut", detailJson)
   }
 
   def lockedOut = Action { implicit request =>
