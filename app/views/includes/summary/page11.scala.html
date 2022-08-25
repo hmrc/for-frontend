@@ -32,7 +32,7 @@
 		@p11.rentFreePeriodDetails.map { rfp =>
 
 			@summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodLength"), 11, "rentFreePeriodDetails_rentFreePeriodLength") {
-				@rfp.lengthInMonths
+				@rfp.lengthInMonths @messages("label.rentFreePeriodDetails.rentFreePeriodLength.months").toLowerCase
 			}
 
 			@summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodDetails"), 11, "rentFreePeriodDetails_rentFreePeriodDetails") {

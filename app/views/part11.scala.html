@@ -29,7 +29,9 @@
         govukDateInput:GovukDateInput,
         hmrcCurrencyInput : HmrcCurrencyInput,
         govukCharacterCount: GovukCharacterCount,
-        govukDetails:GovukDetails,
+        govukDetails: GovukDetails,
+        govukFieldset: GovukFieldset,
+        govukHint: GovukHint,
         formWithCSRF: FormWithCSRF,
         formHelp: includes.formHelp)
 
@@ -37,6 +39,29 @@
 @(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+
+@rentFreeMonthsInput = {
+    @govukHint(
+        Hint(
+            id = Some("rentFreePeriodDetails.rentFreePeriodLength-hint"),
+            content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodLength" + labelSuffix))
+        )
+    )
+    @govukInput(
+        Input(
+            id = "rentFreePeriodDetails.rentFreePeriodLength",
+            name = "rentFreePeriodDetails.rentFreePeriodLength",
+            value = theForm("rentFreePeriodDetails.rentFreePeriodLength").value,
+            classes = "govuk-input--width-20",
+            errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodLength"),
+            attributes = Map("maxLength" -> "3"),
+            label = Label(
+                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength.months")),
+                classes = "govuk-!-font-weight-bold"
+            )
+        )
+    )
+}
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(10).url,
@@ -85,21 +110,14 @@
 
     <div data-hidden-by="rentFreePeriod" data-show-when-value-equals="true" data-hides-this="true" >
 
-        @govukInput(
-            Input(
-                id = "rentFreePeriodDetails.rentFreePeriodLength",
-                name = "rentFreePeriodDetails.rentFreePeriodLength",
-                value = theForm("rentFreePeriodDetails.rentFreePeriodLength").value,
-                classes = "govuk-input--width-20",
-                errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodLength"),
-                attributes=( Map("maxLength" -> "3")),
-                label = Label(
-                    content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                hint = Hint(content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodLength" + labelSuffix)))
-            )
-        )
+        @govukFieldset(Fieldset(
+            legend = Legend(
+                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength")),
+                classes = "govuk-fieldset__legend--l",
+                isPageHeading = true
+            ),
+            html = rentFreeMonthsInput
+        ))
 
         @govukCharacterCount(
             CharacterCount(
