@@ -52,12 +52,11 @@
             id = "rentFreePeriodDetails.rentFreePeriodLength",
             name = "rentFreePeriodDetails.rentFreePeriodLength",
             value = theForm("rentFreePeriodDetails.rentFreePeriodLength").value,
-            classes = "govuk-input--width-20",
+            classes = "govuk-input--width-3",
             errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodLength"),
             attributes = Map("maxLength" -> "3"),
             label = Label(
-                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength.months")),
-                classes = "govuk-!-font-weight-bold"
+                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength.months"))
             )
         )
     )
@@ -113,8 +112,7 @@
         @govukFieldset(Fieldset(
             legend = Legend(
                 content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength")),
-                classes = "govuk-fieldset__legend--l",
-                isPageHeading = true
+                classes = "govuk-!-font-weight-bold"
             ),
             html = rentFreeMonthsInput
         ))
