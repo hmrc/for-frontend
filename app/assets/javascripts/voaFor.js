@@ -62,6 +62,11 @@
             if ($sectionHeading.length > 0) {
                 $sectionHeading.text(index + 1 );
             }
+
+            var $steppedRentHeading = $clone.find('h3.stepped-rent');
+            if ($steppedRentHeading.length > 0) {
+                $steppedRentHeading.text(window.steppedRentHeadings[index]);
+            }
         }
         function changeIdAndLabelId($container, $elem, newIndex) {
             var oldId = $elem.attr('id');

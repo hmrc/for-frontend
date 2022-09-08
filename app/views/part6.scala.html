@@ -80,6 +80,18 @@
   theForm = theForm
 ){
 
+  <script>
+          var steppedRentHeadings = [
+            '@messages(s"heading.steppedRent1")',
+            '@messages(s"heading.steppedRent2")',
+            '@messages(s"heading.steppedRent3")',
+            '@messages(s"heading.steppedRent4")',
+            '@messages(s"heading.steppedRent5")',
+            '@messages(s"heading.steppedRent6")',
+            '@messages(s"heading.steppedRent7")'
+          ];
+  </script>
+
   @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(6), args = 'class -> "myForm", 'id -> "myFormId") {
 
     <input type="hidden" name="variant" value="@variant" />
@@ -326,7 +338,7 @@
 
                 @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {
 
-                <h3 class="govuk-heading-m section-heading">@messages("heading.steppedRent") <span>@{idx + 1}</span></h3>
+                <h3 class="govuk-heading-m section-heading stepped-rent">@messages(s"heading.steppedRent${idx + 1}")</h3>
 
                   @includes.dateFields(
                     form= theForm,
