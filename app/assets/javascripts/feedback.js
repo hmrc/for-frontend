@@ -19,6 +19,12 @@
 
             $.ajax({
                 type: 'POST',
+                url:  '/' + VoaFor.service() + '/pageHelp',
+                data: $(this).serialize() + '&referer=' + window.location.href
+            });
+
+            $.ajax({
+                type: 'POST',
                 url:  $(this).attr('action'),
                 data: data,
                 success: function() {

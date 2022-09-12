@@ -65,6 +65,9 @@ GET         /500                       controllers.ApplicationController.error50
 GET         /survey                         controllers.feedback.SurveyController.onPageView(journey: String)
 POST        /survey                         controllers.feedback.SurveyController.formCompleteFeedback
 
+# PAGE HELP
+POST        /pageHelp                       controllers.feedback.SplunkAuditController.submitPageHelp
+
 # IN-PAGE FEEDBACK
 GET         /thankyou-for-your-feedback     controllers.feedback.FeedbackController.feedbackThankyou
 GET 		/feedback           	        controllers.feedback.FeedbackController.feedback
