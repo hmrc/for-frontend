@@ -88,7 +88,7 @@ class NotConnectedCheckYourAnswersController @Inject()
       case Some(summary) =>
         val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++
           Addresses.addressJson(summary) ++
-          audit.languageJson
+          Audit.languageJson
         submitToHod(summary).map { _ =>
           audit.sendExplicitAudit("NotConnectedSubmission", json)
           Redirect(routes.NotConnectedCheckYourAnswersController.onConfirmationView)

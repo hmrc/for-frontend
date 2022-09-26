@@ -18,7 +18,7 @@ package useCases
 
 import actions.RefNumRequest
 import com.google.inject.ImplementedBy
-import connectors.{Document, SubmissionConnector}
+import connectors.{Audit, Document, SubmissionConnector}
 import form.persistence.FormDocumentRepository
 import helpers.AddressAuditing
 import models.Addresses
@@ -88,7 +88,7 @@ class SubmitBusinessRentalInformationToBackendApi @Inject()(
         submissionJson ++ Addresses.addressJson(summary)
     }.getOrElse(submissionJson)
 
-    audit.sendExplicitAudit(auditType, jsObject ++ audit.languageJson)
+    audit.sendExplicitAudit(auditType, jsObject ++ Audit.languageJson)
     Future.unit
   }
 

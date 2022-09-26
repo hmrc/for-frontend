@@ -71,9 +71,6 @@ trait Audit extends AuditConnector {
     sendExtendedEvent(de)
   }
 
-  def languageJson(implicit messages: Messages): JsObject =
-    Json.obj(Audit.language -> messages.lang.language)
-
 }
 
 object Audit {
@@ -81,6 +78,10 @@ object Audit {
   val address = "address"
   val updatedAddress = "updatedAddress"
   val language = "language"
+
+  def languageJson(implicit messages: Messages): JsObject =
+    Json.obj(Audit.language -> messages.lang.language)
+
 }
 
 @Singleton
