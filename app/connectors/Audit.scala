@@ -22,6 +22,7 @@ import models.pages.Summary
 
 import javax.inject.{Inject, Singleton}
 import models.serviceContracts.submissions.Submission
+import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json, OWrites}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
@@ -70,12 +71,16 @@ trait Audit extends AuditConnector {
     sendExtendedEvent(de)
   }
 
+  def languageJson(implicit messages: Messages): JsObject =
+    Json.obj(Audit.language -> messages.lang.language)
+
 }
 
 object Audit {
   val referenceNumber = "referenceNumber"
   val address = "address"
   val updatedAddress = "updatedAddress"
+  val language = "language"
 }
 
 @Singleton

@@ -86,7 +86,9 @@ class NotConnectedCheckYourAnswersController @Inject()
   def onPageSubmit = refNumAction.async { implicit request =>
     findSummary.flatMap {
       case Some(summary) =>
-        val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++ Addresses.addressJson(summary)
+        val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++
+          Addresses.addressJson(summary) ++
+          audit.languageJson
         submitToHod(summary).map { _ =>
           audit.sendExplicitAudit("NotConnectedSubmission", json)
           Redirect(routes.NotConnectedCheckYourAnswersController.onConfirmationView)

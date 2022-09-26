@@ -88,7 +88,7 @@ class SubmitBusinessRentalInformationToBackendApi @Inject()(
         submissionJson ++ Addresses.addressJson(summary)
     }.getOrElse(submissionJson)
 
-    audit.sendExplicitAudit(auditType, jsObject)
+    audit.sendExplicitAudit(auditType, jsObject ++ audit.languageJson)
     Future.unit
   }
 
