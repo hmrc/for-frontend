@@ -450,7 +450,7 @@ error.writtenAgreement.steppedDetails.stepTo.day.required = Rhaid i’r dyddiad 
 error.writtenAgreement.steppedDetails.stepTo.month.required = Rhaid i’r dyddiad y daw’r rhent i ben gynnwys mis
 error.writtenAgreement.steppedDetails.stepTo.year.required = Rhaid i’r dyddiad y daw’r rhent i ben gynnwys blwyddyn
 error.date_before_1900.writtenAgreement.steppedDetails.stepFrom = Rhaid i’r dyddiad y mae’r rhent yn dechrau fod ar neu ar ôl 1 Ionawr 1900
-error.date_before_1900.writtenAgreement.steppedDetails.stepTo = Rhaid i’r dyddiad y daw’r rhent i ben fod ar neu ar ôl 2 Ionawr 1900
+error.date_before_1900.writtenAgreement.steppedDetails.stepTo = Rhaid i’r dyddiad y daw’r rhent i ben fod ar neu ar ôl 1 Ionawr 1900
 
 #SECTION 7
 ###############################

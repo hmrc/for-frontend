@@ -435,7 +435,7 @@ error.writtenAgreement.steppedDetails.stepTo.day.required = The date the rent en
 error.writtenAgreement.steppedDetails.stepTo.month.required = The date the rent ends must include a month
 error.writtenAgreement.steppedDetails.stepTo.year.required = The date the rent ends must include a year
 error.date_before_1900.writtenAgreement.steppedDetails.stepFrom = The date the rent starts must be on or after 1 January 1900
-error.date_before_1900.writtenAgreement.steppedDetails.stepTo = The date the rent ends must be on or after 2 January 1900
+error.date_before_1900.writtenAgreement.steppedDetails.stepTo = The date the rent ends must be on or after 1 January 1900
 
 #SECTION 7
 ###############################
