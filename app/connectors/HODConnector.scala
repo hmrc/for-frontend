@@ -28,6 +28,7 @@ import views.html.helper.urlEncode
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpReads, HttpResponse, NotFoundException, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 @Singleton
 class DefaultHODConnector @Inject()(config: ServicesConfig, http: ForHttp)(implicit ec: ExecutionContext) extends HODConnector  {
@@ -56,7 +57,7 @@ class DefaultHODConnector @Inject()(config: ServicesConfig, http: ForHttp)(impli
   }
 
   override def saveForLater(d: Document)(implicit hc: HeaderCarrier): Future[Unit] =
-    http.PUT(url(s"savedforlater/${d.referenceNumber}"), d) map { _ => () }
+    http.PUT[Document, HttpResponse](url(s"savedforlater/${d.referenceNumber}"), d) map { _ => () }
 
   override def loadSavedDocument(r: ReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Document]] = {
     http.GET[Document](url(s"savedforlater/$r")).map(Some.apply).map(splitAddress).map(removeAlterationDescription) recoverWith {
