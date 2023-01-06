@@ -21,7 +21,7 @@
 @import models.pages._
 @import models.serviceContracts.submissions._
 
-  @(p4: PageFour, isAgent: Boolean)(implicit requestHeader: RequestHeader,  messages: Messages)
+  @(p4: PageFour, isAgent: Boolean)(implicit messages: Messages)
     <h2 class="govuk-heading-m">@messages("section4.heading")</h2>
     <dl class="govuk-summary-list">
       @summaryBlock(messages("label.propertyIsSublet"), 4, "propertyIsSublet") {

@@ -18,7 +18,7 @@
 @import _root_.template.FormatRefNum
 @import org.joda.time.DateTime
 
-@(GTMCode: String, startDimension: String, returnDimension: String, refDimension: String, summary: Option[Summary] = None)(implicit requestHeader: RequestHeader,  messages: Messages)
+@(GTMCode: String, startDimension: String, returnDimension: String, refDimension: String, summary: Option[Summary] = None)
 
 @defining(summary.map(s => FormatRefNum(s.referenceNumber)).getOrElse("")) { ref =>
     @defining(summary.map(_.journeyResumptions.length).getOrElse(0)) { timesReturned =>

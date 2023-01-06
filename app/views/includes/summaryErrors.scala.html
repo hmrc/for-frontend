@@ -19,7 +19,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
-@(theForm: Form[_], govukErrorSummary: GovukErrorSummary)(implicit requestHeader: RequestHeader, messages: Messages)
+@(theForm: Form[_], govukErrorSummary: GovukErrorSummary)(implicit messages: Messages)
 
     @if(theForm.errors.nonEmpty) {
         @govukErrorSummary(

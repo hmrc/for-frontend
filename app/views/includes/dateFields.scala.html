@@ -28,7 +28,7 @@
     labelSuffix: Option[String] = None,
     label: Option[String] = None,
     showDays : Boolean = false,
-    hiddenBy: Option[HiddenBy] = None)(implicit request: Request[_], messages: Messages)
+    hiddenBy: Option[HiddenBy] = None)(implicit messages: Messages)
 
     @labelText = @{ label.getOrElse("label." + field + labelSuffix.getOrElse(""))}
     @dayfield  = @{field + ".day"}

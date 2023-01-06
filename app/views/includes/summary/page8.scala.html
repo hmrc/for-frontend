@@ -19,7 +19,7 @@
 @import models.pages.Summary
 @import models.serviceContracts.submissions._
 
-@(p8: RentAgreement, isAgent: Boolean)(implicit requestHeader: RequestHeader,  messages: Messages)
+@(p8: RentAgreement, isAgent: Boolean)(implicit messages: Messages)
 
     <h2 class="govuk-heading-m">@if(isAgent){ @messages("section8.heading.agent") }else{ @messages("section8.heading")}</h2>
     <dl class="govuk-summary-list">

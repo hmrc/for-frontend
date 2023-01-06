@@ -15,7 +15,6 @@
  *@
 
 @import play.api.data._
-@import template.HiddenBy
 @import uk.gov.hmrc.govukfrontend.views.Aliases._
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukDateInput
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -25,7 +24,7 @@
 	govukDate: GovukDateInput,
 	helpText: Option[String] = None,
 	labelSuffix: Option[String] = None,
-	label: Option[String] = None)(implicit request: Request[_], messages: Messages)
+	label: Option[String] = None)(implicit messages: Messages)
 
 @labelText = @{ label.getOrElse("label." + field + labelSuffix.getOrElse(""))}
 @monthfield  = @{field + ".months"}

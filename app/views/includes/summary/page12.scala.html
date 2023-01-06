@@ -20,7 +20,7 @@
 @import models.pages._
 @import models.serviceContracts.submissions._
 
-@(p12: PageTwelve)(implicit requestHeader: RequestHeader,  messages: Messages)
+@(p12: PageTwelve)(implicit messages: Messages)
 <h2 class="govuk-heading-m">@messages("section12.heading")</h2>
 <dl class="govuk-summary-list">
     @summaryBlock(messages("label.responsibleOutsideRepairs"), 12, "responsibleOutsideRepairs") {

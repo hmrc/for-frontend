@@ -19,7 +19,7 @@
 @import models.pages._
 @import models.serviceContracts.submissions._
 
-@(p7: PageSeven, isAgent: Boolean, summary: Summary)(implicit requestHeader: RequestHeader,  messages: Messages)
+@(p7: PageSeven, isAgent: Boolean, summary: Summary)(implicit messages: Messages)
 
 @agreementType = {@summary.lease.flatMap {d=>@d.leaseAgreementType.name}}
 
