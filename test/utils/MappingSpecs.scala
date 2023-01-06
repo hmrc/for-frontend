@@ -21,6 +21,8 @@ import models._
 import play.api.data.Form
 import utils.FormBindingTestAssertions._
 
+import java.time.YearMonth
+
 object MappingSpecs extends DateMappingSpecs with DurationMappingSpecs with AddressMappingSpecs with CurrencySpecs with CommonSpecs {
 
   def validateFullName[T](form: Form[T], formData: Map[String, String], field: String, errorMaxLengthKeyOpt: Option[String] = None): Unit = {
@@ -152,7 +154,7 @@ trait DateMappingSpecs { this: CommonSpecs =>
     val key = field + ".day"
     val data = formData.
       updated(field + ".month", "1").
-      updated(field + ".year", "2014")
+      updated(field + ".year", YearMonth.now.minusYears(7).getYear.toString)
 
     val invalid = Seq("-1", "0", "32", "999", "day")
     validateError(key, invalid, Errors.invalidDate, form, data)
