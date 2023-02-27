@@ -40,7 +40,8 @@
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(13).url,
-    pageHeading = messages("section10.heading"),
+    pageHeading = messages("label.anyOtherFactors"),
+    showH1 = false,
     summary = Some(summary),
     showAccountInfo = true,
     showSection = true,
@@ -75,7 +76,8 @@
                     legend = Option(
                         Legend(
                             content = Text(messages("label.anyOtherFactors" + labelSuffix)),
-                            classes = "govuk-!-font-weight-bold"
+                            isPageHeading = true,
+                            classes = "govuk-fieldset__legend--l"
                         )
                     )
                 )

@@ -23,16 +23,16 @@ val scoverageSettings = {
 
 val compileDeps = Seq(
   filters,
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.12.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "5.5.0-play-28",
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.14.0",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "6.7.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.74.0",
   "uk.gov.hmrc" %% "http-caching-client" % "10.0.0-play-28",
   "uk.gov.hmrc" %% "play-partials" % "8.3.0-play-28",
-  "com.typesafe.play" %% "play-json-joda" % "2.9.3",
+  "com.typesafe.play" %% "play-json-joda" % "2.9.4",
   "com.typesafe.play" %% "play-joda-forms" % PlayVersion.current,
   "org.xhtmlrenderer" % "flying-saucer-pdf-itext5" % "9.1.22",
   "nu.validator" % "htmlparser" % "1.4.16",
-  "org.webjars" % "jquery" % "3.6.1",
+  "org.webjars" % "jquery" % "3.6.3",
   "org.webjars.bower" % "compass-mixins" % "1.0.2"
 )
 
