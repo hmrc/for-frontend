@@ -756,6 +756,7 @@ alterationType.removedWall=Removed structural wall
 alterationType.addLift=Installed lifts or escalators
 alterationType.addedParking=Added parking space
 alterationType.addedAirCondition=Added air conditioning
+alterationType.fittingOut=Fitting out (excluding furniture and equipment)
 
 error.hasTenantDonePropertyAlterations.required=Select ‘Yes’ if the tenant has carried out any major alterations
 error.tenantWasRequiredToMakeAlterations.required=Select ‘Yes’ if the tenant was required to carry out any works

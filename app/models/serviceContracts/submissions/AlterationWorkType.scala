@@ -23,38 +23,42 @@ sealed trait AlterationSetByType extends NamedEnum {
 }
 
 object AlterationSetByTypeExtension extends AlterationSetByType {
-  val name ="extension"
+  val name = "extension"
 }
 
 object AlterationSetByTypeDemolition extends AlterationSetByType {
-  val name ="demolition"
+  val name = "demolition"
 }
 
 object AlterationSetByTypeAddedMezzanineFloor extends AlterationSetByType {
-  val name ="addedMezzanineFloor"
+  val name = "addedMezzanineFloor"
 }
 
 object AlterationSetByTypeRemovedWall extends AlterationSetByType {
-  val name ="removedWall"
+  val name = "removedWall"
 }
 
 object AlterationSetByTypeAddLift extends AlterationSetByType {
-  val name ="addLift"
+  val name = "addLift"
 }
 
 object AlterationSetByTypeAddedParking extends AlterationSetByType {
-  val name ="addedParking"
+  val name = "addedParking"
 }
 
 object AlterationSetByTypeAddedAirCondition extends AlterationSetByType {
-  val name ="addedAirCondition"
+  val name = "addedAirCondition"
 }
 
+object AlterationSetByTypeFittingOut extends AlterationSetByType {
+  val name = "fittingOut"
+}
 
 
 object AlterationSetByType extends NamedEnumSupport[AlterationSetByType] {
   val all = List(AlterationSetByTypeExtension, AlterationSetByTypeDemolition,
     AlterationSetByTypeAddedMezzanineFloor, AlterationSetByTypeRemovedWall,
-    AlterationSetByTypeAddLift, AlterationSetByTypeAddedParking, AlterationSetByTypeAddedAirCondition
+    AlterationSetByTypeAddLift, AlterationSetByTypeAddedParking, AlterationSetByTypeAddedAirCondition,
+    AlterationSetByTypeFittingOut
   )
 }

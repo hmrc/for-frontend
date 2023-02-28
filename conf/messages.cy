@@ -768,6 +768,7 @@ alterationType.removedWall=Wedi tynnu wal strwythurol
 alterationType.addLift=Wedi gosod lifftiau neu risiau symudol
 alterationType.addedParking=Wedi ychwanegu lle i barcio
 alterationType.addedAirCondition=Wedi ychwanegu aerdymheru
+alterationType.fittingOut=Ffitio allan (heb gynnwys dodrefn ac offer)
 
 error.hasTenantDonePropertyAlterations.required=Dewiswch ‘ydy’ os yw’r tenant wedi gwneud unrhyw newidiadau mawr
 error.tenantWasRequiredToMakeAlterations.required=Dewiswch ‘oedd’ os oedd rhaid i’r tenant gyflawni unrhyw waith
