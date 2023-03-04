@@ -59,7 +59,7 @@ class PageSixController @Inject()(audit: Audit,
 
   private def getReviewDatesFromPage7(pageSeven: PageSeven): Map[String, String] =
     Seq(
-      pageSeven.pageSevenDetails.flatMap(_.reviewDetails.map(_.whenWasRentReview))
+      pageSeven.pageSevenDetails.filter(_.rentResultOfRentReview).flatMap(_.reviewDetails.map(_.whenWasRentReview))
         .map("rentReviewDate" -> _.toLocalDate.toString),
       pageSeven.pageSevenDetails.flatMap(_.lastReviewDate)
         .map("lastReviewDate" -> _.toLocalDate.toString)
