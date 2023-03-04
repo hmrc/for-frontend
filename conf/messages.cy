@@ -440,6 +440,7 @@ error.writtenAgreement.startDate.isAfterRentReview = Ni all y dyddiad y dechreuo
 error.verbalAgreement.startDate.isAfterLastReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent diwethaf (ar adran 7)
 error.verbalAgreement.startDate.isAfterRentReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent (ar adran 7)
 error.date_before_1900.writtenAgreement.startDate = Mae’n rhaid i hwn fod o 1900 ymlaen
+error.date_must_be_in_past.writtenAgreement.startDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 error.writtenAgreement.leaseLength.months.required = Nodwch sawl mis y mae’r cytundeb presennol ar ei gyfer
 error.writtenAgreement.leaseLength.years.required = Nodwch sawl blwyddyn y mae’r cytundeb presennol ar ei gyfer
 error.writtenAgreement.breakClauseDetails.required = Nodwch fanylion y cymal torri
