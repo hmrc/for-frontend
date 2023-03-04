@@ -17,12 +17,13 @@
 package form
 
 import form.DateMappings._
+import form.Errors.{verbalAgreementStartIsAfterLastReview, verbalAgreementStartIsAfterRentReview}
 import form.MappingSupport._
 import models.pages.{PageSix, _}
 import models.serviceContracts.submissions._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.data.Forms.{default, mapping, optional, text, tuple}
+import play.api.data.Forms.{default, localDate, mapping, optional, text, tuple}
 import play.api.data._
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
@@ -94,7 +95,15 @@ object PageSixForm {
     .verifying(Errors.tooManySteppedRents, _.length <= 7)
 
   val writtenAgreementMapping = mapping(
-    keys.startDate -> monthYearRoughDateMapping(s"$written.${keys.startDate}", ".writtenAgreement.startDate"),
+    keys.startDate -> dateIsAfterAnotherDate(
+      dateIsAfterAnotherDate(
+        monthYearRoughDateMapping(s"$written.${keys.startDate}", ".writtenAgreement.startDate"),
+        "lastReviewDate",
+        verbalAgreementStartIsAfterLastReview
+      ),
+      "rentReviewDate",
+      verbalAgreementStartIsAfterRentReview
+    ),
     keys.rentOpenEnded -> mandatoryBooleanWithError(Errors.leaseAgreementOpenEndedRequired),
     keys.leaseLength -> mandatoryIfFalse(s"$written.${keys.rentOpenEnded}",
       monthsYearDurationMapping(s"$written.${keys.leaseLength}", ".writtenAgreement.leaseLength")),
@@ -112,7 +121,17 @@ object PageSixForm {
   val verbal = keys.verbalAgreement
 
   val verbalAgreementMapping = mapping(
-    keys.startDate -> optional(monthYearRoughDateMapping(s"$verbal.${keys.startDate}")),
+    keys.startDate -> optional(
+      dateIsAfterAnotherDate(
+        dateIsAfterAnotherDate(
+          monthYearRoughDateMapping(s"$verbal.${keys.startDate}"),
+          "lastReviewDate",
+          verbalAgreementStartIsAfterLastReview
+        ),
+        "rentReviewDate",
+        verbalAgreementStartIsAfterRentReview
+      )
+    ),
     keys.rentOpenEnded -> optional(mandatoryBooleanWithError(Errors.leaseAgreementOpenEndedRequired)),
     keys.leaseLength -> mandatoryIfFalse(s"$verbal.${keys.rentOpenEnded}", monthsYearDurationMapping(s"$verbal.${keys.leaseLength}"))
   )(VerbalAgreement.apply)(VerbalAgreement.unapply)
@@ -121,7 +140,9 @@ object PageSixForm {
   val pageSixMapping = mapping(
     keys.leaseAgreementType -> leaseAgreementTypeMapping,
     keys.writtenAgreement -> mandatoryIfAnyOf(keys.leaseAgreementType, writtenAgreements, writtenAgreementMapping),
-    keys.verbalAgreement -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementTypesVerbal.name), verbalAgreementMapping)(VerbalAgreement())
+    keys.verbalAgreement -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementTypesVerbal.name), verbalAgreementMapping)(VerbalAgreement()),
+    "lastReviewDate" -> optional(localDate),
+    "rentReviewDate" -> optional(localDate)
   )(PageSix.apply)(PageSix.unapply)
 
   val pageSixForm = Form(pageSixMapping)

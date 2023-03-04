@@ -96,6 +96,13 @@
 
     <input type="hidden" name="variant" value="@variant" />
 
+    @theForm("rentReviewDate").value.map { rentReviewDate =>
+      <input type="hidden" name="rentReviewDate" value="@rentReviewDate"/>
+    }
+    @theForm("lastReviewDate").value.map { lastReviewDate =>
+      <input type="hidden" name="lastReviewDate" value="@lastReviewDate"/>
+    }
+
     <!-- What type of lease or agreement do you have? -->
     @govukRadios(
       Radios(

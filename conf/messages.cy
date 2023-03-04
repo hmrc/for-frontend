@@ -435,6 +435,10 @@ error.steppedRent.required=Dewiswch ‘Ydy’ os yw’r rhent yn seiliedig ar gy
 
 error.writtenAgreement.startDate.month.required = Mae’n rhaid i’r dyddiad y dechreuodd y cytundeb presennol gynnwys mis
 error.writtenAgreement.startDate.year.required = Mae’n rhaid i’r dyddiad y dechreuodd y cytundeb presennol gynnwys blwyddyn
+error.writtenAgreement.startDate.isAfterLastReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent diwethaf (ar adran 7)
+error.writtenAgreement.startDate.isAfterRentReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent (ar adran 7)
+error.verbalAgreement.startDate.isAfterLastReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent diwethaf (ar adran 7)
+error.verbalAgreement.startDate.isAfterRentReview = Ni all y dyddiad y dechreuodd y cytundeb presennol fod ar ôl ddyddiad yr adolygiad rhent (ar adran 7)
 error.date_before_1900.writtenAgreement.startDate = Mae’n rhaid i hwn fod o 1900 ymlaen
 error.writtenAgreement.leaseLength.months.required = Nodwch sawl mis y mae’r cytundeb presennol ar ei gyfer
 error.writtenAgreement.leaseLength.years.required = Nodwch sawl blwyddyn y mae’r cytundeb presennol ar ei gyfer
@@ -495,7 +499,7 @@ error.date_before_1900.rentResultOfReview = Mae’n rhaid i hwn fod o 1900 ymlae
 error.date_must_be_in_past.rentResultOfReview = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 
 error.lastReviewDate.isBeforeStart = Rhaid i ddyddiad yr adolygiad rhent diwethaf fod ar ôl y dyddiad y dechreuodd y cytundeb presennol
-error.whenWasRentReview.isBeforeStart = The date of the rent review must be after the date the current agreement started
+error.whenWasRentReview.isBeforeStart = Rhaid i ddyddiad yr adolygiad rhent fod ar ôl y dyddiad y dechreuodd y cytundeb presennol
 
 #SECTION 8
 ###############################

@@ -420,6 +420,10 @@ error.steppedRent.required=Select ‘Yes’ if the rent is based on a stepped-re
 
 error.writtenAgreement.startDate.month.required = The date the current agreement started must include a month
 error.writtenAgreement.startDate.year.required = The date the current agreement started must include a year
+error.writtenAgreement.startDate.isAfterLastReview = The date the current agreement started cannot be after the date of the last rent review (on section 7)
+error.writtenAgreement.startDate.isAfterRentReview = The date the current agreement started cannot be after the date of the rent review (on section 7)
+error.verbalAgreement.startDate.isAfterLastReview = The date the current agreement started cannot be after the date of the last rent review (on section 7)
+error.verbalAgreement.startDate.isAfterRentReview = The date the current agreement started cannot be after the date of the rent review (on section 7)
 error.date_before_1900.writtenAgreement.startDate = The date the current agreement started must be after December 1899
 error.writtenAgreement.leaseLength.months.required = Enter how many months the current agreement is for
 error.writtenAgreement.leaseLength.years.required = Enter how many years the current agreement is for

@@ -19,10 +19,14 @@ package models.pages
 import models.RoughDate
 import models.serviceContracts.submissions.{LeaseAgreementType, MonthsYearDuration, SteppedDetails}
 
+import java.time.LocalDate
+
 case class PageSix (
   leaseAgreementType: LeaseAgreementType,
   writtenAgreementDetails: Option[WrittenAgreement],
-  verbalAgreementDetails: VerbalAgreement
+  verbalAgreementDetails: VerbalAgreement,
+  lastReviewDate: Option[LocalDate] = None,
+  rentReviewDate: Option[LocalDate] = None
 )
 
 case class WrittenAgreement(

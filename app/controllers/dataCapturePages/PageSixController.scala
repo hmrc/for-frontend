@@ -18,27 +18,51 @@ package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
 import connectors.Audit
+import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
-
-import javax.inject.Inject
 import models._
-import models.pages.{PageSix, Summary}
+import models.pages.{PageSeven, PageSix, Summary}
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import playconfig.SessionId
 
-class PageSixController @Inject() (audit: Audit,
-                                   formDocumentRepository: FormDocumentRepository,
-                                   refNumAction: RefNumAction,
-                                   cc: MessagesControllerComponents,
-                                   part6: views.html.part6)
+import javax.inject.Inject
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
+import scala.language.postfixOps
+
+class PageSixController @Inject()(audit: Audit,
+                                  formDocumentRepository: FormDocumentRepository,
+                                  refNumAction: RefNumAction,
+                                  cc: MessagesControllerComponents,
+                                  part6: views.html.part6)
   extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc) {
   val format = p6f
   val emptyForm = pageSixForm
   val pageNumber: Int = 6
 
   def template(form: Form[PageSix], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {
-    part6(form, summary)
+    val updatedForm: Form[PageSix] = Await.result(repository.findById(SessionId(hc), request.refNum).map { docOpt =>
+      (for {
+        doc <- docOpt
+        page7 <- doc.page(7)
+        pageSeven <- pageSevenForm.bindFromRequest(page7.fields).value
+      } yield {
+        form.copy(data = form.data ++ getReviewDatesFromPage7(pageSeven))
+      }).getOrElse(form)
+    }, 20 seconds)
+
+    part6(updatedForm, summary)
   }
+
+  private def getReviewDatesFromPage7(pageSeven: PageSeven): Map[String, String] =
+    Seq(
+      pageSeven.pageSevenDetails.flatMap(_.reviewDetails.map(_.whenWasRentReview))
+        .map("rentReviewDate" -> _.toLocalDate.toString),
+      pageSeven.pageSevenDetails.flatMap(_.lastReviewDate)
+        .map("lastReviewDate" -> _.toLocalDate.toString)
+    ).flatten.toMap
+
 }

@@ -151,12 +151,12 @@ class DefaultSubmissionBuilder extends SubmissionBuilder {
   )
 
   private def toLeaseOrAgreement(p6: PageSix) = p6 match {
-    case PageSix(LeaseAgreementTypesVerbal, _, verbal) =>
+    case PageSix(LeaseAgreementTypesVerbal, _, verbal, _, _) =>
       LeaseOrAgreement(
         p6.leaseAgreementType, None, None, None, List.empty, verbal.startDate, verbal.rentOpenEnded,
         verbal.leaseLength
       )
-    case PageSix(_, Some(written), _) =>
+    case PageSix(_, Some(written), _, _, _) =>
       LeaseOrAgreement(
         p6.leaseAgreementType, Some(written.leaseAgreementHasBreakClause), written.breakClauseDetails, Some(written.agreementIsStepped),
         written.steppedDetails, Some(written.startDate), Some(written.rentOpenEnded), written.leaseLength
@@ -194,4 +194,3 @@ class DefaultSubmissionBuilder extends SubmissionBuilder {
 }
 
 case class RentalInformationCouldNotBeRetrieved(refNum: String) extends Exception(refNum)
-case class TenantsAddressMissing(refNum: String) extends Exception(refNum)
