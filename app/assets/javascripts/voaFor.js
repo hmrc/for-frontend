@@ -160,8 +160,13 @@
 
         $(document).on('click', '.add-multi-fields', function (e) {
             e.preventDefault();
-            var element = $(this).closest('fieldset');
+            addMultiFields($(this));
+        });
+
+        function addMultiFields(addLink) {
+            var element = addLink.closest('fieldset');
             var limit = parseInt(element.attr('data-limit'), 10);
+            var minSize = element.attr('data-min-size') ? parseInt(element.attr('data-min-size'), 10) : 1;
             var existingCount = element.find('.multi-fields-group').length;
             //clone the multi-fields-group
             var elementToClone = element.find('.multi-fields-group:last');
@@ -174,19 +179,21 @@
             //remove p's from clone, no idea why.
             $clone.find('p').remove();
             //show the remove button on clone
-            $clone.find('a.remove-multi-fields').show();
+            if (existingCount >= minSize) {
+                $clone.find('a.remove-multi-fields').show();
+            }
             element.find('.multi-fields-group:last .chars').text(element.find('.multi-fields-group:last .chars').attr('data-max-length'));
             //focus on first input of cloned element
             $clone.find('input:visible:first').focus();
             $clone.find(' .intel-alert').addClass('hidden');
             if ($('.multi-fields-group').length === limit) {
-                $(this).hide();
+                addLink.hide();
                 $('.add-hint').show();
             } else {
                 $('.add-hint').hide();
-                $(this).show();
+                addLink.show();
             }
-        });
+        }
 
         function hideTogglingElementsInClone($clone) {
             //hide the data-hidden-by elements in the clone
@@ -241,9 +248,13 @@
             });
         });
 
-        $('.multi-fields-group:not(:first)').find('.remove-multi-fields').css('display', 'inline-block');
-
-
+        var fieldsetMin = $('fieldset[data-min-size]');
+        if (fieldsetMin) {
+            var minSize = parseInt(fieldsetMin.attr('data-min-size'), 10);
+            $('.multi-fields-group').find('.remove-multi-fields').slice(minSize).css('display', 'inline-block');
+        } else {
+            $('.multi-fields-group:not(:first)').find('.remove-multi-fields').css('display', 'inline-block');
+        }
     };
 
     VoaFor.selectMobile = function () {
