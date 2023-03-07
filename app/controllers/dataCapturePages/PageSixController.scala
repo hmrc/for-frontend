@@ -54,7 +54,12 @@ class PageSixController @Inject()(audit: Audit,
       }).getOrElse(form)
     }, 20 seconds)
 
-    part6(updatedForm, summary)
+    // Min 2 steps are required in stepped rent
+    val finalForm: Form[PageSix] = updatedForm.copy(data =
+      updatedForm.data ++ (0 to 1).map(idx => s"writtenAgreement.steppedDetails[$idx].indexSizeHolder" -> "x")
+    )
+
+    part6(finalForm, summary)
   }
 
   private def getReviewDatesFromPage7(pageSeven: PageSeven): Map[String, String] =

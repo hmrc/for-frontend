@@ -136,6 +136,10 @@
             var nameAttr = $(this).attr('name');
             $(this).attr('name', nameAttr.replace(/\[(\d+)\]/g, '[' + index + ']'));
         });
+        $container.find('input[type="hidden"]').each(function () {
+            var nameAttr = $(this).attr('name');
+            $(this).attr('name', nameAttr.replace(/\[(\d+)\]/g, '[' + index + ']'));
+        });
         $container.find('input[type="radio"]').each(function () {
 
             var s = $(this).closest('.multi-fields-group').attr('id'),

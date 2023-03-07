@@ -348,6 +348,8 @@
 
                 <h3 class="govuk-heading-m section-heading stepped-rent">@messages(s"heading.steppedRent${idx + 1}")</h3>
 
+                  <input type="hidden" name="writtenAgreement.steppedDetails[@idx].indexSizeHolder" value="x">
+
                   @includes.dateFields(
                     form= theForm,
                     showDays = true,
