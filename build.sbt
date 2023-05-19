@@ -22,23 +22,24 @@ val scoverageSettings = {
 
 val compileDeps = Seq(
   filters,
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.14.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "6.7.0-play-28",
-  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "1.1.0",
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.15.0",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "7.7.0-play-28",
+  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "1.2.0",
   "uk.gov.hmrc" %% "http-caching-client" % "10.0.0-play-28",
-  "uk.gov.hmrc" %% "play-partials" % "8.3.0-play-28",
+  "uk.gov.hmrc" %% "play-partials" % "8.4.0-play-28",
   "com.typesafe.play" %% "play-json-joda" % "2.9.4",
   "com.typesafe.play" %% "play-joda-forms" % PlayVersion.current,
   "org.xhtmlrenderer" % "flying-saucer-pdf-itext5" % "9.1.22",
   "nu.validator" % "htmlparser" % "1.4.16",
-  "org.webjars" % "jquery" % "3.6.3",
+  "org.webjars" % "jquery" % "3.6.4",
+  "com.github.java-json-tools" % "json-schema-validator" % "2.2.14", // must be the same version as in "for-hod-adapter"
   "org.webjars.bower" % "compass-mixins" % "1.0.2"
 )
 
 val scalatestPlusPlayVersion = "5.1.0"
-val scalatestVersion = "3.2.15"
-val mockitoScalaVersion = "1.17.12"
-val flexMarkVersion = "0.64.0"
+val scalatestVersion = "3.2.16"
+val mockitoScalaVersion = "1.17.14"
+val flexMarkVersion = "0.64.6"
 
 def testDeps(scope: String) = Seq(
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
