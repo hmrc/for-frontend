@@ -25,11 +25,16 @@ import ConditionalMapping._
 import play.api.data.validation.Constraints.{maxLength, minLength, nonEmpty, pattern}
 
 import javax.mail.internet.InternetAddress
-import scala.util.Try
+import scala.util.{Success, Try}
 
 object MappingSupport {
 
-  private val strictEmail = email.verifying("error.email", value => Try(new InternetAddress(value, true)).isSuccess)
+  private val strictEmailConstraint = Constraint[String] { value: String =>
+    Try(new InternetAddress(value, true)) match {
+      case Success(_) => Valid
+      case _ => Invalid(ValidationError("error.email"))
+    }
+  }
 
   val positiveBigDecimal = bigDecimal
     .verifying("error.BigDecimal_negative", _ >= 0.0000)
@@ -138,9 +143,10 @@ object MappingSupport {
         minLength(11, "error.contact.phone.minLength"),
         maxLength(20, "error.contact.phone.maxLength")
       ),
-      "email1" -> default(strictEmail, "").verifying(
+      "email1" -> default(text, "").verifying(
         nonEmpty(errorMessage = Errors.contactEmailRequired),
-        maxLength(50, "contactDetails.email1.email.tooLong")
+        maxLength(50, "contactDetails.email1.email.tooLong"),
+        strictEmailConstraint
       )
     )(ContactDetails.apply)(ContactDetails.unapply)
 
