@@ -23,7 +23,7 @@ val scoverageSettings = {
 val compileDeps = Seq(
   filters,
   "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.15.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "7.7.0-play-28",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "7.9.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "1.2.0",
   "uk.gov.hmrc" %% "http-caching-client" % "10.0.0-play-28",
   "uk.gov.hmrc" %% "play-partials" % "8.4.0-play-28",
@@ -56,7 +56,7 @@ lazy val root = (project in file("."))
   .settings(defaultSettings(): _*)
   .settings(
     name := "for-frontend",
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.11",
     DefaultBuildSettings.targetJvm := "jvm-11",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
