@@ -125,12 +125,6 @@
 
               @defining(Addresses.getAddress(summary)) { address =>
 
-                  <input type="hidden" id="addressBuildingNameNumber" value="@address.buildingNameNumber" class="subletsHidden" />
-                  <input type="hidden" id="addressStreet1" value="@address.street1.getOrElse("")" class="subletsHidden" />
-                  <input type="hidden" id="addressStreet2" value="@address.street2.getOrElse("")" class="subletsHidden" />
-                  <input type="hidden" id="addressPostcode" value="@address.postcode" class="subletsHidden" />
-
-
                   @govukInput(
                       Input(
                           id = s"sublet[$idx].tenantAddress.buildingNameNumber",
