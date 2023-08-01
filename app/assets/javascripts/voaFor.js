@@ -19,6 +19,17 @@
         $helpFormWrapper.find('h2, p').remove();
     };
 
+    VoaFor.printPage = function () {
+        setTimeout(function () {
+            if (window.document.queryCommandSupported('print')) {
+                window.document.execCommand('print', false, null);
+            } else {
+                window.focus();
+                window.print();
+            }
+        }, 1000);
+    };
+
     VoaFor.printPageShouldPrintOnLoad = function(){
         if($('div.govuk-grid-column-full.print-your-answers').length > 0){
             window.print();
