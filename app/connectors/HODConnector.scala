@@ -18,12 +18,12 @@ package connectors
 
 import com.google.inject.ImplementedBy
 import controllers.toFut
+
 import javax.inject.{Inject, Singleton}
-import models.FORLoginResponse
+import models.{Credentials, FORLoginResponse}
 import models.serviceContracts.submissions.{AddressConnectionTypeYes, AddressConnectionTypeYesChangeAddress}
-import play.api.libs.json.{Format, JsValue}
+import play.api.libs.json.{Format, JsValue, Writes}
 import useCases.ReferenceNumber
-import views.html.helper.urlEncode
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpReads, HttpResponse, NotFoundException, Upstream4xxResponse}
@@ -51,8 +51,9 @@ class DefaultHODConnector @Inject()(config: ServicesConfig, http: ForHttp)(impli
   }
 
   override def verifyCredentials(ref1: String, ref2: String, postcode: String)(implicit hc: HeaderCarrier): Future[FORLoginResponse] = {
-    val parts = Seq(ref1, ref2, postcode).map(urlEncode)
-    http.GET[FORLoginResponse](url(s"${parts.mkString("/")}/verify"))(readsHack, hc, ec)
+    val credentials = Credentials(ref1 + ref2, postcode)
+    val wrtCredentials = implicitly[Writes[Credentials]]
+    http.POST[Credentials, FORLoginResponse](url("authenticate"), credentials)(wrtCredentials, readsHack, hc, ec)
   }
 
   override def saveForLater(d: Document)(implicit hc: HeaderCarrier): Future[Unit] =
