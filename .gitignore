@@ -19,12 +19,7 @@ dist
 *.iws
 .sass-cache
 public
-govuk_modules
-npm-debug.log
 *.DS_Store
-frontend/sass/elements
-frontend/sass/_elements.scss
-frontend/sass/_frontend-toolkit.scss
 _SpecRunner.html
 .clover
 .bsp/
