@@ -20,10 +20,12 @@ import models._
 import models.journeys.Journey._
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import util.DateUtil.nowInUK
+
+import java.time.LocalDate
 
 class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Matchers with OptionValues {
 
@@ -290,7 +292,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   lazy val pageEightData = RentAgreement(true, None, RentSetByTypeNewLease)
   lazy val hasNoRentReviews = PageSeven(false, None)
   lazy val hasRentReviews = PageSeven(true, None)
-  lazy val pageNineData = PageNine(AnnualRent(8.99), rentBecomePayable = new LocalDate(2010, 2, 27), rentActuallyAgreed = new LocalDate(2005, 4, 2), negotiatingNewRent = true, rentBasis = RentBaseTypeOpenMarket, None)
+  lazy val pageNineData = PageNine(AnnualRent(8.99), rentBecomePayable = LocalDate.of(2010, 2, 27), rentActuallyAgreed = LocalDate.of(2005, 4, 2), negotiatingNewRent = true, rentBasis = RentBaseTypeOpenMarket, None)
 
 
   private def summaryBuilder( addressConnection: Option[AddressConnectionType] = None,
@@ -308,7 +310,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
                                 responsibilities: Option[PageTwelve] = None,
                                 alterations: Option[PropertyAlterations] = None,
                                 otherFactors: Option[OtherFactors] = None) = {
-    Summary("", DateTime.now, addressConnection, propertyAddress,
+    Summary("", nowInUK, addressConnection, propertyAddress,
       customerDetails,
       theProperty,
       sublet,

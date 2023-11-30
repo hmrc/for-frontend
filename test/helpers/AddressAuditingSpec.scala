@@ -20,7 +20,6 @@ import connectors.Audit
 import models.pages.{PageFour, SubletDetails, Summary}
 import models.serviceContracts.submissions.{Address, AddressConnectionTypeYesChangeAddress, SubletPart}
 import models.RoughDate
-import org.joda.time.DateTime
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
@@ -29,6 +28,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Disabled
 import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, DatastreamMetrics}
+import util.DateUtil.nowInUK
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -64,7 +64,7 @@ class AddressAuditingSpec extends AnyFlatSpec with should.Matchers with MockitoS
   }
 
   private def summaryWithPropertyAddress(voaAddress: Option[Address], corrected: Option[Address]): Summary = {
-    Summary("1234567890", DateTime.now,
+    Summary("1234567890", nowInUK,
       Some(AddressConnectionTypeYesChangeAddress), corrected,
       None, None, None, None, None, None, None, None, None, None, None, None, None,
       voaAddress, Nil
@@ -72,7 +72,7 @@ class AddressAuditingSpec extends AnyFlatSpec with should.Matchers with MockitoS
   }
 
   private def summaryWithSubletAddress(voaAddress: Option[Address], submitted: Address): Summary = {
-    Summary("123467890", DateTime.now, None, None, None, None,
+    Summary("123467890", nowInUK, None, None, None, None,
       Some(PageFour(true, List(SubletDetails("Mr Tenant", submitted, SubletPart, Option("Something"), "Stuff", BigDecimal(0.01), RoughDate(None, Some(1), 2011))))),
       None, None, None, None, None, None, None, None, None, None, voaAddress, Nil)
   }

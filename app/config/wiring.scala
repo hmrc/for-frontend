@@ -23,88 +23,15 @@ import form.persistence.FormDocumentRepository
 import javax.inject.{Inject, Singleton}
 import models.journeys.Journey
 import models.pages.SummaryBuilder
-import org.joda.time.DateTime
 import security.LoginToHOD._
 import uk.gov.hmrc.http._
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
 import useCases.SaveInProgressSubmissionForLater.SaveInProgressSubmissionForLater
 import useCases._
+import util.DateUtil.nowInUK
 
 import scala.concurrent.ExecutionContext
 
-
-//object FORAuditConnector extends AuditConnector with AppName with AppNameHelper {
-//  override lazy val auditingConfig = LoadAuditingConfig("auditing")
-//}
-
-//trait WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete  with AppName with RunMode
-
-//object WSHttp extends ForHttp with AppNameHelper with RunModeHelper {
-//  override protected def configuration: Option[Config] = Option(runModeConfiguration.underlying)
-//
-//  override protected def actorSystem: ActorSystem = Play.current.actorSystem
-//}
-/*
-trait ForHttp extends WSHttp {
-  override val hooks = Seq.empty
-  lazy val useDummyIp = ForConfig.useDummyIp
-
-  // By default HTTP Verbs does not provide access to the pure response body of a 4XX and we need it
-  // An IP address needs to be injected because of the lockout mechanism
-  override def doGet(url: String, headers: Seq[(String, String)])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val hc2 = if (useDummyIp) hc.withExtraHeaders((trueClientIp, "")) else hc
-    super.doGet(url, headers)(hc2, ec).map { res =>
-      res.status match {
-        case 401 => throw Upstream4xxResponse(res.body, 401, 401, res.allHeaders)
-        case 409 => throw Upstream4xxResponse(res.body, 409, 409, res.allHeaders)
-        case _ => res
-      }
-    }(ec)
-  }
-
-  override def doPut[A](url: String,
-                        body: A,
-                        headers: Seq[(String, String)])(implicit rds: Writes[A],
-                                                        hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    super.doPut(url, body, headers)(rds, hc, ec).map { res =>
-      if (res.status == 400) throw new BadRequestException(res.body) else res
-    }(ec)
-  }
-
-}
-
-object SessionCrypto {
-  val applicationCrypto = new ApplicationCrypto(Play.current.configuration.underlying)
-  val crypto = new SessionCookieCryptoFilter(applicationCrypto)
-}
-*/
-
-
-/*
-trait Audit {
-  val referenceNumber = "referenceNumber"
-
-  val auditConnector = AuditServiceConnector
-
-  def apply(event: String, detail: Map[String, String])(implicit hc: HeaderCarrier): Future[AuditResult] = {
-    val tags = hc.toAuditTags()
-    val de = DataEvent(auditSource = "for-frontend", auditType = event, tags = tags, detail = detail)
-    auditConnector.sendEvent(de)
-  }
-
-  def sendExplicitAudit[T](auditType: String, detail: T)(implicit hc: HeaderCarrier, ec: ExecutionContext, writes: Writes[T]) =
-    auditConnector.sendExplicitAudit(auditType, detail)(hc, ec, writes)
-
-  def sendExplicitAudit(auditType: String, detail: JsObject)(implicit hc: HeaderCarrier, ec: ExecutionContext) =
-    auditConnector.sendExplicitAudit(auditType, detail)(hc, ec)
-
-}
-*/
-
-//object S4L extends AppName with AppNameHelper{
-//  def expiryDateInDays: Int = appNameConfiguration.getInt("savedForLaterExpiryDays")
-//    .getOrElse(throw new Exception("No config setting for expiry days"))
-//}
 
 object SessionId {
   def apply(implicit hc: HeaderCarrier): String = hc.sessionId.map(_.value).getOrElse(throw SessionIdMissing())
@@ -125,7 +52,7 @@ object SaveForLater {
 object ContinueWithSavedSubmission {
   def apply()(implicit hc: HeaderCarrier, ec: ExecutionContext, hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository): ContinueWithSavedSubmission = useCases.ContinueWithSavedSubmission(
     LoadSavedForLaterDocument.apply, UpdateDocumentInCurrentSession.apply,
-    SummaryBuilder.build, Journey.pageToResumeAt, () => DateTime.now
+    SummaryBuilder.build, Journey.pageToResumeAt, () => nowInUK
   )
 }
 

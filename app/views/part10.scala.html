@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import helpers._
 @import models.pages.Summary
 @import play.api.data._
@@ -35,7 +34,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 

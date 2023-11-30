@@ -14,6 +14,6 @@
  * limitations under the License.
  *@
 
-@(d: org.joda.time.LocalDate)
+@(d: java.time.LocalDate)
 
-@{s"${d.getDayOfMonth}/${d.getMonthOfYear}/${d.getYear}"}
+@{s"${d.getDayOfMonth}/${d.getMonthValue}/${d.getYear}"}

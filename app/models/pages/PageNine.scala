@@ -18,7 +18,8 @@ package models.pages
 
 import models._
 import models.serviceContracts.submissions.RentBaseType
-import org.joda.time.LocalDate
+
+import java.time.LocalDate
 
 case class PageNine(
      totalRent: AnnualRent,

@@ -16,13 +16,14 @@
 
 @import models.pages.Summary
 @import _root_.template.FormatRefNum
-@import org.joda.time.DateTime
+@import util.DateUtil.nowInUK
+@import util.DateUtil.isoZonedDateFormatter
 
 @(GTMCode: String, startDimension: String, returnDimension: String, refDimension: String, summary: Option[Summary] = None)
 
 @defining(summary.map(s => FormatRefNum(s.referenceNumber)).getOrElse("")) { ref =>
     @defining(summary.map(_.journeyResumptions.length).getOrElse(0)) { timesReturned =>
-        @defining(summary.map(_.journeyStarted.toString).getOrElse(DateTime.now.toString)) { startDate =>
+        @defining(summary.map(_.journeyStarted.format(isoZonedDateFormatter)).getOrElse(isoZonedDateFormatter.format(nowInUK))) { startDate =>
             <!-- Google Tag Manager -->
             <meta name="X-VOA-attr" id="GTM" GTMCode='@GTMCode'
             startDim='@startDimension' startDate='@startDate'

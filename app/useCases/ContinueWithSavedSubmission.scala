@@ -19,11 +19,11 @@ package useCases
 import connectors.Document
 import models.journeys.TargetPage
 import models.pages.Summary
-import org.joda.time.DateTime
 import security.LoginToHOD.LoadSavedForLaterDocument
 import uk.gov.hmrc.http.HeaderCarrier
 import useCases.SaveInProgressSubmissionForLater.UpdateDocumentInCurrentSession
 
+import java.time.ZonedDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 object ContinueWithSavedSubmission {
@@ -43,7 +43,7 @@ object ContinueWithSavedSubmission {
 
   private def matches(p1: Option[SaveForLaterPassword], p2: SaveForLaterPassword) = p1.contains(p2)
 
-  private def record(d: Document, n: DateTime) = d.copy(journeyResumptions = d.journeyResumptions :+ n)
+  private def record(d: Document, n: ZonedDateTime) = d.copy(journeyResumptions = d.journeyResumptions :+ n)
 }
 
 sealed trait SaveForLaterLoginResult

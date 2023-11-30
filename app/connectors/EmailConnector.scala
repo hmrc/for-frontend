@@ -16,24 +16,24 @@
 
 package connectors
 
-import javax.inject.{Inject, Singleton}
-import org.joda.time.LocalDate
 import play.api.i18n.Messages
+import util.DateUtil.fullDateFormatter
 import play.api.libs.json._
-
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class EmailConnector @Inject()(config: ServicesConfig, http: ForHttp)(implicit ec: ExecutionContext) {
 
-  lazy val emailUrl = config.baseUrl("email")
-
+  private val emailUrl = config.baseUrl("email")
 
   def sendEmail(refNumber: String, postcode: String, email: Option[String], expiryDate: LocalDate)(implicit hc: HeaderCarrier, messages: Messages) = {
     email.map { e =>
-      val formattedExpiryDate = s"${expiryDate.getDayOfMonth} ${Messages(s"month.${expiryDate.monthOfYear.getAsText}")} ${expiryDate.getYear}"
+      val formattedExpiryDate = fullDateFormatter.format(expiryDate)
       val json = Json.obj(
         "to" -> JsArray(Seq(JsString(e))),
         "templateId" -> JsString("rald_alert"),

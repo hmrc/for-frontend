@@ -16,7 +16,7 @@
 
 package connectors
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.google.inject.ImplementedBy
 import com.typesafe.config.Config
 import config.ForConfig

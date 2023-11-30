@@ -20,7 +20,9 @@ import form.PageOneForm._
 import models._
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
+import util.DateUtil.nowInUK
+
+import java.time.LocalDate
 
 object SummaryBuilder {
 	def apply(                 page0: Option[AddressConnectionType] = None,
@@ -38,7 +40,7 @@ object SummaryBuilder {
                              page12: Option[PageTwelve] = None,
                              page13: Option[PropertyAlterations] = None,
                              page14: Option[OtherFactors] = None) = {
-    Summary("", DateTime.now, page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12, page13, page14)
+    Summary("", nowInUK, page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12, page13, page14)
   }
 
   lazy val completeShortPathJourney = SummaryBuilder( Some(pageZeroData), pageOneData, Some(pageTwoData), Some(propertyOwned), Some(propertyNotSublet))
@@ -104,7 +106,7 @@ object SummaryBuilder {
   private lazy val pageSevenData = PageSeven(false, None)
   private lazy val pageEightData = RentAgreement(true, None, RentSetByTypeNewLease)
   private lazy val pageNineData = PageNine(
-    AnnualRent( 8.99), rentBecomePayable = new LocalDate(2010, 2, 27), rentActuallyAgreed = new LocalDate(2005, 4, 2),
+    AnnualRent( 8.99), rentBecomePayable = LocalDate.of(2010, 2, 27), rentActuallyAgreed = LocalDate.of(2005, 4, 2),
     negotiatingNewRent = true, rentBasis = RentBaseTypeOpenMarket, None
   )
   private lazy val pageTenData = WhatRentIncludes(false, false, false, false, false, None, Parking(false, None, false, None, None, None))

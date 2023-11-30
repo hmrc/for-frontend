@@ -20,18 +20,19 @@ import connectors.Document
 import controllers.toFut
 import models.FORLoginResponse
 import models.serviceContracts.submissions.Address
-import org.joda.time.DateTime
 import useCases.ReferenceNumber
 import useCases.SaveInProgressSubmissionForLater.UpdateDocumentInCurrentSession
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.ZonedDateTime
+
 object LoginToHOD {
   type Ref1 = String
   type Ref2 = String
   type Postcode = String
-  type StartTime = DateTime
+  type StartTime = ZonedDateTime
   type SessionID = String
   type AuthToken = String
   type LoginToHOD = (Ref1, Ref2, Postcode, StartTime) => Future[LoginResult]
@@ -49,7 +50,7 @@ object LoginToHOD {
     } yield sd map { dps(_, lr.forAuthToken, lr.address) } getOrElse ned(lr.forAuthToken, lr.address)
 
   private def ref(r1: Ref1, r2: Ref2): Future[String] = s"$r1$r2"
-  private def doc(r: ReferenceNumber, a: Address, d: DateTime) = Document(r, d, address = Some(a))
+  private def doc(r: ReferenceNumber, a: Address, d: StartTime) = Document(r, d, address = Some(a))
   private def dps = DocumentPreviouslySaved.apply _
   private def ned = NoExistingDocument.apply _
 }

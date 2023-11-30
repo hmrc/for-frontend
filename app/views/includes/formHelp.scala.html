@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Cy, En}
 @import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-@import scala.concurrent.ExecutionContext
 @import play.api.mvc.Request
 @import play.api.i18n.Messages
 @import play.api.Configuration
@@ -25,7 +24,7 @@
 @this(servicesConfig: ServicesConfig, contactFrontendConfig: ContactFrontendConfig, configuration: Configuration)
 
 
-@()(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
+@()(implicit request: Request[_], messages: Messages)
 
 @reportProblemContactFrontendUrl = @{
     val serviceId = contactFrontendConfig.serviceId.getOrElse("RALD")

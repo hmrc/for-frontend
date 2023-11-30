@@ -19,7 +19,6 @@ package controllers
 import connectors.{Audit, Document}
 import controllers.dataCapturePages.PageZeroController
 import form.persistence.FormDocumentRepository
-import org.joda.time.DateTime
 import org.mockito.scalatest.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -28,6 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderNames
+import util.DateUtil.nowInUK
 import utils.Helpers.refNumAction
 import utils.stubs.StubFormDocumentRepo
 import views.html.part0
@@ -36,7 +36,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
 
   private val testRefNum = "1234567890"
   private val sessionId = java.util.UUID.randomUUID().toString
-  private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, DateTime.now())))
+  private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, nowInUK)))
   private val audit = mock[Audit]
 
   override def fakeApplication(): play.api.Application = {
@@ -45,7 +45,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
         bind[Audit].toInstance(audit),
         bind[FormDocumentRepository].toInstance(documentRepository)
       )
-      .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> true))
+      .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> false))
       .build()
   }
 

@@ -22,6 +22,6 @@ case class NotConnected(fullName: String, emailAddress: Option[String], phoneNum
 
 object NotConnected {
 
-  implicit  val format = Json.format[NotConnected]
+  implicit val format: OFormat[NotConnected] = Json.format[NotConnected]
 
 }

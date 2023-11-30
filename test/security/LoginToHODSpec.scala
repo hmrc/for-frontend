@@ -19,11 +19,11 @@ package security
 import connectors.Document
 import models.FORLoginResponse
 import models.serviceContracts.submissions.Address
-import org.joda.time.DateTime
 import uk.gov.hmrc.http.HeaderCarrier
 import useCases.ReferenceNumber
 import utils.UnitTest
 
+import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class LoginToHODSpec extends UnitTest {
@@ -78,7 +78,7 @@ class LoginToHODSpec extends UnitTest {
     val testAddress = Address("123", None, None, postcode)
     val auth = "YouAreLoggedInNow"
     val loginResponse = FORLoginResponse(auth, testAddress)
-    val now = new DateTime(2015, 3, 2, 13, 20)
+    val now = ZonedDateTime.of(2015, 3, 2, 13, 20, 0, 0, ZoneOffset.UTC)
     val savedDoc = Document("savedDocument", now)
   }
 }

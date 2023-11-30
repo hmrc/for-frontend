@@ -17,7 +17,8 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
-import org.joda.time.LocalDate
+
+import java.time.LocalDate
 
 case class LeaseOrAgreement (
   leaseAgreementType: LeaseAgreementType,

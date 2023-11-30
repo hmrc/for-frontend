@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
-
 @this(main_template: pageLayout, formHelp: includes.formHelp)
 
-@()(implicit request: Request[_], messages: Messages, ec: ExecutionContext)
+@()(implicit request: Request[_], messages: Messages)
 
 @main_template(pageHeading = messages("saveForLater.invalidPassword")) {
 

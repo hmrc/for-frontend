@@ -22,14 +22,15 @@ import connectors.{Audit, Document, Page}
 import helpers.AddressAuditing
 import models._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import util.DateUtil.nowInUK
 
+import java.time.LocalDate
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -77,7 +78,7 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
       Some(LeaseOrAgreement(LeaseAgreementTypesVerbal, Some(false), None, Some(false), List.empty, Some(RoughDate(None, None, 2011)), Some(false), None)),
       Some(RentReviews(false, None)),
       Some(RentAgreement(false, None, RentSetByTypeNewLease)),
-      Some(Rent(Some(20.1), new LocalDate(2011, 1, 1), new LocalDate(2011, 1, 1), false, RentBaseTypeOpenMarket, None)),
+      Some(Rent(Some(20.1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 1), false, RentBaseTypeOpenMarket, None)),
       Some(WhatRentIncludes(false, true, false, false, false, None, Parking(false, None, false, None, None, None))),
       Some(IncentivesAndPayments(false, None, true, None, true, None)),
       Some(Responsibilities(ResponsibleLandlord, ResponsibleLandlord, ResponsibleLandlord, false, true, false, List.empty)),
@@ -87,7 +88,7 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
     val refNum = "a3akdfjas"
 
     val pages = Seq.empty[Page]
-    val document = Document(refNum, DateTime.now, pages)
+    val document = Document(refNum, nowInUK, pages)
 
     val subConnector = StubSubmissionConnector()
     val builder = StubSubmissionBuilder()

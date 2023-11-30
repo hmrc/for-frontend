@@ -19,7 +19,6 @@ package controllers
 import connectors.Audit
 import form.persistence.FormDocumentRepository
 import models.serviceContracts.submissions.Address
-import org.joda.time.DateTime
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
@@ -30,14 +29,15 @@ import playconfig.LoginToHODAction
 import security.LoginToHOD.{Postcode, Ref1, Ref2, StartTime}
 import security.NoExistingDocument
 import uk.gov.hmrc.http.HeaderCarrier
+import util.DateUtil.nowInUK
 import utils.Helpers.fakeRequest2MessageRequest
 import views.html.{login, loginFailed}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits._
 
 class LoginControllerSpec extends AnyFlatSpec with should.Matchers with MockitoSugar {
-  implicit val globalEc = scala.concurrent.ExecutionContext.Implicits.global
-  val documentRepo = mock[FormDocumentRepository]
+  private val documentRepo = mock[FormDocumentRepository]
 
   private val testAddress = Address("13", Some("Street"), Some("City"), "AA11 1AA")
 
@@ -53,7 +53,7 @@ class LoginControllerSpec extends AnyFlatSpec with should.Matchers with MockitoS
     }
 
     val loginToHod = mock[LoginToHODAction]
-    val time = DateTime.now()
+    val time = nowInUK
     when(loginToHod.apply(any[HeaderCarrier], any[ExecutionContext])).thenReturn(loginToHodFunction)
 
     val loginController = new LoginController(audit, documentRepo, loginToHod, stubMessagesControllerComponents(),

@@ -18,11 +18,11 @@ package useCases
 
 import _root_.utils.UnitTest
 import connectors.Document
-import org.joda.time.DateTime
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import testutils._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import util.DateUtil.nowInUK
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import java.security.SecureRandom
@@ -36,7 +36,7 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest {
     val ref = "1111111222"
     val sid = java.util.UUID.randomUUID().toString
     val hc = HeaderCarrier(sessionId = Some(SessionId(sid)))
-    val doc = Document(ref, DateTime.now)
+    val doc = Document(ref, nowInUK)
     val savedDoc = doc.copy(saveForLaterPassword = Some(pas))
 
     "saving a document for a reference number that has not previously saved for later" should {
@@ -57,7 +57,7 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest {
       val oldP = s"oldPassword${random.nextDouble}"
       val newP = s"newPassword${random.nextDouble}"
       val ref = "77788899902"
-      val doc = Document(ref, DateTime.now, saveForLaterPassword = Some(oldP))
+      val doc = Document(ref, nowInUK, saveForLaterPassword = Some(oldP))
       var savedDoc: Document = null
 
       "use the existing password if a document already has a save for later password" in {

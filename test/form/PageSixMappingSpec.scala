@@ -19,10 +19,12 @@ package form
 import models._
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
+import util.DateUtil.nowInUK
+
+import java.time.LocalDate
 
 
 class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
@@ -39,7 +41,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
         leaseAgreementHasBreakClause = true,
         breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
         agreementIsStepped = true,
-        steppedDetails = List(SteppedDetails(stepFrom = new LocalDate(2000, 12, 2), stepTo = new LocalDate(2001, 2, 12), amount = 123.45)),
+        steppedDetails = List(SteppedDetails(stepFrom = LocalDate.of(2000, 12, 2), stepTo = LocalDate.of(2001, 2, 12), amount = 123.45)),
         startDate = new RoughDate(month = 3, year = 2013),
         rentOpenEnded = false,
         leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
@@ -189,7 +191,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "validate stepped rent from date as a date" in {
-    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> DateTime.now().plusYears(1).getYear.toString)
+    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> nowInUK.plusYears(1).getYear.toString)
     val fieldSeq = Seq(getKeyStepped(0).stepFrom, getKeyStepped(0).stepTo)
     validateDate(fieldSeq, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
   }

@@ -22,7 +22,6 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
-@import scala.concurrent.ExecutionContext
 @import util.DateUtil
 @import controllers.dataCapturePages.ForDataCapturePage.variantAttr
 
@@ -40,7 +39,7 @@
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 

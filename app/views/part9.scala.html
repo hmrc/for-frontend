@@ -24,7 +24,6 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
 @import models.pages.PageSeven
-@import scala.concurrent.ExecutionContext
 
 @this(  layout: pageLayout,
         govukRadios: GovukRadios,
@@ -40,7 +39,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[_], summary: Summary)(implicit request: Request[_], messages: Messages)
 
 @previousPage = @{
     if(summary.rentReviews.getOrElse(PageSeven(leaseContainsRentReviews=false, None)).leaseContainsRentReviews) 7

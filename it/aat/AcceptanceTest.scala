@@ -16,7 +16,7 @@
 
 package aat
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.typesafe.config.Config
 import connectors.ForHttp
 import models.FORLoginResponse

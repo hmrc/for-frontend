@@ -20,12 +20,14 @@ import connectors.{Document, Page}
 import form.PageThreeForm
 import models._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.OptionValues._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import useCases.DefaultSubmissionBuilder
+import util.DateUtil.nowInUK
+
+import java.time.LocalDate
 
 class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
 
@@ -122,7 +124,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
   object TestData {
     lazy val tenantsPropertyAddress = Address("1", Some("The Street"), Some("worthing"), "AA11 1AA")
     lazy val doc1 = Document(
-      "refNum1", DateTime.now, Seq(
+      "refNum1", nowInUK, Seq(
         Page(1, page1FormData),
         Page(2, page2FormData),
         Page(3, page3FormData),
@@ -140,7 +142,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       address = Some(defaultAddress)
     )
     lazy val docWithVerbalAgreement = Document(
-      "refNum1", DateTime.now, Seq(
+      "refNum1", nowInUK, Seq(
         Page(1, page1FormData),
         Page(2, page2FormData),
         Page(3, page3FormData),
@@ -176,7 +178,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       incentives = None, responsibilities = None, alterations = None, otherFactors = None, referenceNumber = Some("refNum1")
     )
     lazy val doc3 = Document(
-      "refNum1", DateTime.now, Seq(
+      "refNum1", nowInUK, Seq(
         Page(1,  page1FormData),
         Page(11, page11FormData),
         Page(3,  page3FormData),
@@ -474,13 +476,13 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     val sublet = Sublet(true, List(SubletData("Jake Smythe", Address("Some Company", Some("Some Road"), None, "AA11 1AA"), SubletPart, Option("basement"), "commercial", Some(200), RoughDate(None, Some(2), 2011))))
     val landlord = Landlord(Some("Graham Goose"), Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionTypeOther, Some("magic"))
     val leaseOrAgreement = LeaseOrAgreement(
-      LeaseAgreementTypesLeaseTenancy, Some(true), Some("adjf asdklfj a;sdljfa dsflk"), Some(true), List(SteppedDetails(new LocalDate(2010, 11, 8), new LocalDate(2011, 12, 9),500)), Some(RoughDate(None, Some(3), 2011)), Some(false), Some(MonthsYearDuration(2, 10))
+      LeaseAgreementTypesLeaseTenancy, Some(true), Some("adjf asdklfj a;sdljfa dsflk"), Some(true), List(SteppedDetails(LocalDate.of(2010, 11, 8), LocalDate.of(2011, 12, 9),500)), Some(RoughDate(None, Some(3), 2011)), Some(false), Some(MonthsYearDuration(2, 10))
     )
     val rentReviews = RentReviews(
       true, Some(RentReviewDetails(Some(MonthsYearDuration(0, 3)), Some(RoughDate(None, Some(4), 2013)), true, true,
         Some(RentReviewResultDetails(RoughDate(None, Some(7), 2012), false, Some(RentFixedTypeIndependent))))))
     val rentAgreement = RentAgreement(true, None, RentSetByTypeRenewedLease)
-    val rent = Rent(Some(15588), new LocalDate(2013, 11, 1), new LocalDate(2013, 11, 1), true, RentBaseTypeOther, Some("here are some details about what the rent is based on"))
+    val rent = Rent(Some(15588), LocalDate.of(2013, 11, 1), LocalDate.of(2013, 11, 1), true, RentBaseTypeOther, Some("here are some details about what the rent is based on"))
     val whatRentIncludes = WhatRentIncludes(true, true, true, true, true, Some("RENT DETAILS"), Parking(true, Some(ParkingDetails(2, 0, 0)), true, Some(ParkingDetails(0, 0, 9)), Some(599.84), Some(RoughDate(None, Some(6), 2012))))
     val incentivesAndPayments = IncentivesAndPayments(
       true, Some(FreePeriodDetails(36, "REnt free period alsjfd lasdjf lasjdf la;sdjf lasdjf lasjd flasd jflsa df")), true,

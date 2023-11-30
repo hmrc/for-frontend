@@ -24,11 +24,9 @@ import models.pages.SummaryBuilder
 import models.serviceContracts.submissions.Address
 
 import javax.inject.Inject
-import org.joda.time.DateTime
 import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.JodaForms._
 import play.api.libs.json.{Format, Json}
 import play.api.mvc._
 import playconfig.LoginToHODAction
@@ -37,11 +35,13 @@ import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import util.DateUtil.nowInUK
 import views.html.{login, loginFailed}
 
+import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.{ExecutionContext, Future}
 
-case class LoginDetails(referenceNumber: String, postcode: String, startTime: DateTime)
+case class LoginDetails(referenceNumber: String, postcode: String, startTime: ZonedDateTime)
 
 object LoginController {
   val loginForm = Form(
@@ -49,16 +49,17 @@ object LoginController {
       //format of reference number should be 7 or 8 digits then / then 3 digits
       "referenceNumber" -> text.verifying(Errors.invalidRefNum, x => {
         val cleanRefNumber = x.replaceAll("\\D+", "")
-        val validLength = cleanRefNumber.length > 9 && cleanRefNumber.length < 12: Boolean
-        validLength
+        cleanRefNumber.length > 9 && cleanRefNumber.length < 12
       }),
       "postcode" -> text.verifying(Errors.invalidPostcodeOnLetter, pc => {
         var cleanPostcode = pc.replaceAll("[^\\w\\d]", "")
         cleanPostcode = cleanPostcode.patch(cleanPostcode.length - 3, " ", 0).toUpperCase
-        val isValid = cleanPostcode.matches(MappingSupport.postcodeRegex): Boolean
-        isValid
+        cleanPostcode.matches(MappingSupport.postcodeRegex)
       }),
-      "start-time" -> jodaDate("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+      "start-time" -> default(
+        localDateTime("yyyy-MM-dd'T'HH:mm:ss.SSS")
+          .transform[ZonedDateTime](_.atZone(ZoneOffset.UTC), _.toLocalDateTime),
+        nowInUK)
     )(LoginDetails.apply)(LoginDetails.unapply))
 }
 
@@ -79,7 +80,7 @@ class LoginController @Inject()(
 
 
   def show = Action { implicit request =>
-    Ok(login(loginForm))
+    Ok(login(loginForm.fill(LoginDetails("", "", nowInUK))))
   }
 
   def logout = Action { implicit request =>
@@ -107,7 +108,7 @@ class LoginController @Inject()(
     )
   }
 
-  def verifyLogin(referenceNumber: String, postcode: String, startTime: DateTime)(implicit r: MessagesRequest[AnyContent]) = {
+  def verifyLogin(referenceNumber: String, postcode: String, startTime: ZonedDateTime)(implicit r: MessagesRequest[AnyContent]) = {
     val sessionId = java.util.UUID.randomUUID().toString //TODO - Why new session? Why manually?
 
     implicit val hc2: HeaderCarrier = hc.copy(sessionId = Some(SessionId(sessionId)))

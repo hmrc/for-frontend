@@ -46,7 +46,7 @@ class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with 
       bind[SubmitBusinessRentalInformation].to[StubSubmitBRI].in[Singleton],
       bind[FormDocumentRepository].toProvider[StubFormDocumentRepoProvider].in[Singleton]
     )
-    .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> true)).build()
+    .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> false)).build()
 
   def submit: StubSubmitBRI = app.injector.instanceOf[SubmitBusinessRentalInformation].asInstanceOf[StubSubmitBRI]
 

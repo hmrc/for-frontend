@@ -23,7 +23,6 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
-@import scala.concurrent.ExecutionContext
 @import util.DateUtil
 
 @this(  layout: pageLayout,
@@ -38,7 +37,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[_], summary: Summary)(implicit request: Request[_], messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 @verbalLeaseDate = {@summary.lease.flatMap {d=>@d.verbalAgreementDetails.startDate.map { x => @displayRoughDate(x)}}}

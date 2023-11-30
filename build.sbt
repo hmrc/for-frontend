@@ -20,27 +20,29 @@ val scoverageSettings = {
   )
 }
 
+val bootstrapVersion = "8.1.0"
+val playFrontendVersion = "8.1.0"
+val mongoVersion = "1.6.0"
+
 val compileDeps = Seq(
   filters,
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.22.0",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "7.20.0-play-28",
-  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "1.3.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.9.4",
-  "com.typesafe.play" %% "play-joda-forms" % PlayVersion.current,
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-30" % bootstrapVersion,
+  "uk.gov.hmrc" %% "play-frontend-hmrc-play-30" % playFrontendVersion,
+  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30" % mongoVersion,
   "org.xhtmlrenderer" % "flying-saucer-pdf-itext5" % "9.1.22",
   "nu.validator" % "htmlparser" % "1.4.16",
-  "org.webjars" % "jquery" % "3.6.4",
+  "org.webjars" % "jquery" % "3.7.1",
   "com.github.java-json-tools" % "json-schema-validator" % "2.2.14", // must be the same version as in "for-hod-adapter"
   "org.webjars.bower" % "compass-mixins" % "1.0.2"
 )
 
-val scalatestPlusPlayVersion = "5.1.0"
-val scalatestVersion = "3.2.16"
-val mockitoScalaVersion = "1.17.14"
+val scalatestPlusPlayVersion = "7.0.0"
+val scalatestVersion = "3.2.17"
+val mockitoScalaVersion = "1.17.30"
 val flexMarkVersion = "0.64.8"
 
 def testDeps(scope: String) = Seq(
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+  "org.playframework" %% "play-test" % PlayVersion.current % scope,
   "org.scalatest" %% "scalatest" % scalatestVersion % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalatestPlusPlayVersion % scope,
   "org.mockito" %% "mockito-scala-scalatest" % mockitoScalaVersion % scope,
@@ -54,7 +56,7 @@ lazy val root = (project in file("."))
   .settings(defaultSettings() *)
   .settings(
     name := "for-frontend",
-    scalaVersion := "2.13.11",
+    scalaVersion := "2.13.12",
     DefaultBuildSettings.targetJvm := "jvm-11",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
@@ -67,7 +69,6 @@ lazy val root = (project in file("."))
   )
   .configs(IntegrationTest)
   .settings(
-    Defaults.itSettings,
     DefaultBuildSettings.integrationTestSettings()
   )
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)

@@ -17,11 +17,12 @@
 package models.pages
 
 import models.serviceContracts.submissions._
-import org.joda.time.DateTime
+
+import java.time.ZonedDateTime
 
 case class Summary(
   referenceNumber: String,
-  journeyStarted: DateTime,
+  journeyStarted: ZonedDateTime,
   addressConnection: Option[AddressConnectionType],
   propertyAddress: Option[Address],
   customerDetails: Option[CustomerDetails],
@@ -38,7 +39,7 @@ case class Summary(
   alterations: Option[PropertyAlterations],
   otherFactors: Option[OtherFactors],
   address: Option[Address] = None,
-  journeyResumptions: Seq[DateTime] = Seq.empty
+  journeyResumptions: Seq[ZonedDateTime] = Seq.empty
   ) {
 
   lazy val addressVOABelievesIsCorrect = address.getOrElse(throw new VOAHeldAddressSelectionError(referenceNumber))

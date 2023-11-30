@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -34,7 +33,7 @@
 )
 
 
-@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[_], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @heading = @{messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))}
 

@@ -15,12 +15,11 @@
  *@
 
 @import models.journeys.Journey
-@import scala.concurrent.ExecutionContext
 
 @this(  layout: pageLayout, formHelp: includes.formHelp)
 
 
-@(summary: models.pages.Summary, forPdf: Boolean = false)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(summary: models.pages.Summary, forPdf: Boolean = false)(implicit request: Request[_],  messages: Messages)
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(Journey.lastPageFor(summary)).url,

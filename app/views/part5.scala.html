@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import models._
 @import models.pages.{PageFive, Summary}
 @import models.serviceContracts.submissions._
@@ -37,7 +36,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[PageFive], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext )
+@(theForm: Form[PageFive], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(4).url,
@@ -120,4 +119,3 @@
 
     @formHelp()
 }
-

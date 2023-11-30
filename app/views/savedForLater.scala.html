@@ -15,15 +15,16 @@
  *@
 
 @import models.pages.Summary
-@import org.joda.time.LocalDate
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukWarningText,GovukPanel}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
-@import scala.concurrent.ExecutionContext
+@import util.DateUtil.fullDateFormatter
 
-@this(main_template: pageLayout, govukWarningText: GovukWarningText, govukButton: GovukButton, govukPanel: GovukPanel, formHelp: includes.formHelp )
+@import java.time.LocalDate
 
-@(summary: Summary, password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@this(main_template: pageLayout, govukWarningText: GovukWarningText, govukButton: GovukButton, govukPanel: GovukPanel, formHelp: includes.formHelp)
+
+@(summary: Summary, password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: Request[_],  messages: Messages)
 
 @title = @{
     if(!hasTimedOut) {
@@ -52,9 +53,7 @@
 
     <p class="govuk-body">
         @messages("saveForLater.paragraph")
-        @{
-            s"${expiryDate.getDayOfMonth} ${messages(s"month.${expiryDate.monthOfYear.getAsText}")} ${expiryDate.getYear}"
-        }
+        @{fullDateFormatter.format(expiryDate)}
     </p>
 
     <p>

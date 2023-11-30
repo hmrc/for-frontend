@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import org.joda.time.DateTime
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import util.DateUtil.nowInUK
 
 @this(main_template: pageLayout,
         govukInput: GovukInput,
@@ -75,9 +75,7 @@
             )
         )
 
-        @defining(DateTime.now.toString) { now =>
-            <input type="hidden" name="start-time" value="@now" />
-        }
+        <input type="hidden" name="start-time" value="@theForm("start-time").value" />
 
         @includes.continueButton(govukButton)
     }

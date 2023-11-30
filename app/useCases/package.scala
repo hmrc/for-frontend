@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 package object useCases {
-  type Now = () => DateTime
+  type Now = () => ZonedDateTime
   type ReferenceNumber = String
   type SaveForLaterPassword = String
 }

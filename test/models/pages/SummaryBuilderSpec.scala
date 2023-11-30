@@ -17,17 +17,17 @@
 package models.pages
 
 import connectors.Document
-import org.joda.time.DateTime
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import util.DateUtil.nowInUK
 
 class SummaryBuilderSpec extends AnyFlatSpec with should.Matchers {
 
   behavior of "Summary builder"
 
   it should "map the reference number number, journey started date, and journey resumptions" in {
-    val now = DateTime.now.minusDays(5)
-    val resumptions = Seq(DateTime.now.minusDays(4), DateTime.now.minusDays(3), DateTime.now.minusDays(2))
+    val now = nowInUK.minusDays(5)
+    val resumptions = Seq(nowInUK.minusDays(4), nowInUK.minusDays(3), nowInUK.minusDays(2))
     val d = Document("11122233344", now, Seq.empty, None, Some("secretPassword"), journeyResumptions = resumptions)
     val s = SummaryBuilder.build(d)
     assert(s.referenceNumber === "11122233344")

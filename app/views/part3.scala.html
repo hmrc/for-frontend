@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import models._
 @import models.pages.{PageThree, Summary}
 @import models.serviceContracts.submissions._
@@ -42,7 +41,7 @@
 )
 
 
-@(theForm: Form[PageThree], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[PageThree], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 

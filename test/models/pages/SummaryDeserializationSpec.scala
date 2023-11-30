@@ -18,10 +18,10 @@ package models.pages
 
 import connectors.{Document, Page}
 import models.serviceContracts.submissions.OccupierTypeIndividuals
-import org.joda.time.DateTime
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import util.DateUtil.nowInUK
 
 class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues {
 
@@ -53,7 +53,7 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
 
   val doc: Document = Document(
     referenceNumber = "1111",
-    journeyStarted = DateTime.now(),
+    journeyStarted = nowInUK,
     pages = pages,
     address = None,
     saveForLaterPassword = None,
@@ -73,9 +73,5 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
     summary.rent.value.totalRent.amount shouldBe BigDecimal("10000")
 
    }
-
-
-
-
 
 }

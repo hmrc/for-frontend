@@ -19,10 +19,11 @@ package form
 import models._
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.FormError
+
+import java.time.LocalDate
 
 
 class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
@@ -35,8 +36,8 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
   "A fully populated form" should "bind to a PageNineData" in {
     val expectedData = PageNine(
       totalRent = AnnualRent(123.45),
-      rentBecomePayable = new LocalDate(2001, 5, 1),
-      rentActuallyAgreed = new LocalDate(2001, 5, 1),
+      rentBecomePayable = LocalDate.of(2001, 5, 1),
+      rentActuallyAgreed = LocalDate.of(2001, 5, 1),
       negotiatingNewRent = false,
       rentBasis = RentBaseTypeOther,
       rentBasisOtherDetails = Some("oneTwoThree"))

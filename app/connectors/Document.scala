@@ -17,13 +17,12 @@
 package connectors
 
 import models.serviceContracts.submissions.Address
-import org.joda.time.DateTime
 import play.api.libs.json._
-import play.api.libs.json.JodaReads._
-import play.api.libs.json.JodaWrites._
 
-case class Document(referenceNumber: String, journeyStarted: DateTime,  pages: Seq[Page] = Seq(), address: Option[Address] = None,
-                    saveForLaterPassword: Option[String] = None, journeyResumptions: Seq[DateTime] = Seq.empty) {
+import java.time.ZonedDateTime
+
+case class Document(referenceNumber: String, journeyStarted: ZonedDateTime,  pages: Seq[Page] = Seq(), address: Option[Address] = None,
+                    saveForLaterPassword: Option[String] = None, journeyResumptions: Seq[ZonedDateTime] = Seq.empty) {
   def page(pageNumber: Int): Option[Page] = pages.find(_.pageNumber == pageNumber)
 
   def add(page: Page): Document = {
@@ -33,5 +32,5 @@ case class Document(referenceNumber: String, journeyStarted: DateTime,  pages: S
 }
 
 object Document {
-  implicit val formats = Json.format[Document]
+  implicit val formats: OFormat[Document] = Json.format[Document]
 }

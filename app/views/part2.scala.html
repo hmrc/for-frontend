@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import models.serviceContracts.submissions._
 @import play.api.data._
 @import models.pages.Summary
@@ -36,7 +35,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[CustomerDetails], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[CustomerDetails], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @layout(
     pageHeading = messages("section2.heading"),

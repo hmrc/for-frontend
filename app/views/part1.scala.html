@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import scala.concurrent.ExecutionContext
 @import models._
 @import models.pages.Summary
 @import models.serviceContracts.submissions._
@@ -33,7 +32,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[Address], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[Address], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @getAddressFieldValueOrDefaultUnlessErrors(field:String, defaultAddressValue: String) = @{
     if(theForm.hasErrors) {

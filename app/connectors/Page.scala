@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class Page(pageNumber: Int, fields: Map[String, Seq[String]])
 
 object Page {
-  implicit val formats = Json.format[Page]
+  implicit val formats: OFormat[Page] = Json.format[Page]
 }

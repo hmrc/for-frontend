@@ -16,8 +16,8 @@
 
 package connectors
 
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import models.serviceContracts.submissions.{NotConnectedSubmission, Submission}
@@ -34,14 +34,12 @@ class HodSubmissionConnector @Inject() (config: ServicesConfig,
                                         http: ForHttp)(implicit ec: ExecutionContext) extends SubmissionConnector  {
   lazy val serviceUrl = config.baseUrl("for-hod-adapter")
 
-  implicit def httpReads = new HttpReads[HttpResponse] {
-    override def read(method: String, url: String, response: HttpResponse): HttpResponse = {
-      response.status match {
-        case 400 => throw new BadRequestException(response.body)
-        case 401 => throw new Upstream4xxResponse(response.body, 401, 401, response.headers)
-        case 409 => throw new Upstream4xxResponse(response.body, 409, 409, response.headers)
-        case _ => HttpReads.Implicits.readRaw.read(method, url, response)
-      }
+  implicit def httpReads: HttpReads[HttpResponse] = (method: String, url: String, response: HttpResponse) => {
+    response.status match {
+      case 400 => throw new BadRequestException(response.body)
+      case 401 => throw new Upstream4xxResponse(response.body, 401, 401, response.headers)
+      case 409 => throw new Upstream4xxResponse(response.body, 409, 409, response.headers)
+      case _ => HttpReads.Implicits.readRaw.read(method, url, response)
     }
   }
 

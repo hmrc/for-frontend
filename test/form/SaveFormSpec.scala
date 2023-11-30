@@ -21,18 +21,19 @@ import form.persistence.SaveFormInRepository
 import models.RoughDate
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpec
+import util.DateUtil.nowInUK
 import utils.stubs.StubFormDocumentRepo
 
+import java.time.LocalDate
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.concurrent.ExecutionContext.Implicits._
 
 class SaveFormSpec extends AnyWordSpec with should.Matchers {
   import TestData._
-  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
 
   "SaveForm" when {
 
@@ -91,7 +92,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
   object TestData {
     val refNumWithNoDoc = "4545456744"
     val refNumWithDoc = "1111111222"
-    val testDoc = Document(refNumWithDoc, DateTime.now, Seq.empty)
+    val testDoc = Document(refNumWithDoc, nowInUK, Seq.empty)
     val testData = Map(
       "isAddressCorrect" -> Seq(" false "),
       "address.buildingNameNumber" -> Seq(" 123 "),
@@ -106,7 +107,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     )
     val page1WithTestData = Page(1, testDataTrimmed - "csrfToken")
     val testDocWithTestDataAddedToPage1 = testDoc.add(page1WithTestData)
-    val summaryForTestDocWithTestData = Summary(refNumWithDoc, DateTime.now,
+    val summaryForTestDocWithTestData = Summary(refNumWithDoc, nowInUK,
       Some(AddressConnectionTypeYesChangeAddress),
       Some(Address("123", None, None, "AA11 1AA")),
       None, None, None, None, None, None, None, None, None, None, None, None,
@@ -136,18 +137,18 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     )
     val page6TestData = page6NonEmptyTestData ++ page6EmptyTestData
     val emptyFieldsRefNum = "4455667898"
-    val emptyFieldsTestDoc = Document(emptyFieldsRefNum, DateTime.now, Seq(page1WithTestData))
+    val emptyFieldsTestDoc = Document(emptyFieldsRefNum, nowInUK, Seq(page1WithTestData))
     val page6WithNonEmptyTestDataFields = Page(6, page6NonEmptyTestData)
     val emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6 = emptyFieldsTestDoc.add(page6WithNonEmptyTestDataFields)
     val mappedPage6WithNonEmptyFields = PageSix(
       LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(
         RoughDate(None, Some(3), 2011), false, Some(MonthsYearDuration(2, 10)),
         true, Some("adjf asdklfj a;sdljfa dsflk"), true, List(SteppedDetails(
-          new LocalDate(2011, 12, 9), new LocalDate(2010, 11, 8), 500
+          LocalDate.of(2011, 12, 9), LocalDate.of(2010, 11, 8), 500
         ))
       )), VerbalAgreement()
     )
-    val summaryWithNonEmptyFieldsAddedToPage6 = Summary("", DateTime.now,
+    val summaryWithNonEmptyFieldsAddedToPage6 = Summary("", nowInUK,
       Some(AddressConnectionTypeYesChangeAddress),
       Some(Address("123", None, None, "AA11 1AA")), None, None, None, None,
       Some(mappedPage6WithNonEmptyFields), None, None, None, None, None, None, None, None
@@ -156,7 +157,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
 }
 
 case class StubSummaryBuilder(summaries: (Document, Summary)*) extends SummaryBuilder {
-  val emptySummary = Summary("", DateTime.now,
+  val emptySummary = Summary("", nowInUK,
     None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
   )
 

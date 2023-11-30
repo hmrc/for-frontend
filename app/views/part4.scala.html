@@ -21,7 +21,6 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
-@import scala.concurrent.ExecutionContext
 
 @this(  layout: pageLayout,
         govukRadios: GovukRadios,
@@ -36,7 +35,7 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[PageFour], summary: Summary)(implicit request: Request[_],  messages: Messages, ec: ExecutionContext)
+@(theForm: Form[PageFour], summary: Summary)(implicit request: Request[_],  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 

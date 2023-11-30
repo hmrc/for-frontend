@@ -16,10 +16,11 @@
 
 package form
 
-import org.joda.time.DateTime
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import utils.FormBindingTestAssertions._
+
+import java.time.{ZoneOffset, ZonedDateTime}
 
 class LoginMappingSpec extends AnyFlatSpec with should.Matchers {
 	val loginForm = controllers.LoginController.loginForm
@@ -30,11 +31,11 @@ class LoginMappingSpec extends AnyFlatSpec with should.Matchers {
 		val data = Map(
 			"referenceNumber" -> "12345678 /*BLAH 000",
 			"postcode" -> "AA11 1AA",
-			"start-time" -> "2016-01-04T08:58:42.113Z"
+			"start-time" -> "2016-01-04T08:58:42.113"
 		)
 
 		mustBind(loginForm.bind(data)) { x =>
-			assert(x.startTime === new DateTime(2016, 1, 4, 8, 58, 42, 113))
+			assert(x.startTime === ZonedDateTime.of(2016, 1, 4, 8, 58, 42, 113000000, ZoneOffset.UTC))
 		}
 	}
 
@@ -42,7 +43,7 @@ class LoginMappingSpec extends AnyFlatSpec with should.Matchers {
 		val data = Map(
 			"referenceNumber" -> "12345678  */ 000",
 			"postcode" -> "AA11 1AA",
-			"start-time" -> "2016-01-04T08:58:42.113Z"
+			"start-time" -> "2016-01-04T08:58:42.113"
 		)
 
     mustBind(loginForm.bind(data)) { x => assert(x.referenceNumber === "12345678  */ 000") }
@@ -64,7 +65,7 @@ class LoginMappingSpec extends AnyFlatSpec with should.Matchers {
 		val data = Map(
 			"referenceNumber" -> "12345678 000",
 			"postcode" -> "AA11 1AA",
-			"start-time" -> "2016-01-04T08:58:42.113Z"
+			"start-time" -> "2016-01-04T08:58:42.113"
 		)
 
 		mustBind(loginForm.bind(data)) { x => assert(x.postcode === "AA11 1AA") }

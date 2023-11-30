@@ -52,7 +52,6 @@ trait Audit extends AuditConnector {
    */
   private val summaryWriter = {
     import play.api.libs.json._
-    import play.api.libs.json.JodaWrites._
     Json.writes[Summary]
   }
 

@@ -21,10 +21,11 @@ import models.journeys.Journey._
 import models.journeys.Paths._
 import models.pages._
 import models.serviceContracts.submissions._
-import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import utils.{SummaryBuilder => summaryBuilder}
+
+import java.time.LocalDate
 
 class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
 
@@ -198,5 +199,5 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
   lazy val pageEightData = RentAgreement(true, None, RentSetByTypeNewLease)
   lazy val hasNoRentReviews = PageSeven(false, None)
   lazy val hasRentReviews = PageSeven(true, None)
-  lazy val pageNineData = PageNine(AnnualRent(8.99), rentBecomePayable = new LocalDate(2010, 2, 27), rentActuallyAgreed = new LocalDate(2005, 4, 2), negotiatingNewRent = true, rentBasis = RentBaseTypeOpenMarket, None)
+  lazy val pageNineData = PageNine(AnnualRent(8.99), rentBecomePayable = LocalDate.of(2010, 2, 27), rentActuallyAgreed = LocalDate.of(2005, 4, 2), negotiatingNewRent = true, rentBasis = RentBaseTypeOpenMarket, None)
 }

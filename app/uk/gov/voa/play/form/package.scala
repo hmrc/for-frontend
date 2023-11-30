@@ -20,8 +20,8 @@ package uk.gov.voa.play
 // https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
 
 package object form {
-  implicit val emptyOption = None
-  implicit val emptyList = List()
+  implicit val emptyOption: None.type = None
+  implicit val emptyList: List[Nothing] = List()
   implicit class conditionOpts(c: Condition) {
     def and(c2: Condition): Condition = d => c(d) && c2(d)
   }

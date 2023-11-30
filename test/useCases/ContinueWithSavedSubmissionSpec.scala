@@ -20,21 +20,22 @@ import _root_.utils.UnitTest
 import connectors.Document
 import models.journeys.SummaryPage
 import models.pages.Summary
-import org.joda.time.DateTime
-import uk.gov.hmrc.http.{HeaderCarrier,Authorization}
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier}
+import util.DateUtil.nowInUK
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import java.time.{ZoneOffset, ZonedDateTime}
+import scala.concurrent.ExecutionContext.Implicits._
 
 class ContinueWithSavedSubmissionSpec extends UnitTest {
 
    "Continue with saved submission" when {
      val pwd = "anicepassword"
      val ref = "11122233344"
-     val now = new DateTime(2015, 3, 5, 12, 25)
-     val doc = Document(ref, DateTime.now, saveForLaterPassword = Some(pwd), journeyResumptions = Seq(now.minusDays(1)))
+     val now = ZonedDateTime.of(2015, 3, 5, 12, 25, 0, 0, ZoneOffset.UTC)
+     val doc = Document(ref, nowInUK, saveForLaterPassword = Some(pwd), journeyResumptions = Seq(now.minusDays(1)))
      val tok = "BASIC abcdefg=="
      implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(tok)))
-     val sum = Summary(ref, DateTime.now, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+     val sum = Summary(ref, nowInUK, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
 
     "a document has been saved and the passwords match" should {
       var updated: (HeaderCarrier, ReferenceNumber, Document) = null

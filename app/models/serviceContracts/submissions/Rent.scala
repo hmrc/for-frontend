@@ -16,7 +16,8 @@
 
 package models.serviceContracts.submissions
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
+
 
 case class Rent(
   annualRentExcludingVat: Option[BigDecimal],
