@@ -38,7 +38,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
 import useCases.SaveInProgressSubmissionForLater.SaveInProgressSubmissionForLater
-import useCases.{IncorrectPassword, PasswordsMatch}
+import useCases.{ErrorRetrievingSavedDocument, IncorrectPassword, PasswordsMatch}
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext
@@ -127,10 +127,10 @@ class SaveForLaterController @Inject()
       formWithErrors => BadRequest(saveForLaterLogin(formWithErrors)),
       s4l => continue(hc)(s4l.password, request.refNum) flatMap {
         case PasswordsMatch(pageToResumeAt) => RedirectTo(pageToResumeAt, request.headers).flashing((s4lIndicator, s4lIndicator))
-        case IncorrectPassword => {
+        case IncorrectPassword =>
           val formWithLoginErrors = saveForLaterForm.withError("password", Messages("saveForLater.invalidPassword"))
           BadRequest(saveForLaterLogin(formWithLoginErrors))
-        }
+        case ErrorRetrievingSavedDocument => Redirect(controllers.routes.SaveForLaterController.login)
       }
     )
   }

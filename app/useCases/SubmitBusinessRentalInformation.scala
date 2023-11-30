@@ -133,6 +133,7 @@ class DefaultSubmissionBuilder extends SubmissionBuilder {
     case OccupierTypeIndividuals => Some(p3.mainOccupierName.getOrElse(""))
     case OccupierTypeCompany =>
       Some(Seq(p3.occupierCompanyName, p3.occupierCompanyContact).flatten.mkString(" - ").take(50))
+    case _ => None
   }
 
   private def toSublet(p4: PageFour)(implicit sum: Summary) = Sublet(p4.propertyIsSublet, p4.sublet.map(toSubletData))
