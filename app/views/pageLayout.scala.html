@@ -135,7 +135,7 @@
             additionalHeadBlock = headTemplate(withTimeoutDialog),
             additionalScriptsBlock = scriptsTemplate(),
             beforeContentBlock = beforeBLock,
-            mainContentLayout = if (fullWidth) fullWidthMainContent(_) else None
+            mainContentLayout = Option.when(fullWidth)(fullWidthMainContent _)
         )
     )
 )(contentWithHeading)
