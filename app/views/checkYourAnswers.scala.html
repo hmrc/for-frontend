@@ -26,12 +26,12 @@
     pageHeading = messages("heading.summary"),
     summary = Some(summary),
     showAccountInfo = true,
-    gridClasses = "govuk-grid-column-full"
+    fullWidth = true
 ){
 
     @includes.checkYourAnswersTable(summary)
 
-    <div class="summary-actions govuk-!-margin-top-5 dontprint" >
+    <div class="summary-actions govuk-button-group dontprint" >
         <a id="continue" href="@routes.ApplicationController.declaration" class="govuk-button" role="link">@messages("button.label.continue")</a>
         <a href="@routes.SaveForLaterController.saveForLater(request.path)" class="govuk-button govuk-button--secondary" role="link">@messages("button.label.save")</a>
     </div>

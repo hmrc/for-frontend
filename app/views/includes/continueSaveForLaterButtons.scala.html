@@ -19,10 +19,11 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
 
 @(govukButton: GovukButton)(implicit messages: Messages)
-<p class="govuk-body" style="clear:both;">
+
+<div class="govuk-button-group">
  @govukButton(
   Button(
-   attributes = Map("id" -> "continue", "novalidate" -> "novalidate", "style" -> "margin-right:4px;"),
+   attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
    content = Text(messages("button.label.continue")),
    name = "continue_button",
    value = "continue_button",
@@ -39,5 +40,5 @@
    inputType = "submit"
   )
  )
-</p>
+</div>
 

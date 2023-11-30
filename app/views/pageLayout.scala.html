@@ -18,12 +18,17 @@
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.hmrcfrontend.config.AccessibilityStatementConfig
-@import views.html.govuk.{head, scripts}
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
+@import views.html.govuk.{head, scripts, FullWidthMainContent}
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLanguageSelectHelper
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.TemplateOverrides
+
 
 @this(
-        hmrcLayout: HmrcLayout,
+        hmrcStandardPage: HmrcStandardPage,
+        fullWidthMainContent: FullWidthMainContent,
         headTemplate: head,
         scriptsTemplate: scripts,
         govukPhaseBanner: GovukPhaseBanner,
@@ -49,7 +54,7 @@
     backLinkUrl: Option[String] = None,
     showHistoryBack: Boolean = false,
     withTimeoutDialog: Boolean = true,
-    gridClasses: String = "govuk-grid-column-two-thirds"
+    fullWidth: Boolean = false
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @beforeBLock = {
@@ -91,9 +96,6 @@
 
 @numberOfSteps = {14}
 @contentWithHeading = {
-    <div class="govuk-grid-row">
-        <div class="@gridClasses">
-
         @if(theForm!=null){
             @includes.summaryErrors(theForm = theForm, govukErrorSummary = govukErrorSummary)
         }
@@ -119,17 +121,21 @@
             <h1 class="govuk-heading-l">@pageHeading</h1>
         }
         @contentBlock
-        </div>
-    </div>
 }
 
-@hmrcLayout(
-    pageTitle = pageTitle.getOrElse(pageHeading) + " - " + messages("project.header") + " - " + messages("gov.name"),
-    isWelshTranslationAvailable = true,
-    serviceName = Some(messages("service.name")),
-    serviceUrl= Some(routes.ApplicationController.index.url),
-    additionalHeadBlock = Some(headTemplate(withTimeoutDialog)),
-    additionalScriptsBlock = Some(scriptsTemplate()),
-    beforeContentBlock = Option(beforeBLock),
-    mainContentLayout = Some(identity)
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        pageTitle = pageTitle.getOrElse(pageHeading) + " - " + messages("project.header") + " - " + messages("gov.name"),
+        isWelshTranslationAvailable = true,
+        serviceName = messages("service.name"),
+        serviceURLs = ServiceURLs(
+            serviceUrl = routes.ApplicationController.index.url
+        ),
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = headTemplate(withTimeoutDialog),
+            additionalScriptsBlock = scriptsTemplate(),
+            beforeContentBlock = beforeBLock,
+            mainContentLayout = if (fullWidth) fullWidthMainContent(_) else None
+        )
+    )
 )(contentWithHeading)

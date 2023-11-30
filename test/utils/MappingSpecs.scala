@@ -19,6 +19,7 @@ package utils
 import form._
 import models._
 import play.api.data.Form
+import util.DateUtil.nowInUK
 import utils.FormBindingTestAssertions._
 
 import java.time.YearMonth
@@ -107,7 +108,11 @@ trait CurrencySpecs { this: CommonSpecs =>
 }
 
 trait DateMappingSpecs { this: CommonSpecs =>
-  import org.joda.time.DateTime
+
+  private val nextMonth = nowInUK.plusMonths(1)
+  private val lastMonth = nowInUK.minusMonths(1)
+  private val tomorrow = nowInUK.plusDays(1)
+  private val yesterday = nowInUK.minusDays(1)
 
   def validateFullDateInPast[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = ""): Unit = {
     validateAnyDate(field, form, formData, fieldErrorPart)
@@ -197,9 +202,9 @@ trait DateMappingSpecs { this: CommonSpecs =>
     val invalid = Seq("1899", "1000", "0001")
     invalid foreach { i => validateError(fromKey, invalid, Errors.dateBefore1900 + fieldErrorPart, form, formData, Some(field(0))) }
 
-    val valid = Seq("1900", "1901", "1955", "2014")
-    valid foreach { v =>
-      val d = formData.updated(fromKey, v).updated(toKey, DateTime.parse(v).plusYears(9).getYear.toString)
+    val validYears = Seq("1900", "1901", "1955", "2014")
+    validYears foreach { year =>
+      val d = formData.updated(fromKey, year).updated(toKey, (year.toInt + 9).toString)
       val f = form.bind(d).convertGlobalToFieldErrors()
       doesNotContainErrors(f)
     }
@@ -218,24 +223,19 @@ trait DateMappingSpecs { this: CommonSpecs =>
     val monthKey = field + ".month"
     val yearKey = field + ".year"
 
-    val nextMonth = DateTime.now.plusMonths(1)
-
-    val invalid = Seq(("12", "3030"), ("1", "3025"), (nextMonth.getMonthOfYear.toString, nextMonth.getYear.toString))
+    val invalid = Seq(("12", "3030"), ("1", "3025"), (nextMonth.getMonthValue.toString, nextMonth.getYear.toString))
     invalid foreach { iv =>
       val d = formData.updated(monthKey, iv._1).updated(yearKey, iv._2)
       val f = form.bind(d).convertGlobalToFieldErrors()
       mustOnlyContainError(field, Errors.dateMustBeInPast + fieldErrorPart, f)
     }
 
-    val lastMonth = DateTime.now.plusMonths(-1)
-    val now = DateTime.now
-
-    val valid = Seq(
-      (lastMonth.getMonthOfYear.toString, lastMonth.getYear.toString),
-      (now.getMonthOfYear.toString, now.getYear.toString),
+    val validMonthYear = Seq(
+      (lastMonth.getMonthValue.toString, lastMonth.getYear.toString),
+      (nowInUK.getMonthValue.toString, nowInUK.getYear.toString),
       ("9", "2015"), ("1", "1900"))
-    valid foreach { v =>
-      val d = formData.updated(monthKey, v._1).updated(yearKey, v._2)
+    validMonthYear foreach { case (month, year) =>
+      val d = formData.updated(monthKey, month).updated(yearKey, year)
       val f = form.bind(d).convertGlobalToFieldErrors()
       doesNotContainErrors(f)
     }
@@ -245,9 +245,8 @@ trait DateMappingSpecs { this: CommonSpecs =>
     val monthKey = field + ".month"
     val yearKey = field + ".year"
 
-    val nextMonth = DateTime.now.plusMonths(1)
     val data = formData.
-      updated(monthKey, nextMonth.getMonthOfYear.toString).
+      updated(monthKey, nextMonth.getMonthValue.toString).
       updated(yearKey, nextMonth.getYear.toString)
 
     val res = form.bind(data).convertGlobalToFieldErrors()
@@ -257,23 +256,19 @@ trait DateMappingSpecs { this: CommonSpecs =>
 
   private def fullDateMustBeInPast[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String): Unit = {
 
-    val tomorrow = DateTime.now.plusDays(1)
-
     val invalid = Seq(
       ("28", "2", "2225"),
       ("23", "5", "2115"),
-      (tomorrow.getDayOfMonth.toString, tomorrow.getMonthOfYear.toString, tomorrow.getYear.toString))
+      (tomorrow.getDayOfMonth.toString, tomorrow.getMonthValue.toString, tomorrow.getYear.toString))
     invalid foreach { iv =>
       val f = updateFullDateAndBind(field, iv, form, formData)
       mustOnlyContainError(field, Errors.dateMustBeInPast + fieldErrorPart, f)
     }
 
-    val yesterday = DateTime.now.minusDays(1)
-
     val valid = Seq(
       ("1", "1", "2015"),
       ("31", "10", "2014"),
-      (yesterday.getDayOfMonth.toString, yesterday.getMonthOfYear.toString, yesterday.getYear.toString)
+      (yesterday.getDayOfMonth.toString, yesterday.getMonthValue.toString, yesterday.getYear.toString)
     )
     valid foreach {v =>
       val f = updateFullDateAndBind(field, v, form, formData)

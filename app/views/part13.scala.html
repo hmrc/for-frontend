@@ -96,8 +96,6 @@
         <div  class="multi-fields-group"
               id=@(s"propertyAlterationsDetails_description_div_${idx}")>
 
-        <fieldset class="form-group" id=s"propertyAlterationsDetails[$idx].alterationType">
-
           <h3 class="govuk-heading-m section-heading">@messages("alteration.section.heading") <span>@{idx + 1}</span></h3>
 
           @govukRadios(
@@ -145,7 +143,6 @@
               errorMessage =  theForm.errors.asTextErrorMessageForField(s"propertyAlterationsDetails[$idx].cost")
             )
           )
-        </fieldset>
 
 
           <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display: none">@messages("label.add.remove")</a>

@@ -29,7 +29,7 @@
     backLinkUrl = routes.NotConnectedController.onPageView.url,
     summary = Some(notConnectedSummary.summary),
     showAccountInfo = true,
-    gridClasses = "govuk-grid-column-full"
+    fullWidth = true
 ) {
 
     @formWithCSRF(action = controllers.routes.NotConnectedCheckYourAnswersController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
