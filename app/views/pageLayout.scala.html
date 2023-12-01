@@ -21,6 +21,7 @@
 @import views.html.govuk.{head, scripts, FullWidthMainContent}
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLanguageSelectHelper
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.Banners
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.TemplateOverrides
@@ -50,7 +51,6 @@
     showFooter: Boolean = true,
     showAccountInfo: Boolean = false,
     summary: Option[Summary] = None,
-    beforeContentBlock: Option[Html] = None,
     backLinkUrl: Option[String] = None,
     showHistoryBack: Boolean = false,
     withTimeoutDialog: Boolean = true,
@@ -58,20 +58,6 @@
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @beforeBLock = {
-
-    @if(showFeedback) {
-
-        @govukPhaseBanner(
-            PhaseBanner(
-                classes = "dontprint",
-                tag = Option(Tag(Text("BETA"))),
-                content = HtmlContent(
-                        messages("label.phase2", controllers.feedback.routes.FeedbackController.feedback.url)
-                )
-            )
-        )
-    }
-
     @hmrcLanguageSelectHelper()
 
     @if(showAccountInfo && summary.isDefined){
@@ -79,14 +65,12 @@
     }
 
     @backLinkUrl.map{ url =>
-        <div>@govukBackLink(BackLink(url))</div>
+        @govukBackLink(BackLink(url))
     }
     @if(backLinkUrl.isEmpty && showHistoryBack) {
         <a href="javascript:history.back()" id="history-back"
         class="govuk-back-link dontprint" style="display: none;">@messages("button.label.back")</a>
     }
-
-    @beforeContentBlock
 }
 
 @numberOfSteps = {14}
@@ -125,6 +109,18 @@
         serviceName = messages("service.name"),
         serviceURLs = ServiceURLs(
             serviceUrl = routes.ApplicationController.index.url
+        ),
+        banners = Banners(
+            displayHmrcBanner = !showFeedback,
+            phaseBanner = Option.when(showFeedback)(
+                PhaseBanner(
+                    tag = Tag(Text("BETA")),
+                    content = HtmlContent(
+                        messages("label.phase2", controllers.feedback.routes.FeedbackController.feedback.url)
+                    ),
+                    classes = "dontprint"
+                )
+            )
         ),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = headTemplate(withTimeoutDialog),
