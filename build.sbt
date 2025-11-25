@@ -1,7 +1,7 @@
 import org.irundaia.sass.Minified
 import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
-ThisBuild / scalaVersion := "3.7.3"
+ThisBuild / scalaVersion := "3.7.4"
 ThisBuild / majorVersion := 3
 
 lazy val microservice = Project("for-frontend", file("."))
