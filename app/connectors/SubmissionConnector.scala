@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,15 +43,15 @@ class HodSubmissionConnector @Inject() (config: ServicesConfig, http: ForHttp)(i
     }
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] =
-    http.PUT(s"$serviceUrl/for/submissions/$refNum", submission, Seq.empty).map(_ => ())
+    http.put(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
 
   def submit(refNum: String, submission: JsValue)(implicit hc: HeaderCarrier): Future[Result] =
-    http.PUT(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
+    http.put(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
       Result(ResponseHeader(r.status), HttpEntity.Streamed(Source.single(ByteString(Option(r.body).getOrElse(""))), None, None))
     }
 
   override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(implicit hc: HeaderCarrier): Future[Unit] =
-    http.PUT(s"$serviceUrl/for/submissions/notConnected/${submission.id}", submission).map(_ => ())
+    http.put(s"$serviceUrl/for/submissions/notConnected/${submission.id}", submission).map(_ => ())
 
 }
 

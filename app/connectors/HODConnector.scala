@@ -21,7 +21,7 @@ import controllers.toFut
 import crypto.MongoHasher
 import models.serviceContracts.submissions.{AddressConnectionTypeYes, AddressConnectionTypeYesChangeAddress}
 import models.{Credentials, FORLoginResponse}
-import play.api.libs.json.{Format, JsValue, Writes}
+import play.api.libs.json.{Format, JsValue, Json}
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpReads, HttpResponse, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import useCases.ReferenceNumber
@@ -56,18 +56,17 @@ class DefaultHODConnector @Inject() (
     }
 
   override def verifyCredentials(referenceNumber: String, postcode: String)(implicit hc: HeaderCarrier): Future[FORLoginResponse] = {
-    val credentials    = Credentials(referenceNumber, postcode)
-    val wrtCredentials = implicitly[Writes[Credentials]]
-    http.POST[Credentials, FORLoginResponse](url("authenticate"), credentials, Seq.empty)(using wrtCredentials, readsHack, hc, ec)
+    val credentials = Credentials(referenceNumber, postcode)
+    http.post[Credentials](url("authenticate"), credentials).map(r => Json.parse(r.body).as[FORLoginResponse])
   }
 
   override def saveForLater(d: Document)(implicit hc: HeaderCarrier): Future[Unit] = {
     val document = d.copy(saveForLaterPassword = d.saveForLaterPassword.map(mongoHasher.hash))
-    http.PUT(url(s"savedforlater/${document.referenceNumber}"), document, Seq.empty) map { _ => () }
+    http.put(url(s"savedforlater/${document.referenceNumber}"), document) map { _ => () }
   }
 
   override def loadSavedDocument(r: ReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Document]] =
-    http.GET[Document](url(s"savedforlater/$r"), Seq.empty, Seq.empty)
+    http.get[Document](url(s"savedforlater/$r"), Seq.empty)
       .map(Some(_)).map(splitAddress).map(removeAlterationDescription)
       .recoverWith {
         case _: NotFoundException => None
@@ -101,14 +100,14 @@ class DefaultHODConnector @Inject() (
 
     val page0 = Page(0, form.PageZeroForm.pageZeroForm.fill(AddressConnectionTypeYesChangeAddress).data.view.mapValues(Seq(_)).toMap)
 
-    val newPages = Seq(page0, newPage1) ++ (document.pages.filterNot(x => x.pageNumber == 0 || x.pageNumber == 1))
+    val newPages = Seq(page0, newPage1) ++ document.pages.filterNot(x => x.pageNumber == 0 || x.pageNumber == 1)
 
     document.copy(pages = newPages)
 
   }
 
   def updateDocWithPageZeroAndRemovePageOne(document: Document, page0: Page): Document = {
-    val newPages = page0 +: (document.pages.filterNot(x => x.pageNumber == 0 || x.pageNumber == 1))
+    val newPages = page0 +: document.pages.filterNot(x => x.pageNumber == 0 || x.pageNumber == 1)
     document.copy(pages = newPages)
   }
 
@@ -130,7 +129,7 @@ class DefaultHODConnector @Inject() (
   }
 
   def getSchema(schemaName: String)(implicit hc: HeaderCarrier): Future[JsValue] =
-    http.GET[JsValue](url(s"schema/$schemaName"), Seq.empty, Seq.empty)
+    http.get[JsValue](url(s"schema/$schemaName"), Seq.empty)
 }
 
 @ImplementedBy(classOf[DefaultHODConnector])

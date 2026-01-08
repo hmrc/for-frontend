@@ -19,7 +19,7 @@ package connectors
 import play.api.i18n.Messages
 import util.DateUtil.fullDateFormatter
 import play.api.libs.json._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import java.time.LocalDate
@@ -51,6 +51,6 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit 
         )),
         "force"      -> JsBoolean(false)
       )
-      http.POST[JsObject, HttpResponse](s"$emailUrl/send-templated-email/", json, Seq.empty).map(_ => ())
+      http.post[JsObject](s"$emailUrl/send-templated-email/", json).map(_ => ())
     } getOrElse Future.unit
 }
