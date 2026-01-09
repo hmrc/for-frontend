@@ -24,7 +24,7 @@ import org.apache.pekko.util.ByteString
 import play.api.http.HttpEntity
 import play.api.libs.json.JsValue
 import play.api.mvc.{ResponseHeader, Result}
-import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
@@ -32,15 +32,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class HodSubmissionConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit ec: ExecutionContext) extends SubmissionConnector {
-  lazy val serviceUrl: String = config.baseUrl("for-hod-adapter")
 
-  implicit def httpReads: HttpReads[HttpResponse] = (method: String, url: String, response: HttpResponse) =>
-    response.status match {
-      case 400 => throw new BadRequestException(response.body)
-      case 401 => throw new UpstreamErrorResponse(response.body, 401, 401, response.headers)
-      case 409 => throw new UpstreamErrorResponse(response.body, 409, 409, response.headers)
-      case _   => HttpReads.Implicits.readRaw.read(method, url, response)
-    }
+  val serviceUrl: String = config.baseUrl("for-hod-adapter")
 
   def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] =
     http.put(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
