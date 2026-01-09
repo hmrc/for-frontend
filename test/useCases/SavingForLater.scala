@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,16 +55,14 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest {
     }
 
     "saving a new document for a reference number that has already saved a document" should {
-      val oldP               = s"oldPassword${random.nextDouble}"
-      val newP               = s"newPassword${random.nextDouble}"
-      val ref                = "77788899902"
-      val doc                = Document(ref, nowInUK, saveForLaterPassword = Some(oldP))
-      var savedDoc: Document = null
+      val oldP = s"oldPassword${random.nextDouble}"
+      val newP = s"newPassword${random.nextDouble}"
+      val ref  = "77788899902"
+      val doc  = Document(ref, nowInUK, saveForLaterPassword = Some(oldP))
 
       "use the existing password if a document already has a save for later password" in {
-        var updated: (HeaderCarrier, ReferenceNumber, Document)     = null
         val s: (Document, HeaderCarrier) => Future[ReferenceNumber] =
-          SaveInProgressSubmissionForLater.apply(() => newP, set[Document, Unit](savedDoc = _), (a, b, c) => updated = (a, b, c))
+          SaveInProgressSubmissionForLater.apply(() => newP, set[Document, Unit](_ => ()), (_, _, _) => Future.unit)
         assert(await(s.apply(doc, hc)) === oldP)
       }
     }
