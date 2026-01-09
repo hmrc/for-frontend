@@ -133,6 +133,9 @@ class ForHttpClient @Inject() (
       .setHeader(useDummyIPInTrueClientIPHeader(headers)*)
       .execute[HttpResponse]
       .map { r =>
-        if is2xx(r.status) then Json.parse(r.body).as[A]
-        else throw UpstreamErrorResponse(r.body, r.status, r.status, r.headers)
+        r.status match {
+          case status if is2xx(status) => Json.parse(r.body).as[A]
+          case 404                     => throw NotFoundException(r.body)
+          case status                  => throw UpstreamErrorResponse(r.body, status, status, r.headers)
+        }
       }

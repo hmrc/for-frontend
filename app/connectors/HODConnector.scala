@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import crypto.MongoHasher
 import models.serviceContracts.submissions.{AddressConnectionTypeYes, AddressConnectionTypeYesChangeAddress}
 import models.{Credentials, FORLoginResponse}
 import play.api.libs.json.{Format, JsValue, Json}
-import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpReads, HttpResponse, NotFoundException, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
+import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import useCases.ReferenceNumber
 
@@ -44,20 +45,15 @@ class DefaultHODConnector @Inject() (
 
   private def url(path: String) = s"$serviceUrl/for/$path"
 
-  def readsHack(implicit httpReads: HttpReads[FORLoginResponse]): HttpReads[FORLoginResponse] =
-    new HttpReads[FORLoginResponse] {
-
-      override def read(method: String, url: String, response: HttpResponse): FORLoginResponse =
-        response.status match {
-          case 400 => throw new BadRequestException(response.body)
-          case 401 => throw new UpstreamErrorResponse(response.body, 401, 401, response.headers)
-          case _   => httpReads.read(method, url, response)
-        }
-    }
-
   override def verifyCredentials(referenceNumber: String, postcode: String)(implicit hc: HeaderCarrier): Future[FORLoginResponse] = {
     val credentials = Credentials(referenceNumber, postcode)
-    http.post[Credentials](url("authenticate"), credentials).map(r => Json.parse(r.body).as[FORLoginResponse])
+    http.post[Credentials](url("authenticate"), credentials).map { r =>
+      r.status match {
+        case status if is2xx(status) => Json.parse(r.body).as[FORLoginResponse]
+        case 400                     => throw new BadRequestException(r.body)
+        case status                  => throw UpstreamErrorResponse(r.body, status, status, r.headers)
+      }
+    }
   }
 
   override def saveForLater(d: Document)(implicit hc: HeaderCarrier): Future[Unit] = {
