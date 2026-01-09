@@ -119,7 +119,13 @@ class ForHttpClient @Inject() (
       .withBody(Json.toJson(body))
       .setHeader(useDummyIPInTrueClientIPHeader(headers)*)
       .execute[HttpResponse]
-      .map(r => if r.status == 400 then throw new BadRequestException(r.body) else r)
+      .map { r =>
+        r.status match {
+          case status if is2xx(status) => r
+          case 400                     => throw new BadRequestException(r.body)
+          case status                  => throw UpstreamErrorResponse(r.body, status, status, r.headers)
+        }
+      }
 
   override def get[A](
     url: String,
