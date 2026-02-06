@@ -41,7 +41,7 @@ class PageOneController @Inject() (
 
   val format: OFormat[Address] = addressFormat
   val emptyForm: Form[Address] = pageOneForm
-  val pageNumber: Int = 1
+  val pageNumber: Int          = 1
 
   def template(form: Form[Address], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part1(form, summary)

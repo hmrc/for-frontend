@@ -32,5 +32,5 @@ object NotReviewRentFixedTypeInterimRent extends NotReviewRentFixedType {
 
 object NotReviewRentFixedTypes extends NamedEnumSupport[NotReviewRentFixedType] {
   val all: List[NotReviewRentFixedType] = List(NotReviewRentFixedTypeInterimRent, NotReviewRentFixedTypeFinalJudge)
-  val key: String = all.head.key
+  val key: String                       = all.head.key
 }

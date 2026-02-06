@@ -40,7 +40,7 @@ class PageThirteenController @Inject() (
 ) extends ForDataCapturePage[PropertyAlterations](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[PropertyAlterations] = palf
   val emptyForm: Form[PropertyAlterations] = pageThirteenForm
-  val pageNumber: Int = 13
+  val pageNumber: Int                      = 13
 
   def template(form: Form[PropertyAlterations], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part13(form, summary)

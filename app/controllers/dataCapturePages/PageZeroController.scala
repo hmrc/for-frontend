@@ -43,7 +43,7 @@ class PageZeroController @Inject() (
   implicit override val format: Format[AddressConnectionType] = formatAddressConnection
 
   val emptyForm: Form[AddressConnectionType] = pageZeroForm
-  val pageNumber: Int = 0
+  val pageNumber: Int                        = 0
 
   override def template(form: Form[AddressConnectionType], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part0(form, summary)

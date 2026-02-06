@@ -45,7 +45,7 @@ class LoginControllerSpec extends TestBaseSpec {
   "login controller" should "Audit successful login" in {
 
     val audit = mock[Audit]
-    doNothing.when(audit).sendExplicitAudit(anyString, any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+    doNothing().when(audit).sendExplicitAudit(anyString, any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
 
     val loginToHodFunction = (referenceNumber: ReferenceNumber, _: Postcode, _: StartTime) => {
       assert(referenceNumber.equals("01234567000"))
@@ -82,7 +82,7 @@ class LoginControllerSpec extends TestBaseSpec {
 
   "Login Controller" should "Audit logout event" in {
     val audit = mock[Audit]
-    doNothing.when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+    doNothing().when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
 
     val loginController = new LoginController(
       audit,

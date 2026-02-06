@@ -39,7 +39,7 @@ class PageFourteenController @Inject() (
 ) extends ForDataCapturePage[OtherFactors](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[OtherFactors] = otf
   val emptyForm: Form[OtherFactors] = pageFourteenForm
-  val pageNumber: Int = 14
+  val pageNumber: Int               = 14
 
   override def template(form: Form[OtherFactors], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part14(form, summary)

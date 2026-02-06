@@ -39,7 +39,7 @@ class PageTenController @Inject() (
 ) extends ForDataCapturePage[WhatRentIncludes](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[WhatRentIncludes] = wrif
   val emptyForm: Form[WhatRentIncludes] = pageTenForm
-  val pageNumber: Int = 10
+  val pageNumber: Int                   = 10
 
   def template(form: Form[WhatRentIncludes], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part10(form, summary)

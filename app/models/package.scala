@@ -26,9 +26,9 @@ package object models:
     case JsString(value) =>
       enumObject.fromName(value) match {
         case Some(enumValue) => JsSuccess(enumValue)
-        case None => JsError()
+        case None            => JsError()
       }
-    case _ =>
+    case _               =>
       JsError()
   }
 

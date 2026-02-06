@@ -48,7 +48,7 @@ object NotConnectedPropertyForm {
   def atLeastOneMapping(anotherKey: String, constraints: Constraint[String]*): Mapping[Option[String]] = {
     def optConstraint[T](constraint: Constraint[T]): Constraint[Option[T]] = Constraint[Option[T]] {
       case Some(value) => constraint(value)
-      case None => Valid
+      case None        => Valid
     }
     FieldMapping(key = "", constraints.map(optConstraint))(using atLeastOneKeyFormatter(anotherKey))
   }

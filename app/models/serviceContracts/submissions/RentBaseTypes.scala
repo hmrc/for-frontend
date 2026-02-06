@@ -46,6 +46,6 @@ object RentBaseTypes extends NamedEnumSupport[RentBaseType] {
 
   val all: List[RentBaseType] =
     List(RentBaseTypeOpenMarket, RentBaseTypePercentageOpenMarket, RentBaseTypePercentageTurnover, RentBaseTypeIndexation, RentBaseTypeOther)
-  val key: String = all.head.key
+  val key: String             = all.head.key
 
 }

@@ -55,7 +55,7 @@ class SaveForLaterController @Inject() (
   audit: Audit,
   refNumAction: RefNumAction,
   emailConnector: EmailConnector,
-  config: Configuration,
+  configuration: Configuration,
   saveForLaterLogin: saveForLaterLogin,
   savedForLater: savedForLater,
   customPasswordSaveForLaterView: customPasswordSaveForLater,
@@ -68,7 +68,7 @@ class SaveForLaterController @Inject() (
 
   import SaveForLaterController._
 
-  private val expiryDateInDays = config.get[String]("savedForLaterExpiryDays").toInt
+  private val expiryDateInDays = configuration.get[String]("savedForLaterExpiryDays").toInt
 
   def continue(implicit hc: HeaderCarrier): ContinueWithSavedSubmission = config.ContinueWithSavedSubmission()
 

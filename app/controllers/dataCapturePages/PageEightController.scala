@@ -39,7 +39,7 @@ class PageEightController @Inject() (
 ) extends ForDataCapturePage[RentAgreement](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[RentAgreement] = raf
   val emptyForm: Form[RentAgreement] = pageEightForm
-  val pageNumber: Int = 8
+  val pageNumber: Int                = 8
 
   def template(form: Form[RentAgreement], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part8(form, summary)

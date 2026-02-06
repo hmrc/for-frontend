@@ -32,5 +32,5 @@ object RentFixedTypeArbitrator extends RentFixedType {
 
 object RentFixedTypes extends NamedEnumSupport[RentFixedType] {
   val all: List[RentFixedType] = List(RentFixedTypeArbitrator, RentFixedTypeIndependent)
-  val key: String = all.head.key
+  val key: String              = all.head.key
 }

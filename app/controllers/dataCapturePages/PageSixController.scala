@@ -43,7 +43,7 @@ class PageSixController @Inject() (
 ) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[PageSix] = p6f
   val emptyForm: Form[PageSix] = pageSixForm
-  val pageNumber: Int = 6
+  val pageNumber: Int          = 6
 
   def template(form: Form[PageSix], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {
     val updatedForm: Form[PageSix] = Await.result(
