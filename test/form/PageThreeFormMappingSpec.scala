@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 
 package form
 
-import form.PageThreeForm._
-import models._
+import form.PageThreeForm.*
+import models.*
 import models.pages.PageThree
 import models.serviceContracts.submissions.{OccupierTypeCompany, OccupierTypeIndividuals}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.FormBindingTestAssertions._
-import utils.MappingSpecs._
+import play.api.data.Form
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
 class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -132,7 +133,7 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
       val noRentDetails            = "noRentDetails"
     }
 
-    def bind(dataMap: Map[String, String]) = {
+    def bind(dataMap: Map[String, String]): Form[PageThree] = {
       val bound = pageThreeForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
     }

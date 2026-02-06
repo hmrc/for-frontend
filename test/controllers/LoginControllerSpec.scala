@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import playconfig.LoginToHODAction
+import config.LoginToHODAction
 import security.LoginToHOD.{Postcode, StartTime}
 import security.NoExistingDocument
 import uk.gov.hmrc.http.HeaderCarrier
@@ -45,7 +45,7 @@ class LoginControllerSpec extends TestBaseSpec {
   "login controller" should "Audit successful login" in {
 
     val audit = mock[Audit]
-    doNothing.when(audit).sendExplicitAudit(anyString, any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+    doNothing().when(audit).sendExplicitAudit(anyString, any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
 
     val loginToHodFunction = (referenceNumber: ReferenceNumber, _: Postcode, _: StartTime) => {
       assert(referenceNumber.equals("01234567000"))
@@ -82,7 +82,7 @@ class LoginControllerSpec extends TestBaseSpec {
 
   "Login Controller" should "Audit logout event" in {
     val audit = mock[Audit]
-    doNothing.when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+    doNothing().when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
 
     val loginController = new LoginController(
       audit,

@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
             @Html(sl.tenantAddress.multiLine)
           }
 
-          @summaryBlock((if(sl.subletType == SubletAll) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription")), 4, s"sublet_${index}_subletPropertyPartDescription") {
+          @summaryBlock(if(sl.subletType == SubletAll) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription"), 4, s"sublet_${index}_subletPropertyPartDescription") {
               @if(sl.subletType == SubletAll) {
                   @messages("subletType.all")
               }else {

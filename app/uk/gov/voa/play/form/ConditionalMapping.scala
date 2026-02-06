@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ case class ConditionalMapping[T](condition: Condition, wrapped: Mapping[T], defa
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
-  val key = wrapped.key
+  val key: String = wrapped.key
 
   def verifying(addConstraints: Constraint[T]*): Mapping[T] =
     this.copy(constraints = constraints ++ addConstraints.toSeq)

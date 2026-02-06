@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import form.PageThreeForm.pageThreeForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.{PageThree, Summary}
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -35,9 +36,9 @@ class PageThreeController @Inject() (
   cc: MessagesControllerComponents,
   part3: views.html.part3
 ) extends ForDataCapturePage[PageThree](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = p3f
-  val emptyForm       = pageThreeForm
-  val pageNumber: Int = 3
+  val format: OFormat[PageThree] = p3f
+  val emptyForm: Form[PageThree] = pageThreeForm
+  val pageNumber: Int            = 3
 
   def template(form: Form[PageThree], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part3(form, summary)

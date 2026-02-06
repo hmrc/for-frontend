@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ object ConditionalMappings {
     ConditionalMapping(_.keys.toSeq.contains(fieldName), MandatoryOptionalMapping(mapping, Nil), None, Seq.empty)
 
   def mandatoryIfEqual[T](fieldName: String, value: String, mapping: Mapping[T]): Mapping[Option[T]] = {
-    val condition: Condition = _.get(fieldName).map(_ == value).getOrElse(false)
+    val condition: Condition = _.get(fieldName).exists(_ == value)
     ConditionalMapping(condition, MandatoryOptionalMapping(mapping, Nil), None, Seq.empty)
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,7 +239,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "contactDetails.phone"  -> Seq("01234567890")
     )
 
-    val p3ks = PageThreeForm.keys
+    val p3ks: PageThreeForm.Keys = PageThreeForm.keys
 
     lazy val page3FormData: Map[String, Seq[String]] = Map(
       p3ks.propertyType                   -> Seq("Stuff"),

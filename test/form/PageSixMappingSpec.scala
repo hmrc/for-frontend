@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,7 +134,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = fullData.updated(
       writtenAgreementIsStepped,
       "true"
-    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.month" - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.year"
+    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.month" -
+      s"${keys.writtenAgreement}.steppedDetails[0].stepTo.year"
 
     val res = bind(testData)
     res.errors.size should be(3)
@@ -144,7 +145,8 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val testData = fullData.updated(
       writtenAgreementIsStepped,
       "true"
-    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.month" - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.year"
+    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.month" -
+      s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.year"
 
     val res = bind(testData)
     res.errors.size should be(3)
@@ -329,15 +331,14 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
       "1"
     ).updated(getKeyStepped(0).stepTo + ".year", "2010")
 
-    def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] =
-      (1 to n).foldLeft(data) { (s, v) =>
-        s.updated(getKeyStepped(v).amount, "456.78")
-          .updated(getKeyStepped(v).stepFrom + ".day", "1")
-          .updated(getKeyStepped(v).stepFrom + ".month", "1")
-          .updated(getKeyStepped(v).stepFrom + ".year", (v + 2021).toString)
-          .updated(getKeyStepped(v).stepTo + ".day", "1")
-          .updated(getKeyStepped(v).stepTo + ".month", "1")
-          .updated(getKeyStepped(v).stepTo + ".year", (v + 2022).toString)
-      }
+    def addSteppedRents(n: Int, data: Map[String, String]): Map[String, String] = (1 to n).foldLeft(data) { (s, v) =>
+      s.updated(getKeyStepped(v).amount, "456.78")
+        .updated(getKeyStepped(v).stepFrom + ".day", "1")
+        .updated(getKeyStepped(v).stepFrom + ".month", "1")
+        .updated(getKeyStepped(v).stepFrom + ".year", (v + 2021).toString)
+        .updated(getKeyStepped(v).stepTo + ".day", "1")
+        .updated(getKeyStepped(v).stepTo + ".month", "1")
+        .updated(getKeyStepped(v).stepTo + ".year", (v + 2022).toString)
+    }
   }
 }

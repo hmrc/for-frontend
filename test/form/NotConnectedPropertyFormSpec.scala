@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,13 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
     formWithData.errors shouldBe empty
 
     formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe (NotConnected(
-      "John Doe",
-      Some("john@example.com"),
-      Some("078333232211"),
-      Some("Some additional information")
-    ))
-
+    formWithData.value.value shouldBe
+      NotConnected(
+        "John Doe",
+        Some("john@example.com"),
+        Some("078333232211"),
+        Some("Some additional information")
+      )
   }
 
   it should "map form without email" in {
@@ -53,13 +53,13 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
     formWithData.errors shouldBe empty
 
     formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe (NotConnected(
-      "John Doe",
-      None,
-      Some("078333232211"),
-      Some("Some additional information")
-    ))
-
+    formWithData.value.value shouldBe
+      NotConnected(
+        "John Doe",
+        None,
+        Some("078333232211"),
+        Some("Some additional information")
+      )
   }
 
   it should "map form without phoneNumber" in {
@@ -69,13 +69,13 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
     formWithData.errors shouldBe empty
 
     formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe (NotConnected(
-      "John Doe",
-      Some("john@example.com"),
-      None,
-      Some("Some additional information")
-    ))
-
+    formWithData.value.value shouldBe
+      NotConnected(
+        "John Doe",
+        Some("john@example.com"),
+        None,
+        Some("Some additional information")
+      )
   }
 
   it should "map form without additional information" in {
@@ -85,13 +85,13 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
     formWithData.errors shouldBe empty
 
     formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe (NotConnected(
-      "John Doe",
-      Some("john@example.com"),
-      Some("078333232211"),
-      None
-    ))
-
+    formWithData.value.value shouldBe
+      NotConnected(
+        "John Doe",
+        Some("john@example.com"),
+        Some("078333232211"),
+        None
+      )
   }
 
   it should "fail mapping without phoneNumber and email" in {

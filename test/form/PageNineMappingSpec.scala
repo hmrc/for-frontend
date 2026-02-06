@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package form
 
-import models._
-import models.pages._
-import models.serviceContracts.submissions._
+import models.*
+import models.pages.*
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 import java.time.LocalDate
 import org.scalatest.Assertion
@@ -123,7 +123,7 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
       keys.rentBasedOnDetails      -> "oneTwoThree"
     )
 
-    def bind(dataMap: Map[String, String]) = {
+    def bind(dataMap: Map[String, String]): Form[PageNine] = {
       val bound = pageNineForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
     }

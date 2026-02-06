@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class PageFiveController @Inject() (
   part5: part5
 ) extends ForDataCapturePage[PageFive](audit, formDocumentRepository, refNumAction, cc) {
   val format: OFormat[PageFive] = Json.format
-  val emptyForm                 = pageFiveForm
+  val emptyForm: Form[PageFive] = pageFiveForm
   val pageNumber: Int           = 5
 
   def template(form: Form[PageFive], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =

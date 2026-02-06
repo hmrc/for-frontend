@@ -82,8 +82,7 @@ class Generate7LengthLowercaseAlphaNumPasswordSpec extends AnyFlatSpec with shou
     }
   }
 
-  private def isAllowed(c: Char) =
-    (c.isDigit || isLowercaseLetter(c)) && (isNonAmbiguousDigit(c) || isNonAmbiguousLowercaseLetter(c))
+  private def isAllowed(c: Char) = (c.isDigit || isLowercaseLetter(c)) && (isNonAmbiguousDigit(c) || isNonAmbiguousLowercaseLetter(c))
 
   private def isLowercaseLetter(c: Char)             = c.toString.matches("[a-z]")
   private def isNonAmbiguousDigit(c: Char)           = !Seq('0', '1').contains(c)

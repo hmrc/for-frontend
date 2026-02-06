@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,9 @@ import play.api.data.Form
 
 object FormBindingTestAssertions extends should.Matchers {
 
-  def doesNotContainErrors[T](f: Form[T]): Unit = {
-    if (f.hasErrors) {
-      fail(s"Form incorrectly has errors: ${f.errors}. ${boundObject(f)}")
-    }
-
-    if (!f.value.isDefined) {
-      fail("Form did not bind")
-    }
-
-  }
+  def doesNotContainErrors[T](f: Form[T]): Unit =
+    if f.hasErrors then fail(s"Form incorrectly has errors: ${f.errors}. ${boundObject(f)}")
+    if f.value.isEmpty then fail("Form did not bind")
 
   def mustContainRequiredErrorFor[T](field: String, f: Form[T]): Unit = mustContainError(field, Errors.required, f)
 

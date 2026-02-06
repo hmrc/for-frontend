@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ class PageZeroController @Inject() (
 
   implicit override val format: Format[AddressConnectionType] = formatAddressConnection
 
-  val emptyForm       = pageZeroForm
-  val pageNumber: Int = 0
+  val emptyForm: Form[AddressConnectionType] = pageZeroForm
+  val pageNumber: Int                        = 0
 
   override def template(form: Form[AddressConnectionType], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part0(form, summary)

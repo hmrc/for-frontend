@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 
     @if(p13.propertyAlterations) {
         @p13.propertyAlterationsDetails.zipWithIndex.map { case (details, idx) =>
-            @summaryBlock(s"${idx + 1}", 13, s"propertyAlterationsDetails_description_div_${idx}") {
+            @summaryBlock(s"${idx + 1}", 13, s"propertyAlterationsDetails_description_div_$idx") {
                 @messages("alterationType." + details.alterationType.name)
                 <br/>
                 @(s"£${NumberFormat.getNumberInstance().format(details.cost)}")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@ import connectors.Audit
 import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
-import models._
+import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
-import playconfig.SessionId
+import config.SessionId
+import play.api.libs.json.OFormat
 
 import javax.inject.Inject
 import scala.concurrent.Await
@@ -40,9 +41,9 @@ class PageSixController @Inject() (
   cc: MessagesControllerComponents,
   part6: views.html.part6
 ) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = p6f
-  val emptyForm       = pageSixForm
-  val pageNumber: Int = 6
+  val format: OFormat[PageSix] = p6f
+  val emptyForm: Form[PageSix] = pageSixForm
+  val pageNumber: Int          = 6
 
   def template(form: Form[PageSix], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {
     val updatedForm: Form[PageSix] = Await.result(

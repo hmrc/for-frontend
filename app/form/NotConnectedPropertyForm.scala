@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,11 @@ object NotConnectedPropertyForm {
   }
 
   def atLeastOneMapping(anotherKey: String, constraints: Constraint[String]*): Mapping[Option[String]] = {
-    def optConstraint[T](constraint: Constraint[T]): Constraint[Option[T]] = Constraint[Option[T]] { (parameter: Option[T]) =>
-      parameter match {
-        case Some(value) => constraint(value)
-        case None        => Valid
-      }
+    def optConstraint[T](constraint: Constraint[T]): Constraint[Option[T]] = Constraint[Option[T]] {
+      case Some(value) => constraint(value)
+      case None        => Valid
     }
-    FieldMapping(key = "", constraints.map(optConstraint(_)))(using atLeastOneKeyFormatter(anotherKey))
+    FieldMapping(key = "", constraints.map(optConstraint))(using atLeastOneKeyFormatter(anotherKey))
   }
 
   private val fullNameRegex: Regex = """^[A-Za-z\-.,()'"\s]+$""".r

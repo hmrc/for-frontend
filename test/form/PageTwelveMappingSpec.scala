@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import models.pages.PageTwelve
 import models.serviceContracts.submissions.{ChargeDetails, ResponsibleTenant}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import play.api.data.Form
 
 class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -150,7 +151,7 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
       val parentFieldName: String = s"includedServicesDetails[$idx]"
     }
 
-    def bind(data: Map[String, String]) = pageTwelveForm.bind(data).convertGlobalToFieldErrors()
+    def bind(data: Map[String, String]): Form[PageTwelve] = pageTwelveForm.bind(data).convertGlobalToFieldErrors()
 
     val responsibleOutsideRepairs: (String, String)    = "responsibleOutsideRepairs"    -> "tenant"
     val responsibleInsideRepairs: (String, String)     = "responsibleInsideRepairs"     -> "tenant"
@@ -178,11 +179,10 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
 
     val dataWithSecondService: Map[String, String] = baseData.updated(getKeyService(1).description, "insecurity").updated(getKeyService(1).cost, "250")
 
-    def addServices(n: Int, data: Map[String, String]): Map[String, String] =
-      (1 to n).foldLeft(data) { (s, v) =>
-        s.updated(s"includedServicesDetails[$v].chargeDescription", "blah blah blah")
-          .updated(s"includedServicesDetails[$v].chargeCost", "45")
-      }
+    def addServices(n: Int, data: Map[String, String]): Map[String, String] = (1 to n).foldLeft(data) { (s, v) =>
+      s.updated(s"includedServicesDetails[$v].chargeDescription", "blah blah blah")
+        .updated(s"includedServicesDetails[$v].chargeCost", "45")
+    }
 
     val responsibilitiesWith8Services: PageTwelve = PageTwelve(
       ResponsibleTenant,

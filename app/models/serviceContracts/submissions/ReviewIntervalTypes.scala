@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,6 @@ object ReviewIntervalTypes extends NamedEnumSupport[ReviewIntervalType] {
 
   val all: List[ReviewIntervalType] = List(ReviewIntervalTypeEvery3Years, ReviewIntervalTypeEvery5Years, ReviewIntervalTypeEvery7Years, ReviewIntervalTypeOther)
 
-  val key = all.head.key
+  val key: String = all.head.key
 
 }

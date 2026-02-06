@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ object Paths {
 }
 
 class Path(val pages: Seq[Int]) {
-  val lastPage = pages.last
+  val lastPage: Int = pages.last
 
   def firstIncompletePageFor(summary: Summary): Option[Int] = {
     val asList = summaryAsList(summary)

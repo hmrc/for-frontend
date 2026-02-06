@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,7 +183,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
     lastPageFor(sub) shouldBe 14
   }
 
-  lazy val pageZeroData = AddressConnectionTypeYes
+  lazy val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
 
   lazy val pageOneData: Option[Address] = None
 

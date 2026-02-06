@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import play.shaded.ahc.io.netty.handler.codec.http.QueryStringDecoder
 import play.twirl.api.Html
-import playconfig.SessionId
+import config.SessionId
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class LoginToHODSpec extends UnitTest {
   import TestData._
 
   "Login to HOD with valid credentials" when {
-    implicit val hc = HeaderCarrier()
+    given hc: HeaderCarrier = HeaderCarrier()
 
     "a user has previously saved a document for later" should {
       var updated: (HeaderCarrier, ReferenceNumber, Document)              = null
@@ -49,7 +49,7 @@ class LoginToHODSpec extends UnitTest {
       }
 
       "loads an empty document with the retrieved credentials and the current time as the journey start time into the session in case the user cannot login or wants to start again" in
-        assert(updated === ((hc, refNum, Document(refNum, now, address = Some(loginResponse.address)))))
+        assert(updated === (hc, refNum, Document(refNum, now, address = Some(loginResponse.address))))
     }
 
     "there is no previously stored document" should {
@@ -67,7 +67,7 @@ class LoginToHODSpec extends UnitTest {
       }
 
       "loads an empty document with the retrieved credentials into the session" in
-        assert(updated === ((hc, refNum, Document(refNum, now, address = Some(loginResponse.address)))))
+        assert(updated === (hc, refNum, Document(refNum, now, address = Some(loginResponse.address))))
     }
   }
 

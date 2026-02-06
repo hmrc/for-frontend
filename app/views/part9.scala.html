@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,11 +116,11 @@
                      RadioItem (
                       content = Text(radioItem._2),
                       checked = radioItem._1.equals(theForm("rentBasedOn").value.getOrElse("")),
-                         hint = (Hint(
+                         hint = Hint(
                              content = Text(
                                  messages("rentBasedOn." + radioItem._1 + ".hint")
                              )
-                         )),
+                         ),
                       value   = Option(radioItem._1)
                     )
                  }

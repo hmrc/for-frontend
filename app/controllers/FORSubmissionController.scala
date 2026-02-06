@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class FORSubmissionController @Inject() (
 ) extends FrontendController(cc)
   with Logging {
 
-  lazy val confirmationUrl = controllers.feedback.routes.SurveyController.confirmation.url
+  lazy val confirmationUrl: String = controllers.feedback.routes.SurveyController.confirmation.url
 
   def submit: Action[AnyContent] = refNumberAction.async { implicit request: RefNumRequest[AnyContent] =>
     request.body.asFormUrlEncoded.flatMap { body =>

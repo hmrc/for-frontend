@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import form.PageEightForm.pageEightForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.RentAgreement
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -36,9 +37,9 @@ class PageEightController @Inject() (
   cc: MessagesControllerComponents,
   part8: views.html.part8
 ) extends ForDataCapturePage[RentAgreement](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = raf
-  val emptyForm       = pageEightForm
-  val pageNumber: Int = 8
+  val format: OFormat[RentAgreement] = raf
+  val emptyForm: Form[RentAgreement] = pageEightForm
+  val pageNumber: Int                = 8
 
   def template(form: Form[RentAgreement], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part8(form, summary)

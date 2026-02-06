@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ object MappingSupport {
 
   val decimalRegex          = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
   val cdbMaxCurrencyAmount  = 9999999.99
-  val spacesIntRegex: Regex = """^\-?\d{1,10}$""".r
+  val spacesIntRegex: Regex = """^-?\d{1,10}$""".r
   val intRegex: Regex       = """^\d{1,3}$""".r
 
   lazy val annualRent: Mapping[AnnualRent] = mapping(
@@ -55,12 +55,12 @@ object MappingSupport {
 
   def currencyMapping(fieldErrorPart: String = ""): Mapping[BigDecimal] = default(text, "")
     .verifying(nonEmpty(errorMessage = Errors.required + fieldErrorPart))
-    .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || ((x.replace(",", "").matches(decimalRegex)) && BigDecimal(x.replace(",", "")) >= 0.000))
+    .verifying(Errors.invalidCurrency + fieldErrorPart, x => x == "" || (x.replace(",", "").matches(decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000))
     .transform(s => BigDecimal(s.replace(",", "")), _.toString)
     .verifying(Errors.maxCurrencyAmountExceeded + fieldErrorPart, _ <= cdbMaxCurrencyAmount)
 
   val nonNegativeCurrency: Mapping[BigDecimal] = text
-    .verifying(Errors.invalidCurrency, x => (x.replace(",", "").matches(decimalRegex)) && BigDecimal(x.replace(",", "")) >= 0.000)
+    .verifying(Errors.invalidCurrency, x => x.replace(",", "").matches(decimalRegex) && BigDecimal(x.replace(",", "")) >= 0.000)
     .transform(s => BigDecimal(s.replace(",", "")), _.toString)
     .verifying(Errors.maxCurrencyAmountExceeded, _ <= cdbMaxCurrencyAmount)
 
@@ -179,7 +179,7 @@ object MappingSupport {
 
   case class IndexedMapping[T](
     key: String,
-    wrapped: (String => Mapping[T]),
+    wrapped: String => Mapping[T],
     constraints: Seq[Constraint[List[T]]] = Nil,
     allowEmpty: Boolean = false,
     alwaysValidateFirstIndex: Boolean = false

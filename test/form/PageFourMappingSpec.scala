@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package form
 
-import models._
-import models.pages._
+import models.*
+import models.pages.*
 import models.serviceContracts.submissions.{Address, SubletAll, SubletPart}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -195,7 +195,7 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
     val mandatoryAddressFields: Seq[String] = Seq(keys.addrBuildingNameNumber, keys.addrPostcode, keys.tenantFullName)
     val allAddressFields: Seq[String]       = mandatoryAddressFields ++ Seq(keys.addrStreet1, keys.addrStreet2)
 
-    def bind(dataMap: Map[String, String]) = {
+    def bind(dataMap: Map[String, String]): Form[PageFour] = {
       val bound = pageFourForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
     }
@@ -215,21 +215,20 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
       keys.rentFixedDateYear               -> "2015"
     )
 
-    def addSublets(amount: Int, data: Map[String, String]): Map[String, String] =
-      (1 to amount).foldLeft(data) { (d, n) =>
-        d.updated(keys.addrBuildingNameNumber.replace("[0]", s"[$n]"), data(keys.addrBuildingNameNumber))
-          .updated(keys.addrStreet1.replace("[0]", s"[$n]"), data(keys.addrStreet1))
-          .updated(keys.addrStreet2.replace("[0]", s"[$n]"), data(keys.addrStreet2))
-          .updated(keys.addrPostcode.replace("[0]", s"[$n]"), data(keys.addrPostcode))
-          .updated(keys.tenantFullName.replace("[0]", s"[$n]"), data(keys.tenantFullName))
-          .updated(keys.subletType.replace("[0]", s"[$n]"), data(keys.subletType))
-          .updated(keys.subletPropertyPartDescription.replace("[0]", s"[$n]"), data(keys.subletPropertyPartDescription))
-          .updated(keys.subletPropertyReasonDescription.replace("[0]", s"[$n]"), data(keys.subletPropertyReasonDescription))
-          .updated(keys.annualRentExcludingVat.replace("[0]", s"[$n]"), data(keys.annualRentExcludingVat))
-          .updated(keys.rentFixedDateMonth.replace("[0]", s"[$n]"), data(keys.rentFixedDateMonth))
-          .updated(keys.rentFixedDateYear.replace("[0]", s"[$n]"), data(keys.rentFixedDateYear))
+    def addSublets(amount: Int, data: Map[String, String]): Map[String, String] = (1 to amount).foldLeft(data) { (d, n) =>
+      d.updated(keys.addrBuildingNameNumber.replace("[0]", s"[$n]"), data(keys.addrBuildingNameNumber))
+        .updated(keys.addrStreet1.replace("[0]", s"[$n]"), data(keys.addrStreet1))
+        .updated(keys.addrStreet2.replace("[0]", s"[$n]"), data(keys.addrStreet2))
+        .updated(keys.addrPostcode.replace("[0]", s"[$n]"), data(keys.addrPostcode))
+        .updated(keys.tenantFullName.replace("[0]", s"[$n]"), data(keys.tenantFullName))
+        .updated(keys.subletType.replace("[0]", s"[$n]"), data(keys.subletType))
+        .updated(keys.subletPropertyPartDescription.replace("[0]", s"[$n]"), data(keys.subletPropertyPartDescription))
+        .updated(keys.subletPropertyReasonDescription.replace("[0]", s"[$n]"), data(keys.subletPropertyReasonDescription))
+        .updated(keys.annualRentExcludingVat.replace("[0]", s"[$n]"), data(keys.annualRentExcludingVat))
+        .updated(keys.rentFixedDateMonth.replace("[0]", s"[$n]"), data(keys.rentFixedDateMonth))
+        .updated(keys.rentFixedDateYear.replace("[0]", s"[$n]"), data(keys.rentFixedDateYear))
 
-      }
+    }
 
     def hasError(errors: Seq[FormError], matcher: FormError => Boolean): Boolean =
       errors.exists(matcher)

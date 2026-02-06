@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ trait MockitoExtendedSugar extends MockitoSugar {
 
   def when[T](methodCall: T): OngoingStubbing[T] = Mockito.when(methodCall)
 
-  def doNothing: Stubber = Mockito.doNothing()
+  def doNothing(): Stubber = Mockito.doNothing()
 
   def reset(mocks: AnyRef*): Unit = Mockito.reset(mocks*)
 

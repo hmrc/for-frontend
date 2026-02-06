@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
 @(theForm: Form[LoginDetails],  failedLoginError: Option[String] = None)(implicit request: Request[?], messages: Messages)
 
 @title = @{
-    var title: String = (messages("login.heading") )
+    var title: String = messages("login.heading")
     if(theForm.hasErrors)
         title = (messages("label.error") + ": " ) + title
     title

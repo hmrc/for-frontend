@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 package form
 
-import play.api.data.Form
-import MappingSupport._
+import play.api.data.{Form, Mapping}
+import MappingSupport.*
 import models.serviceContracts.submissions.Address
 
-object PageOneForm {
+object PageOneForm:
 
   lazy val basePageOneForm: Form[Address] = Form(basePageOneMapping)
 
-  val basePageOneMapping = addressMapping
+  private val basePageOneMapping: Mapping[Address] = addressMapping
 
   val pageOneForm: Form[Address] = Form(basePageOneMapping)
-
-}

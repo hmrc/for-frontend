@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ class ContinueWithSavedSubmissionSpec extends UnitTest {
 
       "load the saved document into the current session updating the journey resumptions with the current date and time" in {
         val docWithNowResumption = doc.copy(saveForLaterPassword = None, journeyResumptions = doc.journeyResumptions :+ now)
-        assert(updated === ((hc, ref, docWithNowResumption)))
+        assert(updated === (hc, ref, docWithNowResumption))
       }
     }
 

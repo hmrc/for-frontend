@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,14 +56,14 @@
     val month = InputItem(
         id = monthfield,
         name = monthfield,
-        classes = ("govuk-input--width-2 " + (if(form.error(monthfield).isDefined) "govuk-input--error" else "")),
+        classes = "govuk-input--width-2 " + (if(form.error(monthfield).isDefined) "govuk-input--error" else ""),
         value = form(monthfield).value,
         label = messages("label.date.months")
     )
     val year = InputItem(
         id = yearfield,
         name = yearfield,
-        classes = ("govuk-input--width-2 " + (if(form.error(yearfield).isDefined) "govuk-input--error" else "")),
+        classes = "govuk-input--width-2 " + (if(form.error(yearfield).isDefined) "govuk-input--error" else ""),
         value = form(yearfield).value,
         label = messages("label.date.years")
     )

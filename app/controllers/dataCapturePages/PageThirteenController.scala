@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import form.PageThirteenForm.pageThirteenForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.PropertyAlterations
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import views.html.part13
@@ -37,9 +38,9 @@ class PageThirteenController @Inject() (
   cc: MessagesControllerComponents,
   part13: part13
 ) extends ForDataCapturePage[PropertyAlterations](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = palf
-  val emptyForm       = pageThirteenForm
-  val pageNumber: Int = 13
+  val format: OFormat[PropertyAlterations] = palf
+  val emptyForm: Form[PropertyAlterations] = pageThirteenForm
+  val pageNumber: Int                      = 13
 
   def template(form: Form[PropertyAlterations], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part13(form, summary)

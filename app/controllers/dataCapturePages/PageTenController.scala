@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import form.PageTenForm.pageTenForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.WhatRentIncludes
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -36,9 +37,9 @@ class PageTenController @Inject() (
   cc: MessagesControllerComponents,
   part10: views.html.part10
 ) extends ForDataCapturePage[WhatRentIncludes](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = wrif
-  val emptyForm       = pageTenForm
-  val pageNumber: Int = 10
+  val format: OFormat[WhatRentIncludes] = wrif
+  val emptyForm: Form[WhatRentIncludes] = pageTenForm
+  val pageNumber: Int                   = 10
 
   def template(form: Form[WhatRentIncludes], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
     part10(form, summary)

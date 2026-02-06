@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package form
 
-import models._
+import models.*
 import models.serviceContracts.submissions.{Parking, ParkingDetails, WhatRentIncludes}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import org.scalatest.Assertion
 
 class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
@@ -179,13 +179,14 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
     mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
   }
 
-  "when rentSeparateParking is true but no rent separate or annual parking details have been supplied" should "return a required error for rentSeparateParkingDetails" in {
-    val data = fullData - rentSeparateParkingGarages - annualSeparateParking
-    val form = bind(data)
+  "when rentSeparateParking is true but no rent separate or annual parking details have been supplied" should
+    "return a required error for rentSeparateParkingDetails" in {
+      val data = fullData - rentSeparateParkingGarages - annualSeparateParking
+      val form = bind(data)
 
-    mustContainError(rentSeparateParkingDetailsPrefix, "error.required.parking.rentSeparateParkingDetails", form)
-    mustContainError(annualSeparateParking, "error.required.annualSeparateParkingAmount", form)
-  }
+      mustContainError(rentSeparateParkingDetailsPrefix, "error.required.parking.rentSeparateParkingDetails", form)
+      mustContainError(annualSeparateParking, "error.required.annualSeparateParkingAmount", form)
+    }
 
   "When rentSeparateParking is true but no annual separate parking amount has been supplied" should "return a required error for annualSeparateParking" in {
     val data = fullData - annualSeparateParking
@@ -212,7 +213,7 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
 
   object TestData {
 
-    def bind(dataMap: Map[String, String]) = {
+    def bind(dataMap: Map[String, String]): Form[WhatRentIncludes] = {
       val bound = pageTenForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
     }

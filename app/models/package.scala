@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,21 @@ import models.pages._
 import models.serviceContracts.submissions._
 import play.api.libs.json._
 
-package object models {
+package object models:
 
-  def generateWrites[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Writes[T] = new Writes[T] {
+  private def generateWrites[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Writes[T] = (data: T) => JsString(data.name)
 
-    def writes(data: T): JsValue =
-      JsString(data.name)
+  private def generateReads[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Reads[T] = {
+    case JsString(value) =>
+      enumObject.fromName(value) match {
+        case Some(enumValue) => JsSuccess(enumValue)
+        case None            => JsError()
+      }
+    case _               =>
+      JsError()
   }
 
-  def generateReads[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Reads[T] = new Reads[T] {
-
-    def reads(json: JsValue): JsResult[T] = json match {
-      case JsString(value) =>
-        enumObject.fromName(value) match {
-          case Some(enumValue) => JsSuccess(enumValue)
-          case None            => JsError()
-        }
-      case _               =>
-        JsError()
-    }
-  }
-
-  def generateFormat[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Format[T] = Format[T](generateReads(enumObject), generateWrites(enumObject))
+  private def generateFormat[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Format[T] = Format[T](generateReads(enumObject), generateWrites(enumObject))
 
   implicit val formatPropertyType: Format[PropertyType]                     = generateFormat(PropertyTypes)
   implicit val formatContactAddressType: Format[ContactAddressType]         = generateFormat(ContactAddressTypes)
@@ -102,4 +95,3 @@ package object models {
   implicit val p7f: OFormat[PageSeven]              = Json.format[PageSeven]
   implicit val p9f: OFormat[PageNine]               = Json.format[PageNine]
   implicit val p12f: OFormat[PageTwelve]            = Json.format[PageTwelve]
-}
