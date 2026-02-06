@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package form
 
+import models.serviceContracts.submissions.RentAgreement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import play.api.data.FormError
-import utils.FormBindingTestAssertions._
+import play.api.data.{Form, FormError}
+import utils.FormBindingTestAssertions.*
 
 class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -31,7 +32,7 @@ class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
 
   val baseData: Map[String, String] = Map(wasFixedBetween, notReviewRentFixed, rentSetBy)
 
-  def bind(formData: Map[String, String]) =
+  def bind(formData: Map[String, String]): Form[RentAgreement] =
     pageEightForm.bind(formData).convertGlobalToFieldErrors()
 
   def containsError(errors: Seq[FormError], key: String, message: String): Boolean = {
@@ -47,12 +48,13 @@ class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
     res.errors.isEmpty should be(true)
   }
 
-  "PageEightData" should "bind with the fields and return no issues when no value input for the way that rent was fixed, when it is between yourself and landlord" in {
-    val data = baseData.updated("wasRentFixedBetween", "true") - "notReviewRentFixed"
-    val res  = bind(data)
-    res.errors.isEmpty should be(true)
-    res.errors.size    should be(0)
-  }
+  "PageEightData" should
+    "bind with the fields and return no issues when no value input for the way that rent was fixed, when it is between yourself and landlord" in {
+      val data = baseData.updated("wasRentFixedBetween", "true") - "notReviewRentFixed"
+      val res  = bind(data)
+      res.errors.isEmpty should be(true)
+      res.errors.size    should be(0)
+    }
 
   "PageEightData" should "bind with the fields and return issues when no selection is chosen for if the rent was fixed between you and landlord" in {
     val data = baseData - "wasRentFixedBetween"
@@ -62,11 +64,12 @@ class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
     containsError(res.errors, "wasRentFixedBetween", Errors.wasTheRentFixedBetweenRequired)
   }
 
-  "PageEightData" should "not bind with the fields and return issues when no value input for the way that rent was fixed, when not between yourself and landlord" in {
-    val data = baseData - "notReviewRentFixed"
-    val res  = bind(data).convertGlobalToFieldErrors()
-    mustContainError("notReviewRentFixed", Errors.whoWasTheRentFixedBetweenRequired, res)
-  }
+  "PageEightData" should
+    "not bind with the fields and return issues when no value input for the way that rent was fixed, when not between yourself and landlord" in {
+      val data = baseData - "notReviewRentFixed"
+      val res  = bind(data).convertGlobalToFieldErrors()
+      mustContainError("notReviewRentFixed", Errors.whoWasTheRentFixedBetweenRequired, res)
+    }
 
   "PageEightData" should "bind with the fields and return issues when no value input for the way that rent was set" in {
     val data = baseData - "rentSetByType"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import form.PageElevenForm.pageElevenForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.IncentivesAndPayments
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -36,8 +37,8 @@ class PageElevenController @Inject() (
   cc: MessagesControllerComponents,
   part11: views.html.part11
 ) extends ForDataCapturePage[IncentivesAndPayments](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = incf
-  val emptyForm       = pageElevenForm
+  val format: OFormat[IncentivesAndPayments] = incf
+  val emptyForm: Form[IncentivesAndPayments] = pageElevenForm
   val pageNumber: Int = 11
 
   def template(form: Form[IncentivesAndPayments], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =

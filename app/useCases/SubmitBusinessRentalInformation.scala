@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import models.pages.*
 import models.serviceContracts.submissions.*
 import play.api.Logging
 import play.api.libs.json.{JsObject, Json}
-import playconfig.SessionId
+import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}

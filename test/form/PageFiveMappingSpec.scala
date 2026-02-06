@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package form
 
+import models.pages.PageFive
 import models.serviceContracts.submissions.LandlordConnectionTypeOther
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import play.api.data.Form
 
 class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -112,7 +114,7 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
       landlordConnText
     )
 
-    def bind(formData: Map[String, String]) =
+    def bind(formData: Map[String, String]): Form[PageFive] =
       pageFiveForm.bind(formData).convertGlobalToFieldErrors()
   }
 

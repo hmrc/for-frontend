@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@
 
 package form
 
+import controllers.LoginDetails
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.FormBindingTestAssertions._
+import play.api.data.Form
+import utils.FormBindingTestAssertions.*
 
 import java.time.{ZoneOffset, ZonedDateTime}
 
 class LoginMappingSpec extends AnyFlatSpec with should.Matchers {
-  val loginForm = controllers.LoginController.loginForm
+  val loginForm: Form[LoginDetails] = controllers.LoginController.loginForm
 
   behavior of "Login Mapping"
 

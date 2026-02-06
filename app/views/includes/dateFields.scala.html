@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@
             if(form.errors.exists(x => x.key.contains(field))){
                 val firstError = form.errors.find(x => x.key.contains(field))
                 if (firstError.get.args.size == 2)
-                    msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", ""), firstError.get.args(0), firstError.get.args(1)))))
+                    msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", ""), firstError.get.args.head, firstError.get.args(1)))))
                 else
                     msg = Some(ErrorMessage(content = Text(messages(firstError.get.message.replaceAll("[\\[|\\]]", "")))))
             }
@@ -55,21 +55,21 @@
         val month = InputItem(
             id = monthfield,
             name = monthfield,
-            classes = ("govuk-input--width-2 " + (if(form.error(monthfield).isDefined) "govuk-input--error" else "")),
+            classes = "govuk-input--width-2 " + (if(form.error(monthfield).isDefined) "govuk-input--error" else ""),
             value = form(monthfield).value,
             label = messages("label.date.month")
         )
         val year = InputItem(
             id = yearfield,
             name = yearfield,
-            classes = ("govuk-input--width-4 " + (if(form.error(yearfield).isDefined) "govuk-input--error" else "")),
+            classes = "govuk-input--width-4 " + (if(form.error(yearfield).isDefined) "govuk-input--error" else ""),
             value = form(yearfield).value,
             label = messages("label.date.year")
         )
         val day = InputItem(
             id = dayfield,
             name = dayfield,
-            classes = ("govuk-input--width-2 " + (if(form.error(dayfield).isDefined) "govuk-input--error" else "")),
+            classes = "govuk-input--width-2 " + (if(form.error(dayfield).isDefined) "govuk-input--error" else ""),
             value = form(dayfield).value,
             label = messages("label.date.day")
         )

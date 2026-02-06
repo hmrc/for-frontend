@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,7 +152,7 @@ object DateMappings {
 
     override val format: Option[(String, Seq[Any])] = roughDateMapping.format
 
-    val key = roughDateMapping.key
+    val key: String = roughDateMapping.key
 
     val constraints: Seq[Constraint[RoughDate]] = additionalConstraints
 

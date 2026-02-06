@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import form.PageNineForm.pageNineForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
-import models.pages._
+import models.*
+import models.pages.*
 import play.api.data.Form
+import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -35,8 +36,8 @@ class PageNineController @Inject() (
   cc: MessagesControllerComponents,
   part9: views.html.part9
 ) extends ForDataCapturePage[PageNine](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = p9f
-  val emptyForm       = pageNineForm
+  val format: OFormat[PageNine] = p9f
+  val emptyForm: Form[PageNine] = pageNineForm
   val pageNumber: Int = 9
 
   def template(form: Form[PageNine], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ object PageSixForm {
       (index + "." + keys.amount) -> currencyMapping(".writtenAgreement.steppedDetails.amount")
     )((dates, amount) => SteppedDetails(dates._1, dates._2, amount))(stepped => Some(((stepped.stepFrom, stepped.stepTo), stepped.amount)))
 
-  val written = keys.writtenAgreement
+  val written: String = keys.writtenAgreement
 
   val steppedDetailsListMapping: Mapping[List[SteppedDetails]] =
     IndexedMapping(s"$written.steppedDetails", steppedDetailsMapping, alwaysValidateFirstIndex = true)
@@ -131,7 +131,7 @@ object PageSixForm {
     keys.steppedDetails               -> onlyIfTrue(s"$written.${keys.agreementIsStepped}", steppedDetailsListMapping)
   )(WrittenAgreement.apply)(o => Some(Tuple.fromProductTyped(o))).verifying(noOverlappingSteps)
 
-  val verbal = keys.verbalAgreement
+  val verbal: String = keys.verbalAgreement
 
   val verbalAgreementMapping: Mapping[VerbalAgreement] = mapping(
     keys.startDate     -> optional(

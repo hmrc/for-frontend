@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 package form
 
 import form.PageThirteenForm.pageThirteenForm
-import models._
+import models.*
 import models.serviceContracts.submissions.{AlterationSetByTypeAddLift, AlterationSetByTypeExtension, PropertyAlterations, PropertyAlterationsDetails}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.FormBindingTestAssertions._
-import utils.MappingSpecs._
+import play.api.data.Form
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
 class PageThirteenMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -139,7 +140,7 @@ class PageThirteenMappingSpec extends AnyFlatSpec with should.Matchers {
       val alterationsRequired        = "requiredAnyWorks"
     }
 
-    def bind(data: Map[String, String]) = pageThirteenForm.bind(data).convertGlobalToFieldErrors()
+    def bind(data: Map[String, String]): Form[PropertyAlterations] = pageThirteenForm.bind(data).convertGlobalToFieldErrors()
 
     def indexedKey(idx: Int): IndexedKey = new IndexedKey(idx)
 
@@ -165,13 +166,12 @@ class PageThirteenMappingSpec extends AnyFlatSpec with should.Matchers {
     ).updated(indexedKey(1).alterationDetailsDateMonth, "1").updated(indexedKey(1).alterationDetailsDateYear, "2015")
   }
 
-  def addAlterations(n: Int, data: Map[String, String]): Map[String, String] =
-    (1 to n).foldLeft(data) { (s, v) =>
-      s.updated(s"propertyAlterationsDetails[$v].alterationType", "addLift")
-        .updated(s"propertyAlterationsDetails[$v].cost", "25")
-        .updated(s"propertyAlterationsDetails[$v].date.month", "05")
-        .updated(s"propertyAlterationsDetails[$v].date.year", "2011")
-    }
+  def addAlterations(n: Int, data: Map[String, String]): Map[String, String] = (1 to n).foldLeft(data) { (s, v) =>
+    s.updated(s"propertyAlterationsDetails[$v].alterationType", "addLift")
+      .updated(s"propertyAlterationsDetails[$v].cost", "25")
+      .updated(s"propertyAlterationsDetails[$v].date.month", "05")
+      .updated(s"propertyAlterationsDetails[$v].date.year", "2011")
+  }
 
   val with10Alterations: PropertyAlterations = PropertyAlterations(
     true,

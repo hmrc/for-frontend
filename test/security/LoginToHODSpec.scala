@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class LoginToHODSpec extends UnitTest {
   import TestData._
 
   "Login to HOD with valid credentials" when {
-    implicit val hc = HeaderCarrier()
+    given HeaderCarrier = HeaderCarrier()
 
     "a user has previously saved a document for later" should {
       var updated: (HeaderCarrier, ReferenceNumber, Document)              = null

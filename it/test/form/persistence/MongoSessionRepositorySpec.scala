@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 
 class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureAwaits with DefaultAwaitTimeout with GuiceOneAppPerSuite {
 
-  def mongoSessionrepository() = app.injector.instanceOf[MongoSessionRepository]
+  def mongoSessionRepository(): MongoSessionRepository = app.injector.instanceOf[MongoSessionRepository]
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(Map("metrics.enabled" -> false)).build()
@@ -40,9 +40,9 @@ class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureA
       val formId     = "formId"
       val testObject = MongoSessionRepositorySpecData(name = "John", buildingNumber = 100)
 
-      await(mongoSessionrepository().cache(cacheId, formId, testObject)(using format))
+      await(mongoSessionRepository().cache(cacheId, formId, testObject)(using format))
 
-      val res = await(mongoSessionrepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, formId)(using format))
+      val res = await(mongoSessionRepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, formId)(using format))
       res.value mustBe testObject
 
     }
@@ -54,12 +54,12 @@ class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureA
       val testObject1 = MongoSessionRepositorySpecData(name = "John", buildingNumber = 100)
       val testObject2 = MongoSessionRepositorySpecData(name = "Peter", buildingNumber = -200)
 
-      await(mongoSessionrepository().cache(cacheId, page1, testObject1)(using format))
-      await(mongoSessionrepository().cache(cacheId, page2, testObject2)(using format))
+      await(mongoSessionRepository().cache(cacheId, page1, testObject1)(using format))
+      await(mongoSessionRepository().cache(cacheId, page2, testObject2)(using format))
 
-      val testObjectFromDatabase1 = await(mongoSessionrepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, page1)(using format))
+      val testObjectFromDatabase1 = await(mongoSessionRepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, page1)(using format))
       testObjectFromDatabase1.value mustBe testObject1
-      val testObjectFromDatabase2 = await(mongoSessionrepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, page2)(using format))
+      val testObjectFromDatabase2 = await(mongoSessionRepository().fetchAndGetEntry[MongoSessionRepositorySpecData](cacheId, page2)(using format))
       testObjectFromDatabase2.value mustBe testObject2
     }
   }

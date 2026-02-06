@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package form
 
+import models.serviceContracts.submissions.IncentivesAndPayments
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import play.api.data.FormError
-import utils.FormBindingTestAssertions._
-import utils.MappingSpecs._
+import play.api.data.{Form, FormError}
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
 class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
 
@@ -54,7 +55,7 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
     capSumReceiveDateYear
   )
 
-  def bind(formData: Map[String, String]) =
+  def bind(formData: Map[String, String]): Form[IncentivesAndPayments] =
     pageElevenForm.bind(formData).convertGlobalToFieldErrors()
 
   def containsError(errors: Seq[FormError], key: String, message: String): Boolean = {

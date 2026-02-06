@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,9 +79,9 @@ class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with 
     lazy val refNum    = "adfiwerq08342kfad"
     lazy val sessionId = "sessionid"
 
-    lazy val confirmationUrl = controllers.feedback.routes.SurveyController.confirmation.url
+    lazy val confirmationUrl: String = controllers.feedback.routes.SurveyController.confirmation.url
 
-    lazy val declarationErrorUrl = controllers.routes.ApplicationController.declarationError.url
+    lazy val declarationErrorUrl: String = controllers.routes.ApplicationController.declarationError.url
 
   }
 
@@ -116,7 +116,7 @@ class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers
   def apply(refNum: String)(implicit hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] = {
     Console.println(s"=== called apply with : $refNum ===")
     Future.successful {
-      submittedRefNums = submittedRefNums :+ refNum;
+      submittedRefNums = submittedRefNums :+ refNum
       stubSubmission
     }
   }

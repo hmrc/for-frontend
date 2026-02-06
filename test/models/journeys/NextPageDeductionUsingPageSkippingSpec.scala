@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,41 +278,43 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
     nextPageAllowable(10, doc) shouldBe PageToGoTo(10)
   }
 
-  it should "return page ten when a non verbal agreement has been chosen on page six, on page seven you selected rent reviews and fill in page nine and press continue" in {
-    val doc = summaryBuilder(
-      addressConnection = Some(pageZeroData),
-      customerDetails = Some(pageTwoData),
-      theProperty = Some(pageThreeData),
-      sublet = Some(pageFourData),
-      landlord = Some(pageFiveData),
-      lease = Some(pageSixData),
-      rentReviews = Some(hasRentReviews),
-      rent = Some(pageNineData)
-    )
-    nextPageAllowable(10, doc) shouldBe PageToGoTo(10)
-  }
+  it should
+    "return page ten when a non verbal agreement has been chosen on page six, on page seven you selected rent reviews and fill in page nine and press continue" in {
+      val doc = summaryBuilder(
+        addressConnection = Some(pageZeroData),
+        customerDetails = Some(pageTwoData),
+        theProperty = Some(pageThreeData),
+        sublet = Some(pageFourData),
+        landlord = Some(pageFiveData),
+        lease = Some(pageSixData),
+        rentReviews = Some(hasRentReviews),
+        rent = Some(pageNineData)
+      )
+      nextPageAllowable(10, doc) shouldBe PageToGoTo(10)
+    }
 
-  it should "return page ten when a non verbal agreement has been chosen on page six, on page seven you selected no rent reviews, fill in page eight and fill in page nine and press continue" in {
-    val doc = summaryBuilder(
-      addressConnection = Some(pageZeroData),
-      customerDetails = Some(pageTwoData),
-      theProperty = Some(pageThreeData),
-      sublet = Some(pageFourData),
-      landlord = Some(pageFiveData),
-      lease = Some(pageSixData),
-      rentReviews = Some(hasNoRentReviews),
-      rentAgreement = Some(pageEightData),
-      rent = Some(pageNineData)
-    )
-    nextPageAllowable(10, doc) shouldBe PageToGoTo(10)
-  }
+  it should
+    "return page ten when a non verbal agreement has been chosen on page six, on page seven you selected no rent reviews, fill in page eight and fill in page nine and press continue" in {
+      val doc = summaryBuilder(
+        addressConnection = Some(pageZeroData),
+        customerDetails = Some(pageTwoData),
+        theProperty = Some(pageThreeData),
+        sublet = Some(pageFourData),
+        landlord = Some(pageFiveData),
+        lease = Some(pageSixData),
+        rentReviews = Some(hasNoRentReviews),
+        rentAgreement = Some(pageEightData),
+        rent = Some(pageNineData)
+      )
+      nextPageAllowable(10, doc) shouldBe PageToGoTo(10)
+    }
 
   "nextPageAllowable for page one" should "return zero when trying to go back" in {
     val doc = summaryBuilder()
     nextPageAllowable(0, doc, Some(1)) shouldBe PageToGoTo(0)
   }
 
-  lazy val pageZeroData = AddressConnectionTypeYes
+  lazy val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
 
   lazy val pageOneData: Option[Address] = None
 

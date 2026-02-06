@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,14 @@ import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
 
 import javax.inject.Inject
-import models._
+import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import models.serviceContracts.submissions.LeaseAgreementTypesVerbal
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
-import playconfig.SessionId
+import config.SessionId
+import play.api.libs.json.OFormat
 
 import java.time.LocalDate
 import scala.concurrent.Await
@@ -43,8 +44,8 @@ class PageSevenController @Inject() (
   cc: MessagesControllerComponents,
   part7: views.html.part7
 ) extends ForDataCapturePage[PageSeven](audit, formDocumentRepository, refNumAction, cc) {
-  val format          = p7f
-  val emptyForm       = pageSevenForm
+  val format: OFormat[PageSeven] = p7f
+  val emptyForm: Form[PageSeven] = pageSevenForm
   val pageNumber: Int = 7
 
   def template(form: Form[PageSeven], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {

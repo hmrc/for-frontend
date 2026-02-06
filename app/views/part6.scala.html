@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -347,7 +347,7 @@
                   @includes.dateFields(
                     form= theForm,
                     showDays = true,
-                    field = s"writtenAgreement.steppedDetails[${idx}].stepFrom",
+                    field = s"writtenAgreement.steppedDetails[$idx].stepFrom",
                     govukDate = govukDateInput,
                     label = messages("label.steppedDetails.stepFrom"),
                     helpText = messages("help.steprent.datefrom", DateUtil.exampleDayMonthYear(1))
@@ -355,7 +355,7 @@
                   @includes.dateFields(
                     form= theForm,
                     showDays = true,
-                    field = s"writtenAgreement.steppedDetails[${idx}].stepTo",
+                    field = s"writtenAgreement.steppedDetails[$idx].stepTo",
                     govukDate = govukDateInput,
                     label = messages("label.steppedDetails.stepTo"),
                     helpText = messages("help.steprent.dateto", DateUtil.exampleDayMonthYear(0))
@@ -363,16 +363,16 @@
 
                   @hmrcCurrencyInput(
                     CurrencyInput(
-                      id = s"writtenAgreement.steppedDetails[${idx}].amount",
-                      name = s"writtenAgreement.steppedDetails[${idx}].amount",
-                      value = theForm(s"writtenAgreement.steppedDetails[${idx}].amount").value,
+                      id = s"writtenAgreement.steppedDetails[$idx].amount",
+                      name = s"writtenAgreement.steppedDetails[$idx].amount",
+                      value = theForm(s"writtenAgreement.steppedDetails[$idx].amount").value,
                       classes = "govuk-input--width-10",
                       hint = Hint(content = Text(messages("label.writtenAgreement.steppedDetails.hint"))),
                       label = Label(
                         content = Text(messages("label.writtenAgreement.steppedDetails.amount" + labelSuffix) ),
                         classes = "govuk-!-font-weight-bold"
                       ),
-                      errorMessage =  theForm.errors.asTextErrorMessageForField(s"writtenAgreement.steppedDetails[${idx}].amount")
+                      errorMessage =  theForm.errors.asTextErrorMessageForField(s"writtenAgreement.steppedDetails[$idx].amount")
                     )
                   )
 
