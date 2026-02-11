@@ -48,3 +48,5 @@ lazy val it = (project in file("it"))
   .dependsOn(microservice % "test->test")
   .settings(commonSettings)
   .settings(itSettings())
+
+addCommandAlias("precommit", "scalafmtSbt;scalafmtAll;it/Test/scalafmt;coverage;test;it/test;coverageReport")
