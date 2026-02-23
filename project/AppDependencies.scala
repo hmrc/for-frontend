@@ -16,6 +16,7 @@ object AppDependencies {
     "uk.gov.hmrc"               %% "play-frontend-hmrc-play-30" % playFrontendVersion,
     "uk.gov.hmrc.mongo"         %% "hmrc-mongo-play-30"         % mongoVersion,
     "org.webjars"                % "jquery"                     % "3.7.1",
+    "org.mozilla"                % "rhino"                      % "1.9.1",
     "com.github.java-json-tools" % "json-schema-validator"      % "2.2.14" // must be the same version as in "for-hod-adapter"
   )
 
