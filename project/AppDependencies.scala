@@ -1,18 +1,14 @@
-import play.core.PlayVersion
 import play.sbt.PlayImport.filters
 import sbt.*
 
 object AppDependencies {
 
-  val bootstrapVersion    = "10.5.0"
+  val bootstrapVersion    = "10.6.0"
   val playFrontendVersion = "12.31.0"
   val mongoVersion        = "2.12.0"
 
   // Test dependencies
-  val scalatestPlusPlayVersion    = "7.0.2"
-  val scalatestVersion            = "3.2.19"
   val scalaTestPlusMockitoVersion = "3.2.19.0"
-  val flexMarkVersion             = "0.64.8"
 
   private val compile = Seq(
     filters,
@@ -24,11 +20,8 @@ object AppDependencies {
   )
 
   private val test = Seq(
-    "org.playframework"      %% "play-test"          % PlayVersion.current         % Test,
-    "org.scalatest"          %% "scalatest"          % scalatestVersion            % Test,
-    "org.scalatestplus.play" %% "scalatestplus-play" % scalatestPlusPlayVersion    % Test,
-    "org.scalatestplus"      %% "mockito-5-12"       % scalaTestPlusMockitoVersion % Test,
-    "com.vladsch.flexmark"    % "flexmark-all"       % flexMarkVersion             % Test // for scalatest 3.2.x
+    "uk.gov.hmrc"       %% "bootstrap-test-play-30" % bootstrapVersion            % Test,
+    "org.scalatestplus" %% "mockito-5-12"           % scalaTestPlusMockitoVersion % Test
   )
 
   val appDependencies: Seq[ModuleID] = compile ++ test
