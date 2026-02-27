@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object Survey {
+object Survey:
 
   case class SurveyFeedback(satisfaction: Satisfaction, details: String, journey: Journey, surveyUrl: String)
 
@@ -42,8 +42,6 @@ object Survey {
     "journey"      -> Forms.of[Journey],
     "surveyUrl"    -> text(maxLength = 2000)
   )(SurveyFeedback.apply)(o => Some(Tuple.fromProductTyped(o))))
-
-}
 
 @Singleton
 class SurveyController @Inject() (
@@ -55,11 +53,12 @@ class SurveyController @Inject() (
   errorView: views.html.error.error,
   feedbackThxView: views.html.feedbackThx,
   surveyView: views.html.survey
-)(implicit ec: ExecutionContext
-) extends FrontendController(cc) {
+)(using ec: ExecutionContext
+) extends FrontendController(cc):
+
   import Survey.*
 
-  val completedFeedbackFormNormalJourney: Form[SurveyFeedback] = completedFeedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors
+  private val completedFeedbackFormNormalJourney: Form[SurveyFeedback] = completedFeedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors
 
   def onPageView(journey: String): mvc.Action[AnyContent] = refNumAction { implicit request =>
     val form = completedFeedbackForm.copy(data = Map("journey" -> journey, "surveyUrl" -> request.uri))
@@ -96,4 +95,3 @@ class SurveyController @Inject() (
   def surveyThankyou: mvc.Action[AnyContent] = Action { implicit request =>
     Ok(feedbackThxView()).withNewSession
   }
-}

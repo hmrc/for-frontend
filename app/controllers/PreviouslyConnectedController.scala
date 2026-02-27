@@ -47,8 +47,7 @@ class PreviouslyConnectedController @Inject() (
   previouslyConnected: views.html.previouslyConnected,
   errorView: views.html.error.error
 )(implicit val ec: ExecutionContext
-) extends FrontendController(cc) {
-  val logger: Logger = Logger(this.getClass)
+) extends FrontendController(cc) with Logging:
 
   def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
@@ -70,10 +69,9 @@ class PreviouslyConnectedController @Inject() (
     }
 
   def getForm(notConnectedSummary: NotConnectedSummary): Form[PreviouslyConnected] =
-    notConnectedSummary.previouslyConnected match {
+    notConnectedSummary.previouslyConnected match
       case Some(x) => formMapping.fill(x)
       case None    => formMapping
-    }
 
   def onPageView: mvc.Action[AnyContent] = refNumberAction.async { implicit request =>
     findNotConnectedSummary.map {
@@ -92,10 +90,9 @@ class PreviouslyConnectedController @Inject() (
             Future.successful(Ok(previouslyConnected(formWithErrors, summary))),
           formWithData =>
             cache.cache(SessionId(using hc), cacheKey, formWithData).map { _ =>
-              ForDataCapturePage.extractAction(request.body.asFormUrlEncoded) match {
+              ForDataCapturePage.extractAction(request.body.asFormUrlEncoded) match
                 case ForDataCapturePage.Update => Redirect(routes.NotConnectedCheckYourAnswersController.onPageView)
                 case _                         => Redirect(routes.NotConnectedController.onPageView)
-              }
             }
         )
       case None          =>
@@ -103,8 +100,6 @@ class PreviouslyConnectedController @Inject() (
         Future.successful(NotFound(errorView(404)))
     }
   }
-}
 
-object PreviouslyConnectedController {
+object PreviouslyConnectedController:
   val cacheKey = "PreviouslyConnected"
-}

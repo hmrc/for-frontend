@@ -25,14 +25,13 @@ import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.NotConnected
 import play.api.mvc.MessagesControllerComponents
-import play.api.Logger
+import play.api.{Logger, Logging, mvc}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import models.pages.Summary
-import play.api.mvc
 import play.api.data.Form
 import play.api.mvc.AnyContent
 
@@ -45,9 +44,7 @@ class NotConnectedController @Inject() (
   notConnectedView: views.html.notConnected,
   errorView: views.html.error.error
 )(implicit ec: ExecutionContext
-) extends FrontendController(cc) {
-
-  val logger: Logger = Logger(classOf[NotConnectedController])
+) extends FrontendController(cc) with Logging:
 
   def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
@@ -69,10 +66,9 @@ class NotConnectedController @Inject() (
     }
 
   def getForm(notConnectedSummary: NotConnectedSummary): Form[NotConnected] =
-    notConnectedSummary.notConnected match {
+    notConnectedSummary.notConnected match
       case Some(x) => form.fill(x)
       case None    => form
-    }
 
   def onPageView: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
     findNotConnectedSummary.map {
@@ -99,7 +95,6 @@ class NotConnectedController @Inject() (
         Future.successful(NotFound(errorView(404)))
     }
   }
-}
 
 object NotConnectedController:
   val cacheKey = "NotConnected"
