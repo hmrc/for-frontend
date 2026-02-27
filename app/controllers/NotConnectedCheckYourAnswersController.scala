@@ -73,7 +73,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
         case Some(notConnectedSummary) => Ok(notConnectedCheckYourAnswers(notConnectedSummary))
         case None                      =>
           logger.error(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-          InternalServerError(errorView(500))
+          NotFound(errorView(404))
       }
     }
   }
@@ -91,7 +91,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
           case _: Exception =>
             logger.error(s"Could not send data to HOD - ${request.refNum} - ${hc.sessionId}")
             audit.sendExplicitAudit("NotConnectedSubmissionFailed", json)
-            InternalServerError(errorView(500))
+            NotFound(errorView(404))
         }
       case None          => NotFound(errorView(404))
     }

@@ -80,7 +80,7 @@ class PreviouslyConnectedController @Inject() (
       case Some(notConnectedSummary) => Ok(previouslyConnected(getForm(notConnectedSummary), notConnectedSummary.summary))
       case None                      =>
         logger.warn(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -100,7 +100,7 @@ class PreviouslyConnectedController @Inject() (
         )
       case None          =>
         logger.warn(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        Future.successful(InternalServerError(errorView(500)))
+        Future.successful(NotFound(errorView(404)))
     }
   }
 }

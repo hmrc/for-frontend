@@ -1,7 +1,7 @@
 import org.irundaia.sass.Minified
 import uk.gov.hmrc.DefaultBuildSettings.{itSettings, targetJvm}
 
-ThisBuild / scalaVersion := "3.8.1"
+ThisBuild / scalaVersion := "3.8.2"
 ThisBuild / majorVersion := 3
 
 val commonSettings = Seq(

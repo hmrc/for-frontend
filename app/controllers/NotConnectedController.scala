@@ -79,7 +79,7 @@ class NotConnectedController @Inject() (
       case Some(notConnectedSummary) => Ok(notConnectedView(getForm(notConnectedSummary), notConnectedSummary.summary))
       case None                      =>
         logger.error(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -96,11 +96,10 @@ class NotConnectedController @Inject() (
         )
       case None          =>
         logger.warn(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        Future.successful(InternalServerError(errorView(500)))
+        Future.successful(NotFound(errorView(404)))
     }
   }
 }
 
-object NotConnectedController {
+object NotConnectedController:
   val cacheKey = "NotConnected"
-}

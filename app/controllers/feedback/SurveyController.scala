@@ -90,7 +90,7 @@ class SurveyController @Inject() (
           summary.customerDetails.map(_.contactDetails.email),
           summary
         ))
-      case None      => InternalServerError(errorView(500))
+      case None      => NotFound(errorView(404))
     }
 
   def surveyThankyou: mvc.Action[AnyContent] = Action { implicit request =>

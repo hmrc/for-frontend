@@ -89,7 +89,7 @@ class SaveForLaterController @Inject() (
         else
           Ok(customPasswordSaveForLaterView(sum, expiryDate, CustomUserPasswordForm.customUserPassword, exitPath)) // TODO - pass path
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -114,7 +114,7 @@ class SaveForLaterController @Inject() (
           }
         )
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -142,7 +142,7 @@ class SaveForLaterController @Inject() (
         val sum = SummaryBuilder.build(doc)
         Redirect(UrlFor(Journey.pageToResumeAt(sum), request.headers)).flashing((s4lIndicator, s4lIndicator))
       case None      =>
-        InternalServerError
+        NotFound(errorView(404))
     }
   }
 

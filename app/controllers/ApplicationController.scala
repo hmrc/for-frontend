@@ -72,7 +72,7 @@ class ApplicationController @Inject() (
         )
 
         Ok(declarationView(Form(("", text)), fullName, userType, summary: Summary))
-      case None      => InternalServerError(errorView(500))
+      case None      => NotFound(errorView(404))
     }
   }
 
@@ -83,7 +83,7 @@ class ApplicationController @Inject() (
         val fullName = summary.customerDetails.map(_.fullName).getOrElse("")
         val userType = summary.customerDetails.map(_.userType.name).getOrElse("")
         Ok(declarationView(Form(("", text)).withError("declaration", Errors.declaration), fullName, userType, summary))
-      case None      => InternalServerError(errorView(500))
+      case None      => NotFound(errorView(404))
     }
   }
 
@@ -128,7 +128,7 @@ class ApplicationController @Inject() (
         val sub = SummaryBuilder.build(doc)
         Ok(checkYourAnswersView(sub))
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
