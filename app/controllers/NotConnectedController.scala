@@ -25,7 +25,7 @@ import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.NotConnected
 import play.api.mvc.MessagesControllerComponents
-import play.api.{Logger, Logging, mvc}
+import play.api.{Logging, mvc}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController

@@ -25,7 +25,7 @@ import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission
 import models.{Addresses, NotConnectedJourney}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import play.api.{Logger, Logging, mvc}
+import play.api.{Logging, mvc}
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
