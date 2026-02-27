@@ -24,12 +24,12 @@ import form.persistence.FormDocumentRepository
 import models.Addresses
 
 import javax.inject.{Inject, Singleton}
-import models.pages._
+import models.pages.*
 import play.api.Configuration
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import play.api.libs.json.Json
-import play.api.mvc._
+import play.api.mvc.*
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -50,13 +50,12 @@ class ApplicationController @Inject() (
   configuration: Configuration,
   audit: Audit,
   forConfig: ForConfig
-)(implicit ec: ExecutionContext
-) extends FrontendController(cc) {
+)(using ec: ExecutionContext
+) extends FrontendController(cc):
 
-  private def updatePath(hc: HeaderCarrier, path: String): HeaderCarrier = {
+  private def updatePath(hc: HeaderCarrier, path: String): HeaderCarrier =
     val otherHeaders = hc.otherHeaders.map(x => if x._1 == "path" then ("path", path) else x)
     hc.copy(otherHeaders = otherHeaders)
-  }
 
   def declaration: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).map {
@@ -72,7 +71,7 @@ class ApplicationController @Inject() (
         )
 
         Ok(declarationView(Form(("", text)), fullName, userType, summary: Summary))
-      case None      => InternalServerError(errorView(500))
+      case None      => NotFound(errorView(404))
     }
   }
 
@@ -83,7 +82,7 @@ class ApplicationController @Inject() (
         val fullName = summary.customerDetails.map(_.fullName).getOrElse("")
         val userType = summary.customerDetails.map(_.userType.name).getOrElse("")
         Ok(declarationView(Form(("", text)).withError("declaration", Errors.declaration), fullName, userType, summary))
-      case None      => InternalServerError(errorView(500))
+      case None      => NotFound(errorView(404))
     }
   }
 
@@ -128,15 +127,13 @@ class ApplicationController @Inject() (
         val sub = SummaryBuilder.build(doc)
         Ok(checkYourAnswersView(sub))
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
   def importantInformation: Action[AnyContent] = Action { implicit request =>
-    if (configuration.get[Boolean]("bannerNotice.enabled")) {
+    if configuration.get[Boolean]("bannerNotice.enabled") then
       Ok(importantInformationView())
-    } else {
+    else
       Redirect(routes.LoginController.show)
-    }
   }
-}

@@ -26,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.PreviouslyConnected
 import models.serviceContracts.submissions.PreviouslyConnected.format
-import play.api.Logger
+import play.api.{Logging, mvc}
 import play.api.mvc.MessagesControllerComponents
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,7 +34,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import models.pages.Summary
-import play.api.mvc
 import play.api.data.Form
 import play.api.mvc.AnyContent
 
@@ -47,8 +46,8 @@ class PreviouslyConnectedController @Inject() (
   previouslyConnected: views.html.previouslyConnected,
   errorView: views.html.error.error
 )(implicit val ec: ExecutionContext
-) extends FrontendController(cc) {
-  val logger: Logger = Logger(this.getClass)
+) extends FrontendController(cc)
+  with Logging:
 
   def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
@@ -70,17 +69,16 @@ class PreviouslyConnectedController @Inject() (
     }
 
   def getForm(notConnectedSummary: NotConnectedSummary): Form[PreviouslyConnected] =
-    notConnectedSummary.previouslyConnected match {
+    notConnectedSummary.previouslyConnected match
       case Some(x) => formMapping.fill(x)
       case None    => formMapping
-    }
 
   def onPageView: mvc.Action[AnyContent] = refNumberAction.async { implicit request =>
     findNotConnectedSummary.map {
       case Some(notConnectedSummary) => Ok(previouslyConnected(getForm(notConnectedSummary), notConnectedSummary.summary))
       case None                      =>
         logger.warn(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -92,19 +90,16 @@ class PreviouslyConnectedController @Inject() (
             Future.successful(Ok(previouslyConnected(formWithErrors, summary))),
           formWithData =>
             cache.cache(SessionId(using hc), cacheKey, formWithData).map { _ =>
-              ForDataCapturePage.extractAction(request.body.asFormUrlEncoded) match {
+              ForDataCapturePage.extractAction(request.body.asFormUrlEncoded) match
                 case ForDataCapturePage.Update => Redirect(routes.NotConnectedCheckYourAnswersController.onPageView)
                 case _                         => Redirect(routes.NotConnectedController.onPageView)
-              }
             }
         )
       case None          =>
         logger.warn(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-        Future.successful(InternalServerError(errorView(500)))
+        Future.successful(NotFound(errorView(404)))
     }
   }
-}
 
-object PreviouslyConnectedController {
+object PreviouslyConnectedController:
   val cacheKey = "PreviouslyConnected"
-}

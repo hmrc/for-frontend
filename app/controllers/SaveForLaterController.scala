@@ -25,11 +25,11 @@ import form.persistence.FormDocumentRepository
 import models.Addresses
 
 import javax.inject.{Inject, Singleton}
-import models.journeys._
+import models.journeys.*
 import models.pages.SummaryBuilder
 import play.api.Configuration
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import play.api.libs.json.Json
 import views.html.{customPasswordSaveForLater, saveForLaterLogin, savedForLater}
 import play.api.i18n.Messages
@@ -45,9 +45,8 @@ import scala.concurrent.ExecutionContext
 import play.api.mvc
 import play.api.mvc.AnyContent
 
-object SaveForLaterController {
+object SaveForLaterController:
   val s4lIndicator = "s4l"
-}
 
 @Singleton
 class SaveForLaterController @Inject() (
@@ -60,17 +59,17 @@ class SaveForLaterController @Inject() (
   savedForLater: savedForLater,
   customPasswordSaveForLaterView: customPasswordSaveForLater,
   errorView: views.html.error.error
-)(implicit ec: ExecutionContext,
+)(using ec: ExecutionContext,
   hodConnector: HODConnector,
   repository: FormDocumentRepository,
   mongoHasher: MongoHasher
-) extends FrontendController(cc) {
+) extends FrontendController(cc):
 
-  import SaveForLaterController._
+  import SaveForLaterController.*
 
   private val expiryDateInDays = configuration.get[String]("savedForLaterExpiryDays").toInt
 
-  def continue(implicit hc: HeaderCarrier): ContinueWithSavedSubmission = config.ContinueWithSavedSubmission()
+  private def continue(using hc: HeaderCarrier): ContinueWithSavedSubmission = config.ContinueWithSavedSubmission()
 
   def saveForLater(exitPath: String): mvc.Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).flatMap {
@@ -89,7 +88,7 @@ class SaveForLaterController @Inject() (
         else
           Ok(customPasswordSaveForLaterView(sum, expiryDate, CustomUserPasswordForm.customUserPassword, exitPath)) // TODO - pass path
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -101,7 +100,7 @@ class SaveForLaterController @Inject() (
         CustomUserPasswordForm.customUserPassword.bindFromRequest().fold(
           formErrors =>
             Ok(customPasswordSaveForLaterView(sum, expiryDate, formErrors, exitPath)),
-          validData => {
+          validData =>
             val saveSubmissionForLater = config.SaveForLater(validData.password)
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
               audit.sendSavedForLater(sum, exitPath)
@@ -111,10 +110,9 @@ class SaveForLaterController @Inject() (
               Ok(savedForLater(sum, pw, expiryDate))
 
             }
-          }
         )
       case None      =>
-        InternalServerError(errorView(500))
+        NotFound(errorView(404))
     }
   }
 
@@ -142,7 +140,7 @@ class SaveForLaterController @Inject() (
         val sum = SummaryBuilder.build(doc)
         Redirect(UrlFor(Journey.pageToResumeAt(sum), request.headers)).flashing((s4lIndicator, s4lIndicator))
       case None      =>
-        InternalServerError
+        NotFound(errorView(404))
     }
   }
 
@@ -169,7 +167,5 @@ class SaveForLaterController @Inject() (
       "password" -> nonEmptyText
     )(SaveForLaterLogin.apply)(o => Some(o.password))
   )
-
-}
 
 case class SaveForLaterLogin(password: String)

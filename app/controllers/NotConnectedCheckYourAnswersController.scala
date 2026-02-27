@@ -25,7 +25,7 @@ import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission
 import models.{Addresses, NotConnectedJourney}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import play.api.{Logger, mvc}
+import play.api.{Logging, mvc}
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
@@ -46,10 +46,9 @@ class NotConnectedCheckYourAnswersController @Inject() (
   notConnectedCheckYourAnswers: views.html.notConnectedCheckYourAnswers,
   confirmNotConnectedView: views.html.confirmNotConnected,
   errorView: views.html.error.error
-)(implicit ec: ExecutionContext
-) extends FrontendController(cc) {
-
-  val logger: Logger = Logger(classOf[NotConnectedCheckYourAnswersController])
+)(using ec: ExecutionContext
+) extends FrontendController(cc)
+  with Logging:
 
   def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
@@ -73,7 +72,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
         case Some(notConnectedSummary) => Ok(notConnectedCheckYourAnswers(notConnectedSummary))
         case None                      =>
           logger.error(s"Could not find document in current session - ${request.refNum} - ${hc.sessionId}")
-          InternalServerError(errorView(500))
+          NotFound(errorView(404))
       }
     }
   }
@@ -91,7 +90,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
           case _: Exception =>
             logger.error(s"Could not send data to HOD - ${request.refNum} - ${hc.sessionId}")
             audit.sendExplicitAudit("NotConnectedSubmissionFailed", json)
-            InternalServerError(errorView(500))
+            NotFound(errorView(404))
         }
       case None          => NotFound(errorView(404))
     }
@@ -141,5 +140,3 @@ class NotConnectedCheckYourAnswersController @Inject() (
         submissionConnector.submitNotConnected(summary.referenceNumber, submission)
       }
     }
-
-}
