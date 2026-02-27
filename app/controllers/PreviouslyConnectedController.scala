@@ -26,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.PreviouslyConnected
 import models.serviceContracts.submissions.PreviouslyConnected.format
-import play.api.Logger
+import play.api.{Logger, Logging, mvc}
 import play.api.mvc.MessagesControllerComponents
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,7 +34,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import models.pages.Summary
-import play.api.mvc
 import play.api.data.Form
 import play.api.mvc.AnyContent
 
