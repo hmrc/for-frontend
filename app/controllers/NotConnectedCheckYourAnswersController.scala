@@ -47,7 +47,8 @@ class NotConnectedCheckYourAnswersController @Inject() (
   confirmNotConnectedView: views.html.confirmNotConnected,
   errorView: views.html.error.error
 )(using ec: ExecutionContext
-) extends FrontendController(cc) with Logging:
+) extends FrontendController(cc)
+  with Logging:
 
   def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
