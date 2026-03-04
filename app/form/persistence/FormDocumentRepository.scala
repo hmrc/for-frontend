@@ -27,16 +27,15 @@ import play.api.libs.json.{Format, Json}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[SessionScopedFormDocumentRepository])
-trait FormDocumentRepository {
+trait FormDocumentRepository:
   def findById(documentId: String, referenceNumber: String): Future[Option[Document]]
   def updatePage(documentId: String, referenceNumber: String, page: Page): Future[Unit]
   def store(documentId: String, referenceNumber: String, doc: Document): Future[Unit]
   def clear(documentId: String, referenceNumber: String): Future[Unit]
   def remove(documentId: String): Future[Unit]
-}
 
 @Singleton
-class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionRepository)(implicit ec: ExecutionContext) extends FormDocumentRepository {
+class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionRepository)(using ec: ExecutionContext) extends FormDocumentRepository:
 
   override def findById(documentId: String, referenceNumber: String): Future[Option[Document]] =
     cache.fetchAndGetEntry[DocumentWrapper](documentId, referenceNumber).flatMap {
@@ -66,16 +65,14 @@ class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionReposito
     pages = doc.pages.map(p => p.copy(fields = p.fields.map(kv => (kv._1.replace(".", "___"), kv._2))))
   )
 
-  override def store(documentId: String, referenceNumber: String, doc: Document): Future[Unit] = {
+  override def store(documentId: String, referenceNumber: String, doc: Document): Future[Unit] =
     val dw = DocumentWrapper(toB64Blob(stripDotsOutOfKeyNamesToAppeaseMongo(doc)))
     cache.cache[DocumentWrapper](documentId, referenceNumber, dw) recoverWith {
-      case e: Exception =>
-        Future.failed(e)
+      case e: Exception => Future.failed(e)
     } map { _ => () }
-  }
 
   // Important: B64 the json string because the json encryptor dramatically multiplies the document size when containing UTF-8 causing 413 in caching client
-  private def toB64Blob(doc: Document) = new String(Base64.getEncoder.encode(Json.stringify(Json.toJson(doc)).getBytes("UTF-8")))
+  private def toB64Blob(doc: Document) = String(Base64.getEncoder.encode(Json.stringify(Json.toJson(doc)).getBytes("UTF-8")))
 
   override def clear(documentId: String, referenceNumber: String): Future[Unit] =
     findById(documentId, referenceNumber) flatMap {
@@ -85,9 +82,8 @@ class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionReposito
 
   override def remove(documentId: String): Future[Unit] =
     cache.removeCache(documentId)
-}
 
-object DocumentWrapper {
+object DocumentWrapper:
   implicit val f: Format[DocumentWrapper] = Json.format[DocumentWrapper]
-}
+
 case class DocumentWrapper(b64JsonBlob: String)

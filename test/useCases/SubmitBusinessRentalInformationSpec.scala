@@ -36,10 +36,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.*
 import scala.language.postfixOps
 
-class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matchers with MockitoExtendedSugar {
+class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matchers with MockitoExtendedSugar:
+
   import TestData.*
-  implicit val hc: HeaderCarrier         = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
-  implicit val request: RefNumRequest[?] = new RefNumRequest("refNum", FakeRequest(), new DefaultMessagesApi)
+
+  given HeaderCarrier    = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
+  given RefNumRequest[?] = RefNumRequest("refNum", FakeRequest(), DefaultMessagesApi())
 
   private val audit          = mock[Audit]
   private val auditAddresses = mock[AddressAuditing]
@@ -49,7 +51,7 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
     builder.stubBuild(document, submission)
 
     "a submission for the refNum is received" should {
-      val submit = new SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit, auditAddresses)
+      val submit = SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit, auditAddresses)
       Await.result(submit(refNum), 10 seconds)
 
       "The information will be formatted using the submission schema and posted to the back-end" in
@@ -61,13 +63,13 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
   "An error is returned when a document for the refNum does not exist" in {
     val invalidRefNum = "adlkjfalsjd"
     val ex            = intercept[RentalInformationCouldNotBeRetrieved] {
-      val submit = new SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
+      val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
       Await.result(submit(invalidRefNum), 10 seconds)
     }
     assert(ex.refNum === invalidRefNum)
   }
 
-  object TestData {
+  object TestData:
 
     val submission: Submission = Submission(
       None,
@@ -94,6 +96,3 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
     val subConnector: StubSubmissionConnector = StubSubmissionConnector()
     val builder: StubSubmissionBuilder        = StubSubmissionBuilder()
     val sessionId                             = "sdfjasdljfasldjfasd"
-  }
-
-}

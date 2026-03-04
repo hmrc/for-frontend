@@ -335,7 +335,7 @@
 
             <hr/>
             @defining(theForm("writtenAgreement.steppedDetails").indexes.size) { size =>
-              @_root_.template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
+              @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
 
                 @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {

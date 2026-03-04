@@ -27,11 +27,11 @@ import MappingSupport.*
 import form.Errors.{propertyOwnedByYouRequired, propertyRentedByYouRequired}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
-object PageThreeForm {
+object PageThreeForm:
 
   val keys: Keys = new Keys
 
-  class Keys {
+  class Keys:
     val propertyType           = "propertyType"
     val occupierType           = "occupierType"
     val occupierCompanyName    = "occupierCompanyName"
@@ -41,7 +41,6 @@ object PageThreeForm {
     val propertyOwnedByYou     = "propertyOwnedByYou"
     val propertyRentedByYou    = "propertyRentedByYou"
     val noRentDetails          = "noRentDetails"
-  }
 
   private val basePageThreeMapping = mapping(
     "propertyType"              -> default(text, "").verifying(
@@ -90,4 +89,3 @@ object PageThreeForm {
   )(PageThree.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageThreeForm: Form[PageThree] = Form(basePageThreeMapping)
-}

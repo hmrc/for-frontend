@@ -26,16 +26,16 @@ import views.html.notConnected
 
 import scala.concurrent.ExecutionContext
 
-class NotConnectedControllerSpec extends TestBaseSpec {
+class NotConnectedControllerSpec extends TestBaseSpec:
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  given ExecutionContext = ExecutionContext.Implicits.global
 
   "NotConnectedController" should "move to check your answers" in {
 
     val cache                  = mock[MongoSessionRepository]
     val formDocumentRepository = mock[FormDocumentRepository]
 
-    val controller = new NotConnectedController(
+    val controller = NotConnectedController(
       formDocumentRepository,
       refNumAction(),
       cache,
@@ -51,5 +51,3 @@ class NotConnectedControllerSpec extends TestBaseSpec {
     status(result) shouldBe SEE_OTHER
 
   }
-
-}

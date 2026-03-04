@@ -22,12 +22,12 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
 
-class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageTwelveForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageTwelveForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "Page Twelve Mapping" should "bind with the fields and not return issues" in
     mustBind(bind(baseData))(_ => ())
@@ -141,15 +141,14 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
     mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
   }
 
-  object TestData {
+  object TestData:
 
-    def getKeyService(idx: Int): GetKeyService = new GetKeyService(idx)
+    def getKeyService(idx: Int): GetKeyService = GetKeyService(idx)
 
-    class GetKeyService(idx: Int) {
+    class GetKeyService(idx: Int):
       val description: String     = s"includedServicesDetails[$idx].chargeDescription"
       val cost: String            = s"includedServicesDetails[$idx].chargeCost"
       val parentFieldName: String = s"includedServicesDetails[$idx]"
-    }
 
     def bind(data: Map[String, String]): Form[PageTwelve] = pageTwelveForm.bind(data).convertGlobalToFieldErrors()
 
@@ -204,6 +203,3 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers {
         ChargeDetails("blah blah blah", 45)
       )
     )
-
-  }
-}

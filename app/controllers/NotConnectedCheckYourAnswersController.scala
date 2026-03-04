@@ -25,8 +25,8 @@ import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission
 import models.{Addresses, NotConnectedJourney}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import play.api.{Logging, mvc}
-import play.api.mvc.{AnyContent, MessagesControllerComponents}
+import play.api.Logging
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -50,23 +50,23 @@ class NotConnectedCheckYourAnswersController @Inject() (
 ) extends FrontendController(cc)
   with Logging:
 
-  def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
+  def findSummary(using request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
       case Some(doc) => Option(SummaryBuilder.build(doc))
       case None      => None
     }
 
-  def findNotConnected(sum: Summary)(implicit hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
+  private def findNotConnected(sum: Summary)(using hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
     getNotConnectedFromCache().flatMap { notConnected =>
       getPreviouslyConnectedFromCache().flatMap { previouslyConnected =>
         Option(NotConnectedSummary(sum, previouslyConnected, notConnected))
       }
     }
 
-  def removeSession(implicit request: RefNumRequest[?]): Future[Unit] =
+  private def removeSession(using request: RefNumRequest[?]): Future[Unit] =
     repository.remove(SessionId(using hc))
 
-  def onPageView: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def onPageView: Action[AnyContent] = refNumAction.async { implicit request =>
     findSummary.flatMap { summary =>
       findNotConnected(summary.get).map {
         case Some(notConnectedSummary) => Ok(notConnectedCheckYourAnswers(notConnectedSummary))
@@ -77,7 +77,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
     }
   }
 
-  def onPageSubmit: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def onPageSubmit: Action[AnyContent] = refNumAction.async { implicit request =>
     findSummary.flatMap {
       case Some(summary) =>
         val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++
@@ -96,7 +96,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
     }
   }
 
-  def onConfirmationView: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def onConfirmationView: Action[AnyContent] = refNumAction.async { implicit request =>
     val feedbackForm = Survey.completedFeedbackForm.bind(
       Map("journey" -> NotConnectedJourney.name, "surveyUrl" -> request.uri)
     ).discardingErrors
@@ -110,19 +110,19 @@ class NotConnectedCheckYourAnswersController @Inject() (
     }
   }
 
-  def getPreviouslyConnectedFromCache()(implicit hc: HeaderCarrier): Future[PreviouslyConnected] =
+  def getPreviouslyConnectedFromCache()(using hc: HeaderCarrier): Future[PreviouslyConnected] =
     cache.fetchAndGetEntry[PreviouslyConnected](SessionId(using hc), PreviouslyConnectedController.cacheKey).flatMap {
       case Some(x) => Future.successful(x)
-      case None    => Future.failed(new RuntimeException("Unable to find record in cache for previously connected"))
+      case None    => Future.failed(RuntimeException("Unable to find record in cache for previously connected"))
     }
 
-  def getNotConnectedFromCache()(implicit hc: HeaderCarrier): Future[NotConnected] =
+  def getNotConnectedFromCache()(using hc: HeaderCarrier): Future[NotConnected] =
     cache.fetchAndGetEntry[NotConnected](SessionId(using hc), NotConnectedController.cacheKey).flatMap {
       case Some(x) => Future.successful(x)
-      case None    => Future.failed(new RuntimeException("Unable to find record in cache for not connected"))
+      case None    => Future.failed(RuntimeException("Unable to find record in cache for not connected"))
     }
 
-  private def submitToHod(summary: Summary)(implicit hc: HeaderCarrier, messages: Messages) =
+  private def submitToHod(summary: Summary)(using hc: HeaderCarrier, messages: Messages) =
     getNotConnectedFromCache().flatMap { notConnected =>
       getPreviouslyConnectedFromCache().flatMap { previouslyConnected =>
         val submission = NotConnectedSubmission(

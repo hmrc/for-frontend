@@ -17,7 +17,7 @@
 package utils.stubs
 
 import com.google.inject.Provider
-import connectors._
+import connectors.*
 import form.persistence.FormDocumentRepository
 import helpers.AddressAuditing
 import models.pages.Summary
@@ -29,61 +29,47 @@ import useCases.SubmissionBuilder
 
 import scala.concurrent.Future
 
-object StubSubmissionConnector { def apply() = new StubSubmissionConnector }
-
-class StubSubmissionConnector extends SubmissionConnector with should.Matchers {
+class StubSubmissionConnector extends SubmissionConnector with should.Matchers:
   var submissions: Map[String, Submission] = Map.empty
 
-  def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] = {
+  def submit(refNum: String, submission: Submission)(using hc: HeaderCarrier): Future[Unit] =
     submissions = submissions.updated(refNum, submission)
     Future.unit
-  }
 
   def verifyWasSubmitted(refNum: String, sub: Submission): Unit =
-    submissions.get(refNum) match {
+    submissions.get(refNum) match
       case None    => fail(s"No submission for $refNum")
       case Some(x) => assert(x === sub)
-    }
 
-  override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(implicit hc: HeaderCarrier): Future[Unit] = ???
-}
+  override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(using hc: HeaderCarrier): Future[Unit] = ???
 
-object StubSubmissionBuilder { def apply() = new StubSubmissionBuilder() }
-
-class StubSubmissionBuilder extends SubmissionBuilder {
+class StubSubmissionBuilder extends SubmissionBuilder:
   private var stubs: Map[Document, Submission] = Map.empty
 
   def stubBuild(doc: Document, sub: Submission): Unit = stubs = stubs.updated(doc, sub)
 
-  def build(doc: Document): Submission = stubs.getOrElse(doc, throw new Exception(s"No stub for $doc. Stubs: $stubs"))
-}
+  def build(doc: Document): Submission = stubs.getOrElse(doc, throw Exception(s"No stub for $doc. Stubs: $stubs"))
 
-class StubFormDocumentRepoProvider extends Provider[StubFormDocumentRepo] {
+class StubFormDocumentRepoProvider extends Provider[StubFormDocumentRepo]:
   override def get(): StubFormDocumentRepo = StubFormDocumentRepo()
-}
 
-case class StubFormDocumentRepo(docs: (String, String, Document)*) extends FormDocumentRepository {
+case class StubFormDocumentRepo(docs: (String, String, Document)*) extends FormDocumentRepository:
 
-  override def findById(documentId: String, referenceNumber: String): Future[Option[Document]] = {
+  override def findById(documentId: String, referenceNumber: String): Future[Option[Document]] =
     val doc = docs.find(d => d._1 == documentId && d._2 == referenceNumber).map(_._3)
     Future.successful(doc)
-  }
 
   var storedPages: Seq[(String, String, Page)] = Seq.empty
 
-  override def updatePage(documentId: String, referenceNumber: String, page: Page): Future[Unit] = {
-    storedPages = storedPages :+ ((documentId, referenceNumber, page))
+  override def updatePage(documentId: String, referenceNumber: String, page: Page): Future[Unit] =
+    storedPages = storedPages :+ (documentId, referenceNumber, page)
     Future.unit
-  }
 
   override def store(documentId: String, referenceNumber: String, doc: Document): Future[Unit] = ???
 
   override def clear(documentId: String, referenceNumber: String): Future[Unit] = ???
 
   override def remove(documentId: String): Future[Unit] = Future.successful(())
-}
 
-object StubAddressAuditing extends AddressAuditing(null) {
+object StubAddressAuditing extends AddressAuditing(null):
   override def apply(s: Summary, r: Request[?]): Future[Unit] = Future.successful(())
-
-}

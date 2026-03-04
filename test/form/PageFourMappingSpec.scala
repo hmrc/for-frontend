@@ -23,12 +23,12 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
 
-class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageFourMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageFourForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageFourForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "Page four mapping" should "validate sublet tenant address when sublet is true and is tenants address" in
     validateAddress(pageFourForm, fullData, "sublet[0].tenantAddress")
@@ -172,11 +172,11 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
     mustOnlyContainError("sublet", Errors.tooManySublets, form)
   }
 
-  object TestData {
+  object TestData:
 
     val keys: Keys = new Keys
 
-    class Keys {
+    class Keys:
       val propertyIsSublet                = "propertyIsSublet"
       val addrBuildingNameNumber          = "sublet[0].tenantAddress.buildingNameNumber"
       val addrStreet1                     = "sublet[0].tenantAddress.street1"
@@ -190,15 +190,13 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
       val rentFixedDate                   = "sublet[0].rentFixedDate"
       val rentFixedDateMonth              = "sublet[0].rentFixedDate.month"
       val rentFixedDateYear               = "sublet[0].rentFixedDate.year"
-    }
 
     val mandatoryAddressFields: Seq[String] = Seq(keys.addrBuildingNameNumber, keys.addrPostcode, keys.tenantFullName)
     val allAddressFields: Seq[String]       = mandatoryAddressFields ++ Seq(keys.addrStreet1, keys.addrStreet2)
 
-    def bind(dataMap: Map[String, String]): Form[PageFour] = {
+    def bind(dataMap: Map[String, String]): Form[PageFour] =
       val bound = pageFourForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
-    }
 
     val fullData: Map[String, String] = Map(
       keys.propertyIsSublet                -> "true",
@@ -235,6 +233,3 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers {
 
     def hasError(errors: Seq[FormError], key: String, message: String): Boolean =
       errors.exists(err => err.key == key && err.messages.contains(message))
-  }
-
-}

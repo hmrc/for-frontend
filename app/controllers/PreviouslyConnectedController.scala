@@ -16,7 +16,7 @@
 
 package controllers
 
-import _root_.form.persistence.{FormDocumentRepository, MongoSessionRepository}
+import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import actions.{RefNumAction, RefNumRequest}
 import controllers.PreviouslyConnectedController.cacheKey
 import controllers.dataCapturePages.ForDataCapturePage
@@ -45,7 +45,7 @@ class PreviouslyConnectedController @Inject() (
   val refNumberAction: RefNumAction,
   previouslyConnected: views.html.previouslyConnected,
   errorView: views.html.error.error
-)(implicit val ec: ExecutionContext
+)(using val ec: ExecutionContext
 ) extends FrontendController(cc)
   with Logging:
 

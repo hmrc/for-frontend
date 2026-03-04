@@ -140,7 +140,7 @@
             helpText = "<span>" + messages("label.firstOccupationDate.help") + "</span><br/><br/><span>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>",
             labelSuffix = labelSuffix,
             govukDate = govukDateInput,
-            hiddenBy = Option(new HiddenBy("occupierType", Seq("company", "individuals")))
+            hiddenBy = Option(HiddenBy("occupierType", Seq("company", "individuals")))
         )
         </div>
 

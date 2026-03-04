@@ -16,27 +16,27 @@
 
 package useCases
 
-import _root_.utils.UnitTest
 import connectors.Document
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import util.DateUtil.nowInUK
-import utils.toFut
+import utils.{UnitTest, toFut}
 
 import java.security.SecureRandom
+import java.util.UUID
 import scala.collection.StringOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SaveInProgressSubmissionForLaterSpec extends UnitTest {
+class SaveInProgressSubmissionForLaterSpec extends UnitTest:
 
-  private val random = new SecureRandom()
+  private val random = SecureRandom()
 
   "Save an in progress document for later" when {
     val pas      = s"thisisapassorwd${random.nextDouble}"
     val ref      = "1111111222"
-    val sid      = java.util.UUID.randomUUID().toString
+    val sid      = UUID.randomUUID.toString
     val hc       = HeaderCarrier(sessionId = Some(SessionId(sid)))
     val doc      = Document(ref, nowInUK)
     val savedDoc = doc.copy(saveForLaterPassword = Some(pas))
@@ -67,9 +67,8 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest {
       }
     }
   }
-}
 
-class Generate7LengthLowercaseAlphaNumPasswordSpec extends AnyFlatSpec with should.Matchers {
+class Generate7LengthLowercaseAlphaNumPasswordSpec extends AnyFlatSpec with should.Matchers:
 
   behavior of "Generate 7 length lowercase alpha numeric password spec"
 
@@ -87,4 +86,3 @@ class Generate7LengthLowercaseAlphaNumPasswordSpec extends AnyFlatSpec with shou
   private def isLowercaseLetter(c: Char)             = c.toString.matches("[a-z]")
   private def isNonAmbiguousDigit(c: Char)           = !Seq('0', '1').contains(c)
   private def isNonAmbiguousLowercaseLetter(c: Char) = !Seq('i', 'l', 'o').contains(c)
-}

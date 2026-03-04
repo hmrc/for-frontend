@@ -16,9 +16,9 @@
 
 package form
 
-import models._
-import models.pages._
-import models.serviceContracts.submissions._
+import models.*
+import models.pages.*
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
@@ -26,12 +26,12 @@ import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 
-class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageSixForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageSixForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "A page six form" should "bind to page six with a written agreement" in {
     val p6 = PageSix(
@@ -258,7 +258,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     doesNotContainErrors(f)
   }
 
-  object TestData {
+  object TestData:
     val writtenLeaseYears: String                   = s"${keys.writtenAgreement}.${keys.leaseLength}.years"
     val writtenLeaseMonths: String                  = s"${keys.writtenAgreement}.${keys.leaseLength}.months"
     val writtenStartDate: String                    = s"${keys.writtenAgreement}.${keys.startDate}"
@@ -273,18 +273,16 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
     val verbalLeaseYears: String                    = s"${keys.verbalAgreement}.${keys.leaseLength}.years"
     val verbalLeaseMonths: String                   = s"${keys.verbalAgreement}.${keys.leaseLength}.months"
 
-    def bind(dataMap: Map[String, String]): Form[PageSix] = {
+    def bind(dataMap: Map[String, String]): Form[PageSix] =
       val bound = pageSixForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
-    }
 
-    def getKeyStepped(idx: Int): GetKeyStepped = new GetKeyStepped(idx)
+    def getKeyStepped(idx: Int): GetKeyStepped = GetKeyStepped(idx)
 
-    class GetKeyStepped(idx: Int) {
+    class GetKeyStepped(idx: Int):
       val stepFrom: String = s"${keys.writtenAgreement}.steppedDetails[$idx].stepFrom"
       val stepTo: String   = s"${keys.writtenAgreement}.steppedDetails[$idx].stepTo"
       val amount: String   = s"${keys.writtenAgreement}.steppedDetails[$idx].amount"
-    }
 
     val fullData: Map[String, String] = Map(
       keys.leaseAgreementType              -> LeaseAgreementTypesLicenceOther.name,
@@ -340,5 +338,3 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers {
         .updated(getKeyStepped(v).stepTo + ".month", "1")
         .updated(getKeyStepped(v).stepTo + ".year", (v + 2022).toString)
     }
-  }
-}

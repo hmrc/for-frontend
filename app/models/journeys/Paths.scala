@@ -19,7 +19,6 @@ package models.journeys
 import models.pages.Summary
 import models.serviceContracts.submissions.{AddressConnectionTypeNo, AddressConnectionTypeYes}
 import models.serviceContracts.submissions.{AddressConnectionTypeYesChangeAddress, LeaseAgreementTypesVerbal, UserTypeVacated}
-import play.api.Logger
 
 object Paths:
 

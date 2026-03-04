@@ -40,14 +40,14 @@ trait ForHttp:
     url: String,
     body: Map[String, Seq[String]],
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit hc: HeaderCarrier
+  )(using hc: HeaderCarrier
   ): Future[HttpResponse]
 
   def post[I](
     url: String,
     body: I,
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit
+  )(using
     wts: Writes[I],
     hc: HeaderCarrier
   ): Future[HttpResponse]
@@ -56,7 +56,7 @@ trait ForHttp:
     url: String,
     body: I,
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit
+  )(using
     wts: Writes[I],
     hc: HeaderCarrier
   ): Future[HttpResponse]
@@ -65,7 +65,7 @@ trait ForHttp:
     url: String,
     queryParams: Seq[(String, String)],
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit
+  )(using
     rds: Reads[A],
     hc: HeaderCarrier
   ): Future[A]
@@ -74,7 +74,7 @@ trait ForHttp:
 class ForHttpClient @Inject() (
   forConfig: ForConfig,
   httpClientV2: HttpClientV2
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends ForHttp:
 
   private val useDummyIp = forConfig.useDummyIp
@@ -87,7 +87,7 @@ class ForHttpClient @Inject() (
     url: String,
     body: Map[String, Seq[String]],
     headers: Seq[(String, String)]
-  )(implicit hc: HeaderCarrier
+  )(using hc: HeaderCarrier
   ): Future[HttpResponse] =
     httpClientV2.post(url"$url")
       .withBody(body)
@@ -98,7 +98,7 @@ class ForHttpClient @Inject() (
     url: String,
     body: I,
     headers: Seq[(String, String)]
-  )(implicit
+  )(using
     wts: Writes[I],
     hc: HeaderCarrier
   ): Future[HttpResponse] =
@@ -111,7 +111,7 @@ class ForHttpClient @Inject() (
     url: String,
     body: I,
     headers: Seq[(String, String)]
-  )(implicit
+  )(using
     wts: Writes[I],
     hc: HeaderCarrier
   ): Future[HttpResponse] =
@@ -120,18 +120,17 @@ class ForHttpClient @Inject() (
       .setHeader(useDummyIPInTrueClientIPHeader(headers)*)
       .execute[HttpResponse]
       .map { r =>
-        r.status match {
+        r.status match
           case status if is2xx(status) => r
-          case 400                     => throw new BadRequestException(r.body)
+          case 400                     => throw BadRequestException(r.body)
           case status                  => throw UpstreamErrorResponse(r.body, status, status, r.headers)
-        }
       }
 
   override def get[A](
     url: String,
     queryParams: Seq[(String, String)],
     headers: Seq[(String, String)]
-  )(implicit
+  )(using
     rds: Reads[A],
     hc: HeaderCarrier
   ): Future[A] =
@@ -139,9 +138,8 @@ class ForHttpClient @Inject() (
       .setHeader(useDummyIPInTrueClientIPHeader(headers)*)
       .execute[HttpResponse]
       .map { r =>
-        r.status match {
+        r.status match
           case status if is2xx(status) => Json.parse(r.body).as[A]
           case 404                     => throw NotFoundException(r.body)
           case status                  => throw UpstreamErrorResponse(r.body, status, status, r.headers)
-        }
       }
