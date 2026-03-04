@@ -24,8 +24,7 @@ import models.pages.SummaryBuilder
 import models.{Journey, NormalJourney, Satisfaction}
 import play.api.data.Forms.*
 import play.api.data.{Form, Forms}
-import play.api.mvc
-import play.api.mvc.{AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -60,16 +59,16 @@ class SurveyController @Inject() (
 
   private val completedFeedbackFormNormalJourney: Form[SurveyFeedback] = completedFeedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors
 
-  def onPageView(journey: String): mvc.Action[AnyContent] = refNumAction { implicit request =>
+  def onPageView(journey: String): Action[AnyContent] = refNumAction { implicit request =>
     val form = completedFeedbackForm.copy(data = Map("journey" -> journey, "surveyUrl" -> request.uri))
     Ok(surveyView(form))
   }
 
-  def confirmation: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def confirmation: Action[AnyContent] = refNumAction.async { implicit request =>
     viewConfirmationPage(request.refNum)
   }
 
-  def formCompleteFeedback: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def formCompleteFeedback: Action[AnyContent] = refNumAction.async { implicit request =>
     completedFeedbackForm.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(surveyView(formWithErrors))),
       success =>
@@ -92,6 +91,6 @@ class SurveyController @Inject() (
       case None      => NotFound(errorView(404))
     }
 
-  def surveyThankyou: mvc.Action[AnyContent] = Action { implicit request =>
+  def surveyThankyou: Action[AnyContent] = Action { implicit request =>
     Ok(feedbackThxView()).withNewSession
   }

@@ -41,16 +41,15 @@ class FeedbackController @Inject() (
   val servicesConfig: ServicesConfig,
   feedbackThankyouView: feedbackThx,
   feedbackFormView: feedbackForm
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends FrontendController(cc)
   with Logging:
 
   private val contactFrontendPartialBaseUrl: String  = servicesConfig.baseUrl("contact-frontend")
   private val contactFrontendFeedbackPostUrl: String = s"$contactFrontendPartialBaseUrl/contact/beta-feedback/submit-unauthenticated"
 
-  object FeedbackFormMapper {
-
-    val feedbackForm: Form[Feedback] = Form(
+  val feedbackForm: Form[Feedback] =
+    Form(
       mapping(
         "feedback-rating"   -> optional(text).verifying("feedback.rating.required", _.isDefined),
         "feedback-name"     -> text,
@@ -63,9 +62,6 @@ class FeedbackController @Inject() (
         )
       )(Feedback.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  }
-
-  import FeedbackFormMapper.feedbackForm
 
   def handleFeedbackSubmit: Action[AnyContent] = Action.async { implicit request =>
     feedbackForm.bindFromRequest().fold(
@@ -73,7 +69,7 @@ class FeedbackController @Inject() (
       feedback => {
         val urlEncodedForm = request.body.asFormUrlEncoded.get
 
-        implicit val headerCarrier: HeaderCarrier = hc.copy(authorization = None).withExtraHeaders("Csrf-Token" -> "nocheck")
+        given headerCarrier: HeaderCarrier = hc.copy(authorization = None).withExtraHeaders("Csrf-Token" -> "nocheck")
 
         http.postForm(contactFrontendFeedbackPostUrl, urlEncodedForm).map { r =>
           if is2xx(r.status) then logger.info(s"Feedback successful: ${r.status} response from $contactFrontendFeedbackPostUrl")

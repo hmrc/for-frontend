@@ -20,15 +20,16 @@ import models.serviceContracts.submissions.CustomUserPassword
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 
-object CustomUserPasswordForm {
+object CustomUserPasswordForm:
 
-  val customUserPassword: Form[CustomUserPassword] = Form(mapping(
-    "password"        -> nonEmptyText(minLength = 7),
-    "confirmPassword" -> nonEmptyText
-  )(CustomUserPassword.apply)(o => Some(Tuple.fromProductTyped(o)))
-    .verifying(
-      "saveForLater.passwordsDontMatch",
-      data =>
-        data.confirmPassword == data.password
-    ))
-}
+  val customUserPassword: Form[CustomUserPassword] =
+    Form(
+      mapping(
+        "password"        -> nonEmptyText(minLength = 7),
+        "confirmPassword" -> nonEmptyText
+      )(CustomUserPassword.apply)(o => Some(Tuple.fromProductTyped(o)))
+        .verifying(
+          "saveForLater.passwordsDontMatch",
+          data => data.confirmPassword == data.password
+        )
+    )

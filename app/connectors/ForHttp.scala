@@ -30,9 +30,6 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-/*
-with HttpDelete with WSDelete  with AppName with RunMode
- */
 @ImplementedBy(classOf[ForHttpClient])
 trait ForHttp:
 

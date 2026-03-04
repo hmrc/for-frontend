@@ -30,14 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class ErrorHandler @Inject() (
   val messagesApi: MessagesApi,
   errorView: views.html.error.error
-)(implicit val ec: ExecutionContext
-) extends FrontendErrorHandler {
+)(using val ec: ExecutionContext
+) extends FrontendErrorHandler:
 
-  override def onServerError(header: RequestHeader, exception: Throwable): Future[Result] = {
+  override def onServerError(header: RequestHeader, exception: Throwable): Future[Result] =
+    given Request[?] = Request(header, "")
 
-    implicit val request: Request[?] = Request(header, "")
-
-    exception.getCause match {
+    exception.getCause match
       case _: BadRequestException              => BadRequest(errorView(500))
       case UpstreamErrorResponse(_, 404, _, _) => NotFound(errorView(404))
       case UpstreamErrorResponse(_, 408, _, _) => RequestTimeout(errorView(408))
@@ -45,20 +44,16 @@ class ErrorHandler @Inject() (
       case UpstreamErrorResponse(_, 410, _, _) => Gone(errorView(410))
       case _: NotFoundException                => NotFound(errorView(404))
       case _                                   => super.resolveError(header, exception)
-    }
-  }
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(using request: RequestHeader): Future[Html] =
     render { implicit request =>
       errorView(500)
     }
 
-  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] =
+  override def notFoundTemplate(using request: RequestHeader): Future[Html] =
     render { implicit request =>
       errorView(404)
     }
 
-  private def render(template: Request[?] => Html)(implicit rh: RequestHeader): Future[Html] =
+  private def render(template: Request[?] => Html)(using rh: RequestHeader): Future[Html] =
     Future.successful(template(Request(rh, "")))
-
-}

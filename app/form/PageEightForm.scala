@@ -19,14 +19,16 @@ package form
 import models.serviceContracts.submissions.RentAgreement
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.voa.play.form.ConditionalMappings._
-import MappingSupport._
+import uk.gov.voa.play.form.ConditionalMappings.*
+import MappingSupport.*
 
-object PageEightForm {
+object PageEightForm:
 
-  val pageEightForm: Form[RentAgreement] = Form(mapping(
-    "wasRentFixedBetween" -> mandatoryBooleanWithError(Errors.wasTheRentFixedBetweenRequired),
-    "notReviewRentFixed"  -> mandatoryIfFalse("wasRentFixedBetween", notReviewRentFixedTypeMapping),
-    "rentSetByType"       -> rentSetByTypeMapping
-  )(RentAgreement.apply)(o => Some(Tuple.fromProductTyped(o))))
-}
+  val pageEightForm: Form[RentAgreement] =
+    Form(
+      mapping(
+        "wasRentFixedBetween" -> mandatoryBooleanWithError(Errors.wasTheRentFixedBetweenRequired),
+        "notReviewRentFixed"  -> mandatoryIfFalse("wasRentFixedBetween", notReviewRentFixedTypeMapping),
+        "rentSetByType"       -> rentSetByTypeMapping
+      )(RentAgreement.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )

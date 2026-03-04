@@ -51,9 +51,10 @@ class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionReposito
         }
     }
 
-  private def addBackDotsIntoKeyNames(doc: Document) = doc.copy(
-    pages = doc.pages.map(p => p.copy(fields = p.fields.map(kv => (kv._1.replace("___", "."), kv._2))))
-  )
+  private def addBackDotsIntoKeyNames(doc: Document) =
+    doc.copy(
+      pages = doc.pages.map(p => p.copy(fields = p.fields.map(kv => (kv._1.replace("___", "."), kv._2))))
+    )
 
   override def updatePage(documentId: String, referenceNumber: String, page: Page): Future[Unit] =
     findById(documentId, referenceNumber) flatMap {

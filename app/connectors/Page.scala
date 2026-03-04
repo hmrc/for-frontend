@@ -16,10 +16,9 @@
 
 package connectors
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class Page(pageNumber: Int, fields: Map[String, Seq[String]])
 
-object Page {
+object Page:
   implicit val formats: OFormat[Page] = Json.format[Page]
-}

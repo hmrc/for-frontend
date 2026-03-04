@@ -16,17 +16,19 @@
 
 package controllers
 
-import javax.inject._
+import javax.inject.*
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CustomLanguageController @Inject() (configuration: Configuration, languageUtils: LanguageUtils, cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends LanguageController(languageUtils, cc) {
+class CustomLanguageController @Inject() (configuration: Configuration, languageUtils: LanguageUtils, cc: ControllerComponents)(using ec: ExecutionContext)
+  extends LanguageController(languageUtils, cc):
+
+  override val languageMap: Map[String, Lang] = Map("english" -> Lang("en"), "cymraeg" -> Lang("cy"))
 
   def showEnglish: Action[AnyContent] = Action.async { implicit request =>
     switchToLanguage("english")(request).map(_.withHeaders(LOCATION -> routes.LoginController.show.url))
@@ -37,10 +39,3 @@ class CustomLanguageController @Inject() (configuration: Configuration, language
   }
 
   override protected def fallbackURL: String = configuration.get[String]("language.fallbackUrl").getOrElse("/")
-
-  override def languageMap: Map[String, Lang] = CustomLanguageController.languageMap
-}
-
-object CustomLanguageController {
-  val languageMap: Map[String, Lang] = Map("english" -> Lang("en"), "cymraeg" -> Lang("cy"))
-}

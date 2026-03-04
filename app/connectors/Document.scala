@@ -29,15 +29,12 @@ case class Document(
   address: Option[Address] = None,
   saveForLaterPassword: Option[String] = None,
   journeyResumptions: Seq[ZonedDateTime] = Seq.empty
-) {
+):
   def page(pageNumber: Int): Option[Page] = pages.find(_.pageNumber == pageNumber)
 
-  def add(page: Page): Document = {
+  def add(page: Page): Document =
     val newPages = (pages.filterNot(_.pageNumber == page.pageNumber) :+ page).sortBy(_.pageNumber)
-    this.copy(pages = newPages)
-  }
-}
+    copy(pages = newPages)
 
-object Document {
+object Document:
   implicit val formats: OFormat[Document] = Json.format
-}

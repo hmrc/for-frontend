@@ -36,11 +36,11 @@ class PageEightController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part8: views.html.part8
-) extends ForDataCapturePage[RentAgreement](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[RentAgreement](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[RentAgreement] = raf
   val emptyForm: Form[RentAgreement] = pageEightForm
   val pageNumber: Int                = 8
 
-  def template(form: Form[RentAgreement], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
+  def template(form: Form[RentAgreement], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     part8(form, summary)
-}

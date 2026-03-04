@@ -33,7 +33,7 @@ import play.api.data.Forms.*
 import play.api.libs.json.Json
 import views.html.{customPasswordSaveForLater, saveForLaterLogin, savedForLater}
 import play.api.i18n.Messages
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -42,8 +42,6 @@ import useCases.{ErrorRetrievingSavedDocument, IncorrectPassword, PasswordsMatch
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext
-import play.api.mvc
-import play.api.mvc.AnyContent
 
 object SaveForLaterController:
   val s4lIndicator = "s4l"
@@ -71,7 +69,7 @@ class SaveForLaterController @Inject() (
 
   private def continue(using hc: HeaderCarrier): ContinueWithSavedSubmission = config.ContinueWithSavedSubmission()
 
-  def saveForLater(exitPath: String): mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def saveForLater(exitPath: String): Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).flatMap {
       case Some(doc) =>
         val sum        = SummaryBuilder.build(doc)
@@ -92,7 +90,7 @@ class SaveForLaterController @Inject() (
     }
   }
 
-  def customPasswordSaveForLater(exitPath: String): mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def customPasswordSaveForLater(exitPath: String): Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).flatMap {
       case Some(doc) =>
         val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
@@ -116,11 +114,11 @@ class SaveForLaterController @Inject() (
     }
   }
 
-  def login: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def login: Action[AnyContent] = refNumAction.async { implicit request =>
     Ok(saveForLaterLogin(saveForLaterForm))
   }
 
-  def resume: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def resume: Action[AnyContent] = refNumAction.async { implicit request =>
     saveForLaterForm.bindFromRequest().fold(
       formWithErrors => BadRequest(saveForLaterLogin(formWithErrors)),
       s4l =>
@@ -134,7 +132,7 @@ class SaveForLaterController @Inject() (
     )
   }
 
-  def immediateResume: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def immediateResume: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).flatMap {
       case Some(doc) =>
         val sum = SummaryBuilder.build(doc)
@@ -144,7 +142,7 @@ class SaveForLaterController @Inject() (
     }
   }
 
-  def timeout: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def timeout: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(config.SessionId(using hc), request.refNum).flatMap {
       case Some(doc) =>
         val saveSubmissionForLater = doc.saveForLaterPassword.fold(config.SaveForLater())(config.SaveForLater(_))
