@@ -23,12 +23,12 @@ import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
 import org.scalatest.Assertion
 
-class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageTenMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageTenForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageTenForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "A page ten form" should "bind to what rent includes" in {
     val expectedData = WhatRentIncludes(
@@ -73,7 +73,6 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
     val form = bind(data)
 
     mustContainError(rentSeparateParkingKey, Errors.tenantPaysForParkingRequired, form)
-
   }
 
   it should "return a required field error when the rent included parking details are all 0" in {
@@ -211,27 +210,26 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
 
   val fields: Seq[String] = Seq(Keys.partRent, Keys.otherProperty, Keys.livingAccommodation, Keys.landOnly, Keys.shellUnit)
 
-  object TestData {
+  object TestData:
 
-    def bind(dataMap: Map[String, String]): Form[WhatRentIncludes] = {
+    def bind(dataMap: Map[String, String]): Form[WhatRentIncludes] =
       val bound = pageTenForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
-    }
 
-    lazy val rentIncludeParkingKey                 = "parking.rentIncludeParking"
-    lazy val rentIncludedParkingDetailsPrefix      = "parking.rentIncludeParkingDetails"
-    lazy val rentIncludedParkingOpen               = "parking.rentIncludeParkingDetails.openSpaces"
-    lazy val rentIncludedParkingGarages            = "parking.rentIncludeParkingDetails.garages"
-    lazy val rentIncludedParkingCovered            = "parking.rentIncludeParkingDetails.coveredSpaces"
-    lazy val rentSeparateParkingKey                = "parking.rentSeparateParking"
-    lazy val rentSeparateParkingDetailsPrefix      = "parking.rentSeparateParkingDetails"
-    lazy val rentSeparateParkingGarages            = "parking.rentSeparateParkingDetails.garages"
-    lazy val rentSeparateParkingOpen               = "parking.rentSeparateParkingDetails.openSpaces"
-    lazy val rentSeparateParkingCovered            = "parking.rentSeparateParkingDetails.coveredSpaces"
-    lazy val annualSeparateParking                 = "parking.annualSeparateParking"
-    lazy val annualSeparateParkingPaymentFixedDate = "parking.annualSeparateParkingDate"
-    lazy val annualSeparateParkingMonths           = "parking.annualSeparateParkingDate.month"
-    lazy val annualSeparateParkingYear             = "parking.annualSeparateParkingDate.year"
+    val rentIncludeParkingKey                 = "parking.rentIncludeParking"
+    val rentIncludedParkingDetailsPrefix      = "parking.rentIncludeParkingDetails"
+    val rentIncludedParkingOpen               = "parking.rentIncludeParkingDetails.openSpaces"
+    val rentIncludedParkingGarages            = "parking.rentIncludeParkingDetails.garages"
+    val rentIncludedParkingCovered            = "parking.rentIncludeParkingDetails.coveredSpaces"
+    val rentSeparateParkingKey                = "parking.rentSeparateParking"
+    val rentSeparateParkingDetailsPrefix      = "parking.rentSeparateParkingDetails"
+    val rentSeparateParkingGarages            = "parking.rentSeparateParkingDetails.garages"
+    val rentSeparateParkingOpen               = "parking.rentSeparateParkingDetails.openSpaces"
+    val rentSeparateParkingCovered            = "parking.rentSeparateParkingDetails.coveredSpaces"
+    val annualSeparateParking                 = "parking.annualSeparateParking"
+    val annualSeparateParkingPaymentFixedDate = "parking.annualSeparateParkingDate"
+    val annualSeparateParkingMonths           = "parking.annualSeparateParkingDate.month"
+    val annualSeparateParkingYear             = "parking.annualSeparateParkingDate.year"
 
     val fullData: Map[String, String] = Map(
       Keys.partRent               -> "true",
@@ -264,23 +262,20 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers {
       "parking.rentSeparateParking" -> "true"
     )
 
-    lazy val dataNoDetailsRequired: Map[String, String] = fullData.updated(Keys.partRent, "false").updated(Keys.otherProperty, "false").updated(
+    val dataNoDetailsRequired: Map[String, String] = fullData.updated(Keys.partRent, "false").updated(Keys.otherProperty, "false").updated(
       Keys.livingAccommodation,
       "false"
     ).updated(Keys.landOnly, "false").updated(Keys.shellUnit, "false")
 
-    def hasError(errors: Seq[FormError], key: String, message: String): Assertion = {
+    def hasError(errors: Seq[FormError], key: String, message: String): Assertion =
       val res = errors.exists(err => err.key == key && err.messages.contains(message))
-      res should be(true)
-    }
+      res shouldBe true
 
     def checkMissingField(key: String, code: String = Errors.required): Unit =
       "a  form missing the " + key + " field" should "bind result in 1 validation error" in {
         val testData = fullData - key
         val res      = bind(testData)
-        res.hasErrors   should be(true)
-        res.errors.size should be(1)
+        res.hasErrors   shouldBe true
+        res.errors.size shouldBe 1
         hasError(res.errors, key, code)
       }
-  }
-}

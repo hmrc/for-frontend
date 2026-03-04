@@ -22,12 +22,12 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
 
-class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageFiveForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageFiveForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "PageFive form" should "bind with the fields and not return issues" in
     mustBind(bind(baseData))(_ => ())
@@ -88,14 +88,14 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
     doesNotContainErrors(form)
   }
 
-  object TestData {
-    lazy val landlordFullName: (String, String)    = "landlordFullName"                   -> "Some Geezer"
-    lazy val addressBuildingName: (String, String) = "landlordAddress.buildingNameNumber" -> "Our House"
-    lazy val addressStreet1: (String, String)      = "landlordAddress.street1"            -> "Middle of Our street"
-    lazy val addressStreet2: (String, String)      = "landlordAddress.street2"            -> "Our House"
-    lazy val addressPostcode: (String, String)     = "landlordAddress.postcode"           -> "AA11 1AA"
-    lazy val landlordConnType: (String, String)    = "landlordConnectType"                -> LandlordConnectionTypeOther.name
-    lazy val landlordConnText: (String, String)    = "landlordConnectText"                -> "Fraternal bonds"
+  object TestData:
+    val landlordFullName: (String, String)    = "landlordFullName"                   -> "Some Geezer"
+    val addressBuildingName: (String, String) = "landlordAddress.buildingNameNumber" -> "Our House"
+    val addressStreet1: (String, String)      = "landlordAddress.street1"            -> "Middle of Our street"
+    val addressStreet2: (String, String)      = "landlordAddress.street2"            -> "Our House"
+    val addressPostcode: (String, String)     = "landlordAddress.postcode"           -> "AA11 1AA"
+    val landlordConnType: (String, String)    = "landlordConnectType"                -> LandlordConnectionTypeOther.name
+    val landlordConnText: (String, String)    = "landlordConnectText"                -> "Fraternal bonds"
 
     val addressFields: Seq[String] = Seq(
       "landlordAddress.buildingNameNumber",
@@ -116,6 +116,3 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers {
 
     def bind(formData: Map[String, String]): Form[PageFive] =
       pageFiveForm.bind(formData).convertGlobalToFieldErrors()
-  }
-
-}

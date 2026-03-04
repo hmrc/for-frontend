@@ -33,11 +33,9 @@ class FORSubmissionController @Inject() (
   refNumberAction: RefNumAction,
   submitBusinessRentalInformation: SubmitBusinessRentalInformation,
   errorView: views.html.error.error
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends FrontendController(cc)
-  with Logging {
-
-  lazy val confirmationUrl: String = controllers.feedback.routes.SurveyController.confirmation.url
+  with Logging:
 
   def submit: Action[AnyContent] = refNumberAction.async { implicit request: RefNumRequest[AnyContent] =>
     request.body.asFormUrlEncoded.flatMap { body =>
@@ -47,17 +45,15 @@ class FORSubmissionController @Inject() (
     } getOrElse rejectSubmission
   }
 
-  private def submit[T](refNum: String)(implicit request: RefNumRequest[T]): Future[Result] = {
+  private def submit[T](refNum: String)(using request: RefNumRequest[T]): Future[Result] = {
     val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     for {
       _ <- submitBusinessRentalInformation(refNum)(using hc, request)
     } yield
       // Metrics.submissions.mark() //TODO - Solve metrics
-      Found(confirmationUrl)
+      Found(controllers.feedback.routes.SurveyController.confirmation.url)
   } recoverWith { case UpstreamErrorResponse(_, 409, _, _) => Conflict(errorView(409)) }
 
   private def rejectSubmission = Future.successful {
     Found(routes.ApplicationController.declarationError.url)
   }
-
-}
