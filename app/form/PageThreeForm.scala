@@ -42,50 +42,51 @@ object PageThreeForm:
     val propertyRentedByYou    = "propertyRentedByYou"
     val noRentDetails          = "noRentDetails"
 
-  private val basePageThreeMapping = mapping(
-    "propertyType"              -> default(text, "").verifying(
-      nonEmpty(errorMessage = Errors.propertyTypeRequired),
-      maxLength(100, "error.propertyType.maxLength")
-    ),
-    keys.occupierType           -> occupierType,
-    keys.occupierCompanyName    -> mandatoryIfEqual(
-      keys.occupierType,
-      OccupierTypeCompany.name,
-      default(text, "").verifying(
-        nonEmpty(errorMessage = Errors.companyNameRequired),
-        maxLength(50, "error.companyName.maxLength")
-      )
-    ),
-    keys.occupierCompanyContact -> onlyIf(
-      isEqual(keys.occupierType, OccupierTypeCompany.name),
-      default(text, "").verifying(
-        nonEmpty(errorMessage = "error.occupierCompanyContact.required"),
-        maxLength(50, "error.occupierCompanyContact.maxLength")
-      ).transform[Option[String]](Option(_), _.getOrElse(""))
-    ),
-    keys.firstOccupationDate    ->
-      mandatoryIfEqualToAny(
-        keys.occupierType,
-        Seq(OccupierTypeCompany.name, OccupierTypeIndividuals.name),
-        monthYearRoughDateMapping(keys.firstOccupationDate, ".firstOccupationDate")
+  private val basePageThreeMapping =
+    mapping(
+      "propertyType"              -> default(text, "").verifying(
+        nonEmpty(errorMessage = Errors.propertyTypeRequired),
+        maxLength(100, "error.propertyType.maxLength")
       ),
-    keys.mainOccupierName       -> mandatoryIfEqual(
-      keys.occupierType,
-      OccupierTypeIndividuals.name,
-      default(text, "").verifying(
-        nonEmpty(errorMessage = Errors.occupiersNameRequired),
-        maxLength(50, "error.occupiersName.maxLength")
+      keys.occupierType           -> occupierType,
+      keys.occupierCompanyName    -> mandatoryIfEqual(
+        keys.occupierType,
+        OccupierTypeCompany.name,
+        default(text, "").verifying(
+          nonEmpty(errorMessage = Errors.companyNameRequired),
+          maxLength(50, "error.companyName.maxLength")
+        )
+      ),
+      keys.occupierCompanyContact -> onlyIf(
+        isEqual(keys.occupierType, OccupierTypeCompany.name),
+        default(text, "").verifying(
+          nonEmpty(errorMessage = "error.occupierCompanyContact.required"),
+          maxLength(50, "error.occupierCompanyContact.maxLength")
+        ).transform[Option[String]](Option(_), _.getOrElse(""))
+      ),
+      keys.firstOccupationDate    ->
+        mandatoryIfEqualToAny(
+          keys.occupierType,
+          Seq(OccupierTypeCompany.name, OccupierTypeIndividuals.name),
+          monthYearRoughDateMapping(keys.firstOccupationDate, ".firstOccupationDate")
+        ),
+      keys.mainOccupierName       -> mandatoryIfEqual(
+        keys.occupierType,
+        OccupierTypeIndividuals.name,
+        default(text, "").verifying(
+          nonEmpty(errorMessage = Errors.occupiersNameRequired),
+          maxLength(50, "error.occupiersName.maxLength")
+        )
+      ),
+      keys.propertyOwnedByYou     -> mandatoryBooleanWithError(propertyOwnedByYouRequired),
+      keys.propertyRentedByYou    -> mandatoryIfFalse(keys.propertyOwnedByYou, mandatoryBooleanWithError(propertyRentedByYouRequired)),
+      keys.noRentDetails          -> mandatoryIfFalse(
+        keys.propertyRentedByYou,
+        default(text, "").verifying(
+          nonEmpty(errorMessage = Errors.noRentDetailsRequired),
+          maxLength(249, "error.noRentDetails.maxLength")
+        )
       )
-    ),
-    keys.propertyOwnedByYou     -> mandatoryBooleanWithError(propertyOwnedByYouRequired),
-    keys.propertyRentedByYou    -> mandatoryIfFalse(keys.propertyOwnedByYou, mandatoryBooleanWithError(propertyRentedByYouRequired)),
-    keys.noRentDetails          -> mandatoryIfFalse(
-      keys.propertyRentedByYou,
-      default(text, "").verifying(
-        nonEmpty(errorMessage = Errors.noRentDetailsRequired),
-        maxLength(249, "error.noRentDetails.maxLength")
-      )
-    )
-  )(PageThree.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )(PageThree.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageThreeForm: Form[PageThree] = Form(basePageThreeMapping)

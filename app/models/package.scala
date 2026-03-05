@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import models.pages._
-import models.serviceContracts.submissions._
-import play.api.libs.json._
+import models.pages.*
+import models.serviceContracts.submissions.*
+import play.api.libs.json.*
 
 package object models:
 
@@ -45,15 +45,14 @@ package object models:
   implicit val formatRentFixedByType: Format[RentFixedType]                 = generateFormat(RentFixedTypes)
   implicit val formatReviewalIntervalType: Format[ReviewIntervalType]       = generateFormat(ReviewIntervalTypes)
   implicit val formatResponsibleType: Format[ResponsibleType]               = generateFormat(ResponsibleTypes)
-//  implicit val formatResponsibleTypeOutsideRepairs: Format[ResponsibleTypeOutsideRepairs] = generateFormat(ResponsibleTypeOutsideRepairs)
   implicit val formatRentBaseType: Format[RentBaseType]                     = generateFormat(RentBaseTypes)
   implicit val formatRentLengthType: Format[RentLengthType]                 = generateFormat(RentLengthTypes)
   implicit val formatAlterationSetByType: Format[AlterationSetByType]       = generateFormat(AlterationSetByType)
   implicit val formatAddressConnection: Format[AddressConnectionType]       = generateFormat(AddressConnectionTypes)
   implicit val tenantAddressType: Format[TenantsAddressType]                = generateFormat(TenantsAddressTypes)
-  implicit val formatsubletType: Format[SubletType]                         = generateFormat(SubletType)
+  implicit val formatSubletType: Format[SubletType]                         = generateFormat(SubletType)
 
-  implicit val annr: OFormat[AnnualRent]                                                = Json.format[AnnualRent]
+  implicit val formatAnnualRent: OFormat[AnnualRent]                                    = Json.format[AnnualRent]
   implicit val chargeDetailFormat: OFormat[ChargeDetails]                               = Json.format[ChargeDetails]
   implicit val roughDateFormat: OFormat[RoughDate]                                      = Json.format[RoughDate]
   implicit val paymentDetailsFormat: OFormat[PaymentDetails]                            = Json.format[PaymentDetails]

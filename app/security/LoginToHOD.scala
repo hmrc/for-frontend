@@ -27,7 +27,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.ZonedDateTime
 
-object LoginToHOD {
+object LoginToHOD:
+
   type Postcode                  = String
   type StartTime                 = ZonedDateTime
   type AuthToken                 = String
@@ -43,19 +44,18 @@ object LoginToHOD {
     referenceNumber: ReferenceNumber,
     pc: Postcode,
     st: StartTime
-  )(implicit hc: HeaderCarrier,
+  )(using hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[LoginResult] =
-    for {
+    for
       lr <- v(referenceNumber, pc)
       _  <- u(hc, referenceNumber, doc(referenceNumber, lr.address, st))
       sd <- l(lr.forAuthToken, referenceNumber)
-    } yield sd map { _ => dps(lr.forAuthToken, lr.address) } getOrElse ned(lr.forAuthToken, lr.address)
+    yield sd map { _ => dps(lr.forAuthToken, lr.address) } getOrElse ned(lr.forAuthToken, lr.address)
 
   private def doc(r: ReferenceNumber, a: Address, d: StartTime) = Document(r, d, address = Some(a))
   private def dps                                               = DocumentPreviouslySaved.apply
   private def ned                                               = NoExistingDocument.apply
-}
 
 sealed trait LoginResult
 case class DocumentPreviouslySaved(token: String, address: Address) extends LoginResult

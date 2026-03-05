@@ -18,11 +18,10 @@ package models
 
 import java.time.LocalDate
 
-case class RoughDate(day: Option[Int], month: Option[Int], year: Int) {
+case class RoughDate(day: Option[Int], month: Option[Int], year: Int):
+
   def this(day: Int, month: Int, year: Int) = this(Some(day), Some(month), year)
 
   def this(month: Int, year: Int) = this(None, Some(month), year)
 
   def toLocalDate: LocalDate = LocalDate.of(year, month.getOrElse(1), day.getOrElse(1))
-
-}

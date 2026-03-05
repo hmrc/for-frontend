@@ -22,4 +22,4 @@ case class NotConnectedSummary(
   summary: Summary,
   previouslyConnected: Option[PreviouslyConnected],
   notConnected: Option[NotConnected]
-) {}
+)

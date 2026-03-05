@@ -20,29 +20,28 @@ import models.pages.PageNine
 import models.serviceContracts.submissions.{RentBaseTypeOther, RentBaseTypePercentageOpenMarket, RentBaseTypePercentageTurnover}
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings._
-import DateMappings._
-import MappingSupport._
+import uk.gov.voa.play.form.ConditionalMappings.*
+import DateMappings.*
+import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import play.api.data.Mapping
 
-object PageNineForm {
+object PageNineForm:
 
-  val pageNineMaping: Mapping[PageNine] = mapping(
-    "totalRent"          -> annualRent,
-    "rentBecomePayable"  -> dateFieldsMapping("rentBecomePayable", fieldErrorPart = ".rentBecomePayable"),
-    "rentActuallyAgreed" -> dateFieldsMapping("rentActuallyAgreed", fieldErrorPart = ".rentActuallyAgreed"),
-    "negotiatingNewRent" -> mandatoryBooleanWithError(Errors.negotiatingNewRentRequired),
-    "rentBasedOn"        -> rentBaseTypeMapping,
-    "rentBasedOnDetails" -> mandatoryAndOnlyIfAnyOf(
-      "rentBasedOn",
-      Seq(RentBaseTypePercentageOpenMarket.name, RentBaseTypePercentageTurnover.name, RentBaseTypeOther.name),
-      default(text, "").verifying(
-        nonEmpty(errorMessage = "error.rentBasedOnDetails.required"),
-        maxLength(250, "error.rentBasedOnDetails.maxLength")
-      )
+  val pageNineForm: Form[PageNine] =
+    Form(
+      mapping(
+        "totalRent"          -> annualRent,
+        "rentBecomePayable"  -> dateFieldsMapping("rentBecomePayable", fieldErrorPart = ".rentBecomePayable"),
+        "rentActuallyAgreed" -> dateFieldsMapping("rentActuallyAgreed", fieldErrorPart = ".rentActuallyAgreed"),
+        "negotiatingNewRent" -> mandatoryBooleanWithError(Errors.negotiatingNewRentRequired),
+        "rentBasedOn"        -> rentBaseTypeMapping,
+        "rentBasedOnDetails" -> mandatoryAndOnlyIfAnyOf(
+          "rentBasedOn",
+          Seq(RentBaseTypePercentageOpenMarket.name, RentBaseTypePercentageTurnover.name, RentBaseTypeOther.name),
+          default(text, "").verifying(
+            nonEmpty(errorMessage = "error.rentBasedOnDetails.required"),
+            maxLength(250, "error.rentBasedOnDetails.maxLength")
+          )
+        )
+      )(PageNine.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  )(PageNine.apply)(o => Some(Tuple.fromProductTyped(o)))
-
-  val pageNineForm: Form[PageNine] = Form(pageNineMaping)
-}

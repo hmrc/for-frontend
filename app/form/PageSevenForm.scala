@@ -16,18 +16,18 @@
 
 package form
 
-import form.DateMappings._
+import form.DateMappings.*
 import form.Errors.{lastReviewDateIsBeforeStartDate, rentReviewDateIsBeforeStartDate, rentReviewDetailsRequired}
-import form.MappingSupport._
-import models.pages._
+import form.MappingSupport.*
+import models.pages.*
 import models.serviceContracts.submissions.{RentReviewResultDetails, ReviewIntervalTypeOther}
 import play.api.data.Forms.{localDate, mapping, optional}
-import play.api.data._
-import uk.gov.voa.play.form.ConditionalMappings._
+import play.api.data.*
+import uk.gov.voa.play.form.ConditionalMappings.*
 
-object PageSevenForm {
+object PageSevenForm:
 
-  val rentReviewResultsDetailsMapping: Mapping[RentReviewResultDetails] = mapping(
+  private val rentReviewResultsDetailsMapping: Mapping[RentReviewResultDetails] = mapping(
     "whenWasRentReview" -> dateIsBeforeAnotherDate(
       monthYearRoughDateMapping("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", ".rentResultOfReview"),
       "agreementStartDate",
@@ -37,7 +37,7 @@ object PageSevenForm {
     "rentFixedBy"       -> mandatoryIfFalse("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween", rentFixedByTypeMapping)
   )(RentReviewResultDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val rentReviewDetailsMapping: Mapping[PageSevenDetails] = mapping(
+  private val rentReviewDetailsMapping: Mapping[PageSevenDetails] = mapping(
     "reviewIntervalType"        -> reviewIntervalTypeMapping,
     "reviewIntervalTypeSpecify" ->
       mandatoryIfEqual(
@@ -57,12 +57,11 @@ object PageSevenForm {
     "rentReviewResultsDetails"  -> mandatoryIfTrue("rentReviewDetails.rentResultOfRentReview", rentReviewResultsDetailsMapping)
   )(PageSevenDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val pageSevenForm: Form[PageSeven] = Form(
-    mapping(
-      "leaseContainsRentReviews" -> mandatoryBooleanWithError(rentReviewDetailsRequired),
-      "rentReviewDetails"        -> mandatoryIfTrue("leaseContainsRentReviews", rentReviewDetailsMapping),
-      "agreementStartDate"       -> optional(localDate)
-    )(PageSeven.apply)(o => Some(Tuple.fromProductTyped(o)))
-  )
-
-}
+  val pageSevenForm: Form[PageSeven] =
+    Form(
+      mapping(
+        "leaseContainsRentReviews" -> mandatoryBooleanWithError(rentReviewDetailsRequired),
+        "rentReviewDetails"        -> mandatoryIfTrue("leaseContainsRentReviews", rentReviewDetailsMapping),
+        "agreementStartDate"       -> optional(localDate)
+      )(PageSeven.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )

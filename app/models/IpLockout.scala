@@ -20,6 +20,5 @@ import play.api.libs.json.{Json, OFormat}
 
 case class IpLockout(numberOfRemainingTriesUntilIPLockout: Int)
 
-object IpLockout {
+object IpLockout:
   implicit val format: OFormat[IpLockout] = Json.format[IpLockout]
-}

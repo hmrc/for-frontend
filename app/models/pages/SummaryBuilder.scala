@@ -34,13 +34,12 @@ import form.PageTwelveForm.pageTwelveForm
 import form.PageTwoForm.pageTwoForm
 import play.api.data.Form
 
-trait SummaryBuilder {
+trait SummaryBuilder:
   def build(doc: Document): Summary
-}
 
-object SummaryBuilder extends SummaryBuilder {
+object SummaryBuilder extends SummaryBuilder:
 
-  def build(doc: Document): Summary = {
+  def build(doc: Document): Summary =
     val p0  = findPage(doc, 0, pageZeroForm)
     val p1  = findPage(doc, 1, pageOneForm)
     val p2  = findPage(doc, 2, pageTwoForm)
@@ -77,9 +76,8 @@ object SummaryBuilder extends SummaryBuilder {
       address = doc.address,
       journeyResumptions = doc.journeyResumptions
     )
-  }
 
-  private def findPage[T](doc: Document, pageNumber: Int, form: Form[T]) = doc.page(pageNumber) flatMap { p =>
-    form.bindFromRequest(p.fields).value
-  }
-}
+  private def findPage[T](doc: Document, pageNumber: Int, form: Form[T]) =
+    doc.page(pageNumber) flatMap { p =>
+      form.bindFromRequest(p.fields).value
+    }

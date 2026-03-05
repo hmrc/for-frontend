@@ -18,21 +18,23 @@ package form
 
 import models.serviceContracts.submissions.OtherFactors
 import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.voa.play.form.ConditionalMappings._
-import MappingSupport._
+import play.api.data.Forms.*
+import uk.gov.voa.play.form.ConditionalMappings.*
+import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
-object PageFourteenForm {
+object PageFourteenForm:
 
-  val pageFourteenForm: Form[OtherFactors] = Form(mapping(
-    "anyOtherFactors"        -> mandatoryBooleanWithError(Errors.anyOtherFactorsRequired),
-    "anyOtherFactorsDetails" -> mandatoryIfTrue(
-      "anyOtherFactors",
-      default(text, "").verifying(
-        nonEmpty(errorMessage = "error.anyOtherFactorsDetailsText.required"),
-        maxLength(124, "error.anyOtherFactorsDetailsText.maxLength")
-      )
+  val pageFourteenForm: Form[OtherFactors] =
+    Form(
+      mapping(
+        "anyOtherFactors"        -> mandatoryBooleanWithError(Errors.anyOtherFactorsRequired),
+        "anyOtherFactorsDetails" -> mandatoryIfTrue(
+          "anyOtherFactors",
+          default(text, "").verifying(
+            nonEmpty(errorMessage = "error.anyOtherFactorsDetailsText.required"),
+            maxLength(124, "error.anyOtherFactorsDetailsText.maxLength")
+          )
+        )
+      )(OtherFactors.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  )(OtherFactors.apply)(o => Some(Tuple.fromProductTyped(o))))
-}

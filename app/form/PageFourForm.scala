@@ -16,22 +16,21 @@
 
 package form
 
-import form.DateMappings._
-import models.pages.{PageFour, _}
-import play.api.data.Form
-import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings._
-import uk.gov.voa.play.form._
-import MappingSupport._
+import form.DateMappings.*
+import form.MappingSupport.*
+import models.pages.{PageFour, SubletDetails}
 import models.serviceContracts.submissions.SubletPart
+import play.api.data.Forms.{default, mapping, text}
+import play.api.data.{Form, Mapping}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import play.api.data.Mapping
+import uk.gov.voa.play.form.*
+import uk.gov.voa.play.form.ConditionalMappings.*
 
-object PageFourForm {
+object PageFourForm:
 
   val nonMandatoryFields: Seq[String] = Seq("sublet.annualRentExcludingVat")
 
-  val subletMapping: String => Mapping[SubletDetails] = (index: String) =>
+  private val subletMapping: String => Mapping[SubletDetails] = (index: String) =>
     mapping(
       s"$index.tenantFullName"                  -> default(text, "").verifying(
         nonEmpty(errorMessage = "error.sublet.tenantFullName.required"),
@@ -54,14 +53,13 @@ object PageFourForm {
       s"$index.rentFixedDate"                   -> monthYearRoughDateMapping(s"$index.rentFixedDate", ".sublet.rentFixedDate")
     )(SubletDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val pageFourMapping: Mapping[PageFour] = mapping(
-    "propertyIsSublet" -> mandatoryBooleanWithError(Errors.propertyIsSublet),
-    "sublet"           -> onlyIfTrue(
-      "propertyIsSublet",
-      IndexedMapping("sublet", subletMapping, alwaysValidateFirstIndex = true).verifying(Errors.tooManySublets, _.length <= 5)
-    )
-  )(PageFour.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private val pageFourMapping: Mapping[PageFour] =
+    mapping(
+      "propertyIsSublet" -> mandatoryBooleanWithError(Errors.propertyIsSublet),
+      "sublet"           -> onlyIfTrue(
+        "propertyIsSublet",
+        IndexedMapping("sublet", subletMapping, alwaysValidateFirstIndex = true).verifying(Errors.tooManySublets, _.length <= 5)
+      )
+    )(PageFour.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageFourForm: Form[PageFour] = Form(pageFourMapping)
-
-}

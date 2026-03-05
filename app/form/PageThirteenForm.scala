@@ -38,14 +38,17 @@ object PageThirteenForm:
       s"$indexed.cost"           -> currencyMapping(".alternationCost")
     )(PropertyAlterationsDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val pageThirteenForm: Form[PropertyAlterations] = Form(mapping(
-    propertyAlterations        -> mandatoryBooleanWithError(Errors.hasTenantDonePropertyAlterationsRequired),
-    propertyAlterationsDetails -> onlyIfTrue(
-      propertyAlterations,
-      IndexedMapping("propertyAlterationsDetails", propertyAlterationsDetailsMapping).verifying(Errors.tooManyAlterations, _.length <= 10)
-    ),
-    alterationsRequired        -> mandatoryBooleanIfTrue(
-      propertyAlterations,
-      mandatoryBooleanWithError(Errors.tenantWasRequiredToMakeAlterationsRequired)
+  val pageThirteenForm: Form[PropertyAlterations] =
+    Form(
+      mapping(
+        propertyAlterations        -> mandatoryBooleanWithError(Errors.hasTenantDonePropertyAlterationsRequired),
+        propertyAlterationsDetails -> onlyIfTrue(
+          propertyAlterations,
+          IndexedMapping("propertyAlterationsDetails", propertyAlterationsDetailsMapping).verifying(Errors.tooManyAlterations, _.length <= 10)
+        ),
+        alterationsRequired        -> mandatoryBooleanIfTrue(
+          propertyAlterations,
+          mandatoryBooleanWithError(Errors.tenantWasRequiredToMakeAlterationsRequired)
+        )
+      )(PropertyAlterations.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  )(PropertyAlterations.apply)(o => Some(Tuple.fromProductTyped(o))))

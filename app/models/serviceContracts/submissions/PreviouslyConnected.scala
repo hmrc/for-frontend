@@ -20,8 +20,5 @@ import play.api.libs.json.{Json, OFormat}
 
 case class PreviouslyConnected(previouslyConnected: Boolean)
 
-object PreviouslyConnected {
-
+object PreviouslyConnected:
   implicit val format: OFormat[PreviouslyConnected] = Json.format[PreviouslyConnected]
-
-}

@@ -16,11 +16,8 @@
 
 package models
 
-case class PdfSize(pdfSize: Int) {
+case class PdfSize(pdfSize: Int):
 
   def size: String =
-    if pdfSize > 0 then
-      "(PDF - " + pdfSize / 1024 + " kb)"
-    else
-      ""
-}
+    if pdfSize > 0 then "(PDF - " + pdfSize / 1024 + " kb)"
+    else ""

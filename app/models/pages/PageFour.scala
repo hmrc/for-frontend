@@ -16,8 +16,8 @@
 
 package models.pages
 
-import models._
-import models.serviceContracts.submissions._
+import models.*
+import models.serviceContracts.submissions.*
 
 case class PageFour(propertyIsSublet: Boolean, sublet: List[SubletDetails])
 

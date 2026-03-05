@@ -50,7 +50,7 @@ object PageSixForm:
     val amount                       = "amount"
     val rentOpenEnded                = "rentOpenEnded"
 
-  def toDateIsAfterFromDate: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.toAfterFrom") {
+  private def toDateIsAfterFromDate: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.toAfterFrom") {
     case (stepFrom, stepTo) =>
       val condTo = stepTo.isAfter(stepFrom)
       createFieldConstraintFor(condTo, Errors.toDateIsAfterFromDate, Seq(s"${keys.to}.day"))

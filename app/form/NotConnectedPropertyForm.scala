@@ -53,13 +53,14 @@ object NotConnectedPropertyForm:
 
   private val fullNameRegex: Regex = """^[A-Za-z\-.,()'"\s]+$""".r
 
-  val form: Form[NotConnected] = Form(
-    mapping(
-      "fullName"              -> nonEmptyText.verifying(Constraints.pattern(fullNameRegex, error = "notConnected.error.nameInvalid")),
-      "email"                 -> atLeastOneMapping("phoneNumber", emailAddress),
-      "phoneNumber"           -> atLeastOneMapping("email", MappingSupport.phoneNumber.constraints*),
-      "additionalInformation" -> optional(text)
-    )(NotConnected.apply)(o => Some(Tuple.fromProductTyped(o)))
-  )
+  val form: Form[NotConnected] =
+    Form(
+      mapping(
+        "fullName"              -> nonEmptyText.verifying(Constraints.pattern(fullNameRegex, error = "notConnected.error.nameInvalid")),
+        "email"                 -> atLeastOneMapping("phoneNumber", emailAddress),
+        "phoneNumber"           -> atLeastOneMapping("email", MappingSupport.phoneNumber.constraints*),
+        "additionalInformation" -> optional(text)
+      )(NotConnected.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )
 
   implicit val format: OFormat[NotConnectedPropertyForm] = Json.format

@@ -16,18 +16,17 @@
 
 package form
 
-import form.DateMappings._
-import form.MappingSupport._
+import form.DateMappings.*
+import form.MappingSupport.*
 import models.serviceContracts.submissions.{Parking, WhatRentIncludes}
 import play.api.data.{Form, Mapping}
 import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings._
-import PageTenForm._
+import uk.gov.voa.play.form.ConditionalMappings.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
-object PageTenForm {
+object PageTenForm:
 
-  object Keys {
+  object Keys:
     val partRent                   = "partRent"
     val partRentDetails            = "partRentDetails"
     val otherProperty              = "otherProperty"
@@ -45,29 +44,6 @@ object PageTenForm {
     val rentSeparateParking        = "rentSeparateParking"
     val annualSeparateParking      = "annualSeparateParking"
     val annualSeparateParkingDate  = "annualSeparateParkingDate"
-  }
-
-  val pageTenMapping: Mapping[WhatRentIncludes] = mapping(
-    Keys.partRent            -> mandatoryBooleanWithError(Errors.isRentPaidForPartRequired),
-    Keys.otherProperty       -> mandatoryBooleanWithError(Errors.anyOtherBusinessPropertyRequired),
-    Keys.livingAccommodation -> mandatoryBooleanWithError(Errors.includesLivingAccommodationRequired),
-    Keys.landOnly            -> mandatoryBooleanWithError(Errors.rentBasedOnLandOnlyRequired),
-    Keys.shellUnit           -> mandatoryBooleanWithError(Errors.rentBasedOnEmptyBuildingRequired),
-    Keys.rentDetails         -> mandatoryIfAnyAreTrue(
-      Seq(Keys.shellUnit, Keys.landOnly, Keys.livingAccommodation, Keys.otherProperty, Keys.partRent),
-      default(text, "").verifying(
-        nonEmpty(errorMessage = "error.rentDetails.required"),
-        maxLength(249, "error.rentDetails.maxLength")
-      ),
-      showNestedErrors = false
-    ),
-    "parking"                -> ParkingMapping.parkingMapping("parking")
-  )(WhatRentIncludes.apply)(o => Some(Tuple.fromProductTyped(o)))
-
-  val pageTenForm: Form[WhatRentIncludes] = Form(pageTenMapping)
-}
-
-object ParkingMapping {
 
   private def rentIncludeParkingMapping(prefix: String) = mandatoryIfTrue(
     prefix + Keys.rentIncludeParking,
@@ -79,7 +55,7 @@ object ParkingMapping {
     parkingDetailsMapping(s"$prefix${Keys.rentSeparateParkingDetails}")
   )
 
-  def parkingMapping(prefix: String): Mapping[Parking] = {
+  private def parkingMapping(prefix: String): Mapping[Parking] =
     val pfx = prefix + "."
     mapping(
       (Keys.rentIncludeParking, mandatoryBooleanWithError(Errors.includesParkingRequired)),
@@ -95,5 +71,22 @@ object ParkingMapping {
         )
       )
     )(Parking.apply)(o => Some(Tuple.fromProductTyped(o)))
-  }
-}
+
+  private val pageTenMapping: Mapping[WhatRentIncludes] = mapping(
+    Keys.partRent            -> mandatoryBooleanWithError(Errors.isRentPaidForPartRequired),
+    Keys.otherProperty       -> mandatoryBooleanWithError(Errors.anyOtherBusinessPropertyRequired),
+    Keys.livingAccommodation -> mandatoryBooleanWithError(Errors.includesLivingAccommodationRequired),
+    Keys.landOnly            -> mandatoryBooleanWithError(Errors.rentBasedOnLandOnlyRequired),
+    Keys.shellUnit           -> mandatoryBooleanWithError(Errors.rentBasedOnEmptyBuildingRequired),
+    Keys.rentDetails         -> mandatoryIfAnyAreTrue(
+      Seq(Keys.shellUnit, Keys.landOnly, Keys.livingAccommodation, Keys.otherProperty, Keys.partRent),
+      default(text, "").verifying(
+        nonEmpty(errorMessage = "error.rentDetails.required"),
+        maxLength(249, "error.rentDetails.maxLength")
+      ),
+      showNestedErrors = false
+    ),
+    "parking"                -> parkingMapping("parking")
+  )(WhatRentIncludes.apply)(o => Some(Tuple.fromProductTyped(o)))
+
+  val pageTenForm: Form[WhatRentIncludes] = Form(pageTenMapping)

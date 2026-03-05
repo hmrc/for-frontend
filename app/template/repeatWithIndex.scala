@@ -22,23 +22,18 @@ import views.html.includes.decorateWithId
 
 import scala.collection.immutable.IndexedSeq
 
-object repeatWithIndex {
+object repeatWithIndex:
 
-  def apply(field: play.api.data.Field, max: Int = 1)(f: (Field, Int) => Html): IndexedSeq[Html] = {
+  def apply(field: play.api.data.Field, max: Int = 1)(f: (Field, Int) => Html): IndexedSeq[Html] =
     val numberOfExistingEntries = field.indexes.length
     val amountToCreate          = Math.max(max, numberOfExistingEntries)
     (0 until amountToCreate) map { index => buildHtml(field, f, numberOfExistingEntries, index) }
-  }
 
-  private def buildHtml(field: Field, f: (Field, Int) => Html, numberOfExistingEntries: Int, index: Int): Html = {
+  private def buildHtml(field: Field, f: (Field, Int) => Html, numberOfExistingEntries: Int, index: Int): Html =
     val html       = f(field("[" + index + "]"), index)
     val id         = IndexedFieldId(field.name, index)
     val deleteByJS = index > 0 && index >= numberOfExistingEntries
     decorateWithId(id, html, deleteByJS)
-  }
 
-}
-
-object IndexedFieldId {
+object IndexedFieldId:
   def apply(key: String, index: Int): String = key + "_" + index
-}
