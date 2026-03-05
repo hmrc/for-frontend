@@ -23,7 +23,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import util.DateUtil.nowInUK
 
-class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues {
+class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues:
 
   val pages: Seq[Page] = Seq(
     Page(
@@ -77,5 +77,3 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
     summary.rent.value.totalRent.amount shouldBe BigDecimal("10000")
 
   }
-
-}

@@ -17,11 +17,11 @@
 package form
 
 import models.serviceContracts.submissions.NotConnected
-import org.scalatest.OptionValues._
+import org.scalatest.OptionValues.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
-class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
+class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers:
 
   val baseDate: Map[String, String] = Map(
     "fullName"              -> "John Doe",
@@ -100,7 +100,4 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers {
     formWithData.value shouldBe None
 
     formWithData.errors should have size 2
-
   }
-
-}

@@ -49,5 +49,4 @@ class NotConnectedControllerSpec extends TestBaseSpec:
     val result = controller.onPageSubmit(fakeRequest)
 
     status(result) shouldBe SEE_OTHER
-
   }

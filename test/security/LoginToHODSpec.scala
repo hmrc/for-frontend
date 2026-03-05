@@ -28,8 +28,9 @@ import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class LoginToHODSpec extends UnitTest {
-  import TestData._
+class LoginToHODSpec extends UnitTest:
+
+  import TestData.*
 
   "Login to HOD with valid credentials" when {
     given hc: HeaderCarrier = HeaderCarrier()
@@ -71,7 +72,7 @@ class LoginToHODSpec extends UnitTest {
     }
   }
 
-  object TestData {
+  object TestData:
     val refNum                          = "1111111899"
     val password                        = "aljsljdf"
     val postcode                        = "CV24 5RR"
@@ -80,7 +81,5 @@ class LoginToHODSpec extends UnitTest {
     val loginResponse: FORLoginResponse = FORLoginResponse(auth, testAddress)
     val now: ZonedDateTime              = ZonedDateTime.of(2015, 3, 2, 13, 20, 0, 0, ZoneOffset.UTC)
     val savedDoc: Document              = Document("savedDocument", now)
-  }
-}
 
 case class ArgumentsDidNotMatch(es: Seq[Any], as: Seq[Any]) extends Exception(s"Expected: $es but got: $as")

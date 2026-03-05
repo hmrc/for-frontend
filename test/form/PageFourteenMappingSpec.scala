@@ -16,13 +16,13 @@
 
 package form
 
-import form.PageFourteenForm._
+import form.PageFourteenForm.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.FormBindingTestAssertions._
-import utils.MappingSpecs._
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-class PageFourteenMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageFourteenMappingSpec extends AnyFlatSpec with should.Matchers:
 
   "page fourteen form" should "accept the simple answer no for binding form data" in {
     val testData = Map("anyOtherFactors" -> "false")
@@ -62,4 +62,3 @@ class PageFourteenMappingSpec extends AnyFlatSpec with should.Matchers {
 
     validateLettersNumsSpecCharsUptoLength("anyOtherFactorsDetails", 124, pageFourteenForm, testData, Some("error.anyOtherFactorsDetailsText.maxLength"))
   }
-}

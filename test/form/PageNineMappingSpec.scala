@@ -26,12 +26,12 @@ import play.api.data.{Form, FormError}
 import java.time.LocalDate
 import org.scalatest.Assertion
 
-class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageNineForm._
-  import TestData._
-  import utils.FormBindingTestAssertions._
-  import utils.MappingSpecs._
+  import PageNineForm.*
+  import TestData.*
+  import utils.FormBindingTestAssertions.*
+  import utils.MappingSpecs.*
 
   "A fully populated form" should "bind to a PageNineData" in {
     val expectedData = PageNine(
@@ -88,11 +88,11 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
   it should "validate the rent based on ... details" in
     validateLettersNumsSpecCharsUptoLength(keys.rentBasedOnDetails, 250, pageNineForm, fullData, Some("error.rentBasedOnDetails.maxLength"))
 
-  object TestData {
+  object TestData:
 
     val keys: Keys = new Keys
 
-    class Keys {
+    class Keys:
       val totalRent              = "totalRent"
       val rentLengthType         = "totalRent.rentLengthType"
       val annualRentExcludingVat = "totalRent.annualRentExcludingVat"
@@ -107,7 +107,6 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
       val negotiatingNewRent = "negotiatingNewRent"
       val rentBasedOn        = "rentBasedOn"
       val rentBasedOnDetails = "rentBasedOnDetails"
-    }
 
     val fullData: Map[String, String] = Map(
       keys.rentLengthType          -> RentLengthTypeQuarterly.name,
@@ -123,15 +122,13 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
       keys.rentBasedOnDetails      -> "oneTwoThree"
     )
 
-    def bind(dataMap: Map[String, String]): Form[PageNine] = {
+    def bind(dataMap: Map[String, String]): Form[PageNine] =
       val bound = pageNineForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
-    }
 
-    def hasError(errors: Seq[FormError], key: String, message: String): Assertion = {
+    def hasError(errors: Seq[FormError], key: String, message: String): Assertion =
       val res = errors.exists(err => err.key == key && err.messages.contains(message))
       res should be(true)
-    }
 
     def checkMissingField(key: String, code: String = Errors.required): Unit =
       "a  form missing the " + key + " field" should "bind result in 1 validation error" in {
@@ -139,6 +136,3 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers {
         val res      = bind(testData)
         mustContainError(key, code, res)
       }
-  }
-
-}

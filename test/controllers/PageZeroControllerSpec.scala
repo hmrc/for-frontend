@@ -33,10 +33,12 @@ import utils.Helpers.refNumAction
 import utils.stubs.StubFormDocumentRepo
 import views.html.part0
 
+import java.util.UUID
+
 class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoExtendedSugar:
 
   private val testRefNum         = "1234567890"
-  private val sessionId          = java.util.UUID.randomUUID().toString
+  private val sessionId          = UUID.randomUUID.toString
   private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, nowInUK)))
   private val audit              = mock[Audit]
 

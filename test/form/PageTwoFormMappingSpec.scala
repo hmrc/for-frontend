@@ -21,11 +21,11 @@ import org.scalatest.matchers.should
 import play.api.data.FormError
 import utils.CommonSpecs
 
-class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with CommonSpecs {
+class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with CommonSpecs:
 
-  import TestData._
-  import form.PageTwoForm._
-  import utils.FormBindingTestAssertions._
+  import TestData.*
+  import form.PageTwoForm.*
+  import utils.FormBindingTestAssertions.*
 
   behavior of "page two form mapping"
 
@@ -79,29 +79,25 @@ class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with Commo
   it should "validate full name" in
     validateLettersNumsSpecCharsUptoLength(errorKey.fullName, 50, pageTwoForm, baseFormData)
 
-  object TestData {
+  object TestData:
 
     val errorKey: ErrorKey = new ErrorKey
 
-    class ErrorKey {
+    class ErrorKey:
       val fullName: String    = "fullName"
       val userType: String    = "userType"
       val phone               = "contactDetails.phone"
       val email1              = "contactDetails.email1"
       val email1TooLong       = "contactDetails.email1.email.tooLong"
       val contactDetailsPhone = "contactDetails.phone"
-    }
 
     val formErrors: FormErrors = new FormErrors
 
-    class FormErrors {
-
+    class FormErrors:
       val required: Required = new Required
 
-      class Required {
+      class Required:
         val fullName: FormError = FormError(errorKey.fullName, Errors.required)
-      }
-    }
 
     val tooLongEmail = "email_too_long_for_validation_againt_business_rules_specify_but_DB_constraints@something.co.uk"
 
@@ -112,6 +108,3 @@ class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with Commo
       "contactDetails.email1" -> "blah.blah@test.com",
       "fullName"              -> "Mr John Smith"
     )
-  }
-
-}

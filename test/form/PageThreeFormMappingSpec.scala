@@ -26,9 +26,9 @@ import play.api.data.Form
 import utils.FormBindingTestAssertions.*
 import utils.MappingSpecs.*
 
-class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import TestData._
+  import TestData.*
 
   "A fully populated form "                                          should "bind to PageThreeData" in
     mustBind(bind(formData1))(x => assert(x === data1))
@@ -115,11 +115,11 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
     mustBind(bind(data))(_ => ())
   }
 
-  object TestData {
+  object TestData:
 
     val keys: Keys = new Keys
 
-    class Keys {
+    class Keys:
       val occupierCompanyName      = "occupierCompanyName"
       val occupierCompanyContact   = "occupierCompanyContact"
       val occupierType             = "occupierType"
@@ -131,12 +131,10 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
       val firstOccupationDateYear  = "firstOccupationDate.year"
       val mainOccupierName         = "mainOccupierName"
       val noRentDetails            = "noRentDetails"
-    }
 
-    def bind(dataMap: Map[String, String]): Form[PageThree] = {
+    def bind(dataMap: Map[String, String]): Form[PageThree] =
       val bound = pageThreeForm.bind(dataMap)
       bound.convertGlobalToFieldErrors()
-    }
 
     val formData1: Map[String, String] = Map(
       keys.occupierCompanyName      -> "Some Company",
@@ -161,6 +159,3 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers {
       propertyRentedByYou = Some(true),
       noRentDetails = None
     )
-  }
-
-}

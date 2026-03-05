@@ -29,13 +29,15 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Disabled
-import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, DatastreamMetrics}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.DateUtil.nowInUK
 
+import scala.compiletime.uninitialized
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressAuditingSpec extends TestBaseSpec {
+class AddressAuditingSpec extends TestBaseSpec:
+
   import TestData.*
 
   behavior of "Address Auditing"
@@ -114,38 +116,33 @@ class AddressAuditingSpec extends TestBaseSpec {
       Nil
     )
 
-}
-
-object TestData {
+object TestData:
   val propertyAddress: Address = Address("1 The Road", Some("The Town"), None, "AA11 1AA")
   val unchanged: Address       = Address("1 The Road", Some("The Town"), None, "AA11 1AA")
   val manual: Address          = Address("1 The Road", Some("The Town"), None, "AA11 1AA")
   val oneLineChanged: Address  = Address("1A The Road", Some("The Town"), None, "AA11 1AA")
   val twoLinesChanged: Address = Address("1 The Other Road", Some("The Other Town"), None, "AA11 1AA")
   val overseas: Address        = Address("1 The Road", Some("Atlantis"), None, "The Sea")
-}
 
-object TestAddressAuditing extends AddressAuditing(StubAuditor) {
-  protected val audit = StubAuditor
-}
+object TestAddressAuditing extends AddressAuditing(StubAuditor):
+  protected val audit: Audit = StubAuditor
 
-object StubAuditor extends Audit with should.Matchers with MockitoSugar {
+object StubAuditor extends Audit with should.Matchers with MockitoSugar:
+
   private case class AuditEvent(event: String, detail: Map[String, String])
-  private var lastSentAudit: AuditEvent = null
+  private var lastSentAudit: AuditEvent = uninitialized
 
-  override def apply(event: String, detail: Map[String, String])(implicit hc: HeaderCarrier): Future[Disabled.type] = {
+  override def apply(event: String, detail: Map[String, String])(using hc: HeaderCarrier): Future[AuditResult] =
     lastSentAudit = AuditEvent(event, detail)
     Future.successful(Disabled)
-  }
 
-  def mustHaveSentAudit(event: String, detail: Map[String, String]): Unit = {
+  def mustHaveSentAudit(event: String, detail: Map[String, String]): Unit =
     lastSentAudit       should not equal null
     lastSentAudit.event should equal(event)
     detail foreach { d =>
       lastSentAudit.detail should contain(d)
     }
     lastSentAudit = null
-  }
 
   implicit override def ec: ExecutionContext = ExecutionContext.Implicits.global
 
@@ -158,5 +155,3 @@ object StubAuditor extends Audit with should.Matchers with MockitoSugar {
   override def configuration: Configuration = mock[Configuration]
 
   override def servicesConfig: ServicesConfig = mock[ServicesConfig]
-
-}

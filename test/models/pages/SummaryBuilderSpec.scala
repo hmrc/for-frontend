@@ -21,7 +21,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import util.DateUtil.nowInUK
 
-class SummaryBuilderSpec extends AnyFlatSpec with should.Matchers {
+class SummaryBuilderSpec extends AnyFlatSpec with should.Matchers:
 
   behavior of "Summary builder"
 
@@ -34,4 +34,3 @@ class SummaryBuilderSpec extends AnyFlatSpec with should.Matchers {
     assert(s.journeyStarted === now)
     assert(s.journeyResumptions === resumptions)
   }
-}

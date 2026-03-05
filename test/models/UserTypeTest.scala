@@ -16,12 +16,12 @@
 
 package models
 
-import models.serviceContracts.submissions._
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
 
-class UserTypeTest extends AnyFlatSpec with should.Matchers {
+class UserTypeTest extends AnyFlatSpec with should.Matchers:
 
   val jsonOccupier          = "\"occupier\""
   val jsonOccupiersAgent    = "\"occupiersAgent\""
@@ -68,4 +68,3 @@ class UserTypeTest extends AnyFlatSpec with should.Matchers {
   "UserTypeOwnersAgent" should "map to user type 'ownersAgent' " in {
     fromJson(jsonOwnersAgent) should be(JsSuccess(UserTypeOwnersAgent))
   }
-}

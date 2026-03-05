@@ -21,7 +21,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
 
-class OccupierTypes$Test extends AnyFlatSpec with should.Matchers {
+class OccupierTypes$Test extends AnyFlatSpec with should.Matchers:
 
   val jsonIndividual = """"individuals""""
   val jsonCompany    = """"company""""
@@ -56,5 +56,3 @@ class OccupierTypes$Test extends AnyFlatSpec with should.Matchers {
   "OccupierType" should "map to occupier type 'nobody' " in {
     fromJson(jsonNobody) should be(JsSuccess(OccupierTypeNobody))
   }
-
-}

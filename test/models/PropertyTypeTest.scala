@@ -16,12 +16,12 @@
 
 package models
 
-import models.serviceContracts.submissions._
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
 
-class PropertyTypeTest extends AnyFlatSpec with should.Matchers {
+class PropertyTypeTest extends AnyFlatSpec with should.Matchers:
 
   val jsonShop      = """"shop""""
   val jsonFactory   = """"factory""""
@@ -74,5 +74,3 @@ class PropertyTypeTest extends AnyFlatSpec with should.Matchers {
   "PropertyTypeOther" should "map to property type 'other' " in {
     fromJson(jsonOther) should be(JsSuccess(PropertyTypesOther))
   }
-
-}
