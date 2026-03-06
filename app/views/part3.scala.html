@@ -16,8 +16,6 @@
 
 @import models.pages.{PageThree, Summary}
 @import models.serviceContracts.submissions._
-@import template.HiddenBy
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
@@ -139,8 +137,7 @@
             field = "firstOccupationDate",
             helpText = "<span>" + messages("label.firstOccupationDate.help") + "</span><br/><br/><span>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>",
             labelSuffix = labelSuffix,
-            govukDate = govukDateInput,
-            hiddenBy = Option(HiddenBy("occupierType", Seq("company", "individuals")))
+            govukDate = govukDateInput
         )
         </div>
 

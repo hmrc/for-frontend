@@ -85,8 +85,7 @@
         data-hides-this="true"
         data-limit="10">
 
-      @template.repeatWithIndex(theForm("propertyAlterationsDetails"), max = 10) { (propertyAlterationsDetails, idx) =>
-
+      @template.repeatWithIndex(theForm("propertyAlterationsDetails"), max = 10) { (_, idx) =>
 
         <div  class="multi-fields-group"
               id=@(s"propertyAlterationsDetails_description_div_$idx")>

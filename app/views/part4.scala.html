@@ -96,7 +96,7 @@
         data-show-when-value-equals="true"
         data-limit="5" >
 
-        @template.repeatWithIndex(theForm("sublet"), max = 5) { (sublet, idx) =>
+        @template.repeatWithIndex(theForm("sublet"), max = 5) { (_, idx) =>
 
           <div class="multi-fields-group" id=@(s"sublet_description_div_$idx")>
 

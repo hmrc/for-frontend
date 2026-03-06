@@ -83,8 +83,7 @@ object PageTenForm:
       default(text, "").verifying(
         nonEmpty(errorMessage = "error.rentDetails.required"),
         maxLength(249, "error.rentDetails.maxLength")
-      ),
-      showNestedErrors = false
+      )
     ),
     "parking"                -> parkingMapping("parking")
   )(WhatRentIncludes.apply)(o => Some(Tuple.fromProductTyped(o)))

@@ -81,10 +81,10 @@ class SaveForLaterController @Inject() (
             val email = sum.customerDetails.map(_.contactDetails.email)
             emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
-            Ok(savedForLater(sum, pw, expiryDate))
+            Ok(savedForLater(pw, expiryDate))
           }
         else
-          Ok(customPasswordSaveForLaterView(sum, expiryDate, CustomUserPasswordForm.customUserPassword, exitPath)) // TODO - pass path
+          Ok(customPasswordSaveForLaterView(expiryDate, CustomUserPasswordForm.customUserPassword, exitPath))
       case None      =>
         NotFound(errorView(404))
     }
@@ -97,7 +97,7 @@ class SaveForLaterController @Inject() (
         val sum        = SummaryBuilder.build(doc)
         CustomUserPasswordForm.customUserPassword.bindFromRequest().fold(
           formErrors =>
-            Ok(customPasswordSaveForLaterView(sum, expiryDate, formErrors, exitPath)),
+            Ok(customPasswordSaveForLaterView(expiryDate, formErrors, exitPath)),
           validData =>
             val saveSubmissionForLater = config.SaveForLater(validData.password)
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
@@ -105,7 +105,7 @@ class SaveForLaterController @Inject() (
               val email = sum.customerDetails.map(_.contactDetails.email)
               emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
 
-              Ok(savedForLater(sum, pw, expiryDate))
+              Ok(savedForLater(pw, expiryDate))
 
             }
         )
@@ -154,7 +154,7 @@ class SaveForLaterController @Inject() (
           val email      = sum.customerDetails.map(_.contactDetails.email)
 
           emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
-          Ok(savedForLater(sum, pw, expiryDate, hasTimedOut = true))
+          Ok(savedForLater(pw, expiryDate, hasTimedOut = true))
         }
       case None      => Redirect(routes.LoginController.logout)
     }

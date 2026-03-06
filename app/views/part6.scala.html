@@ -334,9 +334,8 @@
               <div class="govuk-hint">@messages("hint.writtenAgreement.steppedDetailsYear" + labelSuffix)</div>
 
             <hr/>
-            @defining(theForm("writtenAgreement.steppedDetails").indexes.size) { size =>
-              @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
+              @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
                 @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {
 
@@ -383,7 +382,7 @@
                 }
 
               }
-            }
+
             <p class="govuk-body">
               <a href="#" class="add-multi-fields hide-if-no-js govuk-link govuk-body" >@messages("label.add.steppedRent")</a>
             </p>

@@ -84,7 +84,6 @@ class SurveyController @Inject() (
         val summary = SummaryBuilder.build(doc)
         Ok(confirmationView(
           form.getOrElse(completedFeedbackFormNormalJourney.bind(Map("surveyUrl" -> request.uri)).discardingErrors),
-          refNum,
           summary.customerDetails.map(_.contactDetails.email),
           summary
         ))
