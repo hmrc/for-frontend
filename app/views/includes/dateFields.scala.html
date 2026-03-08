@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import template.HiddenBy
 @import uk.gov.hmrc.govukfrontend.views.Aliases._
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukDateInput
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -27,8 +26,7 @@
     helpText: Option[String] = None,
     labelSuffix: Option[String] = None,
     label: Option[String] = None,
-    showDays : Boolean = false,
-    hiddenBy: Option[HiddenBy] = None)(implicit messages: Messages)
+    showDays : Boolean = false)(implicit messages: Messages)
 
     @labelText = @{ label.getOrElse("label." + field + labelSuffix.getOrElse(""))}
     @dayfield  = @{field + ".day"}

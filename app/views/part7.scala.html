@@ -31,7 +31,7 @@
 @(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
-@agreementType = {@summary.lease.flatMap {d=>@d.leaseAgreementType.name}}
+@agreementType = @{summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")}
 
 @layout(
   backLinkUrl = dataCapturePages.routes.PageController.showPage(6).url,
@@ -92,13 +92,12 @@ args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
       @govukRadios(
         Radios(
           name = "rentReviewDetails.reviewIntervalType",
-          items = EnumOptions.options(ReviewIntervalTypes).map(radioItem => {
+          items = ReviewIntervalType.values.toIndexedSeq.map(intervalType =>
             RadioItem(
-              content = Text(radioItem._2),
-              checked = radioItem._1.equals(theForm("rentReviewDetails.reviewIntervalType").value.getOrElse("")),
-              value = Option(radioItem._1)
+              content = Text(messages(s"reviewIntervalType.$intervalType")),
+              checked = theForm("rentReviewDetails.reviewIntervalType").value.contains(intervalType.toString),
+              value = Option(intervalType.toString)
             )
-          }
           ),
           classes = "radio-button-that-show-hides",
           errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.reviewIntervalType"),
@@ -234,13 +233,12 @@ args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
             @govukRadios(
               Radios(
                 name = "rentReviewDetails.rentReviewResultsDetails.rentFixedBy",
-                items = EnumOptions.options(RentFixedTypes).map(radioItem => {
+                items = RentFixedType.values.toIndexedSeq.map(rentFixedType =>
                   RadioItem(
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("rentReviewDetails.rentReviewResultsDetails.rentFixedBy").value.getOrElse("")),
-                    value = Option(radioItem._1)
+                    content = Text(messages(s"rentFixedTypes.$rentFixedType")),
+                    checked = theForm("rentReviewDetails.rentReviewResultsDetails.rentFixedBy").value.contains(rentFixedType.toString),
+                    value = Option(rentFixedType.toString)
                   )
-                }
                 ),
                 attributes = Map(
                   "data-hidden-by" -> "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",

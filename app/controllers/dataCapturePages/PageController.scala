@@ -16,7 +16,7 @@
 
 package controllers.dataCapturePages
 
-import controllers._
+import controllers.*
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -40,12 +40,12 @@ class PageController @Inject() (
   pageTwelveController: PageTwelveController,
   pageThirteenController: PageThirteenController,
   pageFourteenController: PageFourteenController
-) extends FrontendController(cc) {
+) extends FrontendController(cc):
 
   def showPage(pageNumber: Int): Action[AnyContent] = showPageVariant(pageNumber, 0)
 
   def showPageVariant(pageNumber: Int, variant: Int): Action[AnyContent] =
-    pageNumber match {
+    pageNumber match
       case 0  => pageZeroController.show
       case 1  => pageOneController.show
       case 2  => pageTwoController.show
@@ -62,10 +62,9 @@ class PageController @Inject() (
       case 13 => pageThirteenController.show
       case 14 => pageFourteenController.show
       case _  => application.index
-    }
 
   def savePage(pageNumber: Int): Action[AnyContent] =
-    pageNumber match {
+    pageNumber match
       case 0  => pageZeroController.save
       case 1  => pageOneController.save
       case 2  => pageTwoController.save
@@ -82,5 +81,3 @@ class PageController @Inject() (
       case 13 => pageThirteenController.save
       case 14 => pageFourteenController.save
       case _  => application.index
-    }
-}

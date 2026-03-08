@@ -16,20 +16,10 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum SubletType:
 
-sealed trait SubletType extends NamedEnum {
-  override val key = "subletType"
-}
-
-object SubletAll extends SubletType {
-  override val name: String = "all"
-}
-
-object SubletPart extends SubletType {
-  override val name: String = "part"
-}
-
-object SubletType extends NamedEnumSupport[SubletType] {
-  override def all: List[SubletType] = List(SubletAll, SubletPart)
-}
+  case all,
+    part

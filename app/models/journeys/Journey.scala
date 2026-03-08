@@ -16,32 +16,29 @@
 
 package models.journeys
 
-import models.journeys.Paths._
+import models.journeys.Paths.*
 import models.pages.Summary
 
 sealed trait TargetPage
 case object SummaryPage extends TargetPage
 case class PageToGoTo(number: Int) extends TargetPage
 
-object Journey {
+object Journey:
 
-  def pageToResumeAt(summary: Summary): TargetPage = {
+  def pageToResumeAt(summary: Summary): TargetPage =
     val path = Paths.pathFor(summary)
-    path.firstIncompletePageFor(summary) match {
+    path.firstIncompletePageFor(summary) match
       case None       =>
         SummaryPage
       case Some(page) =>
         nextPageAllowable(page, summary)
-    }
-  }
 
   def nextPageAllowable(targetPage: Int, summary: Summary, currentPage: Option[Int] = None): TargetPage =
-    pageToShow(targetPage, summary, currentPage) match {
+    pageToShow(targetPage, summary, currentPage) match
       case 16 => SummaryPage
       case n  => PageToGoTo(n)
-    }
 
-  private def pageToShow(target: Int, summary: Summary, current: Option[Int]): Int = {
+  private def pageToShow(target: Int, summary: Summary, current: Option[Int]): Int =
     val path = Paths.pathFor(summary)
     if target == 0 then
       target
@@ -51,7 +48,6 @@ object Journey {
       path.previousPage(target)
     else
       path.nextPage(target, summary) getOrElse 16
-  }
 
   private def movingBackwards(target: Int, current: Option[Int]) = current.exists(_ > target)
 
@@ -59,4 +55,3 @@ object Journey {
     !Paths.pathFor(summary).contains(target)
 
   def lastPageFor(summary: Summary): Int = pathFor(summary).lastPage
-}

@@ -18,6 +18,5 @@ package template
 
 import useCases.ReferenceNumber
 
-object FormatRefNum {
+object FormatRefNum:
   def apply(r: ReferenceNumber): ReferenceNumber = r.take(r.length - 3) + "/" + r.drop(r.length - 3)
-}

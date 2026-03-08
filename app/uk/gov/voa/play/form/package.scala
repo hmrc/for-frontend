@@ -16,12 +16,12 @@
 
 package uk.gov.voa.play
 
-package object form {
-  implicit val emptyOption: None.type   = None
-  implicit val emptyList: List[Nothing] = List()
+package object form:
 
-  implicit class conditionOpts(c: Condition) {
+  implicit val emptyOption: None.type   = None
+  implicit val emptyList: List[Nothing] = List.empty
+
+  implicit class conditionOpts(c: Condition):
     def and(c2: Condition): Condition = d => c(d) && c2(d)
-  }
+
   type Condition = Map[String, String] => Boolean
-}

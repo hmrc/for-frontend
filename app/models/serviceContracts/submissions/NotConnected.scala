@@ -16,12 +16,9 @@
 
 package models.serviceContracts.submissions
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class NotConnected(fullName: String, emailAddress: Option[String], phoneNumber: Option[String], additionalInformation: Option[String])
 
-object NotConnected {
-
+object NotConnected:
   implicit val format: OFormat[NotConnected] = Json.format[NotConnected]
-
-}

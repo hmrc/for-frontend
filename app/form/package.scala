@@ -22,46 +22,37 @@ import play.api.data.validation.ValidationError
 import play.api.data.validation.Invalid
 import play.api.data.Form
 
-package object form {
+package object form:
 
-  def getMappingErrors[T](dataOpt: Option[T], mapping: Mapping[T], prefix: String): ValidationResult = {
+  def getMappingErrors[T](dataOpt: Option[T], mapping: Mapping[T], prefix: String): ValidationResult =
     val form                            = Form(mapping.withPrefix(prefix))
-    val populatedForm                   = dataOpt match {
+    val populatedForm                   = dataOpt match
       case Some(data) => form.fill(data)
       case None       => form
-    }
     val dataMap                         = populatedForm.data
     val result: Seq[FormError]          = form.bind(dataMap).convertGlobalToFieldErrors().fold(formWithErrors => formWithErrors.errors, _ => Seq())
     val valErrors: Seq[ValidationError] = result flatMap {
       case FormError(key, messages, args) => messages.map(message => createFieldValidationError(key, message, args*))
     }
     if valErrors.isEmpty then Valid else Invalid(valErrors)
-  }
 
-  implicit class ValidationResultHelper(validationResult: ValidationResult) {
+  implicit class ValidationResultHelper(validationResult: ValidationResult):
 
-    def and(constraint: => ValidationResult): ValidationResult = validationResult match {
+    def and(constraint: => ValidationResult): ValidationResult = validationResult match
       case Valid                      => constraint
-      case invalid @ Invalid(errors1) => constraint match {
+      case invalid @ Invalid(errors1) => constraint match
           case Valid            => invalid
           case Invalid(errors2) => Invalid(errors1 ++ errors2)
-        }
-    }
 
-    def or(constraint: => ValidationResult): ValidationResult = validationResult match {
+    def or(constraint: => ValidationResult): ValidationResult = validationResult match
       case Valid            => Valid
-      case Invalid(errors1) => constraint match {
+      case Invalid(errors1) => constraint match
           case Valid            => Valid
           case Invalid(errors2) => Invalid(errors1 ++ errors2)
-        }
-    }
-  }
 
-  def checkFieldConstraint(cond: => Boolean, field: String, code: String): ValidationResult =
-    if cond then
-      Valid
-    else
-      Invalid(Seq(createFieldValidationError(field, code)))
+  private def checkFieldConstraint(cond: => Boolean, field: String, code: String): ValidationResult =
+    if cond then Valid
+    else Invalid(Seq(createFieldValidationError(field, code)))
 
   def createFieldValidationError(field: String, code: String, args: Any*): ValidationError =
     ValidationError(s"fieldError|$field|$code", args*)
@@ -69,21 +60,18 @@ package object form {
   def createFieldConstraintFor(cond: Boolean, code: String, fields: Seq[String]): ValidationResult =
     fields.map(field => checkFieldConstraint(cond, field, code)).reduce(_.and(_))
 
-  implicit class FormErrorSupport(formError: FormError) {
+  implicit class FormErrorSupport(formError: FormError):
 
     def convert(): FormError =
-      formError.message.split('|') match {
+      formError.message.split('|') match
         case Array("fieldError", path, code) =>
           val newPath = if formError.key.isEmpty then path else formError.key + "." + path
           FormError(newPath, newPath + "." + code, formError.args)
         case _                               => formError
-      }
 
-  }
+  implicit class MappingSupportHelper[T](mapping: Mapping[T]):
 
-  implicit class MappingSupportHelper[T](mapping: Mapping[T]) {
-
-    lazy val keys: Seq[String] = {
+    val keys: Seq[String] =
       val childKeys: Set[Seq[String]] = mapping.mappings.filter(_ != mapping).map(_.keys).toSet
 
       val res: Seq[String] = if childKeys.isEmpty then
@@ -92,22 +80,16 @@ package object form {
         childKeys.reduce(_ ++ _).distinct
 
       res.sorted.sortBy(_.contains("."))
-    }
 
-  }
-
-  implicit class FormHelper[T](form: Form[T]) {
+  implicit class FormHelper[T](form: Form[T]):
 
     def convertGlobalToFieldErrors(): Form[T] =
       form.copy(errors = form.errors map (_.convert()))
 
-    def getConstrainedFieldNamesStartingWith(prefix: String): Seq[String] = {
+    def getConstrainedFieldNamesStartingWith(prefix: String): Seq[String] =
       val prefixDot = s"$prefix."
       val keys      = form.mapping.keys
       keys.filter(_.startsWith(prefixDot))
-    }
 
     def setFormData(formData: Map[String, String]): Form[T] =
-      new Form(mapping = form.mapping, data = formData, errors = form.errors, value = form.value)
-  }
-}
+      Form(mapping = form.mapping, data = formData, errors = form.errors, value = form.value)

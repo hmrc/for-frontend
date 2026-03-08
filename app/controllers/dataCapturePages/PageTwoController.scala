@@ -37,11 +37,11 @@ class PageTwoController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part2View: part2
-) extends ForDataCapturePage[CustomerDetails](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[CustomerDetails](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[CustomerDetails] = cdf
   val emptyForm: Form[CustomerDetails] = pageTwoForm
   val pageNumber: Int                  = 2
 
-  def template(form: Form[CustomerDetails], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
+  def template(form: Form[CustomerDetails], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     part2View(form, summary)
-}

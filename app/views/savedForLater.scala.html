@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
@@ -24,7 +23,7 @@
 
 @this(main_template: pageLayout, govukWarningText: GovukWarningText, formHelp: includes.formHelp)
 
-@(summary: Summary, password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: Request[?],  messages: Messages)
+@(password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: Request[?],  messages: Messages)
 
 @title = @{
     if(!hasTimedOut) {

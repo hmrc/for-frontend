@@ -19,8 +19,8 @@ package form
 import connectors.{Document, Page}
 import form.persistence.SaveFormInRepository
 import models.RoughDate
-import models.pages._
-import models.serviceContracts.submissions._
+import models.pages.*
+import models.serviceContracts.submissions.*
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpec
 import util.DateUtil.nowInUK
@@ -28,19 +28,20 @@ import utils.stubs.StubFormDocumentRepo
 
 import java.time.LocalDate
 import scala.concurrent.Await
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.language.postfixOps
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.*
 
-class SaveFormSpec extends AnyWordSpec with should.Matchers {
-  import TestData._
+class SaveFormSpec extends AnyWordSpec with should.Matchers:
+
+  import TestData.*
 
   "SaveForm" when {
 
     "no document exists" should {
       val sessionId = "asdkjfa078380898fdsa"
       val r         = StubFormDocumentRepo()
-      val s         = new SaveFormInRepository(r, StubSummaryBuilder())
+      val s         = SaveFormInRepository(r, StubSummaryBuilder())
       val x         = Await.result(s(Some(testData), sessionId, refNumWithNoDoc, 1), 5 seconds)
 
       "not save anything" in
@@ -54,7 +55,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
       val sessionId = "sdlkjfaweiroiwe"
       val r         = StubFormDocumentRepo((sessionId, refNumWithDoc, testDoc))
       val b         = StubSummaryBuilder((testDocWithTestDataAddedToPage1, summaryForTestDocWithTestData))
-      val s         = new SaveFormInRepository(r, b)
+      val s         = SaveFormInRepository(r, b)
       val x         = Await.result(s(Some(testData), sessionId, refNumWithDoc, 1), 5 seconds)
 
       "add a new page to the document with the supplied fields as a flat Json object" in
@@ -70,7 +71,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
       val sessionId = "asfd937r2839ra3e7sd"
       val r         = StubFormDocumentRepo((sessionId, emptyFieldsRefNum, emptyFieldsTestDoc))
       val b         = StubSummaryBuilder((emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6, summaryWithNonEmptyFieldsAddedToPage6))
-      val s         = new SaveFormInRepository(r, b)
+      val s         = SaveFormInRepository(r, b)
       val x         = Await.result(s(Some(page6TestData), sessionId, emptyFieldsRefNum, 6), 5 seconds)
 
       "add the new page to the document as usual, but will throw away the empty fields" in {
@@ -86,7 +87,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     }
   }
 
-  object TestData {
+  object TestData:
     val refNumWithNoDoc   = "4545456744"
     val refNumWithDoc     = "1111111222"
     val testDoc: Document = Document(refNumWithDoc, nowInUK, Seq.empty)
@@ -110,7 +111,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     val summaryForTestDocWithTestData: Summary = Summary(
       refNumWithDoc,
       nowInUK,
-      Some(AddressConnectionTypeYesChangeAddress),
+      Some(AddressConnectionType.`yes-change-address`),
       Some(Address("123", None, None, "AA11 1AA")),
       None,
       None,
@@ -176,7 +177,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     val emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6: Document = emptyFieldsTestDoc.add(page6WithNonEmptyTestDataFields)
 
     val mappedPage6WithNonEmptyFields: PageSix = PageSix(
-      LeaseAgreementTypesLeaseTenancy,
+      LeaseAgreementType.leaseTenancy,
       Some(WrittenAgreement(
         RoughDate(None, Some(3), 2011),
         false,
@@ -196,7 +197,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
     val summaryWithNonEmptyFieldsAddedToPage6: Summary = Summary(
       "",
       nowInUK,
-      Some(AddressConnectionTypeYesChangeAddress),
+      Some(AddressConnectionType.`yes-change-address`),
       Some(Address("123", None, None, "AA11 1AA")),
       None,
       None,
@@ -212,11 +213,8 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers {
       None,
       None
     )
-  }
-}
 
-case class StubSummaryBuilder(summaries: (Document, Summary)*) extends SummaryBuilder {
+case class StubSummaryBuilder(summaries: (Document, Summary)*) extends SummaryBuilder:
   val emptySummary: Summary = Summary("", nowInUK, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
 
   override def build(doc: Document): Summary = summaries.find(_._1 == doc).map(_._2).getOrElse(emptySummary)
-}

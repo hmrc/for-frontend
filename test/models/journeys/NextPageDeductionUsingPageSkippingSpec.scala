@@ -16,10 +16,10 @@
 
 package models.journeys
 
-import models._
-import models.journeys.Journey._
-import models.pages._
-import models.serviceContracts.submissions._
+import models.*
+import models.journeys.Journey.*
+import models.pages.*
+import models.serviceContracts.submissions.*
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
@@ -27,7 +27,109 @@ import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 
-class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Matchers with OptionValues {
+class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Matchers with OptionValues:
+
+  val pageZeroData: AddressConnectionType = AddressConnectionType.yes
+
+  val pageOneData: Option[Address] = None
+
+  val pageTwoData: CustomerDetails = CustomerDetails("name", UserType.owner, ContactDetails("01234567890", "abc@mailinator.com"))
+
+  val pageThreeData: PageThree = PageThree(
+    propertyType = "property type",
+    occupierType = OccupierType.company,
+    occupierCompanyName = Some("Some Company"),
+    occupierCompanyContact = Some("Some Company Contact"),
+    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
+    None,
+    propertyOwnedByYou = false,
+    propertyRentedByYou = Some(true),
+    None
+  )
+
+  val propertyOwned: PageThree = PageThree(
+    propertyType = "property type",
+    occupierType = OccupierType.company,
+    occupierCompanyName = Some("Some Company"),
+    occupierCompanyContact = Some("Some Company Contact"),
+    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
+    None,
+    propertyOwnedByYou = true,
+    propertyRentedByYou = None,
+    noRentDetails = None
+  )
+
+  val pageFourData: PageFour = PageFour(
+    true,
+    List(SubletDetails(
+      "Something",
+      Address("Street address", None, Some("City"), "Postcode"),
+      SubletType.part,
+      Option("Description"),
+      "Reason",
+      BigDecimal(1.0),
+      RoughDate(None, Some(12), 1980)
+    ))
+  )
+
+  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionType.noConnected, None)
+
+  val pageSixData: PageSix =
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+
+  val pageSixNoVerbal: PageSix     =
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+  val pageSixVerbal: PageSix       = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
+  val pageSevenData: PageSeven     = PageSeven(false, None)
+  val pageEightData: RentAgreement = RentAgreement(true, None, RentSetByType.newLease)
+  val hasNoRentReviews: PageSeven  = PageSeven(false, None)
+  val hasRentReviews: PageSeven    = PageSeven(true, None)
+
+  val pageNineData: PageNine = PageNine(
+    AnnualRent(8.99),
+    rentBecomePayable = LocalDate.of(2010, 2, 27),
+    rentActuallyAgreed = LocalDate.of(2005, 4, 2),
+    negotiatingNewRent = true,
+    rentBasis = RentBaseType.openMarket,
+    None
+  )
+
+  private def summaryBuilder(
+    addressConnection: Option[AddressConnectionType] = None,
+    propertyAddress: Option[Address] = None,
+    customerDetails: Option[CustomerDetails] = None,
+    theProperty: Option[PageThree] = None,
+    sublet: Option[PageFour] = None,
+    landlord: Option[PageFive] = None,
+    lease: Option[PageSix] = None,
+    rentReviews: Option[PageSeven] = None,
+    rentAgreement: Option[RentAgreement] = None,
+    rent: Option[PageNine] = None,
+    includes: Option[WhatRentIncludes] = None,
+    incentives: Option[IncentivesAndPayments] = None,
+    responsibilities: Option[PageTwelve] = None,
+    alterations: Option[PropertyAlterations] = None,
+    otherFactors: Option[OtherFactors] = None
+  ) =
+    Summary(
+      "",
+      nowInUK,
+      addressConnection,
+      propertyAddress,
+      customerDetails,
+      theProperty,
+      sublet,
+      landlord,
+      lease,
+      rentReviews,
+      rentAgreement,
+      rent,
+      includes,
+      incentives,
+      responsibilities,
+      alterations,
+      otherFactors
+    )
 
   "nextPageAllowable for page four" should "return summary when you say you own property and do not sublet" in {
     val pageFourData = PageFour(false, List.empty)
@@ -41,7 +143,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
     val pageThreeData = PageThree(
       propertyType = "property type",
-      occupierType = OccupierTypeCompany,
+      occupierType = OccupierType.company,
       occupierCompanyName = Some("Some Company"),
       occupierCompanyContact = Some("Some Company Contact"),
       firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -62,7 +164,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
     val pageThreeData = PageThree(
       propertyType = "property type",
-      occupierType = OccupierTypeCompany,
+      occupierType = OccupierType.company,
       occupierCompanyName = Some("Some Company"),
       occupierCompanyContact = Some("Some Company Contact"),
       firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -85,7 +187,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   "nextPageAllowable for page six" should "return 8 when the lease agreement is verbal" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),
@@ -112,7 +214,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   it should "display page eight when the lease agreement is verbal" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),
@@ -187,7 +289,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   "nextPageAllowable for page eight" should "return six when page seven is requested when there is a verbal agreement" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),
@@ -313,106 +415,3 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
     val doc = summaryBuilder()
     nextPageAllowable(0, doc, Some(1)) shouldBe PageToGoTo(0)
   }
-
-  lazy val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
-
-  lazy val pageOneData: Option[Address] = None
-
-  lazy val pageTwoData: CustomerDetails = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
-
-  lazy val pageThreeData: PageThree = PageThree(
-    propertyType = "property type",
-    occupierType = OccupierTypeCompany,
-    occupierCompanyName = Some("Some Company"),
-    occupierCompanyContact = Some("Some Company Contact"),
-    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
-    None,
-    propertyOwnedByYou = false,
-    propertyRentedByYou = Some(true),
-    None
-  )
-
-  lazy val propertyOwned: PageThree = PageThree(
-    propertyType = "property type",
-    occupierType = OccupierTypeCompany,
-    occupierCompanyName = Some("Some Company"),
-    occupierCompanyContact = Some("Some Company Contact"),
-    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
-    None,
-    propertyOwnedByYou = true,
-    propertyRentedByYou = None,
-    noRentDetails = None
-  )
-
-  lazy val pageFourData: PageFour = PageFour(
-    true,
-    List(SubletDetails(
-      "Something",
-      Address("Street address", None, Some("City"), "Postcode"),
-      SubletPart,
-      Option("Description"),
-      "Reason",
-      BigDecimal(1.0),
-      RoughDate(None, Some(12), 1980)
-    ))
-  )
-
-  lazy val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionTypeNone, None)
-
-  lazy val pageSixData: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-
-  lazy val pageSixNoVerbal: PageSix     =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-  lazy val pageSixVerbal: PageSix       = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
-  lazy val pageSevenData: PageSeven     = PageSeven(false, None)
-  lazy val pageEightData: RentAgreement = RentAgreement(true, None, RentSetByTypeNewLease)
-  lazy val hasNoRentReviews: PageSeven  = PageSeven(false, None)
-  lazy val hasRentReviews: PageSeven    = PageSeven(true, None)
-
-  lazy val pageNineData: PageNine = PageNine(
-    AnnualRent(8.99),
-    rentBecomePayable = LocalDate.of(2010, 2, 27),
-    rentActuallyAgreed = LocalDate.of(2005, 4, 2),
-    negotiatingNewRent = true,
-    rentBasis = RentBaseTypeOpenMarket,
-    None
-  )
-
-  private def summaryBuilder(
-    addressConnection: Option[AddressConnectionType] = None,
-    propertyAddress: Option[Address] = None,
-    customerDetails: Option[CustomerDetails] = None,
-    theProperty: Option[PageThree] = None,
-    sublet: Option[PageFour] = None,
-    landlord: Option[PageFive] = None,
-    lease: Option[PageSix] = None,
-    rentReviews: Option[PageSeven] = None,
-    rentAgreement: Option[RentAgreement] = None,
-    rent: Option[PageNine] = None,
-    includes: Option[WhatRentIncludes] = None,
-    incentives: Option[IncentivesAndPayments] = None,
-    responsibilities: Option[PageTwelve] = None,
-    alterations: Option[PropertyAlterations] = None,
-    otherFactors: Option[OtherFactors] = None
-  ) =
-    Summary(
-      "",
-      nowInUK,
-      addressConnection,
-      propertyAddress,
-      customerDetails,
-      theProperty,
-      sublet,
-      landlord,
-      lease,
-      rentReviews,
-      rentAgreement,
-      rent,
-      includes,
-      incentives,
-      responsibilities,
-      alterations,
-      otherFactors
-    )
-}

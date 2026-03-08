@@ -20,7 +20,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.FormError
 
-class FormSupportSpec extends AnyFlatSpec with should.Matchers {
+class FormSupportSpec extends AnyFlatSpec with should.Matchers:
 
   "converting a field specific FormError" should "result in the same FormError" in {
     val fe1 = FormError("field", "message", "arg1")
@@ -37,5 +37,3 @@ class FormSupportSpec extends AnyFlatSpec with should.Matchers {
     val fe2 = FormError("field1.field2", "field1.field2.code1.code2", "arg1")
     fe1.convert() should be(fe2)
   }
-
-}

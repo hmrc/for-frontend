@@ -16,7 +16,7 @@
 
 package controllers
 
-import _root_.form.persistence.{FormDocumentRepository, MongoSessionRepository}
+import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import actions.{RefNumAction, RefNumRequest}
 import controllers.PreviouslyConnectedController.cacheKey
 import controllers.dataCapturePages.ForDataCapturePage
@@ -26,8 +26,8 @@ import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.PreviouslyConnected
 import models.serviceContracts.submissions.PreviouslyConnected.format
-import play.api.{Logging, mvc}
-import play.api.mvc.MessagesControllerComponents
+import play.api.Logging
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -35,7 +35,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 import models.pages.Summary
 import play.api.data.Form
-import play.api.mvc.AnyContent
 
 @Singleton
 class PreviouslyConnectedController @Inject() (
@@ -45,23 +44,23 @@ class PreviouslyConnectedController @Inject() (
   val refNumberAction: RefNumAction,
   previouslyConnected: views.html.previouslyConnected,
   errorView: views.html.error.error
-)(implicit val ec: ExecutionContext
+)(using val ec: ExecutionContext
 ) extends FrontendController(cc)
   with Logging:
 
-  def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
+  def findSummary(using request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
       case Some(doc) => Option(SummaryBuilder.build(doc))
       case None      => None
     }
 
-  def getPreviouslyConnectedFromCache()(implicit hc: HeaderCarrier): Future[Option[PreviouslyConnected]] =
+  def getPreviouslyConnectedFromCache()(using hc: HeaderCarrier): Future[Option[PreviouslyConnected]] =
     cache.fetchAndGetEntry[PreviouslyConnected](SessionId(using hc), PreviouslyConnectedController.cacheKey).flatMap {
       case Some(x) => Some(x)
       case None    => None
     }
 
-  def findNotConnectedSummary(implicit request: RefNumRequest[?], hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
+  def findNotConnectedSummary(using request: RefNumRequest[?], hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
     findSummary.flatMap { summary =>
       getPreviouslyConnectedFromCache().flatMap { previouslyConnected =>
         Option(NotConnectedSummary(summary.get, previouslyConnected, None))
@@ -73,7 +72,7 @@ class PreviouslyConnectedController @Inject() (
       case Some(x) => formMapping.fill(x)
       case None    => formMapping
 
-  def onPageView: mvc.Action[AnyContent] = refNumberAction.async { implicit request =>
+  def onPageView: Action[AnyContent] = refNumberAction.async { implicit request =>
     findNotConnectedSummary.map {
       case Some(notConnectedSummary) => Ok(previouslyConnected(getForm(notConnectedSummary), notConnectedSummary.summary))
       case None                      =>
@@ -82,7 +81,7 @@ class PreviouslyConnectedController @Inject() (
     }
   }
 
-  def onPageSubmit: mvc.Action[AnyContent] = refNumberAction.async { implicit request =>
+  def onPageSubmit: Action[AnyContent] = refNumberAction.async { implicit request =>
     findSummary.flatMap {
       case Some(summary) =>
         formMapping.bindFromRequest().fold(

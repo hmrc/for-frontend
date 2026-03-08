@@ -16,7 +16,7 @@
 
 package models.pages
 
-import models.serviceContracts.submissions._
+import models.serviceContracts.submissions.*
 
 case class PageTwelve(
   responsibleOutsideRepairs: ResponsibleType,

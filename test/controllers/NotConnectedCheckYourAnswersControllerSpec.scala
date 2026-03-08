@@ -27,9 +27,9 @@ import views.html.{confirmNotConnected, notConnectedCheckYourAnswers}
 
 import scala.concurrent.ExecutionContext
 
-class NotConnectedCheckYourAnswersControllerSpec extends TestBaseSpec {
+class NotConnectedCheckYourAnswersControllerSpec extends TestBaseSpec:
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  given ExecutionContext = ExecutionContext.Implicits.global
 
   "NotConnectedCheckYourAnswersController" should "Audit submission" in {
 
@@ -38,7 +38,7 @@ class NotConnectedCheckYourAnswersControllerSpec extends TestBaseSpec {
     val cache                  = mock[MongoSessionRepository]
     val audit                  = mock[Audit]
 
-    val controller = new NotConnectedCheckYourAnswersController(
+    val controller = NotConnectedCheckYourAnswersController(
       formDocumentRepository,
       submissionConnector,
       refNumAction(),
@@ -56,5 +56,3 @@ class NotConnectedCheckYourAnswersControllerSpec extends TestBaseSpec {
 
     status(response) shouldBe SEE_OTHER
   }
-
-}

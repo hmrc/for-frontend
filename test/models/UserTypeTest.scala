@@ -16,12 +16,12 @@
 
 package models
 
-import models.serviceContracts.submissions._
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
 
-class UserTypeTest extends AnyFlatSpec with should.Matchers {
+class UserTypeTest extends AnyFlatSpec with should.Matchers:
 
   val jsonOccupier          = "\"occupier\""
   val jsonOccupiersAgent    = "\"occupiersAgent\""
@@ -38,34 +38,33 @@ class UserTypeTest extends AnyFlatSpec with should.Matchers {
     Json.fromJson[UserType](Json.parse(json))
 
   "UserType reader for 'occupier' " should "map to UserTypeOccupier" in {
-    toJson(UserTypeOccupier) should be(jsonOccupier)
+    toJson(UserType.occupier) should be(jsonOccupier)
   }
 
   "UserTypeOccupier" should "map to user type 'occupier' " in {
-    fromJson(jsonOccupier) should be(JsSuccess(UserTypeOccupier))
+    fromJson(jsonOccupier) should be(JsSuccess(UserType.occupier))
   }
 
   "UserType for type 'occupiersAgent' " should "map to UserTypeOccupiersAgent" in {
-    toJson(UserTypeOccupiersAgent) should be(jsonOccupiersAgent)
+    toJson(UserType.occupiersAgent) should be(jsonOccupiersAgent)
   }
 
   "UserTypeOccupiersAgent" should "map to user type occupiersAgent" in {
-    fromJson(jsonOccupiersAgent) should be(JsSuccess(UserTypeOccupiersAgent))
+    fromJson(jsonOccupiersAgent) should be(JsSuccess(UserType.occupiersAgent))
   }
 
   "UserType reader for 'owner' " should "map to UserTypeOwner" in {
-    toJson(UserTypeOwner) should be(jsonOwner)
+    toJson(UserType.owner) should be(jsonOwner)
   }
 
   "UserTypeOwner" should "map to user type 'owner' " in {
-    fromJson(jsonOwner) should be(JsSuccess(UserTypeOwner))
+    fromJson(jsonOwner) should be(JsSuccess(UserType.owner))
   }
 
   "UserType reader for 'ownersAgent' " should "map to UserTypeOwnersAgent" in {
-    toJson(UserTypeOwnersAgent) should be(jsonOwnersAgent)
+    toJson(UserType.ownersAgent) should be(jsonOwnersAgent)
   }
 
   "UserTypeOwnersAgent" should "map to user type 'ownersAgent' " in {
-    fromJson(jsonOwnersAgent) should be(JsSuccess(UserTypeOwnersAgent))
+    fromJson(jsonOwnersAgent) should be(JsSuccess(UserType.ownersAgent))
   }
-}

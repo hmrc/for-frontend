@@ -24,7 +24,7 @@
         formWithCSRF: FormWithCSRF)
 
 
-@(theForm: Form[?], fullName: String, userType: String, summary: models.pages.Summary)(implicit request: Request[?], messages: Messages)
+@(theForm: Form[?], summary: models.pages.Summary)(implicit request: Request[?], messages: Messages)
 
 @layout(
     backLinkUrl = routes.ApplicationController.checkYourAnswers.url,

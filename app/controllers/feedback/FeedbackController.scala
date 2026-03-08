@@ -18,11 +18,11 @@ package controllers.feedback
 
 import connectors.{Audit, ForHttp}
 import controllers.*
-import form.Formats.*
-import models.{Feedback, Journey, NormalJourney, NotConnectedJourney}
+import form.MappingSupport.*
+import models.{Feedback, JourneyName}
 import play.api.Logging
 import play.api.data.Forms.{mapping, optional, text}
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 import play.api.mvc.*
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,31 +41,27 @@ class FeedbackController @Inject() (
   val servicesConfig: ServicesConfig,
   feedbackThankyouView: feedbackThx,
   feedbackFormView: feedbackForm
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends FrontendController(cc)
   with Logging:
 
   private val contactFrontendPartialBaseUrl: String  = servicesConfig.baseUrl("contact-frontend")
   private val contactFrontendFeedbackPostUrl: String = s"$contactFrontendPartialBaseUrl/contact/beta-feedback/submit-unauthenticated"
 
-  object FeedbackFormMapper {
-
-    val feedbackForm: Form[Feedback] = Form(
+  val feedbackForm: Form[Feedback] =
+    Form(
       mapping(
         "feedback-rating"   -> optional(text).verifying("feedback.rating.required", _.isDefined),
         "feedback-name"     -> text,
         "feedback-email"    -> text,
         "service"           -> text,
         "referrer"          -> text,
-        "journey"           -> Forms.of[Journey],
+        "journey"           -> journeyMapping,
         "feedback-comments" -> optional(
           text.verifying("feedback.commments.maxLength", _.length <= 1200)
         )
       )(Feedback.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  }
-
-  import FeedbackFormMapper.feedbackForm
 
   def handleFeedbackSubmit: Action[AnyContent] = Action.async { implicit request =>
     feedbackForm.bindFromRequest().fold(
@@ -73,7 +69,7 @@ class FeedbackController @Inject() (
       feedback => {
         val urlEncodedForm = request.body.asFormUrlEncoded.get
 
-        implicit val headerCarrier: HeaderCarrier = hc.copy(authorization = None).withExtraHeaders("Csrf-Token" -> "nocheck")
+        given headerCarrier: HeaderCarrier = hc.copy(authorization = None).withExtraHeaders("Csrf-Token" -> "nocheck")
 
         http.postForm(contactFrontendFeedbackPostUrl, urlEncodedForm).map { r =>
           if is2xx(r.status) then logger.info(s"Feedback successful: ${r.status} response from $contactFrontendFeedbackPostUrl")
@@ -88,11 +84,11 @@ class FeedbackController @Inject() (
   }
 
   def feedback: Action[AnyContent] = Action { implicit request =>
-    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors))
+    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> JourneyName.normalJourney.name)).discardingErrors))
   }
 
   def notConnectedFeedback: Action[AnyContent] = Action { implicit request =>
-    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> NotConnectedJourney.name)).discardingErrors))
+    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> JourneyName.notConnected.name)).discardingErrors))
   }
 
   def feedbackThankyou: Action[AnyContent] = Action { implicit request =>

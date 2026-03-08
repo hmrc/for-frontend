@@ -23,9 +23,9 @@ import java.util.Locale
 /**
   * @author Yuriy Tumakha
   */
-object DateUtil {
+object DateUtil:
 
-  val ukTimezone: ZoneId = ZoneId.of("Europe/London")
+  private val ukTimezone: ZoneId = ZoneId.of("Europe/London")
 
   private val dayMonthYearExampleFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy", Locale.UK)
   private val monthYearExampleFormatter: DateTimeFormatter    = DateTimeFormatter.ofPattern("M yyyy", Locale.UK)
@@ -40,5 +40,3 @@ object DateUtil {
 
   def exampleMonthYear(minusYears: Int): String =
     nowInUK.minusYears(minusYears).format(monthYearExampleFormatter)
-
-}

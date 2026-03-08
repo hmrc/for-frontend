@@ -23,9 +23,9 @@ import play.api.data.{Form, FormError}
 import utils.FormBindingTestAssertions.*
 import utils.MappingSpecs.*
 
-class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageElevenForm._
+  import PageElevenForm.*
 
   val givenRentFreePeriod: (String, String)   = "rentFreePeriod"                              -> "true"
   val rentFreePeriodLength: (String, String)  = "rentFreePeriodDetails.rentFreePeriodLength"  -> "36"
@@ -162,4 +162,3 @@ class PageElevenMappingSpec extends AnyFlatSpec with should.Matchers {
 
   it should "validate the capital sum received date" in
     validatePastDate("capitalReceivedDetails.paymentDate", pageElevenForm, baseData, ".received")
-}

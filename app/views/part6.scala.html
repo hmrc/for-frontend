@@ -101,13 +101,12 @@
     @govukRadios(
       Radios(
         name = "leaseAgreementType",
-        items = EnumOptions.options(LeaseAgreementTypes).map(radioItem => {
+        items = LeaseAgreementType.values.toIndexedSeq.map(leaseAgreement =>
           RadioItem(
-            content = Text(radioItem._2),
-            checked = radioItem._1.equals(theForm("leaseAgreementType").value.getOrElse("")),
-            value = Option(radioItem._1)
+            content = Text(messages(s"leaseAgreementTypes.$leaseAgreement")),
+            checked = theForm("leaseAgreementType").value.contains(leaseAgreement.toString),
+            value = Option(leaseAgreement.toString)
           )
-        }
         ),
         hint = Hint(content = HtmlContent(messages("hint.leaseAgreementType"))),
         classes = "radio-button-that-show-hides",
@@ -334,9 +333,8 @@
               <div class="govuk-hint">@messages("hint.writtenAgreement.steppedDetailsYear" + labelSuffix)</div>
 
             <hr/>
-            @defining(theForm("writtenAgreement.steppedDetails").indexes.size) { size =>
-              @_root_.template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
+              @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
                 @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {
 
@@ -383,7 +381,7 @@
                 }
 
               }
-            }
+
             <p class="govuk-body">
               <a href="#" class="add-multi-fields hide-if-no-js govuk-link govuk-body" >@messages("label.add.steppedRent")</a>
             </p>

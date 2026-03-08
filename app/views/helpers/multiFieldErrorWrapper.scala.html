@@ -16,7 +16,7 @@
 
 @(fields: Seq[Field], id: String, showGroupedError: Boolean, classes: String* )(content: Html)(implicit messages: Messages)
 
-@defining(_root_.template.HtmlSupport.getErrors(fields)) { combinedErrors =>
+@defining(template.HtmlSupport.getErrors(fields)) { combinedErrors =>
 
     <div id="@id.replace('.', '_')" class="@classes.mkString(" ") @if(combinedErrors.nonEmpty && showGroupedError) { govuk-form-group--error }">
         @if(combinedErrors.nonEmpty && showGroupedError) {

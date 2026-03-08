@@ -31,25 +31,22 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class HodSubmissionConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit ec: ExecutionContext) extends SubmissionConnector {
+class HodSubmissionConnector @Inject() (config: ServicesConfig, http: ForHttp)(using ec: ExecutionContext) extends SubmissionConnector:
 
   val serviceUrl: String = config.baseUrl("for-hod-adapter")
 
-  def submit(refNum: String, submission: Submission)(implicit hc: HeaderCarrier): Future[Unit] =
+  def submit(refNum: String, submission: Submission)(using hc: HeaderCarrier): Future[Unit] =
     http.put(s"$serviceUrl/for/submissions/$refNum", submission).map(_ => ())
 
-  def submit(refNum: String, submission: JsValue)(implicit hc: HeaderCarrier): Future[Result] =
+  def submit(refNum: String, submission: JsValue)(using hc: HeaderCarrier): Future[Result] =
     http.put(s"$serviceUrl/for/submissions/$refNum", submission) map { r =>
       Result(ResponseHeader(r.status), HttpEntity.Streamed(Source.single(ByteString(Option(r.body).getOrElse(""))), None, None))
     }
 
-  override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(implicit hc: HeaderCarrier): Future[Unit] =
+  override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(using hc: HeaderCarrier): Future[Unit] =
     http.put(s"$serviceUrl/for/submissions/notConnected/${submission.id}", submission).map(_ => ())
 
-}
-
 @ImplementedBy(classOf[HodSubmissionConnector])
-trait SubmissionConnector {
-  def submit(refNum: String, submisson: Submission)(implicit hc: HeaderCarrier): Future[Unit]
-  def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(implicit hc: HeaderCarrier): Future[Unit]
-}
+trait SubmissionConnector:
+  def submit(refNum: String, submission: Submission)(using hc: HeaderCarrier): Future[Unit]
+  def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(using hc: HeaderCarrier): Future[Unit]

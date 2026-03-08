@@ -17,13 +17,13 @@
 package models.pages
 
 import connectors.{Document, Page}
-import models.serviceContracts.submissions.OccupierTypeIndividuals
+import models.serviceContracts.submissions.OccupierType
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import util.DateUtil.nowInUK
 
-class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues {
+class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues:
 
   val pages: Seq[Page] = Seq(
     Page(
@@ -41,7 +41,6 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
       9,
       Map(
         "totalRent.annualRentExcludingVat" -> Seq("10000"),
-        "totalRent.rentLengthType"         -> Seq("quarterly"),
         "totalRent.SomethingForTest"       -> Seq("testing value"),
         "rentBecomePayable.day"            -> Seq("20"),
         "rentBecomePayable.month"          -> Seq("12"),
@@ -71,11 +70,9 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
 
     summary.theProperty                    shouldBe defined
     summary.theProperty.value.propertyType shouldBe "hotel"
-    summary.theProperty.value.occupierType shouldBe OccupierTypeIndividuals
+    summary.theProperty.value.occupierType shouldBe OccupierType.individuals
 
     summary.rent                        shouldBe defined
     summary.rent.value.totalRent.amount shouldBe BigDecimal("10000")
 
   }
-
-}

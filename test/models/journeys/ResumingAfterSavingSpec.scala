@@ -19,12 +19,13 @@ package models.journeys
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.SummaryBuilder._
+import utils.SummaryBuilder.*
 import models.pages.Summary
 import org.scalatest.prop.{TableFor1, TableFor2}
 
-class ResumingAfterSavingSpec extends AnyFlatSpec with should.Matchers with TableDrivenPropertyChecks {
-  import TestData._
+class ResumingAfterSavingSpec extends AnyFlatSpec with should.Matchers with TableDrivenPropertyChecks:
+
+  import TestData.*
 
   behavior of "Page to resume at"
 
@@ -41,7 +42,7 @@ class ResumingAfterSavingSpec extends AnyFlatSpec with should.Matchers with Tabl
   it should "return to page one when it has been made invalid by editing when resuming complete but undeclared submissions" in
     assert(Journey.pageToResumeAt(completeShortPathJourneyWithEditedPageOne) === PageToGoTo(1))
 
-  object TestData {
+  object TestData:
     val completeJourneys: TableFor1[Summary] = Table("journey", completeShortPathJourney, completeFullPathJourney)
 
     val incompleteJourneys: TableFor2[Summary, Int] = Table(
@@ -50,5 +51,3 @@ class ResumingAfterSavingSpec extends AnyFlatSpec with should.Matchers with Tabl
       (incompletePageFourJourney, 4),
       (incompletePageFourteenJourney, 14)
     )
-  }
-}

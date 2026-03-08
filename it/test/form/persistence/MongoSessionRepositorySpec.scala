@@ -20,17 +20,17 @@ import java.util.UUID
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{Json, OFormat}
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import MongoSessionRepositorySpecData._
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits, Injecting}
+import MongoSessionRepositorySpecData.*
 import org.scalatest.OptionValues
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureAwaits with DefaultAwaitTimeout with GuiceOneAppPerSuite {
+class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureAwaits with DefaultAwaitTimeout with GuiceOneAppPerSuite with Injecting:
 
-  def mongoSessionRepository(): MongoSessionRepository = app.injector.instanceOf[MongoSessionRepository]
+  def mongoSessionRepository(): MongoSessionRepository = inject[MongoSessionRepository]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure(Map("metrics.enabled" -> false)).build()
 
   "Mongo session repository" should {
@@ -64,12 +64,7 @@ class MongoSessionRepositorySpec extends PlaySpec with OptionValues with FutureA
     }
   }
 
-}
-
 case class MongoSessionRepositorySpecData(name: String, buildingNumber: Int)
 
-object MongoSessionRepositorySpecData {
-
+object MongoSessionRepositorySpecData:
   implicit val format: OFormat[MongoSessionRepositorySpecData] = Json.format[MongoSessionRepositorySpecData]
-
-}

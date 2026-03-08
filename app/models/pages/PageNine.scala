@@ -16,7 +16,7 @@
 
 package models.pages
 
-import models._
+import models.*
 import models.serviceContracts.submissions.RentBaseType
 
 import java.time.LocalDate

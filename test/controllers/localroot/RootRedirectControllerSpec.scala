@@ -25,7 +25,7 @@ import play.api.test.{FakeRequest, Injecting}
 /**
   * @author Yuriy Tumakha
   */
-class RootRedirectControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with Injecting {
+class RootRedirectControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with Injecting:
 
   private val fakeRequest = FakeRequest("GET", "/")
   private val controller  = inject[RootRedirectController]
@@ -37,5 +37,3 @@ class RootRedirectControllerSpec extends AnyWordSpec with Matchers with GuiceOne
       redirectLocation(result) shouldBe Some(controllers.routes.ApplicationController.index.url)
     }
   }
-
-}

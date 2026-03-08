@@ -32,19 +32,19 @@ class MongoSessionRepository @Inject() (
   config: Configuration,
   mongo: MongoComponent,
   timestampSupport: TimestampSupport
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends MongoCacheRepository(
     mongoComponent = mongo,
     collectionName = "sessionFormData",
     ttl = Duration(config.get[Long]("session.timeoutSeconds"), SECONDS),
     timestampSupport = timestampSupport,
     cacheIdType = SimpleCacheId
-  ) {
+  ):
 
-  def fetchAndGetEntry[T](cacheId: String, key: String)(implicit rds: Reads[T]): Future[Option[T]] =
+  def fetchAndGetEntry[T](cacheId: String, key: String)(using rds: Reads[T]): Future[Option[T]] =
     get[T](cacheId)(DataKey(key))
 
-  def cache[A](cacheId: String, formKey: String, body: A)(implicit wts: Writes[A]): Future[CacheItem] =
+  def cache[A](cacheId: String, formKey: String, body: A)(using wts: Writes[A]): Future[CacheItem] =
     put(cacheId)(DataKey(formKey), body)
 
   def removeCache(cacheId: String): Future[Unit] =
@@ -52,5 +52,3 @@ class MongoSessionRepository @Inject() (
 
   def remove(cacheId: String, key: String): Future[Unit] =
     delete(cacheId)(DataKey(key))
-
-}

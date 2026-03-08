@@ -29,82 +29,68 @@ import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 
-class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
+class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
 
   import TestData.*
 
   behavior of "Submission builder"
 
-  it should "build submissions from in-progress documents" in
-    assert(new DefaultSubmissionBuilder().build(doc1) === submission1)
-
-  it should "leave pages as none where there is no data for them" in
-    assert(new DefaultSubmissionBuilder().build(doc2) === submission2)
-
-  it should "assign the correct data to the correct page, no matter what order the pages are supplied in" in
-    assert(new DefaultSubmissionBuilder().build(doc3) === submission1)
-
-  it should "parse a verbal lease agreement when page six is a verbal agreement" in
-    assert(new DefaultSubmissionBuilder().build(docWithVerbalAgreement) === submissionWithVerbalAgreement)
-
-  /*  it should "calculate an annual rent from a weekly rent when mapping rent" in {
-    val sub = SubmissionBuilder.build(docWithWeeklyRent)
-    val annualRent = sub.rent.flatMap(_.annualRentExcludingVat).value
-    assert(annualRent === 5200)
+  it should "build submissions from in-progress documents" in {
+    DefaultSubmissionBuilder().build(doc1) shouldBe submission1
   }
 
-  it should "calculate an annual rent from a monthly rent when mapping rent" in {
-    val sub = SubmissionBuilder.build(docWithMonthlyRent)
-    val annualRent = sub.rent.flatMap(_.annualRentExcludingVat).value
-    assert(annualRent === 60000)
+  it should "leave pages as none where there is no data for them" in {
+    DefaultSubmissionBuilder().build(doc2) shouldBe submission2
   }
 
-  it should "calculate an annual rent from a quarterly rent when mapping rent" in {
-    val sub = SubmissionBuilder.build(docWithQuarterlyRent)
-    val annualRent = sub.rent.flatMap(_.annualRentExcludingVat).value
-    assert(annualRent === 1000)
-  }*/
+  it should "assign the correct data to the correct page, no matter what order the pages are supplied in" in {
+    DefaultSubmissionBuilder().build(doc3) shouldBe submission1
+  }
+
+  it should "parse a verbal lease agreement when page six is a verbal agreement" in {
+    DefaultSubmissionBuilder().build(docWithVerbalAgreement) shouldBe submissionWithVerbalAgreement
+  }
 
   it should "create ndr and water charges services if their details are supplied" in {
-    val sub      = new DefaultSubmissionBuilder().build(docWithNdrChargesAndWaterCharges)
+    val sub      = DefaultSubmissionBuilder().build(docWithNdrChargesAndWaterCharges)
     val services = sub.responsibilities.get.includedServicesDetails
     assert(services.exists(s => s.chargeDescription == "Non-domestic Rates" && s.chargeCost == 41.23))
     assert(services.exists(s => s.chargeDescription == "Water Charges" && s.chargeCost == 456.76))
   }
 
   it should "map overriden property address as tenants address when tenants address is main property address and main property address has been overriden" in {
-    val sub = new DefaultSubmissionBuilder().build(docWithTenantsPropertyAddressAndOverridenMainAddress)
-    assert(sub.sublet.map(_.sublets.head.tenantAddress).value === tenantsPropertyAddress)
+    val sub = DefaultSubmissionBuilder().build(docWithTenantsPropertyAddressAndOverriddenMainAddress)
+    sub.sublet.map(_.sublets.head.tenantAddress).value shouldBe tenantsPropertyAddress
   }
 
   it should "set occupier name as 'Nobody' if the property is not occupied" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeNobody.name))
-    val sub = new DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    assert(sub.theProperty.flatMap(_.occupierName).value === "Nobody")
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.nobody.toString))
+    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
+    sub.theProperty.flatMap(_.occupierName).value shouldBe "Nobody"
   }
 
   it should "set occupier name as first 50 chars of (company name + contact name) if a company occupies the property" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeCompany.name))
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.company.toString))
       .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
       .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
-    val sub = new DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    assert(sub.theProperty.flatMap(_.occupierName).value === "Jimmy Choo Enterprise Integration Ventures - Kyle ")
+    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
+    sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo Enterprise Integration Ventures - Kyle "
   }
 
   it should "set occupier name as main occupier's name if 'one or more individuals' occupies the property" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeIndividuals.name))
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.individuals.toString))
       .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
-    val sub = new DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    assert(sub.theProperty.flatMap(_.occupierName).value === "Jimmy Choo")
+    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
+    sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo"
   }
 
   it should "remove all non-short path information if the user is on the short path (they may have previoysly been on a different path)" in {
     val fullSubmission       = doc1
     val convertedToShortPath = fullSubmission.add(Page(3, page3ShortPath))
-    val sub                  = new DefaultSubmissionBuilder().build(convertedToShortPath)
+    val sub                  = DefaultSubmissionBuilder().build(convertedToShortPath)
     assert(sub.landlord.isEmpty)
     assert(sub.lease.isEmpty)
     assert(sub.rentReviews.isEmpty)
@@ -117,114 +103,12 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     assert(sub.otherFactors.isEmpty)
   }
 
-  object TestData {
-    lazy val tenantsPropertyAddress: Address = Address("1", Some("The Street"), Some("worthing"), "AA11 1AA")
+  object TestData:
+    val tenantsPropertyAddress: Address = Address("1", Some("The Street"), Some("worthing"), "AA11 1AA")
 
-    lazy val doc1: Document = Document(
-      "refNum1",
-      nowInUK,
-      Seq(
-        Page(1, page1FormData),
-        Page(2, page2FormData),
-        Page(3, page3FormData),
-        Page(4, page4FormData),
-        Page(5, page5FormData),
-        Page(6, page6FormData),
-        Page(7, page7FormData),
-        Page(8, page8FormData),
-        Page(9, page9FormData),
-        Page(10, page10FormData),
-        Page(11, page11FormData),
-        Page(12, page12FormData),
-        Page(13, page13FormData),
-        Page(14, page14FormData)
-      ),
-      address = Some(defaultAddress)
-    )
+    val page1FormData: Map[String, Seq[String]] = Map("isAddressCorrect" -> Seq("true"))
 
-    lazy val docWithVerbalAgreement: Document = Document(
-      "refNum1",
-      nowInUK,
-      Seq(
-        Page(1, page1FormData),
-        Page(2, page2FormData),
-        Page(3, page3FormData),
-        Page(4, page4FormData),
-        Page(5, page5FormData),
-        Page(6, page6VerbalData),
-        Page(7, page7FormData),
-        Page(8, page8FormData),
-        Page(9, page9FormData),
-        Page(10, page10FormData),
-        Page(11, page11FormData),
-        Page(12, page12FormData),
-        Page(13, page13FormData),
-        Page(14, page14FormData)
-      ),
-      address = Some(defaultAddress)
-    )
-    lazy val docWithWeeklyRent: Document      = doc1.add(Page(9, page9WeeklyRentData))
-    lazy val docWithMonthlyRent: Document     = doc1.add(Page(9, page9MonthlyRentData))
-    lazy val docWithQuarterlyRent: Document   = doc1.add(Page(9, page9QuarterlyRentData))
-
-    lazy val docWithNdrChargesAndWaterCharges: Document = doc1.add(Page(12, page12NdrAndWaterChargesData))
-
-    lazy val docWithTenantsPropertyAddressAndOverridenMainAddress: Document   = doc1.add(Page(1, page1AlternativeAddressData))
-      .add(Page(4, page4TenantsPropertyAddressData))
-    lazy val docWithTenantsPropertyAddressAndNoOverridenMainAddress: Document = doc1.add(Page(4, page4TenantsPropertyAddressData))
-
-    lazy val submission1: Submission                   = Submission(
-      propertyAddress,
-      Some(customerDetails),
-      Some(theProperty),
-      Some(sublet),
-      Some(landlord),
-      Some(leaseOrAgreement),
-      Some(rentReviews),
-      Some(rentAgreement),
-      Some(rent),
-      Some(whatRentIncludes),
-      Some(incentivesAndPayments),
-      Some(responsibilities),
-      Some(propertyAlterations),
-      Some(otherFactors),
-      referenceNumber = Some("refNum1")
-    )
-    lazy val submissionWithVerbalAgreement: Submission = submission1.copy(lease = Some(verbalLease))
-    lazy val doc2: Document                            = doc1.copy(pages = doc1.pages.take(10))
-
-    lazy val submission2: Submission = submission1.copy(
-      incentives = None,
-      responsibilities = None,
-      alterations = None,
-      otherFactors = None,
-      referenceNumber = Some("refNum1")
-    )
-
-    lazy val doc3: Document                          = Document(
-      "refNum1",
-      nowInUK,
-      Seq(
-        Page(1, page1FormData),
-        Page(11, page11FormData),
-        Page(3, page3FormData),
-        Page(4, page4FormData),
-        Page(5, page5FormData),
-        Page(7, page7FormData),
-        Page(8, page8FormData),
-        Page(2, page2FormData),
-        Page(9, page9FormData),
-        Page(10, page10FormData),
-        Page(12, page12FormData),
-        Page(13, page13FormData),
-        Page(6, page6FormData),
-        Page(14, page14FormData)
-      ),
-      address = Some(defaultAddress)
-    )
-    lazy val page1FormData: Map[String, Seq[String]] = Map("isAddressCorrect" -> Seq("true"))
-
-    lazy val page1AlternativeAddressData: Map[String, Seq[String]] = Map(
+    val page1AlternativeAddressData: Map[String, Seq[String]] = Map(
       "isAddressCorrect"           -> Seq("false"),
       "address.buildingNameNumber" -> Seq("1"),
       "address.street1"            -> Seq("The Street"),
@@ -232,7 +116,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "address.postcode"           -> Seq("AA11 1AA")
     )
 
-    lazy val page2FormData: Map[String, Seq[String]] = Map(
+    val page2FormData: Map[String, Seq[String]] = Map(
       "fullName"              -> Seq("fn"),
       "userType"              -> Seq("occupier"),
       "contactDetails.email1" -> Seq("abc@mailinator.com"),
@@ -241,7 +125,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
 
     val p3ks: PageThreeForm.Keys = PageThreeForm.keys
 
-    lazy val page3FormData: Map[String, Seq[String]] = Map(
+    val page3FormData: Map[String, Seq[String]] = Map(
       p3ks.propertyType                   -> Seq("Stuff"),
       p3ks.occupierType                   -> Seq("individuals"),
       p3ks.mainOccupierName               -> Seq("Mike Ington"),
@@ -253,7 +137,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       p3ks.noRentDetails                  -> Seq("Coz I live with my rents!")
     )
 
-    lazy val page3ShortPath: Map[String, Seq[String]] = Map(
+    val page3ShortPath: Map[String, Seq[String]] = Map(
       p3ks.propertyType                   -> Seq("Stuff"),
       p3ks.occupierType                   -> Seq("individuals"),
       p3ks.mainOccupierName               -> Seq("Mike Ington"),
@@ -265,7 +149,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       p3ks.noRentDetails                  -> Seq("Coz I live with my rents!")
     )
 
-    lazy val page4FormData: Map[String, Seq[String]] = Map(
+    val page4FormData: Map[String, Seq[String]] = Map(
       "propertyIsSublet"                           -> Seq("true"),
       "sublet[0].tenantFullName"                   -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" -> Seq("Some Company"),
@@ -280,7 +164,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "sublet[0].rentFixedDate.year"               -> Seq("2011")
     )
 
-    lazy val page4WeeklySubletRentData: Map[String, Seq[String]] = Map(
+    val page4WeeklySubletRentData: Map[String, Seq[String]] = Map(
       "propertyIsSublet"                           -> Seq("true"),
       "sublet[0].tenantFullName"                   -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" -> Seq("Some Company"),
@@ -295,7 +179,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "sublet[0].rentFixedDate.year"               -> Seq("2011")
     )
 
-    lazy val page4TenantsPropertyAddressData: Map[String, Seq[String]] = Map(
+    val page4TenantsPropertyAddressData: Map[String, Seq[String]] = Map(
       "propertyIsSublet"                           -> Seq("true"),
       "sublet[0].tenantFullName"                   -> Seq("Jake Smythe"),
       "sublet[0].tenantAddress.buildingNameNumber" -> Seq("1"),
@@ -310,7 +194,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "sublet[0].rentFixedDate.year"               -> Seq("2011")
     )
 
-    lazy val page5FormData: Map[String, Seq[String]] = Map(
+    val page5FormData: Map[String, Seq[String]] = Map(
       "landlordFullName"                   -> Seq("Graham Goose"),
       "landlordAddress.buildingNameNumber" -> Seq("Some Company"),
       "landlordAddress.street1"            -> Seq("Some Road"),
@@ -321,7 +205,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "landlordConnectText"                -> Seq("magic")
     )
 
-    lazy val page6FormData: Map[String, Seq[String]] = Map(
+    val page6FormData: Map[String, Seq[String]] = Map(
       "leaseAgreementType"                                -> Seq("leaseTenancy"),
       "writtenAgreement.leaseAgreementHasBreakClause"     -> Seq("true"),
       "writtenAgreement.breakClauseDetails"               -> Seq("adjf asdklfj a;sdljfa dsflk"),
@@ -340,7 +224,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "writtenAgreement.leaseLength.months"               -> Seq("2")
     )
 
-    lazy val page6VerbalData: Map[String, Seq[String]] = Map(
+    val page6VerbalData: Map[String, Seq[String]] = Map(
       "leaseAgreementType"                 -> Seq("verbal"),
       "verbalAgreement.startDate.month"    -> Seq("5"),
       "verbalAgreement.startDate.year"     -> Seq("2011"),
@@ -349,7 +233,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "verbalAgreement.leaseLength.months" -> Seq("2")
     )
 
-    lazy val page7FormData: Map[String, Seq[String]] = Map(
+    val page7FormData: Map[String, Seq[String]] = Map(
       "leaseContainsRentReviews"                                           -> Seq("true"),
       "rentReviewDetails.reviewIntervalType"                               -> Seq("every3Years"),
       "rentReviewDetails.reviewIntervalTypeSpecify.years"                  -> Seq(""),
@@ -364,13 +248,12 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "rentReviewDetails.rentReviewResultsDetails.rentFixedBy"             -> Seq("independent")
     )
 
-    lazy val page8FormData: Map[String, Seq[String]] = Map(
+    val page8FormData: Map[String, Seq[String]] = Map(
       "wasRentFixedBetween" -> Seq("true"),
       "rentSetByType"       -> Seq("renewedLease")
     )
 
-    lazy val page9FormData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("monthly"),
+    val page9FormData: Map[String, Seq[String]] = Map(
       "totalRent.annualRentExcludingVat" -> Seq("15588"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -384,8 +267,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "rentBasedOnDetails"               -> Seq("here are some details about what the rent is based on")
     )
 
-    lazy val page9WeeklyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("weekly"),
+    val page9WeeklyRentData: Map[String, Seq[String]] = Map(
       "totalRent.annualRentExcludingVat" -> Seq("100"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -399,8 +281,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "rentBasedOnDetails"               -> Seq("here are some details about what the rent is based on")
     )
 
-    lazy val page9MonthlyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("monthly"),
+    val page9MonthlyRentData: Map[String, Seq[String]] = Map(
       "totalRent.annualRentExcludingVat" -> Seq("5000"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -414,8 +295,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "rentBasedOnDetails"               -> Seq("here are some details about what the rent is based on")
     )
 
-    lazy val page9QuarterlyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("quarterly"),
+    val page9QuarterlyRentData: Map[String, Seq[String]] = Map(
       "totalRent.annualRentExcludingVat" -> Seq("250"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -429,7 +309,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "rentBasedOnDetails"               -> Seq("here are some details about what the rent is based on")
     )
 
-    lazy val page10FormData: Map[String, Seq[String]] = Map(
+    val page10FormData: Map[String, Seq[String]] = Map(
       "parking.annualSeparateParkingDate.month"      -> Seq("6"),
       "parking.annualSeparateParkingDate.year"       -> Seq("2012"),
       "parking.rentIncludeParkingDetails.openSpaces" -> Seq("2"),
@@ -448,7 +328,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "otherProperty"                                -> Seq("true")
     )
 
-    lazy val page11FormData: Map[String, Seq[String]] = Map(
+    val page11FormData: Map[String, Seq[String]] = Map(
       "rentFreePeriod"                              -> Seq("true"),
       "rentFreePeriodDetails.rentFreePeriodLength"  -> Seq("36"),
       "rentFreePeriodDetails.rentFreePeriodDetails" -> Seq("REnt free period alsjfd lasdjf lasjdf la;sdjf lasdjf lasjd flasd jflsa df"),
@@ -462,7 +342,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "capitalReceivedDetails.paymentDate.year"     -> Seq("2010")
     )
 
-    lazy val page12FormData: Map[String, Seq[String]] = Map(
+    val page12FormData: Map[String, Seq[String]] = Map(
       "responsibleOutsideRepairs"                    -> Seq("both"),
       "responsibleInsideRepairs"                     -> Seq("both"),
       "responsibleBuildingInsurance"                 -> Seq("both"),
@@ -473,7 +353,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "includedServicesDetails[0].chargeCost"        -> Seq("78")
     )
 
-    lazy val page12NdrAndWaterChargesData: Map[String, Seq[String]] = Map(
+    val page12NdrAndWaterChargesData: Map[String, Seq[String]] = Map(
       "responsibleOutsideRepairs"                    -> Seq("both"),
       "responsibleInsideRepairs"                     -> Seq("both"),
       "responsibleBuildingInsurance"                 -> Seq("both"),
@@ -486,7 +366,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "includedServicesDetails[0].chargeCost"        -> Seq("78")
     )
 
-    lazy val page13FormData: Map[String, Seq[String]] = Map(
+    val page13FormData: Map[String, Seq[String]] = Map(
       "propertyAlterations"                       -> Seq("false"),
       "propertyAlterationsDetails[0].description" -> Seq("sdfasadsf"),
       "propertyAlterationsDetails[0].cost"        -> Seq(""),
@@ -494,24 +374,24 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
       "propertyAlterationsDetails[0].date.year"   -> Seq("")
     )
 
-    lazy val page14FormData: Map[String, Seq[String]] = Map(
+    val page14FormData: Map[String, Seq[String]] = Map(
       "anyOtherFactors"        -> Seq("false"),
       "anyOtherFactorsDetails" -> Seq("")
     )
 
     val propertyAddress: Option[Address]        = None
     val alternatePropertyAddress: Some[Address] = Some(tenantsPropertyAddress)
-    val customerDetails: CustomerDetails        = CustomerDetails("fn", UserTypeOccupier, ContactDetails("01234567890", "abc@mailinator.com"))
+    val customerDetails: CustomerDetails        = CustomerDetails("fn", UserType.occupier, ContactDetails("01234567890", "abc@mailinator.com"))
 
     val theProperty: TheProperty =
-      TheProperty("Stuff", OccupierTypeIndividuals, Some("Mike Ington"), Some(RoughDate(None, Some(7), 2013)), false, Some(true), None)
+      TheProperty("Stuff", OccupierType.individuals, Some("Mike Ington"), Some(RoughDate(None, Some(7), 2013)), false, Some(true), None)
 
     val sublet: Sublet = Sublet(
       true,
       List(SubletData(
         "Jake Smythe",
         Address("Some Company", Some("Some Road"), None, "AA11 1AA"),
-        SubletPart,
+        SubletType.part,
         Option("basement"),
         "commercial",
         Some(200),
@@ -520,10 +400,10 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     )
 
     val landlord: Landlord =
-      Landlord("Graham Goose", Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionTypeOther, Some("magic"))
+      Landlord("Graham Goose", Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionType.other, Some("magic"))
 
     val leaseOrAgreement: LeaseOrAgreement = LeaseOrAgreement(
-      LeaseAgreementTypesLeaseTenancy,
+      LeaseAgreementType.leaseTenancy,
       Some(true),
       Some("adjf asdklfj a;sdljfa dsflk"),
       Some(true),
@@ -540,17 +420,17 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
         Some(RoughDate(None, Some(4), 2013)),
         true,
         true,
-        Some(RentReviewResultDetails(RoughDate(None, Some(7), 2012), false, Some(RentFixedTypeIndependent)))
+        Some(RentReviewResultDetails(RoughDate(None, Some(7), 2012), false, Some(RentFixedType.independent)))
       ))
     )
-    val rentAgreement: RentAgreement = RentAgreement(true, None, RentSetByTypeRenewedLease)
+    val rentAgreement: RentAgreement = RentAgreement(true, None, RentSetByType.renewedLease)
 
     val rent: Rent = Rent(
       Some(15588),
       LocalDate.of(2013, 11, 1),
       LocalDate.of(2013, 11, 1),
       true,
-      RentBaseTypeOther,
+      RentBaseType.other,
       Some("here are some details about what the rent is based on")
     )
 
@@ -574,9 +454,9 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     )
 
     val responsibilities: Responsibilities       = Responsibilities(
-      ResponsibleBoth,
-      ResponsibleBoth,
-      ResponsibleBoth,
+      ResponsibleType.both,
+      ResponsibleType.both,
+      ResponsibleType.both,
       false,
       false,
       true,
@@ -586,7 +466,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     val otherFactors: OtherFactors               = OtherFactors(false, None)
 
     val verbalLease: LeaseOrAgreement = LeaseOrAgreement(
-      LeaseAgreementTypesVerbal,
+      LeaseAgreementType.verbal,
       None,
       None,
       None,
@@ -597,29 +477,112 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers {
     )
     val defaultAddress: Address       = Address("45", Some("Default Street"), Some("Goring-by-sea"), "AA11 1AA")
 
+    val doc1: Document = Document(
+      "refNum1",
+      nowInUK,
+      Seq(
+        Page(1, page1FormData),
+        Page(2, page2FormData),
+        Page(3, page3FormData),
+        Page(4, page4FormData),
+        Page(5, page5FormData),
+        Page(6, page6FormData),
+        Page(7, page7FormData),
+        Page(8, page8FormData),
+        Page(9, page9FormData),
+        Page(10, page10FormData),
+        Page(11, page11FormData),
+        Page(12, page12FormData),
+        Page(13, page13FormData),
+        Page(14, page14FormData)
+      ),
+      address = Some(defaultAddress)
+    )
+
+    val docWithVerbalAgreement: Document = Document(
+      "refNum1",
+      nowInUK,
+      Seq(
+        Page(1, page1FormData),
+        Page(2, page2FormData),
+        Page(3, page3FormData),
+        Page(4, page4FormData),
+        Page(5, page5FormData),
+        Page(6, page6VerbalData),
+        Page(7, page7FormData),
+        Page(8, page8FormData),
+        Page(9, page9FormData),
+        Page(10, page10FormData),
+        Page(11, page11FormData),
+        Page(12, page12FormData),
+        Page(13, page13FormData),
+        Page(14, page14FormData)
+      ),
+      address = Some(defaultAddress)
+    )
+
+    val docWithWeeklyRent: Document    = doc1.add(Page(9, page9WeeklyRentData))
+    val docWithMonthlyRent: Document   = doc1.add(Page(9, page9MonthlyRentData))
+    val docWithQuarterlyRent: Document = doc1.add(Page(9, page9QuarterlyRentData))
+
+    val docWithNdrChargesAndWaterCharges: Document = doc1.add(Page(12, page12NdrAndWaterChargesData))
+
+    val docWithTenantsPropertyAddressAndOverriddenMainAddress: Document   = doc1.add(Page(1, page1AlternativeAddressData))
+      .add(Page(4, page4TenantsPropertyAddressData))
+    val docWithTenantsPropertyAddressAndNoOverriddenMainAddress: Document = doc1.add(Page(4, page4TenantsPropertyAddressData))
+
+    val submission1: Submission                   = Submission(
+      propertyAddress,
+      Some(customerDetails),
+      Some(theProperty),
+      Some(sublet),
+      Some(landlord),
+      Some(leaseOrAgreement),
+      Some(rentReviews),
+      Some(rentAgreement),
+      Some(rent),
+      Some(whatRentIncludes),
+      Some(incentivesAndPayments),
+      Some(responsibilities),
+      Some(propertyAlterations),
+      Some(otherFactors),
+      referenceNumber = Some("refNum1")
+    )
+    val submissionWithVerbalAgreement: Submission = submission1.copy(lease = Some(verbalLease))
+    val doc2: Document                            = doc1.copy(pages = doc1.pages.take(10))
+
+    val submission2: Submission = submission1.copy(
+      incentives = None,
+      responsibilities = None,
+      alterations = None,
+      otherFactors = None,
+      referenceNumber = Some("refNum1")
+    )
+
+    val doc3: Document = Document(
+      "refNum1",
+      nowInUK,
+      Seq(
+        Page(1, page1FormData),
+        Page(11, page11FormData),
+        Page(3, page3FormData),
+        Page(4, page4FormData),
+        Page(5, page5FormData),
+        Page(7, page7FormData),
+        Page(8, page8FormData),
+        Page(2, page2FormData),
+        Page(9, page9FormData),
+        Page(10, page10FormData),
+        Page(12, page12FormData),
+        Page(13, page13FormData),
+        Page(6, page6FormData),
+        Page(14, page14FormData)
+      ),
+      address = Some(defaultAddress)
+    )
+
     val docsAndSubmissions: TableFor2[Document, Submission] = Table(
       ("doc", "submission"),
       (doc1, submission1),
       (doc2, submission2)
     )
-
-    def assertEqual(x: Submission, y: Submission): Unit = {
-      assert(x.propertyAddress === y.propertyAddress)
-      assert(x.customerDetails === y.customerDetails)
-      assert(x.theProperty === y.theProperty)
-      assert(x.sublet === y.sublet)
-      assert(x.landlord === y.landlord)
-      assert(x.lease === y.lease)
-      assert(x.rentReviews === y.rentReviews)
-      assert(x.rentAgreement === y.rentAgreement)
-      assert(x.rent === y.rent)
-      assert(x.rentIncludes === y.rentIncludes)
-      assert(x.incentives === y.incentives)
-      assert(x.responsibilities === y.responsibilities)
-      assert(x.alterations === y.alterations)
-      assert(x.otherFactors === y.otherFactors)
-      assert(x === y)
-    }
-  }
-
-}

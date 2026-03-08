@@ -22,7 +22,7 @@ import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
 import utils.FormBindingTestAssertions.*
 
-class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageEightMappingSpec extends AnyFlatSpec with should.Matchers:
 
   import PageEightForm._
 
@@ -35,32 +35,31 @@ class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
   def bind(formData: Map[String, String]): Form[RentAgreement] =
     pageEightForm.bind(formData).convertGlobalToFieldErrors()
 
-  def containsError(errors: Seq[FormError], key: String, message: String): Boolean = {
+  def containsError(errors: Seq[FormError], key: String, message: String): Boolean =
     val exists = errors.exists { err =>
       err.key == key && err.messages.contains(message)
     }
-    exists should be(true)
+    exists shouldBe true
     exists
-  }
 
   "PageEightData" should "bind with the fields and not return issues" in {
     val res = bind(baseData)
-    res.errors.isEmpty should be(true)
+    res.errors.isEmpty shouldBe true
   }
 
   "PageEightData" should
     "bind with the fields and return no issues when no value input for the way that rent was fixed, when it is between yourself and landlord" in {
       val data = baseData.updated("wasRentFixedBetween", "true") - "notReviewRentFixed"
       val res  = bind(data)
-      res.errors.isEmpty should be(true)
-      res.errors.size    should be(0)
+      res.errors.isEmpty shouldBe true
+      res.errors.size    shouldBe 0
     }
 
   "PageEightData" should "bind with the fields and return issues when no selection is chosen for if the rent was fixed between you and landlord" in {
     val data = baseData - "wasRentFixedBetween"
     val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
+    res.errors.isEmpty shouldBe false
+    res.errors.size    shouldBe 1
     containsError(res.errors, "wasRentFixedBetween", Errors.wasTheRentFixedBetweenRequired)
   }
 
@@ -74,8 +73,7 @@ class PageEightMappingSpec extends AnyFlatSpec with should.Matchers {
   "PageEightData" should "bind with the fields and return issues when no value input for the way that rent was set" in {
     val data = baseData - "rentSetByType"
     val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
+    res.errors.isEmpty shouldBe false
+    res.errors.size    shouldBe 1
     containsError(res.errors, "rentSetByType", Errors.isThisRentRequired)
   }
-}

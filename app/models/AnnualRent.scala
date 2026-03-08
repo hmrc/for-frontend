@@ -16,4 +16,4 @@
 
 package models
 
-case class AnnualRent(amount: BigDecimal) {}
+case class AnnualRent(amount: BigDecimal)

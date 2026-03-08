@@ -40,19 +40,20 @@ class PageSixController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part6: views.html.part6
-) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[PageSix] = p6f
   val emptyForm: Form[PageSix] = pageSixForm
   val pageNumber: Int          = 6
 
-  def template(form: Form[PageSix], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {
+  def template(form: Form[PageSix], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     val updatedForm: Form[PageSix] = Await.result(
       repository.findById(SessionId(using hc), request.refNum).map { docOpt =>
-        (for {
+        (for
           doc       <- docOpt
           page7     <- doc.page(7)
           pageSeven <- pageSevenForm.bindFromRequest(page7.fields).value
-        } yield form.copy(data = form.data ++ getReviewDatesFromPage7(pageSeven))).getOrElse(form)
+        yield form.copy(data = form.data ++ getReviewDatesFromPage7(pageSeven))).getOrElse(form)
       },
       20 seconds
     )
@@ -63,7 +64,6 @@ class PageSixController @Inject() (
     )
 
     part6(finalForm, summary)
-  }
 
   private def getReviewDatesFromPage7(pageSeven: PageSeven): Map[String, String] =
     Seq(
@@ -72,5 +72,3 @@ class PageSixController @Inject() (
       pageSeven.pageSevenDetails.flatMap(_.lastReviewDate)
         .map("lastReviewDate" -> _.toLocalDate.toString)
     ).flatten.toMap
-
-}

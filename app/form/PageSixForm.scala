@@ -16,26 +16,26 @@
 
 package form
 
-import form.DateMappings._
+import form.DateMappings.*
 import form.Errors.{verbalAgreementStartIsAfterLastReview, verbalAgreementStartIsAfterRentReview}
-import form.MappingSupport._
-import models.pages.{PageSix, _}
-import models.serviceContracts.submissions._
+import form.MappingSupport.*
+import models.pages.{PageSix, VerbalAgreement, WrittenAgreement}
+import models.serviceContracts.submissions.*
 import play.api.data.Forms.{default, localDate, mapping, optional, text, tuple}
-import play.api.data._
+import play.api.data.*
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import uk.gov.voa.play.form.ConditionalMappings._
-import uk.gov.voa.play.form._
+import uk.gov.voa.play.form.ConditionalMappings.*
+import uk.gov.voa.play.form.*
 import util.DateUtil.fullDateFormatter
 
 import java.time.LocalDate
 
-object PageSixForm {
+object PageSixForm:
 
   val keys: Keys = new Keys
 
-  class Keys {
+  class Keys:
     val leaseAgreementType           = "leaseAgreementType"
     val writtenAgreement             = "writtenAgreement"
     val verbalAgreement              = "verbalAgreement"
@@ -49,16 +49,14 @@ object PageSixForm {
     val to                           = "stepTo"
     val amount                       = "amount"
     val rentOpenEnded                = "rentOpenEnded"
-  }
 
-  def toDateIsAfterFromDate: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.toAfterFrom") {
+  private def toDateIsAfterFromDate: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.toAfterFrom") {
     case (stepFrom, stepTo) =>
       val condTo = stepTo.isAfter(stepFrom)
       createFieldConstraintFor(condTo, Errors.toDateIsAfterFromDate, Seq(s"${keys.to}.day"))
-
   }
 
-  def toDateIsAfterTenYears: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.invalidRange") {
+  private def toDateIsAfterTenYears: Constraint[(LocalDate, LocalDate)] = Constraint("constraints.steppedDetails.invalidRange") {
     case (stepFrom, stepTo) =>
       val maxFutureDate = stepFrom.plusYears(10)
 
@@ -73,13 +71,13 @@ object PageSixForm {
         )))
   }
 
-  def noOverlappingSteps: Constraint[WrittenAgreement] = Constraint("constraints.steppedDetails.overlappingSteps") { writtenAgreement =>
+  private def noOverlappingSteps: Constraint[WrittenAgreement] = Constraint("constraints.steppedDetails.overlappingSteps") { writtenAgreement =>
     val steppedDetails = writtenAgreement.steppedDetails
-    lazy val s         = steppedDetails.zipWithIndex.tail.filterNot { p =>
+    val s              = steppedDetails.zipWithIndex.tail.filterNot { p =>
       p._1.stepFrom.isAfter(steppedDetails(p._2 - 1).stepTo) || p._1.stepFrom.isEqual(steppedDetails(p._2 - 1).stepTo)
     }
 
-    lazy val f = s.map { p =>
+    val f = s.map { p =>
       s"steppedDetails[${p._2}].${keys.from}.day"
     }
     createFieldConstraintFor(
@@ -89,7 +87,7 @@ object PageSixForm {
     )
   }
 
-  val steppedDetailsMapping: String => Mapping[SteppedDetails] = (index: String) =>
+  private val steppedDetailsMapping: String => Mapping[SteppedDetails] = (index: String) =>
     mapping(
       index                       -> tuple(
         keys.from -> dateFieldsMapping(s"$index.stepFrom", allowFutureDates = true, fieldErrorPart = ".writtenAgreement.steppedDetails.stepFrom"),
@@ -98,13 +96,13 @@ object PageSixForm {
       (index + "." + keys.amount) -> currencyMapping(".writtenAgreement.steppedDetails.amount")
     )((dates, amount) => SteppedDetails(dates._1, dates._2, amount))(stepped => Some(((stepped.stepFrom, stepped.stepTo), stepped.amount)))
 
-  val written: String = keys.writtenAgreement
+  private val written: String = keys.writtenAgreement
 
-  val steppedDetailsListMapping: Mapping[List[SteppedDetails]] =
+  private val steppedDetailsListMapping: Mapping[List[SteppedDetails]] =
     IndexedMapping(s"$written.steppedDetails", steppedDetailsMapping, alwaysValidateFirstIndex = true)
       .verifying(Errors.tooManySteppedRents, _.length <= 7)
 
-  val writtenAgreementMapping: Mapping[WrittenAgreement] = mapping(
+  private val writtenAgreementMapping: Mapping[WrittenAgreement] = mapping(
     keys.startDate                    -> dateIsAfterAnotherDate(
       dateIsAfterAnotherDate(
         monthYearRoughDateMapping(s"$written.${keys.startDate}", ".writtenAgreement.startDate"),
@@ -131,9 +129,9 @@ object PageSixForm {
     keys.steppedDetails               -> onlyIfTrue(s"$written.${keys.agreementIsStepped}", steppedDetailsListMapping)
   )(WrittenAgreement.apply)(o => Some(Tuple.fromProductTyped(o))).verifying(noOverlappingSteps)
 
-  val verbal: String = keys.verbalAgreement
+  private val verbal: String = keys.verbalAgreement
 
-  val verbalAgreementMapping: Mapping[VerbalAgreement] = mapping(
+  private val verbalAgreementMapping: Mapping[VerbalAgreement] = mapping(
     keys.startDate     -> optional(
       dateIsAfterAnotherDate(
         dateIsAfterAnotherDate(
@@ -149,15 +147,14 @@ object PageSixForm {
     keys.leaseLength   -> mandatoryIfFalse(s"$verbal.${keys.rentOpenEnded}", monthsYearDurationMapping(s"$verbal.${keys.leaseLength}"))
   )(VerbalAgreement.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val writtenAgreements: Seq[String] = Seq(LeaseAgreementTypesLeaseTenancy.name, LeaseAgreementTypesLicenceOther.name)
+  private val writtenAgreements: Seq[String] = Seq(LeaseAgreementType.leaseTenancy.toString, LeaseAgreementType.licenceOther.toString)
 
-  val pageSixMapping: Mapping[PageSix] = mapping(
+  private val pageSixMapping: Mapping[PageSix] = mapping(
     keys.leaseAgreementType -> leaseAgreementTypeMapping,
     keys.writtenAgreement   -> mandatoryIfAnyOf(keys.leaseAgreementType, writtenAgreements, writtenAgreementMapping),
-    keys.verbalAgreement    -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementTypesVerbal.name), verbalAgreementMapping)(using VerbalAgreement()),
+    keys.verbalAgreement    -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementType.verbal.toString), verbalAgreementMapping)(using VerbalAgreement()),
     "lastReviewDate"        -> optional(localDate),
     "rentReviewDate"        -> optional(localDate)
   )(PageSix.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageSixForm: Form[PageSix] = Form(pageSixMapping)
-}

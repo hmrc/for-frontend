@@ -60,9 +60,7 @@ class ApplicationController @Inject() (
   def declaration: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).map {
       case Some(doc) =>
-        val summary  = SummaryBuilder.build(doc)
-        val fullName = summary.customerDetails.map(_.fullName).getOrElse("")
-        val userType = summary.customerDetails.map(_.userType.name).getOrElse("")
+        val summary = SummaryBuilder.build(doc)
 
         val json = Json.obj(Audit.referenceNumber -> request.refNum) ++ Addresses.addressJson(summary)
         audit.sendExplicitAudit("ContinueNextPage", json)(
@@ -70,7 +68,7 @@ class ApplicationController @Inject() (
           ec
         )
 
-        Ok(declarationView(Form(("", text)), fullName, userType, summary: Summary))
+        Ok(declarationView(Form(("", text)), summary))
       case None      => NotFound(errorView(404))
     }
   }
@@ -78,10 +76,8 @@ class ApplicationController @Inject() (
   def declarationError: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).map {
       case Some(doc) =>
-        val summary  = SummaryBuilder.build(doc)
-        val fullName = summary.customerDetails.map(_.fullName).getOrElse("")
-        val userType = summary.customerDetails.map(_.userType.name).getOrElse("")
-        Ok(declarationView(Form(("", text)).withError("declaration", Errors.declaration), fullName, userType, summary))
+        val summary = SummaryBuilder.build(doc)
+        Ok(declarationView(Form(("", text)).withError("declaration", Errors.declaration), summary))
       case None      => NotFound(errorView(404))
     }
   }
