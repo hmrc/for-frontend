@@ -73,7 +73,7 @@
             idPrefix = Option("landlordConnectType"),
             items = LandlordConnectionType.values.toIndexedSeq.map(landlordConnection =>
                 RadioItem(
-                    content = Text(messages(s"landlordConnectType.$landlordConnection")),
+                    content = Text(messages(s"landlordConnectionType.$landlordConnection")),
                     checked = theForm("landlordConnectType").value.contains(landlordConnection.toString),
                     value   = Option(landlordConnection.toString)
                 )

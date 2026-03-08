@@ -16,18 +16,18 @@
 
 package form
 
+import form.ConditionalMapping.*
+import form.Scala3EnumFieldMapping.enumMappingRequired
+import jakarta.mail.internet.InternetAddress
 import models.*
 import models.serviceContracts.submissions.*
 import play.api.data.Forms.*
 import play.api.data.validation.*
-import play.api.data.{FormError, Forms, Mapping}
-import ConditionalMapping.*
-import form.Scala3EnumFieldMapping.enumMappingRequired
 import play.api.data.validation.Constraints.{maxLength, minLength, nonEmpty, pattern}
+import play.api.data.{FormError, Forms, Mapping}
 
-import javax.mail.internet.InternetAddress
-import scala.util.{Success, Try}
 import scala.util.matching.Regex
+import scala.util.{Success, Try}
 
 object MappingSupport:
 
