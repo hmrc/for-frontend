@@ -19,7 +19,7 @@ package connectors
 import com.google.inject.ImplementedBy
 import controllers.toFut
 import crypto.MongoHasher
-import models.serviceContracts.submissions.{AddressConnectionTypeYes, AddressConnectionTypeYesChangeAddress}
+import models.serviceContracts.submissions.AddressConnectionType
 import models.{Credentials, FORLoginResponse}
 import play.api.libs.json.{Format, JsValue, Json}
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
@@ -78,7 +78,7 @@ class DefaultHODConnector @Inject() (
         if isAddressCorrect.contains("false") then
           updateChangedAddresToNewModel(doc, page1)
         else
-          val page0 = Page(0, form.PageZeroForm.pageZeroForm.fill(AddressConnectionTypeYes).data.view.mapValues(Seq(_)).toMap)
+          val page0 = Page(0, form.PageZeroForm.pageZeroForm.fill(AddressConnectionType.yes).data.view.mapValues(Seq(_)).toMap)
           updateDocWithPageZeroAndRemovePageOne(doc, page0)
     fixedDocument.orElse(maybeDocument)
 
@@ -92,7 +92,7 @@ class DefaultHODConnector @Inject() (
 
     val newPage1 = page1.copy(fields = page1Data)
 
-    val page0 = Page(0, form.PageZeroForm.pageZeroForm.fill(AddressConnectionTypeYesChangeAddress).data.view.mapValues(Seq(_)).toMap)
+    val page0 = Page(0, form.PageZeroForm.pageZeroForm.fill(AddressConnectionType.`yes-change-address`).data.view.mapValues(Seq(_)).toMap)
 
     val newPages = Seq(page0, newPage1) ++ document.pages.filterNot(x => x.pageNumber == 0 || x.pageNumber == 1)
 

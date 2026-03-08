@@ -22,7 +22,7 @@ import controllers.feedback.Survey
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import models.pages.{NotConnectedSummary, Summary, SummaryBuilder}
 import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission, PreviouslyConnected}
-import models.{Addresses, NotConnectedJourney}
+import models.{Addresses, JourneyName}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.Logging
@@ -98,7 +98,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
 
   def onConfirmationView: Action[AnyContent] = refNumAction.async { implicit request =>
     val feedbackForm = Survey.completedFeedbackForm.bind(
-      Map("journey" -> NotConnectedJourney.name, "surveyUrl" -> request.uri)
+      Map("journey" -> JourneyName.notConnected.name, "surveyUrl" -> request.uri)
     ).discardingErrors
 
     findSummary.flatMap { summary =>

@@ -16,24 +16,13 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum UserType:
 
-sealed trait LeaseAgreementType extends NamedEnum {
-  val key = "leaseAgreementTypes"
-}
-
-object LeaseAgreementTypesVerbal extends LeaseAgreementType {
-  val name = "verbal"
-}
-
-object LeaseAgreementTypesLeaseTenancy extends LeaseAgreementType {
-  val name = "leaseTenancy"
-}
-
-object LeaseAgreementTypesLicenceOther extends LeaseAgreementType {
-  val name = "licenceOther"
-}
-
-object LeaseAgreementTypes extends NamedEnumSupport[LeaseAgreementType] {
-  val all: List[LeaseAgreementType] = List(LeaseAgreementTypesLeaseTenancy, LeaseAgreementTypesLicenceOther, LeaseAgreementTypesVerbal)
-}
+  case occupier,
+    owner,
+    occupiersAgent,
+    ownersAgent,
+    vacated

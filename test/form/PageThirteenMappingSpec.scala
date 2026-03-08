@@ -18,7 +18,7 @@ package form
 
 import form.PageThirteenForm.pageThirteenForm
 import models.*
-import models.serviceContracts.submissions.{AlterationSetByTypeAddLift, AlterationSetByTypeExtension, PropertyAlterations, PropertyAlterationsDetails}
+import models.serviceContracts.submissions.{AlterationSetByType, PropertyAlterations, PropertyAlterationsDetails}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
@@ -170,16 +170,16 @@ class PageThirteenMappingSpec extends AnyFlatSpec with should.Matchers:
   val with10Alterations: PropertyAlterations = PropertyAlterations(
     true,
     List(
-      PropertyAlterationsDetails(RoughDate(None, Some(6), 1902), AlterationSetByTypeExtension, 5.5),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25),
-      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByTypeAddLift, 25)
+      PropertyAlterationsDetails(RoughDate(None, Some(6), 1902), AlterationSetByType.extension, 5.5),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25),
+      PropertyAlterationsDetails(RoughDate(None, Some(5), 2011), AlterationSetByType.addLift, 25)
     ),
     Some(false)
   )

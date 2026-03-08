@@ -22,6 +22,7 @@ import play.api.data.Forms.*
 import play.api.data.validation.*
 import play.api.data.{FormError, Forms, Mapping}
 import ConditionalMapping.*
+import form.Scala3EnumFieldMapping.enumMappingRequired
 import play.api.data.validation.Constraints.{maxLength, minLength, nonEmpty, pattern}
 
 import javax.mail.internet.InternetAddress
@@ -67,33 +68,31 @@ object MappingSupport:
       .verifying(message, _.isDefined)
       .transform(_.getOrElse(false), Some(_))
 
-  import Formats.*
-
-  val postcodeRegex                                                  =
+  val postcodeRegex      =
     """(GIR ?0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKPSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) ?[0-9][A-Z-[CIKMOV]]{2})""" // scalastyle:ignore
-  val phoneRegex                                                     = """^^[0-9\s\+()-]+$"""
-  val userType: Mapping[UserType]                                    = Forms.of[UserType]
-  val contactAddressType: Mapping[ContactAddressType]                = Forms.of[ContactAddressType]
-  val propertyType: Mapping[PropertyType]                            = Forms.of[PropertyType]
-  val occupierType: Mapping[OccupierType]                            = Forms.of[OccupierType]
-  val landlordConnectionType: Mapping[LandlordConnectionType]        = Forms.of[LandlordConnectionType]
-  val leaseAgreementTypeMapping: Mapping[LeaseAgreementType]         = Forms.of[LeaseAgreementType]
-  val reviewIntervalTypeMapping: Mapping[ReviewIntervalType]         = Forms.of[ReviewIntervalType]
-  val rentFixedByTypeMapping: Mapping[RentFixedType]                 = Forms.of[RentFixedType]
-  val rentBaseTypeMapping: Mapping[RentBaseType]                     = Forms.of[RentBaseType]
-  val notReviewRentFixedTypeMapping: Mapping[NotReviewRentFixedType] = Forms.of[NotReviewRentFixedType]
-  val rentSetByTypeMapping: Mapping[RentSetByType]                   = Forms.of[RentSetByType]
+  private val phoneRegex = """^^[0-9\s\+()-]+$"""
 
-  val responsibleTypeMapping: Mapping[ResponsibleType] = Forms.of[ResponsibleType]
+  val userType: Mapping[UserType]                                    = enumMappingRequired(UserType, Errors.userTypeRequired)
+  val occupierType: Mapping[OccupierType]                            = enumMappingRequired(OccupierType, Errors.occupierTypeRequired)
+  val landlordConnectionType: Mapping[LandlordConnectionType]        = enumMappingRequired(LandlordConnectionType, Errors.LandlordConnectionTypeRequired)
+  val leaseAgreementTypeMapping: Mapping[LeaseAgreementType]         = enumMappingRequired(LeaseAgreementType, Errors.leaseAgreementTypeRequired)
+  val reviewIntervalTypeMapping: Mapping[ReviewIntervalType]         = enumMappingRequired(ReviewIntervalType, Errors.rentReviewFrequencyRequired)
+  val rentFixedByTypeMapping: Mapping[RentFixedType]                 = enumMappingRequired(RentFixedType, Errors.rentFixedByRequired)
+  val rentBaseTypeMapping: Mapping[RentBaseType]                     = enumMappingRequired(RentBaseType, Errors.rentBasedOnRequired)
+  val notReviewRentFixedTypeMapping: Mapping[NotReviewRentFixedType] = enumMappingRequired(NotReviewRentFixedType, Errors.whoWasTheRentFixedBetweenRequired)
+  val rentSetByTypeMapping: Mapping[RentSetByType]                   = enumMappingRequired(RentSetByType, Errors.isThisRentRequired)
+  val responsibleOutsideRepairsMapping: Mapping[ResponsibleType]     = enumMappingRequired(ResponsibleType, Errors.responsibleOutsideRepairsRequired)
+  val responsibleInsideRepairsMapping: Mapping[ResponsibleType]      = enumMappingRequired(ResponsibleType, Errors.responsibleInsideRepairsRequired)
+  val responsibleBuildingInsuranceMapping: Mapping[ResponsibleType]  = enumMappingRequired(ResponsibleType, Errors.responsibleBuildingInsuranceRequired)
+  val addressConnectionType: Mapping[AddressConnectionType]          = enumMappingRequired(AddressConnectionType, Errors.isConnectedError)
+  val alterationSetByTypeMapping: Mapping[AlterationSetByType]       = enumMappingRequired(AlterationSetByType, Errors.whichWorksWereDoneRequired)
+  val subletTypeMapping: Mapping[SubletType]                         = enumMappingRequired(SubletType, Errors.subletTypeRequired)
+  val satisfactionMapping: Mapping[Satisfaction]                     = enumMappingRequired(Satisfaction, Errors.noValueSelected)
+  val journeyMapping: Mapping[JourneyName]                           = enumMappingRequired(JourneyName, Errors.noValueSelected)
 
-  val contactAddressTypeMapping: Mapping[ContactAddressType]   = Forms.of[ContactAddressType]
-  val rentLengthType: Mapping[RentLengthType]                  = Forms.of[RentLengthType]
-  val postcode: Mapping[String]                                = PostcodeMapping.postcode()
-  val loginPostcode: Mapping[String]                           = PostcodeMapping.postcode(Errors.invalidPostcodeOnLetter, Errors.invalidPostcodeOnLetter)
-  val phoneNumber: Mapping[String]                             = nonEmptyText(maxLength = 20).verifying(Errors.invalidPhone, _.matches(phoneRegex))
-  val addressConnectionType: Mapping[AddressConnectionType]    = Forms.of[AddressConnectionType]
-  val alterationSetByTypeMapping: Mapping[AlterationSetByType] = Forms.of[AlterationSetByType]
-  val subletTypeMapping: Mapping[SubletType]                   = Forms.of[SubletType]
+  val postcode: Mapping[String]      = PostcodeMapping.postcode()
+  val loginPostcode: Mapping[String] = PostcodeMapping.postcode(Errors.invalidPostcodeOnLetter, Errors.invalidPostcodeOnLetter)
+  val phoneNumber: Mapping[String]   = nonEmptyText(maxLength = 20).verifying(Errors.invalidPhone, _.matches(phoneRegex))
 
   def addressMapping: Mapping[Address] = mapping(
     "buildingNameNumber" -> default(text, "").verifying(

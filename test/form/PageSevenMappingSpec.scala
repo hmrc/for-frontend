@@ -17,7 +17,7 @@
 package form
 
 import models.pages.PageSeven
-import models.serviceContracts.submissions.ReviewIntervalTypeOther
+import models.serviceContracts.submissions.ReviewIntervalType
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
@@ -29,7 +29,7 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers:
   import utils.MappingSpecs.*
 
   val leaseContainsRentReviews: (String, String) = "leaseContainsRentReviews"                                           -> "true"
-  val reviewIntervalType: (String, String)       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalTypeOther.name
+  val reviewIntervalType: (String, String)       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalType.other.toString
   val reviewIntervalYears: (String, String)      = "rentReviewDetails.reviewIntervalTypeSpecify.years"                  -> "11"
   val reviewIntervalMonths: (String, String)     = "rentReviewDetails.reviewIntervalTypeSpecify.months"                 -> "12"
   val lastReviewDateMonth: (String, String)      = "rentReviewDetails.lastReviewDate.month"                             -> "3"

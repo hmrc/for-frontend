@@ -27,11 +27,11 @@
 
       @if(!p8.wasRentFixedBetween) {
         @summaryBlock(messages("label.notReviewRentFixed"), 8, "notReviewRentFixed") {
-          @p8.notReviewRentFixed.map(x => messages(s"notReviewRentFixedTypes.${x.name}"))
+          @p8.notReviewRentFixed.map(rentType => messages(s"notReviewRentFixedTypes.$rentType"))
         }
       }
 
       @summaryBlock(messages("label.rentSetByType"), 8, "rentSetByType") {
-        @messages(s"rentSetByTypes.${p8.rentSetByType.name}")
+        @messages(s"rentSetByTypes.${p8.rentSetByType}")
       }
     </dl>

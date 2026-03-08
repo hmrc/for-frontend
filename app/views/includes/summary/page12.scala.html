@@ -22,14 +22,14 @@
 <h2 class="govuk-heading-m">@messages("section12.heading")</h2>
 <dl class="govuk-summary-list">
     @summaryBlock(messages("label.responsibleOutsideRepairs"), 12, "responsibleOutsideRepairs") {
-        @messages(s"responsibleType.${p12.responsibleOutsideRepairs.name}")
+        @messages(s"responsibleType.${p12.responsibleOutsideRepairs}")
 
     }
     @summaryBlock(messages("label.responsibleInsideRepairs"), 12, "responsibleInsideRepairs") {
-        @messages(s"responsibleType.${p12.responsibleInsideRepairs.name}")
+        @messages(s"responsibleType.${p12.responsibleInsideRepairs}")
     }
     @summaryBlock(messages("label.responsibleBuildingInsurance"), 12, "responsibleBuildingInsurance") {
-        @messages(s"responsibleType.${p12.responsibleBuildingInsurance.name}")
+        @messages(s"responsibleType.${p12.responsibleBuildingInsurance}")
     }
     @summaryBlock(messages("label.ndrCharges"), 12, "ndrCharges") {
         @displayBoolean(p12.ndrCharges, "7")

@@ -73,17 +73,17 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
 
     val submission: Submission = Submission(
       None,
-      Some(CustomerDetails("fn", UserTypeOccupier, ContactDetails("01234567890", "abc@mailinator.com"))),
-      Some(TheProperty("Stuff", OccupierTypeIndividuals, None, None, false, None, None)),
+      Some(CustomerDetails("fn", UserType.occupier, ContactDetails("01234567890", "abc@mailinator.com"))),
+      Some(TheProperty("Stuff", OccupierType.individuals, None, None, false, None, None)),
       Some(Sublet(false, List.empty)),
-      Some(Landlord("abc", Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionTypeNone, None)),
-      Some(LeaseOrAgreement(LeaseAgreementTypesVerbal, Some(false), None, Some(false), List.empty, Some(RoughDate(None, None, 2011)), Some(false), None)),
+      Some(Landlord("abc", Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionType.noConnected, None)),
+      Some(LeaseOrAgreement(LeaseAgreementType.verbal, Some(false), None, Some(false), List.empty, Some(RoughDate(None, None, 2011)), Some(false), None)),
       Some(RentReviews(false, None)),
-      Some(RentAgreement(false, None, RentSetByTypeNewLease)),
-      Some(Rent(Some(20.1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 1), false, RentBaseTypeOpenMarket, None)),
+      Some(RentAgreement(false, None, RentSetByType.newLease)),
+      Some(Rent(Some(20.1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 1), false, RentBaseType.openMarket, None)),
       Some(WhatRentIncludes(false, true, false, false, false, None, Parking(false, None, false, None, None, None))),
       Some(IncentivesAndPayments(false, None, true, None, true, None)),
-      Some(Responsibilities(ResponsibleLandlord, ResponsibleLandlord, ResponsibleLandlord, false, true, false, List.empty)),
+      Some(Responsibilities(ResponsibleType.landlord, ResponsibleType.landlord, ResponsibleType.landlord, false, true, false, List.empty)),
       Some(PropertyAlterations(false, List.empty, None)),
       Some(OtherFactors(false, Some("xyz")))
     )

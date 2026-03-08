@@ -19,7 +19,7 @@ package form
 import form.DateMappings.*
 import form.MappingSupport.*
 import models.pages.{PageFour, SubletDetails}
-import models.serviceContracts.submissions.SubletPart
+import models.serviceContracts.submissions.SubletType
 import play.api.data.Forms.{default, mapping, text}
 import play.api.data.{Form, Mapping}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
@@ -39,7 +39,7 @@ object PageFourForm:
       s"$index.tenantAddress"                   -> addressMapping(s"$index.tenantAddress"),
       s"$index.subletType"                      -> subletTypeMapping,
       s"$index.subletPropertyPartDescription"   -> mandatoryIf(
-        isEqual(s"$index.subletType", SubletPart.name),
+        isEqual(s"$index.subletType", SubletType.part.toString),
         default(text, "").verifying(
           nonEmpty(errorMessage = "error.subletPropertyPartDescription.required"),
           maxLength(100, "error.subletPropertyPartDescription.maxLength")

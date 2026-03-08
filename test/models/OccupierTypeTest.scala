@@ -16,12 +16,12 @@
 
 package models
 
-import models.serviceContracts.submissions.{OccupierType, OccupierTypeCompany, OccupierTypeIndividuals, OccupierTypeNobody}
+import models.serviceContracts.submissions.OccupierType
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
 
-class OccupierTypes$Test extends AnyFlatSpec with should.Matchers:
+class OccupierTypeTest extends AnyFlatSpec with should.Matchers:
 
   val jsonIndividual = """"individuals""""
   val jsonCompany    = """"company""""
@@ -34,25 +34,25 @@ class OccupierTypes$Test extends AnyFlatSpec with should.Matchers:
     Json.fromJson[OccupierType](Json.parse(json))
 
   "OccupierType reader for 'individual' " should "map to OccupierTypeIndividual" in {
-    toJson(OccupierTypeIndividuals) should be(jsonIndividual)
+    toJson(OccupierType.individuals) should be(jsonIndividual)
   }
 
   "OccupierTypeIndividual" should "map to occupier type 'individual' " in {
-    fromJson(jsonIndividual) should be(JsSuccess(OccupierTypeIndividuals))
+    fromJson(jsonIndividual) should be(JsSuccess(OccupierType.individuals))
   }
 
   "OccupierType reader for 'company' " should "map to OccupierTypeCompany" in {
-    toJson(OccupierTypeCompany) should be(jsonCompany)
+    toJson(OccupierType.company) should be(jsonCompany)
   }
 
   "OccupierType" should "map to occupier type 'company' " in {
-    fromJson(jsonCompany) should be(JsSuccess(OccupierTypeCompany))
+    fromJson(jsonCompany) should be(JsSuccess(OccupierType.company))
   }
 
   "OccupierType reader for 'nobody' " should "map to OccupierTypeNobody" in {
-    toJson(OccupierTypeNobody) should be(jsonNobody)
+    toJson(OccupierType.nobody) should be(jsonNobody)
   }
 
   "OccupierType" should "map to occupier type 'nobody' " in {
-    fromJson(jsonNobody) should be(JsSuccess(OccupierTypeNobody))
+    fromJson(jsonNobody) should be(JsSuccess(OccupierType.nobody))
   }

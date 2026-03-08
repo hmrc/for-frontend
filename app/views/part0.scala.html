@@ -17,7 +17,7 @@
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import models.serviceContracts.submissions.{AddressConnectionTypeNo, AddressConnectionTypeYes, AddressConnectionTypeYesChangeAddress}
+@import models.serviceContracts.submissions.AddressConnectionType
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Text, Legend}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 
@@ -49,15 +49,14 @@
                 name = "isRelated",
                 idPrefix = Option("isRelated"),
                 items = Seq(
-                    AddressConnectionTypeYes.name -> messages("label.yes.oes"),
-                    AddressConnectionTypeYesChangeAddress.name -> Messages("label.yes.change.address"),
-                    AddressConnectionTypeNo.name -> messages("label.no.nac.oes")
-                ).map(i => RadioItem (
+                    AddressConnectionType.yes.toString -> messages("label.yes.oes"),
+                    AddressConnectionType.`yes-change-address`.toString -> Messages("label.yes.change.address"),
+                    AddressConnectionType.no.toString -> messages("label.no.nac.oes")
+                ).map(i => RadioItem(
                     content = Text(i._2),
-                    checked = i._1.equals(theForm("isRelated").value.getOrElse("")),
-                    value=Option(i._1)
-                  )
-                ),
+                    checked = theForm("isRelated").value.contains(i._1),
+                    value   = Option(i._1)
+                )),
                 errorMessage = theForm.errors.asTextErrorMessageForField("isRelated"),
                 fieldset = Option(
                     Fieldset(

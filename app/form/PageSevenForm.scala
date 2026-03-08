@@ -20,7 +20,7 @@ import form.DateMappings.*
 import form.Errors.{lastReviewDateIsBeforeStartDate, rentReviewDateIsBeforeStartDate, rentReviewDetailsRequired}
 import form.MappingSupport.*
 import models.pages.*
-import models.serviceContracts.submissions.{RentReviewResultDetails, ReviewIntervalTypeOther}
+import models.serviceContracts.submissions.{RentReviewResultDetails, ReviewIntervalType}
 import play.api.data.Forms.{localDate, mapping, optional}
 import play.api.data.*
 import uk.gov.voa.play.form.ConditionalMappings.*
@@ -42,7 +42,7 @@ object PageSevenForm:
     "reviewIntervalTypeSpecify" ->
       mandatoryIfEqual(
         "rentReviewDetails.reviewIntervalType",
-        ReviewIntervalTypeOther.name,
+        ReviewIntervalType.other.toString,
         monthsYearDurationMapping("rentReviewDetails.reviewIntervalTypeSpecify", ".rentReviewIntervalOther")
       ),
     "lastReviewDate"            -> optional(

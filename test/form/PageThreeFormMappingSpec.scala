@@ -19,7 +19,7 @@ package form
 import form.PageThreeForm.*
 import models.*
 import models.pages.PageThree
-import models.serviceContracts.submissions.{OccupierTypeCompany, OccupierTypeIndividuals}
+import models.serviceContracts.submissions.OccupierType
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
@@ -33,14 +33,14 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
   "A fully populated form "                                          should "bind to PageThreeData" in
     mustBind(bind(formData1))(x => assert(x === data1))
   "If occupier type is Company and no company name is supplied then" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierTypeCompany.name) - keys.occupierCompanyName
+    val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyName
     val bound   = bind(dataMap).convertGlobalToFieldErrors()
 
     mustContainError(keys.occupierCompanyName, "error.companyName.required", bound)
   }
 
   "If occupier type is Company and no first occupation date is supplied the" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierTypeCompany.name) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
+    val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
     val form    = bind(dataMap)
 
     mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
@@ -49,7 +49,7 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   "If occupier type is Individual and no first occupation date is supplied then" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
+    val dataMap = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
     val form    = bind(dataMap)
 
     mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
@@ -60,12 +60,12 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
     validateLettersNumsSpecCharsUptoLength(keys.propertyType, 100, pageThreeForm, formData1, Some("error.propertyType.maxLength"))
 
   it should "validate the first occupation date when the occupier type is individuals" in {
-    val formData = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name).updated(keys.mainOccupierName, "Jimmy Choo")
+    val formData = formData1.updated(keys.occupierType, OccupierType.individuals.toString).updated(keys.mainOccupierName, "Jimmy Choo")
     validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
   }
 
   it should "validate the first occupation date when the occupier type is company" in {
-    val formData = formData1.updated(keys.occupierType, OccupierTypeCompany.name)
+    val formData = formData1.updated(keys.occupierType, OccupierType.company.toString)
     validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
   }
 
@@ -73,14 +73,14 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
     validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyName, 50, pageThreeForm, formData1, Some("error.companyName.maxLength"))
 
   it should "require occupier company contact for selected occupier type Company" in {
-    val data = formData1.updated(keys.occupierType, OccupierTypeCompany.name) - keys.occupierCompanyContact
+    val data = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyContact
     val form = bind(data)
 
     mustContainError(keys.occupierCompanyContact, "error.occupierCompanyContact.required", form)
   }
 
   it should "not require occupier company contact for selected occupier type Individuals" in {
-    val data = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name) - keys.occupierCompanyContact
+    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.occupierCompanyContact
     val form = bind(data)
 
     mustNotContainErrorFor(keys.occupierCompanyContact, form)
@@ -97,14 +97,14 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "require a main contact name when occupier type is one or more individuals" in {
-    val data = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name) - keys.mainOccupierName
+    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
     val form = bind(data)
 
     mustContainError(keys.mainOccupierName, "error.occupiersName.required", form)
   }
 
   it should "allow upto 50 chars as a main occupier name" in {
-    val data = formData1.updated(keys.occupierType, OccupierTypeIndividuals.name) - keys.mainOccupierName
+    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
 
     validateLettersNumsSpecCharsUptoLength(keys.mainOccupierName, 50, pageThreeForm, data, Some("error.occupiersName.maxLength"))
   }
@@ -139,7 +139,7 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
     val formData1: Map[String, String] = Map(
       keys.occupierCompanyName      -> "Some Company",
       keys.occupierCompanyContact   -> "Some Company Contact",
-      keys.occupierType             -> OccupierTypeCompany.name,
+      keys.occupierType             -> OccupierType.company.toString,
       keys.otherPropertyType        -> "other property type",
       keys.propertyOwnedByYou       -> "false",
       keys.propertyRentedByYou      -> "true",
@@ -150,7 +150,7 @@ class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
 
     val data1: PageThree = PageThree(
       propertyType = "Stud farm",
-      occupierType = OccupierTypeCompany,
+      occupierType = OccupierType.company,
       occupierCompanyName = Some("Some Company"),
       occupierCompanyContact = Some("Some Company Contact"),
       firstOccupationDate = Some(RoughDate(None, Some(2), 2015)),

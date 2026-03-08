@@ -18,7 +18,7 @@ package models
 
 import connectors.Audit
 import models.pages.Summary
-import models.serviceContracts.submissions.{Address, AddressConnectionTypeYesChangeAddress}
+import models.serviceContracts.submissions.{Address, AddressConnectionType}
 import play.api.libs.json.{JsObject, Json}
 
 object Addresses:
@@ -32,7 +32,7 @@ object Addresses:
     summary.address.fold(Json.obj())(address => Json.obj(Audit.address -> address)) ++
       summary.propertyAddress
         .filter(newAddress =>
-          summary.addressConnection.contains(AddressConnectionTypeYesChangeAddress)
+          summary.addressConnection.contains(AddressConnectionType.`yes-change-address`)
             && !summary.address.contains(newAddress)
         )
         .fold(Json.obj())(newAddress => Json.obj(Audit.updatedAddress -> newAddress))

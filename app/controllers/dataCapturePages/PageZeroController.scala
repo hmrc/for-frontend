@@ -25,7 +25,7 @@ import form.persistence.FormDocumentRepository
 import javax.inject.Inject
 import models.*
 import models.pages.Summary
-import models.serviceContracts.submissions.{AddressConnectionType, AddressConnectionTypeNo}
+import models.serviceContracts.submissions.AddressConnectionType
 import play.api.data.Form
 import play.api.libs.json.*
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
@@ -51,6 +51,6 @@ class PageZeroController @Inject() (
   override def goToNextPage(action: FormAction, summary: Summary, savedFields: Map[String, Seq[String]])(using request: RefNumRequest[AnyContent]): Result =
     action match
       case ForDataCapturePage.Continue => summary.addressConnection match
-          case Some(AddressConnectionTypeNo) => Redirect(controllers.routes.PreviouslyConnectedController.onPageView)
-          case _                             => super.goToNextPage(action, summary, savedFields)
+          case Some(AddressConnectionType.no) => Redirect(controllers.routes.PreviouslyConnectedController.onPageView)
+          case _                              => super.goToNextPage(action, summary, savedFields)
       case _                           => super.goToNextPage(action, summary, savedFields)

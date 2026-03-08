@@ -29,15 +29,15 @@ import java.time.LocalDate
 
 class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Matchers with OptionValues:
 
-  val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
+  val pageZeroData: AddressConnectionType = AddressConnectionType.yes
 
   val pageOneData: Option[Address] = None
 
-  val pageTwoData: CustomerDetails = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
+  val pageTwoData: CustomerDetails = CustomerDetails("name", UserType.owner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   val pageThreeData: PageThree = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -49,7 +49,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
   val propertyOwned: PageThree = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -64,7 +64,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
     List(SubletDetails(
       "Something",
       Address("Street address", None, Some("City"), "Postcode"),
-      SubletPart,
+      SubletType.part,
       Option("Description"),
       "Reason",
       BigDecimal(1.0),
@@ -72,16 +72,16 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
     ))
   )
 
-  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionTypeNone, None)
+  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionType.noConnected, None)
 
   val pageSixData: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
 
   val pageSixNoVerbal: PageSix     =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-  val pageSixVerbal: PageSix       = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+  val pageSixVerbal: PageSix       = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
   val pageSevenData: PageSeven     = PageSeven(false, None)
-  val pageEightData: RentAgreement = RentAgreement(true, None, RentSetByTypeNewLease)
+  val pageEightData: RentAgreement = RentAgreement(true, None, RentSetByType.newLease)
   val hasNoRentReviews: PageSeven  = PageSeven(false, None)
   val hasRentReviews: PageSeven    = PageSeven(true, None)
 
@@ -90,7 +90,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
     rentBecomePayable = LocalDate.of(2010, 2, 27),
     rentActuallyAgreed = LocalDate.of(2005, 4, 2),
     negotiatingNewRent = true,
-    rentBasis = RentBaseTypeOpenMarket,
+    rentBasis = RentBaseType.openMarket,
     None
   )
 
@@ -143,7 +143,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
     val pageThreeData = PageThree(
       propertyType = "property type",
-      occupierType = OccupierTypeCompany,
+      occupierType = OccupierType.company,
       occupierCompanyName = Some("Some Company"),
       occupierCompanyContact = Some("Some Company Contact"),
       firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -164,7 +164,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
 
     val pageThreeData = PageThree(
       propertyType = "property type",
-      occupierType = OccupierTypeCompany,
+      occupierType = OccupierType.company,
       occupierCompanyName = Some("Some Company"),
       occupierCompanyContact = Some("Some Company Contact"),
       firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -187,7 +187,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   "nextPageAllowable for page six" should "return 8 when the lease agreement is verbal" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),
@@ -214,7 +214,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   it should "display page eight when the lease agreement is verbal" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),
@@ -289,7 +289,7 @@ class NextPageDeductionUsingPageSkippingSpec extends AnyFlatSpec with should.Mat
   }
 
   "nextPageAllowable for page eight" should "return six when page seven is requested when there is a verbal agreement" in {
-    val p6  = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())
+    val p6  = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())
     val doc = summaryBuilder(
       addressConnection = Some(pageZeroData),
       customerDetails = Some(pageTwoData),

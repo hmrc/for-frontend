@@ -16,8 +16,13 @@
 
 package models.serviceContracts.submissions
 
-import models.NamedEnumSupport
+/**
+  * @author Yuriy Tumakha
+  */
+enum RentBaseType:
 
-object PropertyTypes extends NamedEnumSupport[PropertyType] {
-  val all: List[PropertyType] = List(PropertyTypesShop, PropertyTypesOffice, PropertyTypesFactory, PropertyTypesWarehouse, PropertyTypesOther)
-}
+  case openMarket,
+    percentageOpenMarket,
+    percentageTurnover,
+    indexation,
+    other

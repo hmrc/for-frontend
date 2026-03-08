@@ -39,9 +39,9 @@ object PageTwelveForm:
 
   private val pageTwelveMapping: Mapping[PageTwelve] =
     mapping(
-      "responsibleOutsideRepairs"    -> responsibleTypeMapping,
-      "responsibleInsideRepairs"     -> responsibleTypeMapping,
-      "responsibleBuildingInsurance" -> responsibleTypeMapping,
+      "responsibleOutsideRepairs"    -> responsibleOutsideRepairsMapping,
+      "responsibleInsideRepairs"     -> responsibleInsideRepairsMapping,
+      "responsibleBuildingInsurance" -> responsibleBuildingInsuranceMapping,
       "ndrCharges"                   -> mandatoryBooleanWithError(Errors.businessRatesRequired),
       "ndrDetails"                   -> mandatoryIfTrue("ndrCharges", currencyMapping(".businessRatesPerYear")),
       "waterCharges"                 -> mandatoryBooleanWithError(Errors.waterChargesIncludedRequired),

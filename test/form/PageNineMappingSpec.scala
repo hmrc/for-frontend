@@ -39,7 +39,7 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
       rentBecomePayable = LocalDate.of(2001, 5, 1),
       rentActuallyAgreed = LocalDate.of(2001, 5, 1),
       negotiatingNewRent = false,
-      rentBasis = RentBaseTypeOther,
+      rentBasis = RentBaseType.other,
       rentBasisOtherDetails = Some("oneTwoThree")
     )
 
@@ -60,9 +60,9 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
   checkMissingField(keys.rentBecomePayableYear, "error.rentBecomePayable.year.required")
   checkMissingField(keys.rentBecomePayableMonth, "error.rentBecomePayable.month.required")
 
-  RentBaseTypes.all.filter(x => x != RentBaseTypeOpenMarket && x != RentBaseTypeIndexation).foreach { rentBasis =>
-    "A form with 'rent basis' of '" + rentBasis.name + "' but a missing 'rent basis other' field" should "return required error for rent based on details" in {
-      val testData = fullData.updated(keys.rentBasedOn, rentBasis.name) - keys.rentBasedOnDetails
+  RentBaseType.values.filter(x => x != RentBaseType.openMarket && x != RentBaseType.indexation).foreach { rentBasis =>
+    "A form with 'rent basis' of '" + rentBasis + "' but a missing 'rent basis other' field" should "return required error for rent based on details" in {
+      val testData = fullData.updated(keys.rentBasedOn, rentBasis.toString) - keys.rentBasedOnDetails
       val res      = bind(testData)
 
       mustContainError("rentBasedOnDetails", "error.rentBasedOnDetails.required", res)
@@ -70,7 +70,7 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   "A form with a rent basis of open market and no rent based on details" should "not error" in {
-    val data = fullData.updated(keys.rentBasedOn, RentBaseTypeOpenMarket.name) - keys.rentBasedOnDetails
+    val data = fullData.updated(keys.rentBasedOn, RentBaseType.openMarket.toString) - keys.rentBasedOnDetails
     val form = bind(data)
 
     doesNotContainErrors(form)
@@ -94,7 +94,6 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
 
     class Keys:
       val totalRent              = "totalRent"
-      val rentLengthType         = "totalRent.rentLengthType"
       val annualRentExcludingVat = "totalRent.annualRentExcludingVat"
       val rentBecomePayableDay   = "rentBecomePayable.day"
       val rentBecomePayableMonth = "rentBecomePayable.month"
@@ -109,7 +108,6 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
       val rentBasedOnDetails = "rentBasedOnDetails"
 
     val fullData: Map[String, String] = Map(
-      keys.rentLengthType          -> RentLengthTypeQuarterly.name,
       keys.annualRentExcludingVat  -> "123.45",
       keys.rentBecomePayableDay    -> "1",
       keys.rentBecomePayableMonth  -> "5",
@@ -118,7 +116,7 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
       keys.rentActuallyAgreedMonth -> "5",
       keys.rentActuallyAgreedYear  -> "2001",
       keys.negotiatingNewRent      -> "false",
-      keys.rentBasedOn             -> RentBasisTypeOther.name,
+      keys.rentBasedOn             -> RentBaseType.other.toString,
       keys.rentBasedOnDetails      -> "oneTwoThree"
     )
 

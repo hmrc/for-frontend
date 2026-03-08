@@ -18,11 +18,11 @@ package controllers.feedback
 
 import connectors.{Audit, ForHttp}
 import controllers.*
-import form.Formats.*
-import models.{Feedback, Journey, NormalJourney, NotConnectedJourney}
+import form.MappingSupport.*
+import models.{Feedback, JourneyName}
 import play.api.Logging
 import play.api.data.Forms.{mapping, optional, text}
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 import play.api.mvc.*
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,7 +56,7 @@ class FeedbackController @Inject() (
         "feedback-email"    -> text,
         "service"           -> text,
         "referrer"          -> text,
-        "journey"           -> Forms.of[Journey],
+        "journey"           -> journeyMapping,
         "feedback-comments" -> optional(
           text.verifying("feedback.commments.maxLength", _.length <= 1200)
         )
@@ -84,11 +84,11 @@ class FeedbackController @Inject() (
   }
 
   def feedback: Action[AnyContent] = Action { implicit request =>
-    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors))
+    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> JourneyName.normalJourney.name)).discardingErrors))
   }
 
   def notConnectedFeedback: Action[AnyContent] = Action { implicit request =>
-    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> NotConnectedJourney.name)).discardingErrors))
+    Ok(feedbackFormView(feedbackForm.bind(Map("journey" -> JourneyName.notConnected.name)).discardingErrors))
   }
 
   def feedbackThankyou: Action[AnyContent] = Action { implicit request =>

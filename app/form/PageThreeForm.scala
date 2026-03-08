@@ -18,7 +18,7 @@ package form
 
 import form.DateMappings.*
 import models.pages.PageThree
-import models.serviceContracts.submissions.{OccupierTypeCompany, OccupierTypeIndividuals}
+import models.serviceContracts.submissions.OccupierType
 import play.api.data.Form
 import play.api.data.Forms.*
 import uk.gov.voa.play.form.ConditionalMappings.*
@@ -51,14 +51,14 @@ object PageThreeForm:
       keys.occupierType           -> occupierType,
       keys.occupierCompanyName    -> mandatoryIfEqual(
         keys.occupierType,
-        OccupierTypeCompany.name,
+        OccupierType.company.toString,
         default(text, "").verifying(
           nonEmpty(errorMessage = Errors.companyNameRequired),
           maxLength(50, "error.companyName.maxLength")
         )
       ),
       keys.occupierCompanyContact -> onlyIf(
-        isEqual(keys.occupierType, OccupierTypeCompany.name),
+        isEqual(keys.occupierType, OccupierType.company.toString),
         default(text, "").verifying(
           nonEmpty(errorMessage = "error.occupierCompanyContact.required"),
           maxLength(50, "error.occupierCompanyContact.maxLength")
@@ -67,12 +67,12 @@ object PageThreeForm:
       keys.firstOccupationDate    ->
         mandatoryIfEqualToAny(
           keys.occupierType,
-          Seq(OccupierTypeCompany.name, OccupierTypeIndividuals.name),
+          Seq(OccupierType.company.toString, OccupierType.individuals.toString),
           monthYearRoughDateMapping(keys.firstOccupationDate, ".firstOccupationDate")
         ),
       keys.mainOccupierName       -> mandatoryIfEqual(
         keys.occupierType,
-        OccupierTypeIndividuals.name,
+        OccupierType.individuals.toString,
         default(text, "").verifying(
           nonEmpty(errorMessage = Errors.occupiersNameRequired),
           maxLength(50, "error.occupiersName.maxLength")

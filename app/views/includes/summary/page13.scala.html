@@ -28,7 +28,7 @@
     @if(p13.propertyAlterations) {
         @p13.propertyAlterationsDetails.zipWithIndex.map { case (details, idx) =>
             @summaryBlock(s"${idx + 1}", 13, s"propertyAlterationsDetails_description_div_$idx") {
-                @messages("alterationType." + details.alterationType.name)
+                @messages(s"alterationType.${details.alterationType}")
                 <br/>
                 @(s"£${NumberFormat.getNumberInstance().format(details.cost)}")
                 <br/>

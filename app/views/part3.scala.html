@@ -72,12 +72,12 @@
                 name = "occupierType",
                 idPrefix = Option("occupierType"),
                 classes = "radio-button-that-show-hides",
-                items = EnumOptions.options(OccupierTypes)
-                        .map( radioItem => RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("occupierType").value.getOrElse("")),
-                    value=Option(radioItem._1)
-                )
+                items = OccupierType.values.toIndexedSeq.map(occupierType =>
+                    RadioItem (
+                        content = Text(messages(s"occupierType.$occupierType")),
+                        checked = theForm("occupierType").value.contains(occupierType.toString),
+                        value = Option(occupierType.toString)
+                    )
                 ),
                 hint = Hint(content = Text(messages("occupierType.help"))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("occupierType"),

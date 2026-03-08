@@ -33,10 +33,10 @@
 	}
 
 	@summaryBlock(messages(if(isAgent) messages("label.LandlordConnectionTypes.agent") else messages("label.LandlordConnectionTypes")), 5, "landlordConnectType") {
-		@messages(s"landlordConnectionType.${p5.landlordConnectionType.name}")
+		@messages(s"landlordConnectionType.${p5.landlordConnectionType}")
 	}
 
-	@if(p5.landlordConnectionType == LandlordConnectionTypeOther) {
+	@if(p5.landlordConnectionType == LandlordConnectionType.other) {
 		@summaryBlock(messages(if(isAgent) messages("label.landlordConnectText.agent") else messages("label.landlordConnectText")), 5, "landlordConnectText") {
 			@p5.landlordConnectText.getOrElse("")
 		}

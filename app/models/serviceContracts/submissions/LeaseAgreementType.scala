@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package models.serviceContracts.submissions
 
-sealed trait Journey extends NamedEnum {
-  val key = "journeyType"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum LeaseAgreementType:
 
-object NormalJourney extends Journey {
-  val name = "normal-journey"
-}
-
-object NotConnectedJourney extends Journey {
-  val name = "not-connected"
-}
-
-object FeedbackPageJourney extends Journey {
-  val name = "feedback-page"
-}
-
-object JourneyTypes extends NamedEnumSupport[Journey] {
-  val all: List[Journey] = List(NormalJourney, NotConnectedJourney)
-}
+  case leaseTenancy,
+    licenceOther,
+    verbal

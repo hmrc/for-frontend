@@ -18,7 +18,7 @@ package form
 
 import models.*
 import models.pages.*
-import models.serviceContracts.submissions.{Address, SubletAll, SubletPart}
+import models.serviceContracts.submissions.{Address, SubletType}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
@@ -62,7 +62,7 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "not return required error for sublet information when we sublet whole property" in {
-    val data = (fullData - keys.subletPropertyPartDescription) + (keys.subletType -> SubletAll.name)
+    val data = (fullData - keys.subletPropertyPartDescription) + (keys.subletType -> SubletType.all.toString)
     val form = bind(data)
 
     form.errors should be(empty)
@@ -103,7 +103,7 @@ class PageFourMappingSpec extends AnyFlatSpec with should.Matchers:
       subletPropertyReasonDescription = "residential",
       annualRent = BigDecimal(123.45),
       rentFixedDate = new RoughDate(2, 2015),
-      subletType = SubletPart
+      subletType = SubletType.part
     )
 
     val expectedData = PageFour(propertyIsSublet = true, List(expectedSubletData))

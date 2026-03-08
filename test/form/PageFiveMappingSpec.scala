@@ -17,7 +17,7 @@
 package form
 
 import models.pages.PageFive
-import models.serviceContracts.submissions.LandlordConnectionTypeOther
+import models.serviceContracts.submissions.LandlordConnectionType
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
@@ -94,7 +94,7 @@ class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers:
     val addressStreet1: (String, String)      = "landlordAddress.street1"            -> "Middle of Our street"
     val addressStreet2: (String, String)      = "landlordAddress.street2"            -> "Our House"
     val addressPostcode: (String, String)     = "landlordAddress.postcode"           -> "AA11 1AA"
-    val landlordConnType: (String, String)    = "landlordConnectType"                -> LandlordConnectionTypeOther.name
+    val landlordConnType: (String, String)    = "landlordConnectType"                -> LandlordConnectionType.other.toString
     val landlordConnText: (String, String)    = "landlordConnectText"                -> "Fraternal bonds"
 
     val addressFields: Seq[String] = Seq(

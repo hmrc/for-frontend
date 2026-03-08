@@ -50,14 +50,14 @@ object SummaryBuilder:
 
   private val editedPageOneData = pageOneForm.bind(editedPageOneForm).value
 
-  private val pageZeroData = AddressConnectionTypeYes
+  private val pageZeroData = AddressConnectionType.yes
   private val pageOneData  = Option.empty[Address]
 
-  private val pageTwoData = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
+  private val pageTwoData = CustomerDetails("name", UserType.owner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   private val propertyOwned = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -69,7 +69,7 @@ object SummaryBuilder:
 
   private val propertyRented = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -89,7 +89,7 @@ object SummaryBuilder:
     List(SubletDetails(
       "Something",
       Address("Street address", None, Some("City"), "Postcode"),
-      SubletPart,
+      SubletType.part,
       Option("Description"),
       "Reason",
       BigDecimal(1.33),
@@ -100,34 +100,34 @@ object SummaryBuilder:
   private val pageFiveData = PageFive(
     "name",
     Some(Address("line1", None, Some("city"), "postcode")),
-    LandlordConnectionTypeNone,
+    LandlordConnectionType.noConnected,
     None
   )
 
   private val pageSixData = PageSix(
-    LeaseAgreementTypesLeaseTenancy,
+    LeaseAgreementType.leaseTenancy,
     Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)),
     VerbalAgreement()
   )
 
   private val pageSevenData = PageSeven(false, None)
-  private val pageEightData = RentAgreement(true, None, RentSetByTypeNewLease)
+  private val pageEightData = RentAgreement(true, None, RentSetByType.newLease)
 
   private val pageNineData   = PageNine(
     AnnualRent(8.99),
     rentBecomePayable = LocalDate.of(2010, 2, 27),
     rentActuallyAgreed = LocalDate.of(2005, 4, 2),
     negotiatingNewRent = true,
-    rentBasis = RentBaseTypeOpenMarket,
+    rentBasis = RentBaseType.openMarket,
     None
   )
   private val pageTenData    = WhatRentIncludes(false, false, false, false, false, None, Parking(false, None, false, None, None, None))
   private val pageElevenData = IncentivesAndPayments(false, None, false, None, false, None)
 
   private val pageTwelveData   = PageTwelve(
-    ResponsibleLandlord,
-    ResponsibleLandlord,
-    ResponsibleLandlord,
+    ResponsibleType.landlord,
+    ResponsibleType.landlord,
+    ResponsibleType.landlord,
     false,
     None,
     false,
@@ -163,4 +163,4 @@ object SummaryBuilder:
   val incompletePageFourteenJourney: Summary = completeFullPathJourney.copy(otherFactors = None)
 
   val completeShortPathJourneyWithEditedPageOne: Summary =
-    SummaryBuilder(Some(AddressConnectionTypeYesChangeAddress), editedPageOneData, Some(pageTwoData), Some(propertyOwned), Some(propertyNotSublet))
+    SummaryBuilder(Some(AddressConnectionType.`yes-change-address`), editedPageOneData, Some(pageTwoData), Some(propertyOwned), Some(propertyNotSublet))

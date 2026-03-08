@@ -101,13 +101,12 @@
     @govukRadios(
       Radios(
         name = "leaseAgreementType",
-        items = EnumOptions.options(LeaseAgreementTypes).map(radioItem => {
+        items = LeaseAgreementType.values.toIndexedSeq.map(leaseAgreement =>
           RadioItem(
-            content = Text(radioItem._2),
-            checked = radioItem._1.equals(theForm("leaseAgreementType").value.getOrElse("")),
-            value = Option(radioItem._1)
+            content = Text(messages(s"leaseAgreementTypes.$leaseAgreement")),
+            checked = theForm("leaseAgreementType").value.contains(leaseAgreement.toString),
+            value = Option(leaseAgreement.toString)
           )
-        }
         ),
         hint = Hint(content = HtmlContent(messages("hint.leaseAgreementType"))),
         classes = "radio-button-that-show-hides",

@@ -83,8 +83,8 @@ trait Audit extends AuditConnector:
   def sendFeedback(f: Feedback, refNumOpt: Option[String])(using hc: HeaderCarrier, request: RequestHeader): Future[AuditResult] =
     val refNum         = refNumOpt.getOrElse("")
     val rating: Int    = f.rating.flatMap(r => Try(r.toInt).toOption).getOrElse(0)
-    val satisfaction   = SatisfactionTypes.all.find(_.rating == rating).getOrElse(Satisfied)
-    val surveyFeedback = SurveyFeedback(satisfaction, f.comments.getOrElse(""), FeedbackPageJourney, getReferrerUrl)
+    val satisfaction   = Satisfaction.values.find(_.rating == rating).getOrElse(Satisfaction.satisfied)
+    val surveyFeedback = SurveyFeedback(satisfaction, f.comments.getOrElse(""), JourneyName.feedbackPage, getReferrerUrl)
     sendSurveyFeedback(surveyFeedback, refNum)
 
   private def platformFrontendHost(using request: RequestHeader): String =

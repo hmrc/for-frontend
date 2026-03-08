@@ -17,15 +17,15 @@
 package controllers.feedback
 
 import actions.{RefNumAction, RefNumRequest}
+import config.SessionId
 import connectors.Audit
-import form.Formats.*
+import form.MappingSupport.*
 import form.persistence.FormDocumentRepository
 import models.pages.SummaryBuilder
-import models.{Journey, NormalJourney, Satisfaction}
+import models.{JourneyName, Satisfaction}
 import play.api.data.Forms.*
 import play.api.data.{Form, Forms}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import config.SessionId
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -33,14 +33,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object Survey:
 
-  case class SurveyFeedback(satisfaction: Satisfaction, details: String, journey: Journey, surveyUrl: String)
+  case class SurveyFeedback(satisfaction: Satisfaction, details: String, journey: JourneyName, surveyUrl: String)
 
-  val completedFeedbackForm: Form[SurveyFeedback] = Form(mapping(
-    "satisfaction" -> Forms.of[Satisfaction],
-    "details"      -> text(maxLength = 1200),
-    "journey"      -> Forms.of[Journey],
-    "surveyUrl"    -> text(maxLength = 2000)
-  )(SurveyFeedback.apply)(o => Some(Tuple.fromProductTyped(o))))
+  val completedFeedbackForm: Form[SurveyFeedback] =
+    Form(
+      mapping(
+        "satisfaction" -> satisfactionMapping,
+        "details"      -> text(maxLength = 1200),
+        "journey"      -> journeyMapping,
+        "surveyUrl"    -> text(maxLength = 2000)
+      )(SurveyFeedback.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )
 
 @Singleton
 class SurveyController @Inject() (
@@ -57,7 +60,8 @@ class SurveyController @Inject() (
 
   import Survey.*
 
-  private val completedFeedbackFormNormalJourney: Form[SurveyFeedback] = completedFeedbackForm.bind(Map("journey" -> NormalJourney.name)).discardingErrors
+  private val completedFeedbackFormNormalJourney: Form[SurveyFeedback] =
+    completedFeedbackForm.bind(Map("journey" -> JourneyName.normalJourney.name)).discardingErrors
 
   def onPageView(journey: String): Action[AnyContent] = refNumAction { implicit request =>
     val form = completedFeedbackForm.copy(data = Map("journey" -> journey, "surveyUrl" -> request.uri))

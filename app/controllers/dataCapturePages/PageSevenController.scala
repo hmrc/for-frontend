@@ -25,7 +25,7 @@ import form.persistence.FormDocumentRepository
 import javax.inject.Inject
 import models.*
 import models.pages.{PageSeven, PageSix, Summary}
-import models.serviceContracts.submissions.LeaseAgreementTypesVerbal
+import models.serviceContracts.submissions.LeaseAgreementType
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
@@ -65,7 +65,7 @@ class PageSevenController @Inject() (
     part7(updatedForm, summary)
 
   private def getAgreementStartDate(pageSix: PageSix): Option[LocalDate] =
-    if pageSix.leaseAgreementType == LeaseAgreementTypesVerbal then
+    if pageSix.leaseAgreementType == LeaseAgreementType.verbal then
       pageSix.verbalAgreementDetails.startDate.map(_.toLocalDate)
     else
       pageSix.writtenAgreementDetails.map(_.startDate.toLocalDate)

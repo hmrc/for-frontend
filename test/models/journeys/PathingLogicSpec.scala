@@ -29,15 +29,15 @@ import java.time.LocalDate
 
 class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
 
-  val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
+  val pageZeroData: AddressConnectionType = AddressConnectionType.yes
 
   val pageOneData: Option[Address] = None
 
-  val pageTwoData: CustomerDetails = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
+  val pageTwoData: CustomerDetails = CustomerDetails("name", UserType.owner, ContactDetails("01234567890", "abc@mailinator.com"))
 
   val propertyOwned: PageThree = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -49,7 +49,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
 
   val propertyRented: PageThree = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -61,7 +61,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
 
   val propertyNotOwnedOrRented: PageThree = PageThree(
     propertyType = "property type",
-    occupierType = OccupierTypeCompany,
+    occupierType = OccupierType.company,
     occupierCompanyName = Some("Some Company"),
     occupierCompanyContact = Some("Some Company Contact"),
     firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
@@ -81,7 +81,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
     List(SubletDetails(
       "Something",
       Address("Street address", None, Some("City"), "Postcode"),
-      SubletPart,
+      SubletType.part,
       Option("Description"),
       "Reason",
       BigDecimal(1.33),
@@ -89,19 +89,19 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
     ))
   )
 
-  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionTypeNone, None)
+  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionType.noConnected, None)
 
   val pageSixData: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
 
   val pageSixNoVerbal: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
 
   val leaseAgreementTenancy: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-  val pageSixVerbal: PageSix         = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+  val pageSixVerbal: PageSix         = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
   val pageSevenData: PageSeven       = PageSeven(false, None)
-  val pageEightData: RentAgreement   = RentAgreement(true, None, RentSetByTypeNewLease)
+  val pageEightData: RentAgreement   = RentAgreement(true, None, RentSetByType.newLease)
   val hasNoRentReviews: PageSeven    = PageSeven(false, None)
   val hasRentReviews: PageSeven      = PageSeven(true, None)
 
@@ -110,7 +110,7 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
     rentBecomePayable = LocalDate.of(2010, 2, 27),
     rentActuallyAgreed = LocalDate.of(2005, 4, 2),
     negotiatingNewRent = true,
-    rentBasis = RentBaseTypeOpenMarket,
+    rentBasis = RentBaseType.openMarket,
     None
   )
 

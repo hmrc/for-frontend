@@ -20,37 +20,19 @@ import play.api.libs.json.*
 
 package object models:
 
-  private def generateWrites[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Writes[T] = (data: T) => JsString(data.name)
-
-  private def generateReads[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Reads[T] = {
-    case JsString(value) =>
-      enumObject.fromName(value) match {
-        case Some(enumValue) => JsSuccess(enumValue)
-        case None            => JsError()
-      }
-    case _               =>
-      JsError()
-  }
-
-  private def generateFormat[T <: NamedEnum](enumObject: NamedEnumSupport[T]): Format[T] = Format[T](generateReads(enumObject), generateWrites(enumObject))
-
-  implicit val formatPropertyType: Format[PropertyType]                     = generateFormat(PropertyTypes)
-  implicit val formatContactAddressType: Format[ContactAddressType]         = generateFormat(ContactAddressTypes)
-  implicit val formatUserType: Format[UserType]                             = generateFormat(UserTypes)
-  implicit val formatOccupierType: Format[OccupierType]                     = generateFormat(OccupierTypes)
-  implicit val format: Format[LandlordConnectionType]                       = generateFormat(LandlordConnectionTypes)
-  implicit val formatLeaseAgreementType: Format[LeaseAgreementType]         = generateFormat(LeaseAgreementTypes)
-  implicit val formatNotReviewRentFixedType: Format[NotReviewRentFixedType] = generateFormat(NotReviewRentFixedTypes)
-  implicit val formatRentSetByType: Format[RentSetByType]                   = generateFormat(RentSetByTypes)
-  implicit val formatRentFixedByType: Format[RentFixedType]                 = generateFormat(RentFixedTypes)
-  implicit val formatReviewalIntervalType: Format[ReviewIntervalType]       = generateFormat(ReviewIntervalTypes)
-  implicit val formatResponsibleType: Format[ResponsibleType]               = generateFormat(ResponsibleTypes)
-  implicit val formatRentBaseType: Format[RentBaseType]                     = generateFormat(RentBaseTypes)
-  implicit val formatRentLengthType: Format[RentLengthType]                 = generateFormat(RentLengthTypes)
-  implicit val formatAlterationSetByType: Format[AlterationSetByType]       = generateFormat(AlterationSetByType)
-  implicit val formatAddressConnection: Format[AddressConnectionType]       = generateFormat(AddressConnectionTypes)
-  implicit val tenantAddressType: Format[TenantsAddressType]                = generateFormat(TenantsAddressTypes)
-  implicit val formatSubletType: Format[SubletType]                         = generateFormat(SubletType)
+  implicit val formatUserType: Format[UserType]                             = Scala3EnumJsonFormat.format
+  implicit val formatOccupierType: Format[OccupierType]                     = Scala3EnumJsonFormat.format
+  implicit val format: Format[LandlordConnectionType]                       = Scala3EnumJsonFormat.format
+  implicit val formatLeaseAgreementType: Format[LeaseAgreementType]         = Scala3EnumJsonFormat.format
+  implicit val formatNotReviewRentFixedType: Format[NotReviewRentFixedType] = Scala3EnumJsonFormat.format
+  implicit val formatRentSetByType: Format[RentSetByType]                   = Scala3EnumJsonFormat.format
+  implicit val formatRentFixedByType: Format[RentFixedType]                 = Scala3EnumJsonFormat.format
+  implicit val formatReviewalIntervalType: Format[ReviewIntervalType]       = Scala3EnumJsonFormat.format
+  implicit val formatResponsibleType: Format[ResponsibleType]               = Scala3EnumJsonFormat.format
+  implicit val formatRentBaseType: Format[RentBaseType]                     = Scala3EnumJsonFormat.format
+  implicit val formatAlterationSetByType: Format[AlterationSetByType]       = Scala3EnumJsonFormat.format
+  implicit val formatAddressConnection: Format[AddressConnectionType]       = Scala3EnumJsonFormat.format
+  implicit val formatSubletType: Format[SubletType]                         = Scala3EnumJsonFormat.format
 
   implicit val formatAnnualRent: OFormat[AnnualRent]                                    = Json.format[AnnualRent]
   implicit val chargeDetailFormat: OFormat[ChargeDetails]                               = Json.format[ChargeDetails]

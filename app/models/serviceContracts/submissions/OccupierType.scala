@@ -16,28 +16,11 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum OccupierType:
 
-sealed trait OccupierType extends NamedEnum {
-  val key = "occupierType"
-}
-
-object OccupierTypeCompany extends OccupierType {
-  val name = "company"
-}
-
-object OccupierTypeIndividuals extends OccupierType {
-  val name = "individuals"
-}
-
-object OccupierTypeNobody extends OccupierType {
-  val name = "nobody"
-}
-
-object OccupierTypeVacated extends OccupierType {
-  val name = "vacated"
-}
-
-object OccupierTypes extends NamedEnumSupport[OccupierType] {
-  val all: List[OccupierType] = List(OccupierTypeIndividuals, OccupierTypeCompany, OccupierTypeNobody)
-}
+  case individuals,
+    company,
+    nobody

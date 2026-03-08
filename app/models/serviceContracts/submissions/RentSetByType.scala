@@ -16,28 +16,12 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum RentSetByType:
 
-sealed trait RentSetByType extends NamedEnum {
-  val key = "rentSetByTypes"
-}
-
-object RentSetByTypeSurrender extends RentSetByType {
-  val name = "surrender"
-}
-
-object RentSetByTypeLeaseback extends RentSetByType {
-  val name = "leaseback"
-}
-
-object RentSetByTypeNewLease extends RentSetByType {
-  val name = "newLease"
-}
-
-object RentSetByTypeRenewedLease extends RentSetByType {
-  val name = "renewedLease"
-}
-
-object RentSetByTypes extends NamedEnumSupport[RentSetByType] {
-  val all: List[RentSetByType] = List(RentSetByTypeNewLease, RentSetByTypeRenewedLease, RentSetByTypeLeaseback, RentSetByTypeSurrender)
-}
+  case newLease,
+    renewedLease,
+    leaseback,
+    surrender

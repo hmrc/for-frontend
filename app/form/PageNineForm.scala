@@ -17,7 +17,7 @@
 package form
 
 import models.pages.PageNine
-import models.serviceContracts.submissions.{RentBaseTypeOther, RentBaseTypePercentageOpenMarket, RentBaseTypePercentageTurnover}
+import models.serviceContracts.submissions.RentBaseType
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
 import uk.gov.voa.play.form.ConditionalMappings.*
@@ -37,7 +37,7 @@ object PageNineForm:
         "rentBasedOn"        -> rentBaseTypeMapping,
         "rentBasedOnDetails" -> mandatoryAndOnlyIfAnyOf(
           "rentBasedOn",
-          Seq(RentBaseTypePercentageOpenMarket.name, RentBaseTypePercentageTurnover.name, RentBaseTypeOther.name),
+          Seq(RentBaseType.percentageOpenMarket.toString, RentBaseType.percentageTurnover.toString, RentBaseType.other.toString),
           default(text, "").verifying(
             nonEmpty(errorMessage = "error.rentBasedOnDetails.required"),
             maxLength(250, "error.rentBasedOnDetails.maxLength")

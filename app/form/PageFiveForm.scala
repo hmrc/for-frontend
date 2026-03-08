@@ -18,7 +18,7 @@ package form
 
 import form.MappingSupport.*
 import models.pages.PageFive
-import models.serviceContracts.submissions.LandlordConnectionTypeOther
+import models.serviceContracts.submissions.LandlordConnectionType
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
@@ -37,7 +37,7 @@ object PageFiveForm:
         "landlordConnectType" -> landlordConnectionType,
         "landlordConnectText" -> mandatoryIfEqual(
           "landlordConnectType",
-          LandlordConnectionTypeOther.name,
+          LandlordConnectionType.other.toString,
           default(text, "").verifying(
             nonEmpty(errorMessage = "error.landlordConnectText.required"),
             maxLength(100, "error.landlordConnectText.maxLength")

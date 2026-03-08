@@ -35,7 +35,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
 
   "A page six form" should "bind to page six with a written agreement" in {
     val p6 = PageSix(
-      LeaseAgreementTypesLicenceOther,
+      LeaseAgreementType.licenceOther,
       Some(WrittenAgreement(
         leaseAgreementHasBreakClause = true,
         breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
@@ -59,14 +59,14 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "allow all fields to be optional when the agreement is verbal or written" in {
-    val data = Map(keys.leaseAgreementType -> LeaseAgreementTypesVerbal.name)
+    val data = Map(keys.leaseAgreementType -> LeaseAgreementType.verbal.toString)
 
-    mustBind(bind(data))(x => assert(x === PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement())))
+    mustBind(bind(data))(x => assert(x === PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())))
   }
 
   it should "allow a start and open ended value if there is a verbal agreement or one in writing" in {
     val data   = Map(
-      keys.leaseAgreementType      -> LeaseAgreementTypesVerbal.name,
+      keys.leaseAgreementType      -> LeaseAgreementType.verbal.toString,
       s"$verbalStartDate.month"    -> "5",
       s"$verbalStartDate.year"     -> "2011",
       verbalRentOpenEnded          -> "false",
@@ -74,14 +74,14 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
       s"$verbalLeaseLength.months" -> "4"
     )
     val verbal = VerbalAgreement(Some(RoughDate(None, Some(5), 2011)), Some(false), Some(MonthsYearDuration(months = 4, years = 3)))
-    val lease  = PageSix(LeaseAgreementTypesVerbal, None, verbal)
+    val lease  = PageSix(LeaseAgreementType.verbal, None, verbal)
 
     mustBind(bind(data))(x => assert(x === lease))
   }
 
   it should "require a lease length if the agreement is not open ended for a written contract" in {
     val data = Map(
-      keys.leaseAgreementType -> LeaseAgreementTypesLeaseTenancy.name,
+      keys.leaseAgreementType -> LeaseAgreementType.leaseTenancy.toString,
       writtenRentOpenEnded    -> "false"
     )
     val form = bind(data)
@@ -92,7 +92,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
 
   it should "require a lease length if the agreement is not open ended for a verbal contract" in {
     val data = Map(
-      keys.leaseAgreementType -> LeaseAgreementTypesVerbal.name,
+      keys.leaseAgreementType -> LeaseAgreementType.verbal.toString,
       verbalRentOpenEnded     -> "false"
     )
     val form = bind(data)
@@ -102,7 +102,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "require all fields to be mandatory if the lease agreement type is a tenancy agreement" in {
-    val data = Map("leaseAgreementType" -> LeaseAgreementTypesLeaseTenancy.name)
+    val data = Map("leaseAgreementType" -> LeaseAgreementType.leaseTenancy.toString)
     val form = bind(data)
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
@@ -113,7 +113,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "require all fields to be mandatory if the lease agreement type is other type of written agreement" in {
-    val data = Map("leaseAgreementType" -> LeaseAgreementTypesLicenceOther.name)
+    val data = Map("leaseAgreementType" -> LeaseAgreementType.licenceOther.toString)
     val form = bind(data)
 
     mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
@@ -124,7 +124,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
   }
 
   it should "return an break clause required error when 'has break clause' is true and there are no break clause details" in {
-    val testData = fullData.updated(keys.leaseAgreementType, LeaseAgreementTypesLicenceOther.name) - writtenBreakClauseDetails
+    val testData = fullData.updated(keys.leaseAgreementType, LeaseAgreementType.licenceOther.toString) - writtenBreakClauseDetails
     val form     = bind(testData)
 
     mustContainError(writtenBreakClauseDetails, "error.writtenAgreement.breakClauseDetails.required", form)
@@ -285,7 +285,7 @@ class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
       val amount: String   = s"${keys.writtenAgreement}.steppedDetails[$idx].amount"
 
     val fullData: Map[String, String] = Map(
-      keys.leaseAgreementType              -> LeaseAgreementTypesLicenceOther.name,
+      keys.leaseAgreementType              -> LeaseAgreementType.licenceOther.toString,
       writtenLeaseAgreementHasBreakClause  -> "true",
       writtenBreakClauseDetails            -> "BREAK CLAUSE DETAILS",
       writtenAgreementIsStepped            -> "true",

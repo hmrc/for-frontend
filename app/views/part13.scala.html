@@ -96,13 +96,12 @@
             Radios(
               name = s"propertyAlterationsDetails[$idx].alterationType",
               idPrefix = Option(s"propertyAlterationsDetails[$idx].alterationType"),
-              items = AlterationSetByType.all.map(i => {
-                RadioItem (
-                  content = Text(messages("alterationType." + i.name)),
-                  checked = i.name.equals(theForm(s"propertyAlterationsDetails[$idx].alterationType").value.getOrElse("")),
-                  value   = Option(i.name)
+              items = AlterationSetByType.values.toIndexedSeq.map(alterationType =>
+                RadioItem(
+                  content = Text(messages(s"alterationType.$alterationType")),
+                  checked = theForm(s"propertyAlterationsDetails[$idx].alterationType").value.contains(alterationType.toString),
+                  value   = Option(alterationType.toString)
                 )
-              }
               ),
               errorMessage = theForm.errors.asTextErrorMessageForField(s"propertyAlterationsDetails[$idx].alterationType"),
               fieldset = Option(

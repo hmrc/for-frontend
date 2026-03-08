@@ -17,7 +17,7 @@
 package form
 
 import models.pages.PageTwelve
-import models.serviceContracts.submissions.{ChargeDetails, ResponsibleTenant}
+import models.serviceContracts.submissions.{ChargeDetails, ResponsibleType}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
@@ -184,9 +184,9 @@ class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers:
     }
 
     val responsibilitiesWith8Services: PageTwelve = PageTwelve(
-      ResponsibleTenant,
-      ResponsibleTenant,
-      ResponsibleTenant,
+      ResponsibleType.tenant,
+      ResponsibleType.tenant,
+      ResponsibleType.tenant,
       true,
       Some(99.99),
       true,

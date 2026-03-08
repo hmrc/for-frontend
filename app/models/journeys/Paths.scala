@@ -17,8 +17,7 @@
 package models.journeys
 
 import models.pages.Summary
-import models.serviceContracts.submissions.{AddressConnectionTypeNo, AddressConnectionTypeYes}
-import models.serviceContracts.submissions.{AddressConnectionTypeYesChangeAddress, LeaseAgreementTypesVerbal, UserTypeVacated}
+import models.serviceContracts.submissions.*
 
 object Paths:
 
@@ -29,21 +28,16 @@ object Paths:
   private val vacatedPath         = Path(0 to 2)
 
   def pathFor(summary: Summary): Path =
-    val removePage1 = summary.addressConnection.exists {
-      case AddressConnectionTypeYes                                        => true
-      case AddressConnectionTypeYesChangeAddress | AddressConnectionTypeNo => false
-    }
-
-    if removePage1 then
+    if summary.addressConnection.contains(AddressConnectionType.yes) then
       Path(buildPath(summary).pages.filterNot(_ == 1))
     else
       buildPath(summary)
 
   private def buildPath(summary: Summary): Path =
     if isShortPath(summary) then shortPath
-    else if summary.lease.isDefined && summary.lease.get.leaseAgreementType == LeaseAgreementTypesVerbal then verbalAgreementPath
-    else if summary.rentReviews.isDefined && summary.rentReviews.get.leaseContainsRentReviews then rentReviewPaths
-    else if summary.customerDetails.isDefined && summary.customerDetails.get.userType == UserTypeVacated then vacatedPath
+    else if summary.lease.exists(_.leaseAgreementType == LeaseAgreementType.verbal) then verbalAgreementPath
+    else if summary.rentReviews.exists(_.leaseContainsRentReviews) then rentReviewPaths
+    else if summary.customerDetails.exists(_.userType == UserType.vacated) then vacatedPath
     else standardPath
 
   def isShortPath(summary: Summary): Boolean =

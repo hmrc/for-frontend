@@ -24,22 +24,22 @@
 <h2 class="govuk-heading-m">@messages("section6.heading")</h2>
 <dl class="govuk-summary-list">
     @summaryBlock(messages(if(isAgent) messages("label.leaseAgreementType.agent") else messages("label.leaseAgreementType")), 6, "leaseAgreementType") {
-      @messages(s"${LeaseAgreementTypes.all.head.key}.${p6.leaseAgreementType.name}")
+      @messages(s"leaseAgreementTypes.${p6.leaseAgreementType}")
     }
 
     @p6.writtenAgreementDetails.map { wa =>
 
-        @summaryBlock(if(isAgent) messages("label.writtenAgreement.startDate.agent."+p6.leaseAgreementType.name) else messages("label.writtenAgreement.startDate."+p6.leaseAgreementType.name), 6, "writtenAgreement_startDate_month") {
+        @summaryBlock(if(isAgent) messages("label.writtenAgreement.startDate.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.startDate."+p6.leaseAgreementType), 6, "writtenAgreement_startDate_month") {
            @displayRoughDate(wa.startDate)
         }
 
-        @summaryBlock(if(isAgent) messages("label.writtenAgreement.rentOpenEnded.agent."+p6.leaseAgreementType.name) else messages("label.writtenAgreement.rentOpenEnded."+p6.leaseAgreementType.name), 6, "writtenAgreement_rentOpenEnded") {
+        @summaryBlock(if(isAgent) messages("label.writtenAgreement.rentOpenEnded.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.rentOpenEnded."+p6.leaseAgreementType), 6, "writtenAgreement_rentOpenEnded") {
           @displayBoolean(wa.rentOpenEnded, "2")
         }
 
 
         @if(!wa.rentOpenEnded) {
-          @summaryBlock(if(isAgent) messages("label.writtenAgreement.leaseLength.agent."+p6.leaseAgreementType.name) else messages("label.writtenAgreement.leaseLength."+p6.leaseAgreementType.name), 6, "writtenAgreement_leaseLength_years") {
+          @summaryBlock(if(isAgent) messages("label.writtenAgreement.leaseLength.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.leaseLength."+p6.leaseAgreementType), 6, "writtenAgreement_leaseLength_years") {
             @wa.leaseLength.map { ll => <span class="yNumber">@{ll.years}</span> <span class="yText">years</span>, <span class="mNumber">@{ll.months}</span> <span class="mText">months</span> }
           }
         }
@@ -73,7 +73,7 @@
 
     }
 
-    @if(p6.leaseAgreementType == LeaseAgreementTypesVerbal) {
+    @if(p6.leaseAgreementType == LeaseAgreementType.verbal) {
         @p6.verbalAgreementDetails.startDate.map { sd =>
             @summaryBlock(messages(if(isAgent) messages("label.verbalAgreement.startDate.agent") else messages("label.verbalAgreement.startDate")), 6, "verbalAgreement.startDate_month") {
                 @displayRoughDate(sd)

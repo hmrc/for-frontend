@@ -20,7 +20,7 @@ import base.TestBaseSpec
 import connectors.Audit
 import models.RoughDate
 import models.pages.{PageFour, SubletDetails, Summary}
-import models.serviceContracts.submissions.{Address, AddressConnectionTypeYesChangeAddress, SubletPart}
+import models.serviceContracts.submissions.{Address, AddressConnectionType, SubletType}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import org.scalatestplus.mockito.MockitoSugar
@@ -74,7 +74,7 @@ class AddressAuditingSpec extends TestBaseSpec:
     Summary(
       "1234567890",
       nowInUK,
-      Some(AddressConnectionTypeYesChangeAddress),
+      Some(AddressConnectionType.`yes-change-address`),
       corrected,
       None,
       None,
@@ -101,7 +101,10 @@ class AddressAuditingSpec extends TestBaseSpec:
       None,
       None,
       None,
-      Some(PageFour(true, List(SubletDetails("Mr Tenant", submitted, SubletPart, Option("Something"), "Stuff", BigDecimal(0.01), RoughDate(None, Some(1), 2011))))),
+      Some(PageFour(
+        true,
+        List(SubletDetails("Mr Tenant", submitted, SubletType.part, Option("Something"), "Stuff", BigDecimal(0.01), RoughDate(None, Some(1), 2011)))
+      )),
       None,
       None,
       None,

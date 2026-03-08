@@ -16,21 +16,16 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum AlterationSetByType:
 
-sealed trait NotReviewRentFixedType extends NamedEnum {
-  val key = "notReviewRentFixedTypes"
-}
-
-object NotReviewRentFixedTypeFinalJudge extends NotReviewRentFixedType {
-  val name = "finalJudge"
-}
-
-object NotReviewRentFixedTypeInterimRent extends NotReviewRentFixedType {
-  val name = "interim"
-}
-
-object NotReviewRentFixedTypes extends NamedEnumSupport[NotReviewRentFixedType] {
-  val all: List[NotReviewRentFixedType] = List(NotReviewRentFixedTypeInterimRent, NotReviewRentFixedTypeFinalJudge)
-  val key: String                       = all.head.key
-}
+  case extension,
+    demolition,
+    addedMezzanineFloor,
+    removedWall,
+    addLift,
+    addedParking,
+    addedAirCondition,
+    fittingOut

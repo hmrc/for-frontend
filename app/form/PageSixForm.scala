@@ -147,12 +147,12 @@ object PageSixForm:
     keys.leaseLength   -> mandatoryIfFalse(s"$verbal.${keys.rentOpenEnded}", monthsYearDurationMapping(s"$verbal.${keys.leaseLength}"))
   )(VerbalAgreement.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  private val writtenAgreements: Seq[String] = Seq(LeaseAgreementTypesLeaseTenancy.name, LeaseAgreementTypesLicenceOther.name)
+  private val writtenAgreements: Seq[String] = Seq(LeaseAgreementType.leaseTenancy.toString, LeaseAgreementType.licenceOther.toString)
 
   private val pageSixMapping: Mapping[PageSix] = mapping(
     keys.leaseAgreementType -> leaseAgreementTypeMapping,
     keys.writtenAgreement   -> mandatoryIfAnyOf(keys.leaseAgreementType, writtenAgreements, writtenAgreementMapping),
-    keys.verbalAgreement    -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementTypesVerbal.name), verbalAgreementMapping)(using VerbalAgreement()),
+    keys.verbalAgreement    -> onlyIf(isEqual(keys.leaseAgreementType, LeaseAgreementType.verbal.toString), verbalAgreementMapping)(using VerbalAgreement()),
     "lastReviewDate"        -> optional(localDate),
     "rentReviewDate"        -> optional(localDate)
   )(PageSix.apply)(o => Some(Tuple.fromProductTyped(o)))

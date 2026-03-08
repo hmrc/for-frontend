@@ -69,16 +69,12 @@
               name = "userType",
               classes = "radio-button-that-show-hides",
               idPrefix = Option("userType"),
-              items = Seq(
-                  "occupier" -> messages("userType.occupier"),
-                  "owner" -> messages("userType.owner"),
-                  "occupiersAgent" -> messages("userType.occupiersAgent"),
-                  "ownersAgent" -> messages("userType.ownersAgent")
-              ).map( radioItem => RadioItem (
-                  content = Text(radioItem._2),
-                  checked = radioItem._1.equals(theForm("userType").value.getOrElse("")),
-                  value=Option(radioItem._1)
-              )
+              items = UserType.values.toSeq.filter(_ != UserType.vacated).map(userType =>
+                  RadioItem (
+                      content = Text(messages(s"userType.$userType")),
+                      checked = theForm("userType").value.contains(userType.toString),
+                      value = Option(userType.toString)
+                  )
               ),
               hint = Hint(content = Text(messages("hint.occupierExplanation"))),
               errorMessage = theForm.errors.asTextErrorMessageForField("userType"),

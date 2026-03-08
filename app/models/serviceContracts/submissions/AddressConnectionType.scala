@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package models.serviceContracts.submissions
 
-sealed trait TenantsAddressType extends NamedEnum {
-  val key = "isTenantsAddressType"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum AddressConnectionType:
 
-object TenantsAddressTypeDifferentAddress extends TenantsAddressType {
-  val name = "differentAddress"
-}
-
-object TenantsAddressTypeMain extends TenantsAddressType {
-  val name = "mainAddress"
-}
-
-object TenantsAddressTypes extends NamedEnumSupport[TenantsAddressType] {
-  val all: List[TenantsAddressType] = List(TenantsAddressTypeMain, TenantsAddressTypeDifferentAddress)
-}
+  case yes,
+    `yes-change-address`,
+    no

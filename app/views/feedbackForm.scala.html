@@ -48,7 +48,7 @@
         <input type="hidden" name="referrer" value="@request.host@request.uri"/>
         <input type="hidden" name="service"  value="RALD">
         <input type="hidden" name="canOmitComments"  value="true">
-        <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(NormalJourney.name)"/>
+        <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.feedbackPage.name)"/>
 
         @govukRadios(
             Radios(

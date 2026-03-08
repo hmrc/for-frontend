@@ -153,11 +153,9 @@ class DefaultSubmissionBuilder extends SubmissionBuilder:
 
   private def occupierNameFor(p3: PageThree) =
     p3.occupierType match
-      case OccupierTypeNobody      => Some("Nobody")
-      case OccupierTypeIndividuals => Some(p3.mainOccupierName.getOrElse(""))
-      case OccupierTypeCompany     =>
-        Some(Seq(p3.occupierCompanyName, p3.occupierCompanyContact).flatten.mkString(" - ").take(50))
-      case _                       => None
+      case OccupierType.nobody      => Some("Nobody")
+      case OccupierType.individuals => Some(p3.mainOccupierName.getOrElse(""))
+      case OccupierType.company     => Some(Seq(p3.occupierCompanyName, p3.occupierCompanyContact).flatten.mkString(" - ").take(50))
 
   private def toSublet(p4: PageFour) = Sublet(p4.propertyIsSublet, p4.sublet.map(toSubletData))
 
@@ -190,7 +188,7 @@ class DefaultSubmissionBuilder extends SubmissionBuilder:
 
   private def toLeaseOrAgreement(p6: PageSix) =
     p6 match
-      case PageSix(LeaseAgreementTypesVerbal, _, verbal, _, _) =>
+      case PageSix(LeaseAgreementType.verbal, _, verbal, _, _) =>
         LeaseOrAgreement(
           p6.leaseAgreementType,
           None,
@@ -220,10 +218,10 @@ class DefaultSubmissionBuilder extends SubmissionBuilder:
   private def toRentReviewDetails(p7d: PageSevenDetails) =
     RentReviewDetails(
       p7d.reviewIntervalType match
-        case ReviewIntervalTypeEvery3Years => Some(MonthsYearDuration(0, 3))
-        case ReviewIntervalTypeEvery5Years => Some(MonthsYearDuration(0, 5))
-        case ReviewIntervalTypeEvery7Years => Some(MonthsYearDuration(0, 7))
-        case ReviewIntervalTypeOther       => p7d.reviewIntervalTypeSpecify,
+        case ReviewIntervalType.every3Years => Some(MonthsYearDuration(0, 3))
+        case ReviewIntervalType.every5Years => Some(MonthsYearDuration(0, 5))
+        case ReviewIntervalType.every7Years => Some(MonthsYearDuration(0, 7))
+        case ReviewIntervalType.other       => p7d.reviewIntervalTypeSpecify,
       p7d.lastReviewDate,
       p7d.canRentReduced,
       p7d.rentResultOfRentReview,

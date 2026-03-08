@@ -65,14 +65,14 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
 
   it should "set occupier name as 'Nobody' if the property is not occupied" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeNobody.name))
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.nobody.toString))
     val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
     sub.theProperty.flatMap(_.occupierName).value shouldBe "Nobody"
   }
 
   it should "set occupier name as first 50 chars of (company name + contact name) if a company occupies the property" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeCompany.name))
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.company.toString))
       .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
       .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
     val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
@@ -81,7 +81,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
 
   it should "set occupier name as main occupier's name if 'one or more individuals' occupies the property" in {
     val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierTypeIndividuals.name))
+    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.individuals.toString))
       .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
     val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
     sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo"
@@ -254,7 +254,6 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val page9FormData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("monthly"),
       "totalRent.annualRentExcludingVat" -> Seq("15588"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -269,7 +268,6 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val page9WeeklyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("weekly"),
       "totalRent.annualRentExcludingVat" -> Seq("100"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -284,7 +282,6 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val page9MonthlyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("monthly"),
       "totalRent.annualRentExcludingVat" -> Seq("5000"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -299,7 +296,6 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val page9QuarterlyRentData: Map[String, Seq[String]] = Map(
-      "totalRent.rentLengthType"         -> Seq("quarterly"),
       "totalRent.annualRentExcludingVat" -> Seq("250"),
       "rent-paid"                        -> Seq(""),
       "rentBecomePayable.day"            -> Seq("1"),
@@ -385,17 +381,17 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
 
     val propertyAddress: Option[Address]        = None
     val alternatePropertyAddress: Some[Address] = Some(tenantsPropertyAddress)
-    val customerDetails: CustomerDetails        = CustomerDetails("fn", UserTypeOccupier, ContactDetails("01234567890", "abc@mailinator.com"))
+    val customerDetails: CustomerDetails        = CustomerDetails("fn", UserType.occupier, ContactDetails("01234567890", "abc@mailinator.com"))
 
     val theProperty: TheProperty =
-      TheProperty("Stuff", OccupierTypeIndividuals, Some("Mike Ington"), Some(RoughDate(None, Some(7), 2013)), false, Some(true), None)
+      TheProperty("Stuff", OccupierType.individuals, Some("Mike Ington"), Some(RoughDate(None, Some(7), 2013)), false, Some(true), None)
 
     val sublet: Sublet = Sublet(
       true,
       List(SubletData(
         "Jake Smythe",
         Address("Some Company", Some("Some Road"), None, "AA11 1AA"),
-        SubletPart,
+        SubletType.part,
         Option("basement"),
         "commercial",
         Some(200),
@@ -404,10 +400,10 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val landlord: Landlord =
-      Landlord("Graham Goose", Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionTypeOther, Some("magic"))
+      Landlord("Graham Goose", Some(Address("Some Company", Some("Some Road"), None, "AA11 1AA")), LandlordConnectionType.other, Some("magic"))
 
     val leaseOrAgreement: LeaseOrAgreement = LeaseOrAgreement(
-      LeaseAgreementTypesLeaseTenancy,
+      LeaseAgreementType.leaseTenancy,
       Some(true),
       Some("adjf asdklfj a;sdljfa dsflk"),
       Some(true),
@@ -424,17 +420,17 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
         Some(RoughDate(None, Some(4), 2013)),
         true,
         true,
-        Some(RentReviewResultDetails(RoughDate(None, Some(7), 2012), false, Some(RentFixedTypeIndependent)))
+        Some(RentReviewResultDetails(RoughDate(None, Some(7), 2012), false, Some(RentFixedType.independent)))
       ))
     )
-    val rentAgreement: RentAgreement = RentAgreement(true, None, RentSetByTypeRenewedLease)
+    val rentAgreement: RentAgreement = RentAgreement(true, None, RentSetByType.renewedLease)
 
     val rent: Rent = Rent(
       Some(15588),
       LocalDate.of(2013, 11, 1),
       LocalDate.of(2013, 11, 1),
       true,
-      RentBaseTypeOther,
+      RentBaseType.other,
       Some("here are some details about what the rent is based on")
     )
 
@@ -458,9 +454,9 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     )
 
     val responsibilities: Responsibilities       = Responsibilities(
-      ResponsibleBoth,
-      ResponsibleBoth,
-      ResponsibleBoth,
+      ResponsibleType.both,
+      ResponsibleType.both,
+      ResponsibleType.both,
       false,
       false,
       true,
@@ -470,7 +466,7 @@ class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
     val otherFactors: OtherFactors               = OtherFactors(false, None)
 
     val verbalLease: LeaseOrAgreement = LeaseOrAgreement(
-      LeaseAgreementTypesVerbal,
+      LeaseAgreementType.verbal,
       None,
       None,
       None,

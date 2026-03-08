@@ -17,7 +17,6 @@
 package utils
 
 import form.*
-import models.*
 import play.api.data.Form
 import util.DateUtil.nowInUK
 import utils.FormBindingTestAssertions.*
@@ -86,19 +85,10 @@ trait CurrencySpecs:
   val validAmount: Seq[String] = Seq("192307.69", "1", "250", "55421")
   val exceededMax: Seq[String] = Seq("10000000", "10000001", "19999999.99")
 
-  def validateAnnualRent[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = ""): Unit = {
-    checkAnnualRentAmount(RentLengthTypeWeekly, field, form, formData, fieldErrorPart)
-    checkAnnualRentAmount(RentLengthTypeMonthly, field, form, formData, fieldErrorPart)
-    checkAnnualRentAmount(RentLengthTypeQuarterly, field, form, formData, fieldErrorPart)
-  }
-
-  private def checkAnnualRentAmount[T](rentLengthType: RentLengthType, field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String)
-    : Unit =
-    val data            = formData.updated(s"$field.rentLengthType", rentLengthType.name)
+  def validateAnnualRent[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = ""): Unit =
     val annualRentField = s"$field.annualRentExcludingVat"
-
-    validateNoError(annualRentField, validAmount, form, data)
-    validateError(annualRentField, exceededMax, Errors.maxCurrencyAmountExceeded + fieldErrorPart, form, data, Some(annualRentField))
+    validateNoError(annualRentField, validAmount, form, formData)
+    validateError(annualRentField, exceededMax, Errors.maxCurrencyAmountExceeded + fieldErrorPart, form, formData, Some(annualRentField))
 
   def validateCurrency[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String = ""): Unit =
     validateError(field, invalidCurrencyValues, Errors.invalidCurrency + fieldErrorPart, form, formData)

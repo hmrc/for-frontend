@@ -16,26 +16,13 @@
 
 package models
 
-sealed trait RentLengthType extends NamedEnum {
-  val key = "rentLengthTypes"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum JourneyName(val name: String):
 
-object RentLengthTypeAnnually extends RentLengthType {
-  val name = "annual"
-}
+  override def toString: String = name
 
-object RentLengthTypeQuarterly extends RentLengthType {
-  val name = "quarterly"
-}
-
-object RentLengthTypeMonthly extends RentLengthType {
-  val name = "monthly"
-}
-
-object RentLengthTypeWeekly extends RentLengthType {
-  val name = "weekly"
-}
-
-object RentLengthTypes extends NamedEnumSupport[RentLengthType] {
-  val all: List[RentLengthType] = List(RentLengthTypeAnnually, RentLengthTypeQuarterly, RentLengthTypeMonthly, RentLengthTypeWeekly)
-}
+  case normalJourney extends JourneyName("normal-journey")
+  case notConnected extends JourneyName("not-connected")
+  case feedbackPage extends JourneyName("feedback-page")

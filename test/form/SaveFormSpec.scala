@@ -111,7 +111,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers:
     val summaryForTestDocWithTestData: Summary = Summary(
       refNumWithDoc,
       nowInUK,
-      Some(AddressConnectionTypeYesChangeAddress),
+      Some(AddressConnectionType.`yes-change-address`),
       Some(Address("123", None, None, "AA11 1AA")),
       None,
       None,
@@ -177,7 +177,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers:
     val emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6: Document = emptyFieldsTestDoc.add(page6WithNonEmptyTestDataFields)
 
     val mappedPage6WithNonEmptyFields: PageSix = PageSix(
-      LeaseAgreementTypesLeaseTenancy,
+      LeaseAgreementType.leaseTenancy,
       Some(WrittenAgreement(
         RoughDate(None, Some(3), 2011),
         false,
@@ -197,7 +197,7 @@ class SaveFormSpec extends AnyWordSpec with should.Matchers:
     val summaryWithNonEmptyFieldsAddedToPage6: Summary = Summary(
       "",
       nowInUK,
-      Some(AddressConnectionTypeYesChangeAddress),
+      Some(AddressConnectionType.`yes-change-address`),
       Some(Address("123", None, None, "AA11 1AA")),
       None,
       None,
