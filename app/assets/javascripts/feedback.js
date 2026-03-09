@@ -1,5 +1,5 @@
 
-    VoaFeedback.helpForm = function() {
+    VOFeedback.helpForm = function() {
         const helpFormLink = $('#helpFormLink');
 
         if (helpFormLink.attr('href') !== undefined) {

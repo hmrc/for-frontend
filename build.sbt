@@ -35,7 +35,7 @@ lazy val microservice = Project("for-frontend", file("."))
         "javascripts/intelAlerts.js",
         "javascripts/messages.js",
         "javascripts/radioToggle.js",
-        "javascripts/voaFor.js"
+        "javascripts/voRALD.js"
       ))
     ),
     Assets / pipelineStages := Seq(concat, digest),

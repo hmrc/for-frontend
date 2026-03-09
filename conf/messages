@@ -74,7 +74,7 @@ label.phase=This is a new service – your <a href="{0}" target="_blank" id="bet
 label.phase2=This is a new service – your <a href="{0}" class="govuk-link" target="_blank" id="betaFeedback">feedback</a> will help us to improve it.
 label.beta=Beta
 label.section=Section {0} of {1}
-label.footer.builtBy=Built by the <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Valuation Office Agency</a>
+label.footer.builtBy=Built by the <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Valuation Office</a>
 label.footer.licence=All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
 label.footer.ogl=Open Government Licence
 label.footer.crown=Crown copyright
@@ -155,7 +155,7 @@ label.address.townCity=Town or city
 label.address.postcode=Postcode (optional)
 label.currentAddress=Current address
 label.updatedAddress=Updated address
-label.suggestedChanges=Suggested changes to the address may not be<br />accepted by the VOA.
+label.suggestedChanges=Suggested changes to the address may not be<br />accepted by the VO.
 
 #SECTION 2
 ##############################
@@ -304,7 +304,7 @@ error.subletPropertyReasonDescription.required = Enter what the property is used
 error.subletPropertyReasonDescription.maxLength = The property use must be 100 characters or fewer
 error.required.sublet.annualRent = Enter how much rent is paid
 error.invalid_currency.sublet.annualRent = The rent paid must be a number
-error.maxCurrencyAmountExceeded.sublet.annualRent = Maximum amount exceeded - please contact the VOA
+error.maxCurrencyAmountExceeded.sublet.annualRent = Maximum amount exceeded - please contact the VO
 error.date_must_be_in_past.sublet.rentFixedDate = The date the let or sub-let started must be in the past
 error.date_before_1900.sublet.rentFixedDate = The date the let or sub-let started must be after December 1899
 
@@ -411,7 +411,7 @@ label.writtenAgreement.steppedDetails.amount=The rent paid or to be paid per yea
 label.writtenAgreement.steppedDetails.amount.agent=The rent paid or to be paid per year during this period (excluding VAT).
 label.writtenAgreement.steppedDetails.hint=Enter the yearly amount even if the period is for less or more than a year.
 label.writtenAgreement.steppedDetails=Stepped-rent details
-hint.leaseAgreementType=For multiple leases or tenancy agreements, enter details of the primary lease then contact the Valuation Office Agency to provide details of the other lease or agreements.
+hint.leaseAgreementType=For multiple leases or tenancy agreements, enter details of the primary lease then contact the Valuation Office to provide details of the other lease or agreements.
 
 error.leaseType.required=Select the type of lease or agreement
 error.leaseOpenEnded.required=Select ‘Yes’ if the current agreement is open-ended
@@ -907,7 +907,7 @@ label.no9=No
 
 #PDF
 ###############################
-heading.summary.pdf=Only sign below if requested by the Valuation Office Agency
+heading.summary.pdf=Only sign below if requested by the Valuation Office
 heading.summary.pdf.name=Print name (in capitals)
 heading.summary.pdf.signature=Signature
 heading.summary.pdf.date=Date signed
@@ -1127,7 +1127,7 @@ error.403.heading=The reference number you entered does not match our records. P
 error.409.heading=You cannot edit this information because it has already been submitted.
 error.409.body=You can email us at <a href="mailto:formhelp@voa.gov.uk">formhelp@voa.gov.uk</a> if you need further help.
 
-error.maxCurrencyAmountExceeded=Maximum amount exceeded - please contact the VOA
+error.maxCurrencyAmountExceeded=Maximum amount exceeded - please contact the VO
 
 #SESSION TIMEOUT
 ##############################
@@ -1143,7 +1143,7 @@ intel.alert.notBeforeLeaseDate=This date should not be before the lease or agree
 #INFO PAGES
 ##############################
 heading.termsandconditions=Terms and conditions
-content.termsandconditions=<p>These terms and conditions govern your use of the Valuation Office Agency’s (VOA) - Rent and Lease Details online service, as governed by the laws of England and Wales. Please read these terms and conditions carefully as they affect your rights and liabilities in the law.</p><p>By using this website, you agree to the terms and conditions as provided.</p><h2 class="heading-medium">Using this online service</h2><p>We make every effort to ensure that the information published on this website is accurate. However, the VOA cannot accept any liability for the accuracy of this information, and those who use it do so at their own risk.</p><p>We cannot guarantee that the service will be fault free. If there is a problem with the service, you should use the ‘Get help with this form’ link at the bottom of each page and we will come back to you as soon as we can.</p><h2 class="heading-medium">Virus protection</h2><p>We make every effort to carefully check and test all the material but we would advise users to run an anti-virus program on all material downloaded online.</p><p>The VOA accepts no responsibility for any loss, disruption or damage to your data or  computer system while using this website.</p><h2 class="heading-medium">Amendments to terms and conditions</h2><p>We may update these terms and conditions from time to time and by continuing to use the site, you confirm your continued agreement to these terms and conditions of use.</p><h2 class="heading-medium">Security</h2><p>To ensure that your data is kept safe, we use Secure Sockets Layer (SSL) protection, one of the strongest security systems, and 128 bit encryption to store and transfer your data.</p><p>SSL works by:</p><ul class="list-bullet"><li>preventing impersonation - you can tell that you are using a genuine SSL website by the padlock symbol at the bottom of the screen or your browser’s address bar</li><li>encrypting data - as soon as your computer has recognised our computer they encrypt all information that is passed between them. Data encryption means that no-one else can read or change your information as it travels over the Internet</li><li>preventing scrambling - SSL uses a Message Authentication Code (MAC) to prevent anyone tampering with our website. Your computer will always check this code before it takes a message from us. This means that if anyone tries to interfere with a message, your computer will not recognise the code and will alert you.</li></ul>
+content.termsandconditions=<p>These terms and conditions govern your use of the Valuation Office (VO) - Rent and Lease Details online service, as governed by the laws of England and Wales. Please read these terms and conditions carefully as they affect your rights and liabilities in the law.</p><p>By using this website, you agree to the terms and conditions as provided.</p><h2 class="heading-medium">Using this online service</h2><p>We make every effort to ensure that the information published on this website is accurate. However, the VO cannot accept any liability for the accuracy of this information, and those who use it do so at their own risk.</p><p>We cannot guarantee that the service will be fault free. If there is a problem with the service, you should use the ‘Get help with this form’ link at the bottom of each page and we will come back to you as soon as we can.</p><h2 class="heading-medium">Virus protection</h2><p>We make every effort to carefully check and test all the material but we would advise users to run an anti-virus program on all material downloaded online.</p><p>The VO accepts no responsibility for any loss, disruption or damage to your data or  computer system while using this website.</p><h2 class="heading-medium">Amendments to terms and conditions</h2><p>We may update these terms and conditions from time to time and by continuing to use the site, you confirm your continued agreement to these terms and conditions of use.</p><h2 class="heading-medium">Security</h2><p>To ensure that your data is kept safe, we use Secure Sockets Layer (SSL) protection, one of the strongest security systems, and 128 bit encryption to store and transfer your data.</p><p>SSL works by:</p><ul class="list-bullet"><li>preventing impersonation - you can tell that you are using a genuine SSL website by the padlock symbol at the bottom of the screen or your browser’s address bar</li><li>encrypting data - as soon as your computer has recognised our computer they encrypt all information that is passed between them. Data encryption means that no-one else can read or change your information as it travels over the Internet</li><li>preventing scrambling - SSL uses a Message Authentication Code (MAC) to prevent anyone tampering with our website. Your computer will always check this code before it takes a message from us. This means that if anyone tries to interfere with a message, your computer will not recognise the code and will alert you.</li></ul>
 heading.cookies=Cookies
 content.cookies=<p>The Rent and Lease Detail service (RALD) puts small files, known as ‘cookies’, onto your computer to collect information about how you browse the site.</p>Cookies are used to:<ul class="list-bullet"><li>measure how you use the website so that it can be updated and improved based on your needs</li><li>remember the notifications you’ve seen so that we don’t show them to you again</li></ul><p>RALD cookies aren’t used to identify you personally.</p>You’ll normally see a message on the site before we store a cookie on your computer.<p>Find out more about <a href="http://www.aboutcookies.org/">how to manage cookies</a>.</p><h2 class="heading-medium">How cookies are used on RALD</h2><h3 class="heading-small">Measuring website usage (Google Analytics)</h3><p>We use Google Analytics software to collect information about how you use RALD. We do this to help make sure the site is meeting the needs of its users and to help us make improvements.</p><p>Google Analytics stores information about:</p><ul class="list-bullet"><li>the pages you visit on RALD</li><li>how long you spend on each page </li><li>how you got to the site</li></ul><p>We don’t collect or store your personal information (for example your name or address) so this information can’t be used to identify who you are.</p><p>We don’t allow Google to use or share our analytics data.</p><p>Google Analytics sets the following cookies:</p><h3 class="heading-small">Universal Analytics</h3><table><thead><tr><th>Name</th><th>Purpose</th><th>Expires</th></tr><tr><td>_ga</td><td>This helps us count how many people visit RALD by tracking if you’ve visited before</td><td>2 years</td></tr><tr><td>_gat</td><td>Used to manage the rate at which page view requests are made</td><td>10 minutes</td></tr></tbody></table><h3 class="heading-small">RALD specific cookies</h3><table><thead><tr><th>Name</th><th>Purpose</th><th>Expires</th></tr></thead><tbody><tr><td>mdtp</td><td>Stores session data</td><td>When you close your browser</td></tr><tr><td>mdtpdf</td><td>Stores session data</td><td>When you close your browser</td></tr></tbody></table><h3 class="heading-small">Our introductory message</h3><p>You may see a pop-up welcome message when you first visit. A cookie is stored so that your computer knows you’ve seen it, and knows not to show it again.</p><table><thead><tr><th>Name</th><th>Purpose</th><th>Expires</th></tr></thead><tbody><tr><td>seen_cookie_message</td><td>Saves a message to let us know that you have seen our cookie message</td><td>1 month</td></tr></tbody></table>
 
@@ -1155,8 +1155,8 @@ content.timeout.login=Log in again
 
 #INDEX
 #############################
-index.title=Send your rent, lease or ownership details to the Valuation Office Agency
-index.subheader=If you rent, lease or own a business property, you need to send the <a href="https://www.gov.uk/government/organisations/valuation-office-agency" target="_blank">Valuation Office Agency (VOA)</a> your details if they’ve asked you by letter to do so.
+index.title=Send your rent, lease or ownership details to the Valuation Office
+index.subheader=If you rent, lease or own a business property, you need to send the <a href="https://www.gov.uk/government/organisations/valuation-office-agency" target="_blank">Valuation Office (VO)</a> your details if they’ve asked you by letter to do so.
 index.takenToCourt=You could be taken to court if you submit false information.
 index.info=You’ll need the following information to use this service:
 index.leaseAgreement=your lease or agreement details (or any tenant’s details if you’re the owner)
@@ -1171,8 +1171,8 @@ index.before=Before you start
 index.before.p1=It takes about 30 mins to use this service.
 index.before.p2=You don’t have to complete it in one go. You can save what you’ve done and return to finish later on.
 index.help=If you need help
-index.help.p1=Contact the VOA team in your area for help with using the service.
-index.help.p2=You can find their contact details on the letter sent by the VOA.
+index.help.p1=Contact the VO team in your area for help with using the service.
+index.help.p2=You can find their contact details on the letter sent by the VO.
 
 #CONFIRMATION INFORMATION
 emailAddress.confirmation=We have sent a confirmation email to

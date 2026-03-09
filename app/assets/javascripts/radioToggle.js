@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    VoaRadioToggle.toggleFieldsBasedOnCheckedRadioButton = function(){
+    VORadioToggle.toggleFieldsBasedOnCheckedRadioButton = function(){
 
         function showFieldsAssociatedWithSelectedRadiosOnPageLoad() {
             //when page loads show the fields associated with selected radio buttons if any are checked

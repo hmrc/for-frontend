@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    VoaAlerts.intelAlert = function () {
+    VOAlerts.intelAlert = function () {
 
         //Section 9
         function intelCheckSection9(element){
