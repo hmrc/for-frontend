@@ -802,7 +802,7 @@ confirm.copy.list.1=We’ll update our records with the information you have giv
 confirm.copy.list.2=You do not need to contact us, but we may need to contact you to check some of the details you provided.
 
 label.quoteRefNum=If you have any questions about your form send an email, quoting your reference number {0}, to
-label.formHelpEmail=formhelp@voa.gov.uk
+label.formHelpEmail=formhelpvo@hmrc.gov.uk
 label.submitAnotherForm=Submit another form
 label.FeedbackLastPage=To help us improve our services please provide your feedback by clicking here
 label.giveFeedback=Click here to send us feedback
@@ -957,7 +957,7 @@ hint.vacated.form=<p>Please send:</p>\
   <li>Your contact telephone number</li>\
   </ul>\
   </p>\
-  <p>to <a href="mailto:formhelp@voa.gov.uk?subject=Ex-owners/occupiers form&body=Please email us your reference number, email address and/or telephone number only. If we require any further information we will contact you in due course. " target="_blank" id="mailto" onclick="gasend()">formhelp@voa.gov.uk</a></p>
+  <p>to <a href="mailto:formhelpvo@hmrc.gov.uk?subject=Ex-owners/occupiers form&body=Please email us your reference number, email address and/or telephone number only. If we require any further information we will contact you in due course. " target="_blank" id="mailto" onclick="gasend()">formhelpvo@hmrc.gov.uk</a></p>
 
 
 #NOT connected journey
@@ -1125,7 +1125,7 @@ error.410.heading=The page you requested is no longer available
 error.500.heading=There is a problem with the page and it cannot be displayed. Please try again later.
 error.403.heading=The reference number you entered does not match our records. Please check and try again.
 error.409.heading=You cannot edit this information because it has already been submitted.
-error.409.body=You can email us at <a href="mailto:formhelp@voa.gov.uk">formhelp@voa.gov.uk</a> if you need further help.
+error.409.body=You can email us at <a href="mailto:formhelpvo@hmrc.gov.uk">formhelpvo@hmrc.gov.uk</a> if you need further help.
 
 error.maxCurrencyAmountExceeded=Maximum amount exceeded - please contact the VO
 
