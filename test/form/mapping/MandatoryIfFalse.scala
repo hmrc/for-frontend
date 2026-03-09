@@ -14,41 +14,35 @@
  * limitations under the License.
  */
 
-package uk.gov.voa.play.form
+package form.mapping
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
 import play.api.data.Forms.*
 
-// TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
-// https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
-
-class MandatoryIfAnyAreTrue extends AnyFlatSpec with should.Matchers:
+class MandatoryIfFalse extends AnyFlatSpec with should.Matchers:
 
   import ConditionalMappings.*
 
   val form: Form[Model] = Form(mapping(
-    "f1"     -> boolean,
-    "f2"     -> boolean,
-    "f3"     -> boolean,
-    "target" -> mandatoryIfAnyAreTrue(Seq("f1", "f2", "f3"), nonEmptyText)
+    "source" -> boolean,
+    "target" -> mandatoryIfFalse("source", nonEmptyText)
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  case class Model(f1: Boolean, f2: Boolean, f3: Boolean, target: Option[String])
+  case class Model(source: Boolean, target: Option[String])
 
-  behavior of "mandatory if any are true"
+  behavior of "mandatory if false"
 
-  it should "mandate the target field if any of the source fields are true" in {
-    Seq("f1", "f2", "f3") foreach { f =>
-      val data = Map(f -> "true")
-      val res  = form.bind(data)
+  it should "mandate the target field if the source field is false, with field-level errors" in {
+    val data = Map("source" -> "false")
+    val res  = form.bind(data)
 
-      assert(res.errors.head.key === "target")
-    }
+    assert(res.errors.head.key === "target")
   }
 
-  it should "not mandate the target field if neither of the source fields are true" in {
+  it should "not mandate the target field if the source field is not false" in {
     val res = form.bind(Map.empty[String, String])
+
     assert(res.errors.isEmpty)
   }

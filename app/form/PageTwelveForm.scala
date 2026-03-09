@@ -16,12 +16,12 @@
 
 package form
 
+import form.mapping.*
+import form.mapping.ConditionalMappings.*
 import models.pages.*
 import models.serviceContracts.submissions.ChargeDetails
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings.*
-import uk.gov.voa.play.form.*
 import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import play.api.data.Mapping

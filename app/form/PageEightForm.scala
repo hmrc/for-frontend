@@ -16,10 +16,10 @@
 
 package form
 
+import form.mapping.ConditionalMappings.*
 import models.serviceContracts.submissions.RentAgreement
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.voa.play.form.ConditionalMappings.*
 import MappingSupport.*
 
 object PageEightForm:

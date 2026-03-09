@@ -14,37 +14,38 @@
  * limitations under the License.
  */
 
-package uk.gov.voa.play.form
+package form.mapping
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
 import play.api.data.Forms.*
 
-// TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
-// https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
-
-class MandatoryIfNot extends AnyFlatSpec with should.Matchers:
+class MandatoryIfAnyAreTrue extends AnyFlatSpec with should.Matchers:
 
   import ConditionalMappings.*
 
-  case class Model(source: String, target: Option[String])
-
   val form: Form[Model] = Form(mapping(
-    "source" -> nonEmptyText,
-    "target" -> mandatoryIfNot("source", "magicValue", nonEmptyText)
+    "f1"     -> boolean,
+    "f2"     -> boolean,
+    "f3"     -> boolean,
+    "target" -> mandatoryIfAnyAreTrue(Seq("f1", "f2", "f3"), nonEmptyText)
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  it should "mandate the target field if the source field DOES not match the specified value" in {
-    val data = Map("source" -> "NotTheMagicValue")
-    val res  = form.bind(data)
+  case class Model(f1: Boolean, f2: Boolean, f3: Boolean, target: Option[String])
 
-    assert(res.errors.head.key === "target")
+  behavior of "mandatory if any are true"
+
+  it should "mandate the target field if any of the source fields are true" in {
+    Seq("f1", "f2", "f3") foreach { f =>
+      val data = Map(f -> "true")
+      val res  = form.bind(data)
+
+      assert(res.errors.head.key === "target")
+    }
   }
 
-  it should "not mandate the target field if the source field DOES NOT match the specified value" in {
-    val data = Map("source" -> "magicValue")
-    val res  = form.bind(data)
-
+  it should "not mandate the target field if neither of the source fields are true" in {
+    val res = form.bind(Map.empty[String, String])
     assert(res.errors.isEmpty)
   }

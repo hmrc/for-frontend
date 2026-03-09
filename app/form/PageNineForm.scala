@@ -16,11 +16,11 @@
 
 package form
 
+import form.mapping.ConditionalMappings.*
 import models.pages.PageNine
 import models.serviceContracts.submissions.RentBaseType
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings.*
 import DateMappings.*
 import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}

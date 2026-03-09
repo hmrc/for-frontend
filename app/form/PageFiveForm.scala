@@ -17,12 +17,12 @@
 package form
 
 import form.MappingSupport.*
+import form.mapping.ConditionalMappings.*
 import models.pages.PageFive
 import models.serviceContracts.submissions.LandlordConnectionType
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import uk.gov.voa.play.form.ConditionalMappings.*
 
 object PageFiveForm:
 

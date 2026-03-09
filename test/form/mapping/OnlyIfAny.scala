@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.voa.play.form
+package form.mapping
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import org.scalatest.OptionValues.*
 import play.api.data.Form
 import play.api.data.Forms.*
-
-// TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
-// https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
 
 class OnlyIfAny extends AnyFlatSpec with should.Matchers:
 

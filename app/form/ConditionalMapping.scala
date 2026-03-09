@@ -16,10 +16,10 @@
 
 package form
 
+import form.mapping.Condition
+import form.mapping.ConditionalMappings.*
 import play.api.data.{FormError, Mapping}
 import play.api.data.validation.Constraint
-import uk.gov.voa.play.form.Condition
-import uk.gov.voa.play.form.ConditionalMappings.*
 
 object ConditionalMapping:
 

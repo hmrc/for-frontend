@@ -70,7 +70,7 @@ class AddressAuditingSpec extends TestBaseSpec:
     )
   }
 
-  private def summaryWithPropertyAddress(voaAddress: Option[Address], corrected: Option[Address]): Summary =
+  private def summaryWithPropertyAddress(voAddress: Option[Address], corrected: Option[Address]): Summary =
     Summary(
       "1234567890",
       nowInUK,
@@ -89,11 +89,11 @@ class AddressAuditingSpec extends TestBaseSpec:
       None,
       None,
       None,
-      voaAddress,
+      voAddress,
       Nil
     )
 
-  private def summaryWithSubletAddress(voaAddress: Option[Address], submitted: Address): Summary =
+  private def summaryWithSubletAddress(voAddress: Option[Address], submitted: Address): Summary =
     Summary(
       "123467890",
       nowInUK,
@@ -115,7 +115,7 @@ class AddressAuditingSpec extends TestBaseSpec:
       None,
       None,
       None,
-      voaAddress,
+      voAddress,
       Nil
     )
 

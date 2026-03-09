@@ -19,14 +19,14 @@ package form
 import form.DateMappings.*
 import form.Errors.{verbalAgreementStartIsAfterLastReview, verbalAgreementStartIsAfterRentReview}
 import form.MappingSupport.*
+import form.mapping.*
+import form.mapping.ConditionalMappings.*
 import models.pages.{PageSix, VerbalAgreement, WrittenAgreement}
 import models.serviceContracts.submissions.*
 import play.api.data.Forms.{default, localDate, mapping, optional, text, tuple}
 import play.api.data.*
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import uk.gov.voa.play.form.ConditionalMappings.*
-import uk.gov.voa.play.form.*
 import util.DateUtil.fullDateFormatter
 
 import java.time.LocalDate

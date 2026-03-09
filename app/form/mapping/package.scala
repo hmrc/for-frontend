@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.voa.play
+package form
 
-package object form:
+package object mapping:
 
   implicit val emptyOption: None.type   = None
   implicit val emptyList: List[Nothing] = List.empty
