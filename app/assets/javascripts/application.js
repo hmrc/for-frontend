@@ -6,12 +6,12 @@
 /******************/
 
 // set namespaces (remember to add new namespaces to .jshintrc)
-var VoaFor = {};
-var VoaCommon = {};
-var VoaFeedback = {};
-var VoaMessages = {};
-var VoaAlerts = {};
-var VoaRadioToggle = {};
+var VORALD = {};
+var VOCommon = {};
+var VOFeedback = {};
+var VOMessages = {};
+var VOAlerts = {};
+var VORadioToggle = {};
 var ref;
 
 (function ($) {
@@ -19,34 +19,34 @@ var ref;
     $(document).ready(function () {
 
         /** Init functions **/
-        //voaFor.js
-        VoaFor.showHistoryBackLink();
-        VoaFor.printLinkSetup();
-        VoaFor.printPageShouldPrintOnLoad();
-        VoaFor.addField();
-        VoaFor.removeField();
-        VoaFor.addFieldMulti();
-        VoaFor.removeFieldMulti();
-        VoaFor.selectMobile();
-        VoaFor.isEdit();
-        VoaFor.getReferrer();
-        VoaFor.addMultiButtonState();
-        VoaFor.doYouOwnTheProperty();
-        VoaFor.setHelpGDSClasses();
+        //voRALD.js
+        VORALD.showHistoryBackLink();
+        VORALD.printLinkSetup();
+        VORALD.printPageShouldPrintOnLoad();
+        VORALD.addField();
+        VORALD.removeField();
+        VORALD.addFieldMulti();
+        VORALD.removeFieldMulti();
+        VORALD.selectMobile();
+        VORALD.isEdit();
+        VORALD.getReferrer();
+        VORALD.addMultiButtonState();
+        VORALD.doYouOwnTheProperty();
+        VORALD.setHelpGDSClasses();
 
         //feedback.js
-        VoaFeedback.helpForm();
+        VOFeedback.helpForm();
 
         //intelAlerts.js
-        VoaAlerts.intelAlert();
+        VOAlerts.intelAlert();
 
         //radioToggle.js
-        VoaRadioToggle.toggleFieldsBasedOnCheckedRadioButton();
+        VORadioToggle.toggleFieldsBasedOnCheckedRadioButton();
 
         //common.js
-        VoaCommon.anchorFocus();
-        VoaCommon.details();
-        VoaCommon.characterCount();
+        VOCommon.anchorFocus();
+        VOCommon.details();
+        VOCommon.characterCount();
     });
 
 })(jQuery);

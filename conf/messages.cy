@@ -74,7 +74,7 @@ label.phase=Mae hwn yn wasanaeth newydd – bydd eich <a href="{0}" target="_bla
 label.phase2=Mae hwn yn wasanaeth newydd – bydd eich <a href="{0}" class="govuk-link" target="_blank" id="betaFeedback">adborth</a> yn ein helpu i’w wella
 label.beta=Beta
 label.section=Adran {0} o {1}
-label.footer.builtBy=Adeiladwyd gan <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Asiantaeth y Swyddfa Brisio</a>
+label.footer.builtBy=Adeiladwyd gan <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Swyddfa Brisio</a>
 label.footer.licence=Mae’r holl gynnwys ar gael o dan y <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Drwydded Llywodraeth Agored f3.0</a> ac eithrio lle nodir yn wahanol
 label.footer.ogl=Trwydded Llywodraeth Agored
 label.footer.crown=Hawlfraint y Goron
@@ -156,7 +156,7 @@ label.address.townCity=Tref neu ddinas
 label.address.postcode=Cod post (dewisol)
 label.currentAddress=Cyfeiriad presennol
 label.updatedAddress=Cyfeiriad a ddiweddarwyd
-label.suggestedChanges=Efallai na chaiff newidiadau a awgrymir i’r cyfeiriad eu derbyn gan Asiantaeth y Swyddfa Brisio.
+label.suggestedChanges=Efallai na chaiff newidiadau a awgrymir i’r cyfeiriad eu derbyn gan Swyddfa Brisio.
 
 #SECTION 2
 ##############################
@@ -299,7 +299,7 @@ error.subletPropertyReasonDescription.required = Nodwch at beth y caiff yr eiddo
 error.subletPropertyReasonDescription.maxLength = Mae’n rhaid i ddefnydd yr eiddo fod yn 100 o gymeriadau neu lai
 error.required.sublet.annualRent = Nodwch faint o rent sy’n cael ei dalu
 error.invalid_currency.sublet.annualRent = Mae’n rhaid i’r rhent sy’n cael ei dalu fod yn rhif
-error.maxCurrencyAmountExceeded.sublet.annualRent = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
+error.maxCurrencyAmountExceeded.sublet.annualRent = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Swyddfa Brisio
 error.date_must_be_in_past.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad fod yn y gorffennol
 error.date_before_1900.sublet.rentFixedDate = Mae’n rhaid i’r dyddiad y cafodd yr eiddo ei osod neu ei is-osod fod ar ôl Rhagfyr 1899
 
@@ -447,7 +447,7 @@ error.writtenAgreement.breakClauseDetails.required = Nodwch fanylion y cymal tor
 error.writtenAgreement.breakClauseDetails.maxLength = Mae’n rhaid i fanylion y cymal torri fod yn 124 o gymeriadau neu lai
 error.required.writtenAgreement.steppedDetails.amount = Nodwch y rhent blynyddol am y cyfnod hwn
 error.invalid_currency.writtenAgreement.steppedDetails.amount = Mae’n rhaid i’r rhent fod yn rhif rhwng 1 a 9999999
-error.maxCurrencyAmountExceeded.writtenAgreement.steppedDetails.amount = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
+error.maxCurrencyAmountExceeded.writtenAgreement.steppedDetails.amount = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Swyddfa Brisio
 error.writtenAgreement.steppedDetails.stepFrom.day.required = Rhaid i’r dyddiad y mae’r rhent yn dechrau gynnwys diwrnod
 error.writtenAgreement.steppedDetails.stepFrom.month.required = Rhaid i’r dyddiad y mae’r rhent yn dechrau gynnwys mis
 error.writtenAgreement.steppedDetails.stepFrom.year.required = Rhaid i’r dyddiad y mae’r rhent yn dechrau gynnwys blwyddyn
@@ -549,7 +549,7 @@ error.rentBaseOn.required=Dewiswch beth mae’r rhent yn seiliedig arno
 
 error.required.annualRentExcludingVat = Nodwch y rhent blynyddol presennol
 error.invalid_currency.annualRentExcludingVat = Mae’n rhaid i’r rhent fod yn rhif rhwng 1 a 9999999
-error.maxCurrencyAmountExceeded.annualRentExcludingVat = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
+error.maxCurrencyAmountExceeded.annualRentExcludingVat = Rydych wedi mynd heibio’r terfyn - cysylltwch ag Swyddfa Brisio
 
 error.rentBasedOnDetails.required = Nodwch fanylion y rhent sylfaenol
 error.rentBasedOnDetails.maxLength = Mae’n rhaid i fanylion y rhent sylfaenol fod yn 250 o gymeriadau neu lai
@@ -916,7 +916,7 @@ label.no9=Nage
 
 #PDF
 ###############################
-heading.summary.pdf=Dylech ond llofnodi isod os bydd Asiantaeth y Swyddfa Brisio yn gofyn i chi wneud hynny
+heading.summary.pdf=Dylech ond llofnodi isod os bydd Swyddfa Brisio yn gofyn i chi wneud hynny
 heading.summary.pdf.name=Enw (mewn priflythrennau)
 heading.summary.pdf.signature=Llofnod
 heading.summary.pdf.date=Dyddiad y llofnod
@@ -963,7 +963,7 @@ hint.vacated.form=<p>Anfonwch:</p>\
   <li>Eich rhif teleffôn cyswllt</li>\
   </ul>\
   </p>\
-  <p>i <a href="mailto:formhelp@voa.gov.uk?subject=Ffurflen cyn-berchennog/ddeiliad&body=Ebostiwch eich cyfeirnod, cyfeiriad e-bost a/neu rif ffôn yn unig i ni. Os bydd angen rhagor o wybodaeth arnom, byddwn yn cysylltu â chi maes o law." target="_blank" id="mailto" onclick="gasendWelsh()">formhelp@voa.gov.uk</a> os gwelwch yn dda.</p>
+  <p>i <a href="mailto:formhelpvo@hmrc.gov.uk?subject=Ffurflen cyn-berchennog/ddeiliad&body=Ebostiwch eich cyfeirnod, cyfeiriad e-bost a/neu rif ffôn yn unig i ni. Os bydd angen rhagor o wybodaeth arnom, byddwn yn cysylltu â chi maes o law." target="_blank" id="mailto" onclick="gasendWelsh()">formhelpvo@hmrc.gov.uk</a> os gwelwch yn dda.</p>
 
 
 
@@ -1114,9 +1114,9 @@ error.410.heading=Nid yw’r dudalen y gofynnwyd amdani ar gael mwyach.
 error.500.heading=Mae problem gyda’r dudalen ac ni ellir ei dangos. Rhowch gynnig arall arni yn nes ymlaen.
 error.403.heading=Nid yw’r cyfeirnod rydych wedi’i roi yn cyd-fynd â’n cofnodion. Cadarnhewch fod y rhif cywir gennych a rhowch gynnig arall arni.
 error.409.heading=Ni allwch olygu’r wybodaeth hon mwyach gan ei bod wedi’i chyflwyno eisoes.
-error.409.body=Gallwch anfon e-bost atom yn <a href="mailto:formhelp@voa.gov.uk">formhelp@voa.gov.uk</a> os bydd angen rhagor o help arnoch.
+error.409.body=Gallwch anfon e-bost atom yn <a href="mailto:formhelpvo@hmrc.gov.uk">formhelpvo@hmrc.gov.uk</a> os bydd angen rhagor o help arnoch.
 
-error.maxCurrencyAmountExceeded=Rydych wedi mynd heibio’r terfyn - cysylltwch ag Asiantaeth y Swyddfa Brisio
+error.maxCurrencyAmountExceeded=Rydych wedi mynd heibio’r terfyn - cysylltwch ag Swyddfa Brisio
 
 #SESSION TIMEOUT
 ##############################
@@ -1132,7 +1132,7 @@ intel.alert.notBeforeLeaseDate=Ni ddylai’r dyddiad hwn fod cyn dyddiad dechrau
 #INFO PAGES
 ##############################
 heading.termsandconditions=Telerau ac Amodau
-content.termsandconditions=<p>Mae’r telerau ac amodau hyn yn llywodraethu eich defnydd o wasanaeth Manylion Rhent a Phrydles ar-lein Asiantaeth y Swyddfa Brisio, fel y’i llywodraethir gan ddeddfau Cymru a Lloegr. Darllenwch y telerau ac amodau hyn yn ofalus gan eu bod yn effeithio ar eich hawliau a’ch cyfrifoldebau yn y gyfraith.</p><p>Wrth ddefnyddio’r wefan hon, rydych yn cytuno ar y telerau ac amodau fel y’u darparwyd.</p><h2 class="heading-medium">Defnyddio’r gwasanaeth ar-lein hwn</h2><p>Rydym yn gwneud pob ymdrech i sicrhau bod y wybodaeth a gyhoeddir ar y wefan yn gywir. Fodd bynnag, ni all Asiantaeth y Swyddfa Brisio dderbyn unrhyw gyfrifoldeb am gywirdeb y wybodaeth hon, ac mae’r rhai sy’n ei defnyddio yn gwneud hynny ar eu menter eu hunain.</p> <p>Ni allwn warantu y bydd y gwasanaeth heb unrhyw ddiffygion. Os bydd problem gyda’r gwasanaeth, dylech ddefnyddio’r ddolen ‘Cael help gyda’r dudalen hon’ ar waelod pob tudalen a byddwn yn cysylltu â chi cyn gynted ag y gallwn.</p> <h2 class="heading-medium">Diogelu rhag feirysau</h2> <p>Rydym yn gwneud pob ymdrech i wirio a phrofi’r holl ddeunydd yn ofalus, ond byddem yn cynghori defnyddwyr i redeg rhaglen gwrthfeirysau ar bob deunydd a lawrlwythir ar-lein.</p> <p>Nid yw Asiantaeth y Swyddfa Brisio yn derbyn unrhyw gyfrifoldeb am unrhyw golled, amhariad na difrod i’ch data na’ch system gyfrifiadurol tra byddwch yn defnyddio’r wefan hon.</p> <h2 class="heading-medium">Diwygiadau i’r telerau ac amodau</h2> <p>Gallwn ddiweddaru’r telerau ac amodau o bryd i’w gilydd a drwy barhau i ddefnyddio’r wefan rydych yn cadarnhau eich bod yn parhau i gytuno ar y telerau ac amodau defnydd hyn.</p> <h2 class="heading-medium">Diogelwch</h2> <p>Er mwyn sicrhau bod eich data’n cael eu cadw’n ddiogel, rydym yn defnyddio diogelwch Haen Socedi Diogel (SSL), un o’r systemau diogelwch cryfaf, ac amgryptiad 128 bit i storio a throsglwyddo eich data.</p> <p>Mae SSL yn gweithio drwy wneud y canlynol:</p> <ul class="list-bullet"> <li>atal pobl rhag dynwared rhywun arall - gallwch weld eich bod yn defnyddio gwefan SSL go iawn drwy’r symbol clo clap ar waelod y sgrin neu ym mar cyfeiriad eich porwr</li> <li>amgryptio data - cyn gynted ag y bydd eich cyfrifiadur wedi adnabod eich cyfrifiadur ni, bydd yn amgryptio’r holl wybodaeth a drosglwyddir rhyngddynt. Mae amgryptio data yn golygu na all unrhyw un arall ddarllen eich gwybodaeth wrth iddo deithio ar draws y Rhyngrwyd na’i newid </li> <li>atal anhrefnu (scrambling) - mae SSL yn defnyddio Cod Dilysu Neges (MAC) i atal unrhyw un rhag ymyrryd â’n gwefan. Bydd eich cyfrifiadur yn gwirio’r cod hwn bob tro cyn derbyn neges gennym. Golyga hyn, os bydd rhywun yn ceisio ymyrryd â neges, na fydd eich cyfrifiadur yn adnabod y cod a bydd yn eich rhybuddio.</li> </ul>
+content.termsandconditions=<p>Mae’r telerau ac amodau hyn yn llywodraethu eich defnydd o wasanaeth Manylion Rhent a Phrydles ar-lein Swyddfa Brisio, fel y’i llywodraethir gan ddeddfau Cymru a Lloegr. Darllenwch y telerau ac amodau hyn yn ofalus gan eu bod yn effeithio ar eich hawliau a’ch cyfrifoldebau yn y gyfraith.</p><p>Wrth ddefnyddio’r wefan hon, rydych yn cytuno ar y telerau ac amodau fel y’u darparwyd.</p><h2 class="heading-medium">Defnyddio’r gwasanaeth ar-lein hwn</h2><p>Rydym yn gwneud pob ymdrech i sicrhau bod y wybodaeth a gyhoeddir ar y wefan yn gywir. Fodd bynnag, ni all Asiantaeth y Swyddfa Brisio dderbyn unrhyw gyfrifoldeb am gywirdeb y wybodaeth hon, ac mae’r rhai sy’n ei defnyddio yn gwneud hynny ar eu menter eu hunain.</p> <p>Ni allwn warantu y bydd y gwasanaeth heb unrhyw ddiffygion. Os bydd problem gyda’r gwasanaeth, dylech ddefnyddio’r ddolen ‘Cael help gyda’r dudalen hon’ ar waelod pob tudalen a byddwn yn cysylltu â chi cyn gynted ag y gallwn.</p> <h2 class="heading-medium">Diogelu rhag feirysau</h2> <p>Rydym yn gwneud pob ymdrech i wirio a phrofi’r holl ddeunydd yn ofalus, ond byddem yn cynghori defnyddwyr i redeg rhaglen gwrthfeirysau ar bob deunydd a lawrlwythir ar-lein.</p> <p>Nid yw Asiantaeth y Swyddfa Brisio yn derbyn unrhyw gyfrifoldeb am unrhyw golled, amhariad na difrod i’ch data na’ch system gyfrifiadurol tra byddwch yn defnyddio’r wefan hon.</p> <h2 class="heading-medium">Diwygiadau i’r telerau ac amodau</h2> <p>Gallwn ddiweddaru’r telerau ac amodau o bryd i’w gilydd a drwy barhau i ddefnyddio’r wefan rydych yn cadarnhau eich bod yn parhau i gytuno ar y telerau ac amodau defnydd hyn.</p> <h2 class="heading-medium">Diogelwch</h2> <p>Er mwyn sicrhau bod eich data’n cael eu cadw’n ddiogel, rydym yn defnyddio diogelwch Haen Socedi Diogel (SSL), un o’r systemau diogelwch cryfaf, ac amgryptiad 128 bit i storio a throsglwyddo eich data.</p> <p>Mae SSL yn gweithio drwy wneud y canlynol:</p> <ul class="list-bullet"> <li>atal pobl rhag dynwared rhywun arall - gallwch weld eich bod yn defnyddio gwefan SSL go iawn drwy’r symbol clo clap ar waelod y sgrin neu ym mar cyfeiriad eich porwr</li> <li>amgryptio data - cyn gynted ag y bydd eich cyfrifiadur wedi adnabod eich cyfrifiadur ni, bydd yn amgryptio’r holl wybodaeth a drosglwyddir rhyngddynt. Mae amgryptio data yn golygu na all unrhyw un arall ddarllen eich gwybodaeth wrth iddo deithio ar draws y Rhyngrwyd na’i newid </li> <li>atal anhrefnu (scrambling) - mae SSL yn defnyddio Cod Dilysu Neges (MAC) i atal unrhyw un rhag ymyrryd â’n gwefan. Bydd eich cyfrifiadur yn gwirio’r cod hwn bob tro cyn derbyn neges gennym. Golyga hyn, os bydd rhywun yn ceisio ymyrryd â neges, na fydd eich cyfrifiadur yn adnabod y cod a bydd yn eich rhybuddio.</li> </ul>
 heading.cookies=Cwcis
 content.cookies=<p>Mae’r gwasanaeth Manylion Rhent a Phrydles (RALD) yn rhoi ffeiliau bach, a elwir yn ‘cookies’, ar eich cyfrifiadur er mwyn casglu gwybodaeth ynglŷn â sut rydych yn pori’r wefan.</p>Defnyddir cwcis er mwyn:<ul class="list-bullet"><li>mesur sut rydych yn defnyddio’r wefan fel ei bod yn cael ei diweddaru a’i gwella yn seiliedig ar eich anghenion</li><li>cofio’r hysbysiadau rydych wedi’u gweld fel nad ydym yn eu dangos i chi eto</li></ul><p>Ni ddefnyddir cwcis RALD i’ch adnabod chi’n bersonol.</p> Byddwch fel arfer yn gweld neges ar y safle cyn y byddwn yn storio cwcis ar eich cyfrifiadur. <p>Rhagor o wybodaeth ynglŷn â <a href="http://www.aboutcookies.org/">sut rydym yn rheoli cwcis</a>.</p> <h2 class="heading-medium">Sut y defnyddir cwcis ar RALD</h2> <h3 class="heading-small">Mesur defnydd o’r wefan (Google Analytics)</h3> <p>Rydym yn defnyddio meddalwedd Google Analytics i gasglu gwybodaeth ynglŷn â sut rydych yn defnyddio RALD. Rydym yn gwneud hyn er mwyn helpu i wneud yn siŵr bod y safle’n diwallu anghenion ei defnyddiwr ac i’n helpu i wneud gwelliannau.</p> <p>Mae Google Analytics yn storio gwybodaeth am y canlynol:</p> <ul class="list-bullet"> <li>y tudalennau y gwnaethoch ymweld â nhw ar RALD</li> <li>faint o amser y gwnaethoch ei dreulio ar bob tudalen</li> <li>sut y daethoch i’r safle</li> </ul> <p>Nid ydym yn casglu nac yn storio eich gwybodaeth bersonol (er enghraifft eich enw neu eich cyfeiriad) felly ni ellir defnyddio’r wybodaeth i nodi pwy ydych.</p> <p>Nid ydym yn caniatáu i Google ddefnyddio na rhannu ein data dadansoddi.</p> <p>Mae Google Analytics yn gosod y cwcis canlynol:</p> <h3 class="heading-small">Universal Analytics</h3> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> <tr> <td>_ga</td> <td>Mae hyn yn ei helpu i gyfrif faint o bobl sy’n ymweld â RALD drwy weld a ydych wedi ymweld o’r blaen</td> <td>2 flynedd</td> </tr> <tr> <td>_gat</td> <td>Fe’i defnyddir i reoli’r raddfa y gwneir ceisiadau i weld tudalen newydd</td> <td>10 munud</td> </tr> </tbody> </table> <h3 class="heading-small">Cwcis sy’n benodol ar gyfer RALD</h3> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> </thead> <tbody> <tr> <td>mdtp</td> <td>Storio data sesiynau</td> <td>Pan fyddwch yn cau eich porwr</td> </tr> <tr> <td>mdtpdf</td> <td>Storio data sesiynau</td> <td>Pan fyddwch yn cau eich porwr</td> </tr> </tbody> </table> <h3 class="heading-small">Ein neges ragarweiniol</h3> <p>Efallai y byddwch yn gweld neges groeso naid pan fyddwch yn ymweld am y tro cyntaf. Storir cwcis ar eich porwr fel bod eich cyfrifiadur yn gwybod eich bod wedi ei gweld, a’i fod yn gwybod i beidio â’i dangos eto.</p> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> </thead> <tbody> <tr> <td>seen_cookie_message</td> <td>Mae’n cadw neges i roi gwybod i ni eich bod wedi gweld ein neges cwcis.</td> <td>1 mis</td> </tr> </tbody> </table>
 label.writtenAgreement.steppedDetails.amount.agent=Y rhent a dalwyd neu sydd i’w dalu bob blwyddyn yn ystod y cyfnod hwn (heb gynnwys TAW).
@@ -1145,8 +1145,8 @@ content.timeout.login=Mewngofnodwch eto
 
 #INDEX
 #############################
-index.title=Anfonwch eich manylion rhent, prydles neu berchenogaeth at Asiantaeth y Swyddfa Brisio
-index.subheader=Mae angen i chi yrru gwybodaeth ynglyn ȃ’ch eiddo busnes i <a href="https://www.gov.uk/government/organisations/valuation-office-agency" target="_blank">Asiantaeth y Swyddfa Brisio (VOA)</a> os ydynt wedi gofyn i chi.
+index.title=Anfonwch eich manylion rhent, prydles neu berchenogaeth at Swyddfa Brisio
+index.subheader=Mae angen i chi yrru gwybodaeth ynglyn ȃ’ch eiddo busnes i <a href="https://www.gov.uk/government/organisations/valuation-office-agency" target="_blank">Swyddfa Brisio (VO)</a> os ydynt wedi gofyn i chi.
 index.takenToCourt=Gallech orfod fynd i’r llys os byddwch yn cyflwyno gwybodaeth ffug.
 index.info=‘Rydych angen gwybodaeth ar y canlynol:
 index.leaseAgreement=eich prydles neu gytundeb, ynglyn ag unrhyw adolygiad rhent neu cyfnod rhent rhad ac am ddim (neu unrhyw wybodaeth am y tenant os chi yw’r perchennog)

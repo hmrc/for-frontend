@@ -1,15 +1,15 @@
 (function ($) {
     'use strict';
 
-    VoaFor.service = function () {
+    VORALD.service = function () {
         return 'sending-rental-information';
     };
 
-    VoaFor.showHistoryBackLink = function(){
+    VORALD.showHistoryBackLink = function(){
         $('a#history-back').show();
     };
 
-    VoaFor.setHelpGDSClasses = function(){
+    VORALD.setHelpGDSClasses = function(){
         var $helpFormWrapper = $('#helpFormWrapper');
         $helpFormWrapper.find('input[type=text]')
             .removeClass('input--fullwidth').removeClass('form-control')
@@ -19,22 +19,22 @@
         $helpFormWrapper.find('h2, p').remove();
     };
 
-    VoaFor.scrollDirection = 1;
+    VORALD.scrollDirection = 1;
 
-    VoaFor.isChromeOnMac = function() {
+    VORALD.isChromeOnMac = function() {
         return navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Mac OS') !== -1;
     };
 
-    VoaFor.printLinkSetup = function () {
+    VORALD.printLinkSetup = function () {
         $('.print-link').on('click', function (event) {
             event.preventDefault();
 
             // Overcome to Save as PDF in Chrome in full-screen mode on Mac
-            if (VoaFor.isChromeOnMac()) {
+            if (VORALD.isChromeOnMac()) {
                 const direction =
-                    window.scrollY < 150 ? 1 : (window.scrollY > $('#main-content').innerHeight() - 350 ? -1 : VoaFor.scrollDirection);
+                    window.scrollY < 150 ? 1 : (window.scrollY > $('#main-content').innerHeight() - 350 ? -1 : VORALD.scrollDirection);
                 window.scrollBy(0, direction * 150);
-                VoaFor.scrollDirection = -direction;
+                VORALD.scrollDirection = -direction;
 
                 setTimeout(function () {
                     if (document.queryCommandSupported('print')) {
@@ -51,13 +51,13 @@
         });
     };
 
-    VoaFor.printPageShouldPrintOnLoad = function(){
+    VORALD.printPageShouldPrintOnLoad = function(){
         if($('div.govuk-grid-column-full.print-your-answers').length > 0){
             window.print();
         }
     };
 
-    VoaFor.addField = function () {
+    VORALD.addField = function () {
         $(document).on('click', '.add', function (e) {
             e.preventDefault();
             var id = $(this).closest('.form-group').attr('id');
@@ -76,7 +76,7 @@
         });
     };
 
-    VoaFor.removeField = function () {
+    VORALD.removeField = function () {
         $(document).on('click', '.remove', function (e) {
             e.preventDefault();
             $(this).closest('.add-group').remove();
@@ -87,7 +87,7 @@
         });
     };
 
-    VoaFor.changeIds = function (container, index) {
+    VORALD.changeIds = function (container, index) {
         function incrementSectionHeadingNumber($clone) {
             //increment the section heading eg "Sub-let 1" changes to "Sub-let 2"
             var $sectionHeading = $clone.find('h3.section-heading span');
@@ -191,7 +191,7 @@
         });
     };
 
-    VoaFor.addFieldMulti = function () {
+    VORALD.addFieldMulti = function () {
 
         //remove if js
         $('.deleteifjs').remove();
@@ -209,7 +209,7 @@
             //clone the multi-fields-group
             var elementToClone = element.find('.multi-fields-group:last');
             var $clone = elementToClone.clone();
-            VoaFor.changeIds($clone, existingCount);
+            VORALD.changeIds($clone, existingCount);
             $clone.insertAfter(elementToClone);
             hideTogglingElementsInClone($clone);
             removeValuesFromClonedInputs($clone);
@@ -256,7 +256,7 @@
 
     };
 
-    VoaFor.addMultiButtonState = function () {
+    VORALD.addMultiButtonState = function () {
         var $element = $('.add-multi-fields');
         var $group = $('.multi-fields-group');
         var l = parseInt($element.closest('fieldset').attr('data-limit'), 10);
@@ -267,7 +267,7 @@
         }
     };
 
-    VoaFor.removeFieldMulti = function () {
+    VORALD.removeFieldMulti = function () {
         $(document).on('click', '.remove-multi-fields', function (e) {
             e.preventDefault();
             var limit = parseInt($(this).closest('fieldset').attr('data-limit'), 10);
@@ -282,7 +282,7 @@
                 $('.add-multi-fields').hide();
             }
             $('.multi-fields-group').each(function (i) {
-                VoaFor.changeIds(this, i);
+                VORALD.changeIds(this, i);
             });
         });
 
@@ -295,7 +295,7 @@
         }
     };
 
-    VoaFor.selectMobile = function () {
+    VORALD.selectMobile = function () {
         function setSelectSize() {
             if ($(window).width() <= 640) {
                 $('.addressList').attr('size', '');
@@ -310,13 +310,13 @@
         setSelectSize();
     };
 
-    VoaFor.isEdit = function () {
-        if (VoaCommon.getQueryString('edit')) {
-            $('[name="continue_button"]').text(VoaMessages.textLabel('buttonUpdate')).attr('name', 'update_button');
+    VORALD.isEdit = function () {
+        if (VOCommon.getQueryString('edit')) {
+            $('[name="continue_button"]').text(VOMessages.textLabel('buttonUpdate')).attr('name', 'update_button');
         }
     };
 
-    VoaFor.doYouOwnTheProperty = function(){
+    VORALD.doYouOwnTheProperty = function(){
         $(':radio[name=propertyOwnedByYou]').on('click', function (){
             $(':radio[name=propertyRentedByYou]').removeAttr('checked');
             $('textarea#noRentDetails').removeClass('govuk-textarea--error');
@@ -326,7 +326,7 @@
         });
     };
 
-    VoaFor.getReferrer = function () {
+    VORALD.getReferrer = function () {
         var s = window.location.href, i = s.indexOf('?') + 1, r, v;
 
         if (ref) {

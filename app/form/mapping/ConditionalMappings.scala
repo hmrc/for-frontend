@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.voa.play.form
+package form.mapping
 
 import play.api.data.Mapping
 

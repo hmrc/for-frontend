@@ -17,12 +17,12 @@
 package form
 
 import form.DateMappings.*
+import form.mapping.*
+import form.mapping.ConditionalMappings.*
 import models.pages.PageThree
 import models.serviceContracts.submissions.OccupierType
 import play.api.data.Form
 import play.api.data.Forms.*
-import uk.gov.voa.play.form.ConditionalMappings.*
-import uk.gov.voa.play.form.*
 import MappingSupport.*
 import form.Errors.{propertyOwnedByYouRequired, propertyRentedByYouRequired}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}

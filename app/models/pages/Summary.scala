@@ -42,7 +42,7 @@ case class Summary(
   journeyResumptions: Seq[ZonedDateTime] = Seq.empty
 ):
 
-  def addressVOABelievesIsCorrect: Address = address.getOrElse(throw VOAHeldAddressSelectionError(referenceNumber))
+  def addressVOBelievesIsCorrect: Address = address.getOrElse(throw VOHeldAddressSelectionError(referenceNumber))
 
   def addressUserBelievesIsCorrect: Address =
     addressConnection.flatMap {
@@ -62,4 +62,4 @@ case class Summary(
 case class NoMainAddress(refNum: String) extends Exception(refNum)
 case object NoReferenceNumber extends Exception
 case class UsersAddressSelectionError(refNum: String) extends Exception(refNum)
-case class VOAHeldAddressSelectionError(refNum: String) extends Exception(refNum)
+case class VOHeldAddressSelectionError(refNum: String) extends Exception(refNum)

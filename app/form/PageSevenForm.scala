@@ -19,11 +19,11 @@ package form
 import form.DateMappings.*
 import form.Errors.{lastReviewDateIsBeforeStartDate, rentReviewDateIsBeforeStartDate, rentReviewDetailsRequired}
 import form.MappingSupport.*
+import form.mapping.ConditionalMappings.*
 import models.pages.*
 import models.serviceContracts.submissions.{RentReviewResultDetails, ReviewIntervalType}
 import play.api.data.Forms.{localDate, mapping, optional}
 import play.api.data.*
-import uk.gov.voa.play.form.ConditionalMappings.*
 
 object PageSevenForm:
 

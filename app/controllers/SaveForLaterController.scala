@@ -79,7 +79,7 @@ class SaveForLaterController @Inject() (
           saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
             audit.sendSavedForLater(sum, exitPath)
             val email = sum.customerDetails.map(_.contactDetails.email)
-            emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
+            emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
 
             Ok(savedForLater(pw, expiryDate))
           }
@@ -103,7 +103,7 @@ class SaveForLaterController @Inject() (
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
               audit.sendSavedForLater(sum, exitPath)
               val email = sum.customerDetails.map(_.contactDetails.email)
-              emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
+              emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
 
               Ok(savedForLater(pw, expiryDate))
 
@@ -153,7 +153,7 @@ class SaveForLaterController @Inject() (
           val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
           val email      = sum.customerDetails.map(_.contactDetails.email)
 
-          emailConnector.sendEmail(sum.referenceNumber, sum.addressVOABelievesIsCorrect.postcode, email, expiryDate)
+          emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
           Ok(savedForLater(pw, expiryDate, hasTimedOut = true))
         }
       case None      => Redirect(routes.LoginController.logout)

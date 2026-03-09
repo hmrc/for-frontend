@@ -1,6 +1,6 @@
 (function ($) {
     'use strict';
-    VoaMessages.textLabel = function (t) {
+    VOMessages.textLabel = function (t) {
         var text;
         if($('html').attr('lang') === 'en'){
             text = {

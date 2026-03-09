@@ -16,10 +16,10 @@
 
 package form
 
+import form.mapping.ConditionalMappings.*
 import models.serviceContracts.submissions.{CapitalDetails, FreePeriodDetails, IncentivesAndPayments}
 import play.api.data.Form
 import play.api.data.Forms.*
-import uk.gov.voa.play.form.ConditionalMappings.*
 import MappingSupport.*
 import DateMappings.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}

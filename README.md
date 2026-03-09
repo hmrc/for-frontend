@@ -1,10 +1,10 @@
 Rent And Lease Details Frontend
 ===============================
 
-Supplying business rental information is an important activity that allows the VOA (valuation office agency) to calculate the rateable value of a property. 
+Supplying business rental information is an important activity that allows the VO (Valuation Office) to calculate the rateable value of a property. 
 Rateable value represents the open market annual rental value of a business/ non-domestic property. 
 
-This repository contains the RALD (rent and lease details) form (aka FOR - Form Of Return) application - it is the website that allows users to submit their rental information to the VOA.
+This repository contains the RALD (rent and lease details) form (aka FOR - Form Of Return) application - it is the website that allows users to submit their rental information to the VO.
 
 Requirements
 ------------
