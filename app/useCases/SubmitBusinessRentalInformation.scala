@@ -34,9 +34,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[SubmitBusinessRentalInformationToBackendApi])
-trait SubmitBusinessRentalInformation {
-  def apply(refNum: String)(implicit hs: HeaderCarrier, request: RefNumRequest[?]): Future[Submission]
-}
+trait SubmitBusinessRentalInformation:
+  def apply(refNum: String)(using hs: HeaderCarrier, request: RefNumRequest[?]): Future[Submission]
 
 @Singleton
 class SubmitBusinessRentalInformationToBackendApi @Inject() (
@@ -45,19 +44,20 @@ class SubmitBusinessRentalInformationToBackendApi @Inject() (
   subConnector: SubmissionConnector,
   audit: connectors.Audit,
   auditAddresses: AddressAuditing
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends SubmitBusinessRentalInformation
-  with Logging {
+  with Logging:
 
-  def apply(refNum: String)(implicit hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] =
+  def apply(refNum: String)(using hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] =
     repository.findById(SessionId(using hc), refNum).flatMap {
       case someDoc @ Some(doc) =>
         val submission = builder.build(doc)
-        subConnector.submit(refNum, submission).map {
-          _ =>
-            auditFormSubmissionAndAddress(success = true, submission, someDoc)
-            submission
-        }
+        subConnector.submit(refNum, submission)
+          .map {
+            _ =>
+              auditFormSubmissionAndAddress(success = true, submission, someDoc)
+              submission
+          }
           .recoverWith {
             case ex: Throwable =>
               logger.error("Error on form submission", ex)
@@ -74,9 +74,9 @@ class SubmitBusinessRentalInformationToBackendApi @Inject() (
     success: Boolean,
     submission: Submission,
     docOpt: Option[Document]
-  )(implicit hc: HeaderCarrier,
+  )(using hc: HeaderCarrier,
     request: RefNumRequest[T]
-  ): Future[Unit] = {
+  ): Future[Unit] =
     val auditType = if success then "FormSubmission" else "FormSubmissionFailed"
 
     val submissionJson = Json.toJson(submission).as[JsObject]
@@ -90,30 +90,24 @@ class SubmitBusinessRentalInformationToBackendApi @Inject() (
 
     audit.sendExplicitAudit(auditType, jsObject ++ Audit.languageJson)
     Future.unit
-  }
-
-}
 
 @ImplementedBy(classOf[DefaultSubmissionBuilder])
-trait SubmissionBuilder {
+trait SubmissionBuilder:
   def build(doc: Document): Submission
-}
 
 @Singleton
-class DefaultSubmissionBuilder extends SubmissionBuilder {
+class DefaultSubmissionBuilder extends SubmissionBuilder:
 
-  def build(doc: Document): Submission = {
+  def build(doc: Document): Submission =
     val summary = SummaryBuilder.build(doc)
     if Paths.isShortPath(summary) then buildShortSubmission(summary, doc) else buildSubmission(summary, doc)
-  }
 
-  private def buildShortSubmission(summary: Summary, doc: Document) = {
-    implicit val s: Summary = summary
+  private def buildShortSubmission(summary: Summary, doc: Document) =
     Submission(
-      s.propertyAddress,
-      s.customerDetails,
-      s.theProperty.map(toTheProperty),
-      s.sublet.map(toSublet),
+      summary.propertyAddress,
+      summary.customerDetails,
+      summary.theProperty.map(toTheProperty),
+      summary.sublet.map(toSublet),
       None,
       None,
       None,
@@ -126,10 +120,8 @@ class DefaultSubmissionBuilder extends SubmissionBuilder {
       None,
       Some(doc.referenceNumber)
     )
-  }
 
-  private def buildSubmission(summary: Summary, doc: Document) = {
-    implicit val s: Summary = summary
+  private def buildSubmission(s: Summary, doc: Document) =
     Submission(
       s.propertyAddress,
       s.customerDetails,
@@ -147,118 +139,119 @@ class DefaultSubmissionBuilder extends SubmissionBuilder {
       s.otherFactors,
       referenceNumber = Some(doc.referenceNumber)
     )
-  }
 
-  private def toTheProperty(p3: PageThree) = TheProperty(
-    p3.propertyType,
-    p3.occupierType,
-    occupierNameFor(p3),
-    p3.firstOccupationDate,
-    p3.propertyOwnedByYou,
-    if p3.propertyOwnedByYou then None else p3.propertyRentedByYou,
-    p3.noRentDetails
-  )
+  private def toTheProperty(p3: PageThree) =
+    TheProperty(
+      p3.propertyType,
+      p3.occupierType,
+      occupierNameFor(p3),
+      p3.firstOccupationDate,
+      p3.propertyOwnedByYou,
+      if p3.propertyOwnedByYou then None else p3.propertyRentedByYou,
+      p3.noRentDetails
+    )
 
-  private def occupierNameFor(p3: PageThree) = p3.occupierType match {
-    case OccupierTypeNobody      => Some("Nobody")
-    case OccupierTypeIndividuals => Some(p3.mainOccupierName.getOrElse(""))
-    case OccupierTypeCompany     =>
-      Some(Seq(p3.occupierCompanyName, p3.occupierCompanyContact).flatten.mkString(" - ").take(50))
-    case _                       => None
-  }
+  private def occupierNameFor(p3: PageThree) =
+    p3.occupierType match
+      case OccupierType.nobody      => Some("Nobody")
+      case OccupierType.individuals => Some(p3.mainOccupierName.getOrElse(""))
+      case OccupierType.company     => Some(Seq(p3.occupierCompanyName, p3.occupierCompanyContact).flatten.mkString(" - ").take(50))
 
   private def toSublet(p4: PageFour) = Sublet(p4.propertyIsSublet, p4.sublet.map(toSubletData))
 
-  private def toSubletData(s: SubletDetails) = SubletData(
-    s.tenantFullName,
-    tenantsAddress(s),
-    s.subletType,
-    s.subletPropertyPartDescription,
-    s.subletPropertyReasonDescription,
-    Some(s.annualRent),
-    s.rentFixedDate
-  )
+  private def toSubletData(sd: SubletDetails) =
+    SubletData(
+      sd.tenantFullName,
+      tenantsAddress(sd),
+      sd.subletType,
+      sd.subletPropertyPartDescription,
+      sd.subletPropertyReasonDescription,
+      Some(sd.annualRent),
+      sd.rentFixedDate
+    )
 
-  private def tenantsAddress(s: SubletDetails) = Address(
-    s.tenantAddress.buildingNameNumber,
-    s.tenantAddress.street1,
-    s.tenantAddress.street2,
-    s.tenantAddress.postcode
-  )
+  private def tenantsAddress(sd: SubletDetails) =
+    Address(
+      sd.tenantAddress.buildingNameNumber,
+      sd.tenantAddress.street1,
+      sd.tenantAddress.street2,
+      sd.tenantAddress.postcode
+    )
 
-  private def toLandlord(p5: PageFive) = Landlord(
-    p5.landlordFullName,
-    p5.landlordAddress,
-    p5.landlordConnectionType,
-    p5.landlordConnectText
-  )
+  private def toLandlord(p5: PageFive) =
+    Landlord(
+      p5.landlordFullName,
+      p5.landlordAddress,
+      p5.landlordConnectionType,
+      p5.landlordConnectText
+    )
 
-  private def toLeaseOrAgreement(p6: PageSix) = p6 match {
-    case PageSix(LeaseAgreementTypesVerbal, _, verbal, _, _) =>
-      LeaseOrAgreement(
-        p6.leaseAgreementType,
-        None,
-        None,
-        None,
-        List.empty,
-        verbal.startDate,
-        verbal.rentOpenEnded,
-        verbal.leaseLength
-      )
-    case PageSix(_, Some(written), _, _, _)                  =>
-      LeaseOrAgreement(
-        p6.leaseAgreementType,
-        Some(written.leaseAgreementHasBreakClause),
-        written.breakClauseDetails,
-        Some(written.agreementIsStepped),
-        written.steppedDetails,
-        Some(written.startDate),
-        Some(written.rentOpenEnded),
-        written.leaseLength
-      )
-    case _                                                   =>
-      LeaseOrAgreement(p6.leaseAgreementType, None, None, None, List.empty, None, None, None)
-  }
+  private def toLeaseOrAgreement(p6: PageSix) =
+    p6 match
+      case PageSix(LeaseAgreementType.verbal, _, verbal, _, _) =>
+        LeaseOrAgreement(
+          p6.leaseAgreementType,
+          None,
+          None,
+          None,
+          List.empty,
+          verbal.startDate,
+          verbal.rentOpenEnded,
+          verbal.leaseLength
+        )
+      case PageSix(_, Some(written), _, _, _)                  =>
+        LeaseOrAgreement(
+          p6.leaseAgreementType,
+          Some(written.leaseAgreementHasBreakClause),
+          written.breakClauseDetails,
+          Some(written.agreementIsStepped),
+          written.steppedDetails,
+          Some(written.startDate),
+          Some(written.rentOpenEnded),
+          written.leaseLength
+        )
+      case _                                                   =>
+        LeaseOrAgreement(p6.leaseAgreementType, None, None, None, List.empty, None, None, None)
 
   private def toRentReviews(p7: PageSeven) = RentReviews(p7.leaseContainsRentReviews, p7.pageSevenDetails.map(toRentReviewDetails))
 
-  private def toRentReviewDetails(p7d: PageSevenDetails) = RentReviewDetails(
-    p7d.reviewIntervalType match {
-      case ReviewIntervalTypeEvery3Years => Some(MonthsYearDuration(0, 3))
-      case ReviewIntervalTypeEvery5Years => Some(MonthsYearDuration(0, 5))
-      case ReviewIntervalTypeEvery7Years => Some(MonthsYearDuration(0, 7))
-      case ReviewIntervalTypeOther       => p7d.reviewIntervalTypeSpecify
-    },
-    p7d.lastReviewDate,
-    p7d.canRentReduced,
-    p7d.rentResultOfRentReview,
-    p7d.reviewDetails
-  )
+  private def toRentReviewDetails(p7d: PageSevenDetails) =
+    RentReviewDetails(
+      p7d.reviewIntervalType match
+        case ReviewIntervalType.every3Years => Some(MonthsYearDuration(0, 3))
+        case ReviewIntervalType.every5Years => Some(MonthsYearDuration(0, 5))
+        case ReviewIntervalType.every7Years => Some(MonthsYearDuration(0, 7))
+        case ReviewIntervalType.other       => p7d.reviewIntervalTypeSpecify,
+      p7d.lastReviewDate,
+      p7d.canRentReduced,
+      p7d.rentResultOfRentReview,
+      p7d.reviewDetails
+    )
 
-  private def toRent(p9: PageNine) = Rent(
-    Some(p9.totalRent.amount),
-    p9.rentBecomePayable,
-    p9.rentActuallyAgreed,
-    p9.negotiatingNewRent,
-    p9.rentBasis,
-    p9.rentBasisOtherDetails
-  )
+  private def toRent(p9: PageNine) =
+    Rent(
+      Some(p9.totalRent.amount),
+      p9.rentBecomePayable,
+      p9.rentActuallyAgreed,
+      p9.negotiatingNewRent,
+      p9.rentBasis,
+      p9.rentBasisOtherDetails
+    )
 
-  private def toResponsibilities(p12: PageTwelve) = Responsibilities(
-    p12.responsibleOutsideRepairs,
-    p12.responsibleInsideRepairs,
-    p12.responsibleBuildingInsurance,
-    p12.ndrCharges,
-    p12.waterCharges,
-    p12.includedServices,
-    p12.includedServicesDetails ++ ndrAndWaterServices(p12)
-  )
+  private def toResponsibilities(p12: PageTwelve) =
+    Responsibilities(
+      p12.responsibleOutsideRepairs,
+      p12.responsibleInsideRepairs,
+      p12.responsibleBuildingInsurance,
+      p12.ndrCharges,
+      p12.waterCharges,
+      p12.includedServices,
+      p12.includedServicesDetails ++ ndrAndWaterServices(p12)
+    )
 
-  private def ndrAndWaterServices(p12: PageTwelve): Seq[ChargeDetails] = {
+  private def ndrAndWaterServices(p12: PageTwelve): Seq[ChargeDetails] =
     val ndr   = p12.ndrDetails.map(ChargeDetails("Non-domestic Rates", _))
     val water = p12.waterChargesCost.map(ChargeDetails("Water Charges", _))
     Seq(ndr, water).flatten
-  }
-}
 
 case class RentalInformationCouldNotBeRetrieved(refNum: String) extends Exception(refNum)

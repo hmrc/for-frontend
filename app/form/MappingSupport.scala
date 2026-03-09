@@ -16,38 +16,34 @@
 
 package form
 
-import models._
-import models.serviceContracts.submissions._
-import play.api.data.Forms._
-import play.api.data.validation._
-import play.api.data.{FormError, Forms, Mapping}
-import ConditionalMapping._
+import form.ConditionalMapping.*
+import form.Scala3EnumFieldMapping.enumMappingRequired
+import jakarta.mail.internet.InternetAddress
+import models.*
+import models.serviceContracts.submissions.*
+import play.api.data.Forms.*
+import play.api.data.validation.*
 import play.api.data.validation.Constraints.{maxLength, minLength, nonEmpty, pattern}
+import play.api.data.{FormError, Forms, Mapping}
 
-import javax.mail.internet.InternetAddress
-import scala.util.{Success, Try}
 import scala.util.matching.Regex
+import scala.util.{Success, Try}
 
-object MappingSupport {
+object MappingSupport:
 
   private val strictEmailConstraint = Constraint[String] {
     value =>
-      Try(new InternetAddress(value, true)) match {
+      Try(InternetAddress(value, true)) match
         case Success(_) => Valid
         case _          => Invalid(ValidationError("error.email"))
-      }
   }
 
-  val positiveBigDecimal: Mapping[BigDecimal] = bigDecimal
-    .verifying("error.BigDecimal_negative", _ >= 0.0000)
-    .transform(_.abs, v => v)
+  private val decimalRegex          = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
+  private val cdbMaxCurrencyAmount  = 9999999.99
+  private val spacesIntRegex: Regex = """^-?\d{1,10}$""".r
+  private val intRegex: Regex       = """^\d{1,3}$""".r
 
-  val decimalRegex          = """^[0-9]{1,10}\.?[0-9]{0,2}$"""
-  val cdbMaxCurrencyAmount  = 9999999.99
-  val spacesIntRegex: Regex = """^-?\d{1,10}$""".r
-  val intRegex: Regex       = """^\d{1,3}$""".r
-
-  lazy val annualRent: Mapping[AnnualRent] = mapping(
+  val annualRent: Mapping[AnnualRent] = mapping(
     "annualRentExcludingVat" -> currencyMapping(".annualRentExcludingVat")
   )(AnnualRent.apply)(rent => Some(rent.amount)).verifying(Errors.maxCurrencyAmountExceeded, _.amount <= cdbMaxCurrencyAmount)
 
@@ -72,33 +68,31 @@ object MappingSupport {
       .verifying(message, _.isDefined)
       .transform(_.getOrElse(false), Some(_))
 
-  import Formats._ // scalastyle:ignore
-
-  val postcodeRegex                                                  =
+  val postcodeRegex      =
     """(GIR ?0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKPSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) ?[0-9][A-Z-[CIKMOV]]{2})""" // scalastyle:ignore
-  val phoneRegex                                                     = """^^[0-9\s\+()-]+$"""
-  val userType: Mapping[UserType]                                    = Forms.of[UserType]
-  val contactAddressType: Mapping[ContactAddressType]                = Forms.of[ContactAddressType]
-  val propertyType: Mapping[PropertyType]                            = Forms.of[PropertyType]
-  val occupierType: Mapping[OccupierType]                            = Forms.of[OccupierType]
-  val landlordConnectionType: Mapping[LandlordConnectionType]        = Forms.of[LandlordConnectionType]
-  val leaseAgreementTypeMapping: Mapping[LeaseAgreementType]         = Forms.of[LeaseAgreementType]
-  val reviewIntervalTypeMapping: Mapping[ReviewIntervalType]         = Forms.of[ReviewIntervalType]
-  val rentFixedByTypeMapping: Mapping[RentFixedType]                 = Forms.of[RentFixedType]
-  val rentBaseTypeMapping: Mapping[RentBaseType]                     = Forms.of[RentBaseType]
-  val notReviewRentFixedTypeMapping: Mapping[NotReviewRentFixedType] = Forms.of[NotReviewRentFixedType]
-  val rentSetByTypeMapping: Mapping[RentSetByType]                   = Forms.of[RentSetByType]
+  private val phoneRegex = """^^[0-9\s\+()-]+$"""
 
-  val responsibleTypeMapping: Mapping[ResponsibleType] = Forms.of[ResponsibleType]
+  val userType: Mapping[UserType]                                    = enumMappingRequired(UserType, Errors.userTypeRequired)
+  val occupierType: Mapping[OccupierType]                            = enumMappingRequired(OccupierType, Errors.occupierTypeRequired)
+  val landlordConnectionType: Mapping[LandlordConnectionType]        = enumMappingRequired(LandlordConnectionType, Errors.LandlordConnectionTypeRequired)
+  val leaseAgreementTypeMapping: Mapping[LeaseAgreementType]         = enumMappingRequired(LeaseAgreementType, Errors.leaseAgreementTypeRequired)
+  val reviewIntervalTypeMapping: Mapping[ReviewIntervalType]         = enumMappingRequired(ReviewIntervalType, Errors.rentReviewFrequencyRequired)
+  val rentFixedByTypeMapping: Mapping[RentFixedType]                 = enumMappingRequired(RentFixedType, Errors.rentFixedByRequired)
+  val rentBaseTypeMapping: Mapping[RentBaseType]                     = enumMappingRequired(RentBaseType, Errors.rentBasedOnRequired)
+  val notReviewRentFixedTypeMapping: Mapping[NotReviewRentFixedType] = enumMappingRequired(NotReviewRentFixedType, Errors.whoWasTheRentFixedBetweenRequired)
+  val rentSetByTypeMapping: Mapping[RentSetByType]                   = enumMappingRequired(RentSetByType, Errors.isThisRentRequired)
+  val responsibleOutsideRepairsMapping: Mapping[ResponsibleType]     = enumMappingRequired(ResponsibleType, Errors.responsibleOutsideRepairsRequired)
+  val responsibleInsideRepairsMapping: Mapping[ResponsibleType]      = enumMappingRequired(ResponsibleType, Errors.responsibleInsideRepairsRequired)
+  val responsibleBuildingInsuranceMapping: Mapping[ResponsibleType]  = enumMappingRequired(ResponsibleType, Errors.responsibleBuildingInsuranceRequired)
+  val addressConnectionType: Mapping[AddressConnectionType]          = enumMappingRequired(AddressConnectionType, Errors.isConnectedError)
+  val alterationSetByTypeMapping: Mapping[AlterationSetByType]       = enumMappingRequired(AlterationSetByType, Errors.whichWorksWereDoneRequired)
+  val subletTypeMapping: Mapping[SubletType]                         = enumMappingRequired(SubletType, Errors.subletTypeRequired)
+  val satisfactionMapping: Mapping[Satisfaction]                     = enumMappingRequired(Satisfaction, Errors.noValueSelected)
+  val journeyMapping: Mapping[JourneyName]                           = enumMappingRequired(JourneyName, Errors.noValueSelected)
 
-  val contactAddressTypeMapping: Mapping[ContactAddressType]   = Forms.of[ContactAddressType]
-  val rentLengthType: Mapping[RentLengthType]                  = Forms.of[RentLengthType]
-  val postcode: Mapping[String]                                = PostcodeMapping.postcode()
-  val loginPostcode: Mapping[String]                           = PostcodeMapping.postcode(Errors.invalidPostcodeOnLetter, Errors.invalidPostcodeOnLetter)
-  val phoneNumber: Mapping[String]                             = nonEmptyText(maxLength = 20).verifying(Errors.invalidPhone, _.matches(phoneRegex))
-  val addressConnectionType: Mapping[AddressConnectionType]    = Forms.of[AddressConnectionType]
-  val alterationSetByTypeMapping: Mapping[AlterationSetByType] = Forms.of[AlterationSetByType]
-  val subletTypeMapping: Mapping[SubletType]                   = Forms.of[SubletType]
+  val postcode: Mapping[String]      = PostcodeMapping.postcode()
+  val loginPostcode: Mapping[String] = PostcodeMapping.postcode(Errors.invalidPostcodeOnLetter, Errors.invalidPostcodeOnLetter)
+  val phoneNumber: Mapping[String]   = nonEmptyText(maxLength = 20).verifying(Errors.invalidPhone, _.matches(phoneRegex))
 
   def addressMapping: Mapping[Address] = mapping(
     "buildingNameNumber" -> default(text, "").verifying(
@@ -120,7 +114,7 @@ object MappingSupport {
     "postcode"           -> nonEmptyTextOr(s"$prefix.postcode", postcode, "error.postcode.required")
   )(Address.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  def optionalAddressMapping(prefix: String): Mapping[Address] = mapping(
+  def optionalAddressMapping: Mapping[Address] = mapping(
     "buildingNameNumber" -> default(
       text.verifying(maxLength(50, "error.buildingNameNumber.maxLength")),
       ""
@@ -183,35 +177,32 @@ object MappingSupport {
     constraints: Seq[Constraint[List[T]]] = Nil,
     allowEmpty: Boolean = false,
     alwaysValidateFirstIndex: Boolean = false
-  ) extends Mapping[List[T]] {
+  ) extends Mapping[List[T]]:
 
-    def indexes(data: Map[String, String]): List[Int] = {
+    def indexes(data: Map[String, String]): List[Int] =
       val keyPattern    = ("""^""" + key + """\[(\d+)\].*$""").r
       val indicesInData = data.toList.collect { case (keyPattern(index), _) => index.toInt }
       val all           = if alwaysValidateFirstIndex then indicesInData :+ 0 else indicesInData
       all.distinct.sorted
-    }
 
     override val mappings: Seq[Mapping[?]] = wrapped(s"$key[0]").mappings
 
     override def verifying(addConstraints: Constraint[List[T]]*): Mapping[List[T]] =
       this.copy[T](constraints = constraints ++ addConstraints.toSeq)
 
-    override def unbind(value: List[T]): Map[String, String] = {
+    override def unbind(value: List[T]): Map[String, String] =
       val datas = value.zipWithIndex.map { case (t, i) => wrapped(key + "[" + i + "]").unbind(t) }
       datas.foldLeft(Map.empty[String, String])(_ ++ _)
-    }
 
     override def withPrefix(prefix: String): Mapping[List[T]] = this
 
-    override def unbindAndValidate(value: List[T]): (Map[String, String], Seq[FormError]) = {
+    override def unbindAndValidate(value: List[T]): (Map[String, String], Seq[FormError]) =
       val (datas, errors) = value.zipWithIndex.map { case (t, i) => wrapped(key + "[" + i + "]").unbindAndValidate(t) }.unzip
       (datas.foldLeft(Map.empty[String, String])(_ ++ _), errors.flatten ++ collectErrors(value))
-    }
 
     private def indexedKey(index: Int) = s"$key[$index]"
 
-    override def bind(data: Map[String, String]): Either[Seq[FormError], List[T]] = {
+    override def bind(data: Map[String, String]): Either[Seq[FormError], List[T]] =
       val bound = for index <- indexes(data) yield wrapped(indexedKey(index)).bind(data)
       if bound.forall(_.isRight) then
         if bound.isEmpty && !allowEmpty then
@@ -220,9 +211,5 @@ object MappingSupport {
           Right(bound.map(_.toOption.get)).flatMap(applyConstraints)
       else
         Left(bound.collect { case Left(errors) => errors }.flatten)
-    }
 
     private def allEmptyFieldsForIndexZero = wrapped(s"$key[0]").mappings.flatMap(_.keys).map((_, "")).toMap
-  }
-
-}

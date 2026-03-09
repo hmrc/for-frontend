@@ -16,28 +16,10 @@
 
 package models.serviceContracts.submissions
 
-import models.NamedEnum
+/**
+  * @author Yuriy Tumakha
+  */
+enum NotReviewRentFixedType:
 
-sealed trait PropertyType extends NamedEnum {
-  val key = "propertyTypes"
-}
-
-object PropertyTypesWarehouse extends PropertyType {
-  val name = "warehouse"
-}
-
-object PropertyTypesShop extends PropertyType {
-  val name = "shop"
-}
-
-object PropertyTypesOther extends PropertyType {
-  val name = "other"
-}
-
-object PropertyTypesOffice extends PropertyType {
-  val name = "office"
-}
-
-object PropertyTypesFactory extends PropertyType {
-  val name = "factory"
-}
+  case interim,
+    finalJudge

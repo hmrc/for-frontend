@@ -18,18 +18,18 @@ package form
 
 import models.serviceContracts.submissions.PreviouslyConnected
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 
-object PreviouslyConnectedForm {
+object PreviouslyConnectedForm:
 
-  private val previouslyConnectedMandatoryBoolean = optional(boolean)
-    .verifying("previously-connected.mandatory", _.isDefined)
-    .transform(_.getOrElse(false), Some(_))
+  private val previouslyConnectedMandatoryBoolean =
+    optional(boolean)
+      .verifying("previously-connected.mandatory", _.isDefined)
+      .transform(_.getOrElse(false), Some(_))
 
-  private val fieldMapping = mapping(
-    "haveYouBeenConnected" -> previouslyConnectedMandatoryBoolean
-  )(PreviouslyConnected.apply)(pc => Some(pc.previouslyConnected))
-
-  val formMapping: Form[PreviouslyConnected] = Form(fieldMapping)
-
-}
+  val formMapping: Form[PreviouslyConnected] =
+    Form(
+      mapping(
+        "haveYouBeenConnected" -> previouslyConnectedMandatoryBoolean
+      )(PreviouslyConnected.apply)(pc => Some(pc.previouslyConnected))
+    )

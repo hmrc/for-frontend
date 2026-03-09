@@ -32,7 +32,7 @@
 
 @heading = @{if(summary.isAgent){ messages("section8.heading.agent") }else{ messages("section8.heading")}}
 @previousPage = @{
-    if(LeaseAgreementTypesVerbal.equals( summary.lease.get.leaseAgreementType)) 6
+    if(summary.lease.exists(_.leaseAgreementType == LeaseAgreementType.verbal)) 6
     else 7
 }
 @layout(
@@ -80,12 +80,11 @@
             Radios(
                 name = "notReviewRentFixed",
                 idPrefix = Option("notReviewRentFixed"),
-                items = EnumOptions
-                        .options(NotReviewRentFixedTypes)
-                        .map( radioItem => RadioItem (
-                            content = Text(radioItem._2),
-                            checked = radioItem._1.equals(theForm("notReviewRentFixed").value.getOrElse("")),
-                            value=Option(radioItem._1)
+                items = NotReviewRentFixedType.values.toIndexedSeq.map(notReviewRentType =>
+                    RadioItem(
+                        content = Text(messages(s"notReviewRentFixedTypes.$notReviewRentType")),
+                        checked = theForm("notReviewRentFixed").value.contains(notReviewRentType.toString),
+                        value   = Option(notReviewRentType.toString)
                     )
                 ),
                 attributes = Map(
@@ -110,13 +109,12 @@
             Radios(
                 name = "rentSetByType",
                 idPrefix = Option("rentSetByType"),
-                items = EnumOptions
-                        .options(RentSetByTypes)
-                        .map( radioItem => RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("rentSetByType").value.getOrElse("")),
-                    value=Option(radioItem._1)
-                )
+                items = RentSetByType.values.toIndexedSeq.map(rentSetBy =>
+                    RadioItem(
+                        content = Text(messages(s"rentSetByTypes.$rentSetBy")),
+                        checked = theForm("rentSetByType").value.contains(rentSetBy.toString),
+                        value   = Option(rentSetBy.toString)
+                    )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("rentSetByType"),
                 fieldset = Option(

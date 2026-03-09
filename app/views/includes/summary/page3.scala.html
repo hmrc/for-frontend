@@ -27,10 +27,10 @@
   }
 
   @summaryBlock(messages("label.occupierTypes"), 3, "occupierType") {
-    @messages(s"occupierType.${p3.occupierType.name}")
+    @messages(s"occupierType.${p3.occupierType}")
   }
 
-  @if(p3.occupierType == OccupierTypeCompany) {
+  @if(p3.occupierType == OccupierType.company) {
     @summaryBlock(messages("label.companyName"), 3, "occupierCompanyName") {
       @p3.occupierCompanyName.getOrElse("")
     }
@@ -39,7 +39,7 @@
     }
   }
 
-  @if(p3.occupierType == OccupierTypeIndividuals || p3.occupierType == OccupierTypeCompany) {
+  @if(p3.occupierType == OccupierType.individuals || p3.occupierType == OccupierType.company) {
     @summaryBlock(messages(if(isAgent) messages("label.firstOccupationDate.agent") else messages("label.firstOccupationDate")), 3, "firstOccupationDate_month") {
       @{ p3.firstOccupationDate.map { d => displayRoughDate(d) }}
     }

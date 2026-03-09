@@ -37,7 +37,8 @@ import views.html.{login, loginFailed}
 import scala.concurrent.ExecutionContext.Implicits.*
 import scala.concurrent.{ExecutionContext, Future}
 
-class LoginControllerSpec extends TestBaseSpec {
+class LoginControllerSpec extends TestBaseSpec:
+
   private val documentRepo = mock[FormDocumentRepository]
 
   private val testAddress = Address("13", Some("Street"), Some("City"), "AA11 1AA")
@@ -56,7 +57,7 @@ class LoginControllerSpec extends TestBaseSpec {
     val time       = nowInUK
     when(loginToHod.apply(using any[HeaderCarrier], any[ExecutionContext])).thenReturn(loginToHodFunction)
 
-    val loginController = new LoginController(
+    val loginController = LoginController(
       audit,
       documentRepo,
       loginToHod,
@@ -84,7 +85,7 @@ class LoginControllerSpec extends TestBaseSpec {
     val audit = mock[Audit]
     doNothing().when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
 
-    val loginController = new LoginController(
+    val loginController = LoginController(
       audit,
       documentRepo,
       null,
@@ -104,5 +105,3 @@ class LoginControllerSpec extends TestBaseSpec {
     verify(audit).sendExplicitAudit(eqTo("Logout"), eqTo(Json.obj(Audit.referenceNumber -> "-")))(using any[HeaderCarrier], any[ExecutionContext])
 
   }
-
-}

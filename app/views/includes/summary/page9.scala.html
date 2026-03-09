@@ -40,10 +40,10 @@
 		}
 
 		@summaryBlock(messages("label.rentBasedOn"), 9, "rentBasedOn") {
-			@messages(s"${RentBaseTypes.key}.${p9.rentBasis.name}")
+			@messages(s"rentBaseTypes.${p9.rentBasis}")
 		}
 
-		@if(p9.rentBasis != RentBaseTypeOpenMarket) {
+		@if(p9.rentBasis != RentBaseType.openMarket) {
 			@summaryBlock(messages("label.rentBasedOnDetails"), 9, "rentBasedOnDetails") {
 				@p9.rentBasisOtherDetails.getOrElse("")
 			}

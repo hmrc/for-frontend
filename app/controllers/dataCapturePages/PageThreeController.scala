@@ -35,12 +35,11 @@ class PageThreeController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part3: views.html.part3
-) extends ForDataCapturePage[PageThree](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[PageThree](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[PageThree] = p3f
   val emptyForm: Form[PageThree] = pageThreeForm
   val pageNumber: Int            = 3
 
-  def template(form: Form[PageThree], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
+  def template(form: Form[PageThree], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     part3(form, summary)
-
-}

@@ -24,7 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 /**
   * @author Yuriy Tumakha
   */
-trait MockitoExtendedSugar extends MockitoSugar {
+trait MockitoExtendedSugar extends MockitoSugar:
 
   // ArgumentMatchers
 
@@ -77,5 +77,3 @@ trait MockitoExtendedSugar extends MockitoSugar {
   def times(wantedNumberOfInvocations: Int): VerificationMode = Mockito.times(wantedNumberOfInvocations)
 
   def calls(wantedNumberOfInvocations: Int): VerificationMode = Mockito.calls(wantedNumberOfInvocations)
-
-}

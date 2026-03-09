@@ -16,30 +16,32 @@
 
 package form
 
-import form.MappingSupport._
+import form.MappingSupport.*
 import models.pages.PageFive
-import models.serviceContracts.submissions.LandlordConnectionTypeOther
+import models.serviceContracts.submissions.LandlordConnectionType
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import uk.gov.voa.play.form.ConditionalMappings._
+import uk.gov.voa.play.form.ConditionalMappings.*
 
-object PageFiveForm {
+object PageFiveForm:
 
-  val pageFiveForm: Form[PageFive] = Form(mapping(
-    "landlordFullName"    -> default(text, "").verifying(
-      nonEmpty(errorMessage = "error.landlordFullName.required"),
-      maxLength(50, "error.landlordFullName.maxLength")
-    ),
-    "landlordAddress"     -> optional(optionalAddressMapping("landlordAddress")),
-    "landlordConnectType" -> landlordConnectionType,
-    "landlordConnectText" -> mandatoryIfEqual(
-      "landlordConnectType",
-      LandlordConnectionTypeOther.name,
-      default(text, "").verifying(
-        nonEmpty(errorMessage = "error.landlordConnectText.required"),
-        maxLength(100, "error.landlordConnectText.maxLength")
-      )
+  val pageFiveForm: Form[PageFive] =
+    Form(
+      mapping(
+        "landlordFullName"    -> default(text, "").verifying(
+          nonEmpty(errorMessage = "error.landlordFullName.required"),
+          maxLength(50, "error.landlordFullName.maxLength")
+        ),
+        "landlordAddress"     -> optional(optionalAddressMapping),
+        "landlordConnectType" -> landlordConnectionType,
+        "landlordConnectText" -> mandatoryIfEqual(
+          "landlordConnectType",
+          LandlordConnectionType.other.toString,
+          default(text, "").verifying(
+            nonEmpty(errorMessage = "error.landlordConnectText.required"),
+            maxLength(100, "error.landlordConnectText.maxLength")
+          )
+        )
+      )(PageFive.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
-  )(PageFive.apply)(o => Some(Tuple.fromProductTyped(o))))
-}

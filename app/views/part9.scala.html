@@ -112,18 +112,15 @@
           Radios(
               name = "rentBasedOn",
               idPrefix = Option("rentBasedOn"),
-              items = EnumOptions.options(RentBaseTypes).map( radioItem => {
-                     RadioItem (
-                      content = Text(radioItem._2),
-                      checked = radioItem._1.equals(theForm("rentBasedOn").value.getOrElse("")),
+              items = RentBaseType.values.toIndexedSeq.map(rentBaseType =>
+                  RadioItem(
+                      content = Text(messages(s"rentBaseTypes.$rentBaseType")),
+                      checked = theForm("rentBasedOn").value.contains(rentBaseType.toString),
                          hint = Hint(
-                             content = Text(
-                                 messages("rentBasedOn." + radioItem._1 + ".hint")
-                             )
+                             content = Text(messages(s"rentBasedOn.$rentBaseType.hint"))
                          ),
-                      value   = Option(radioItem._1)
-                    )
-                 }
+                      value   = Option(rentBaseType.toString)
+                  )
               ),
               classes = "radio-button-that-show-hides",
               errorMessage = theForm.errors.asTextErrorMessageForField("rentBasedOn"),

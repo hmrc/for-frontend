@@ -19,14 +19,14 @@ package uk.gov.voa.play.form
 import play.api.data.validation.Constraint
 import play.api.data.{FormError, Mapping}
 
-case class MandatoryOptionalMapping[T](wrapped: Mapping[T], constraints: Seq[Constraint[Option[T]]] = Nil) extends Mapping[Option[T]] {
+case class MandatoryOptionalMapping[T](wrapped: Mapping[T], constraints: Seq[Constraint[Option[T]]] = Nil) extends Mapping[Option[T]]:
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
   val key: String = wrapped.key
 
   def verifying(addConstraints: Constraint[Option[T]]*): Mapping[Option[T]] =
-    this.copy(constraints = this.constraints ++ addConstraints.toSeq)
+    copy(constraints = constraints ++ addConstraints.toSeq)
 
   def bind(data: Map[String, String]): Either[Seq[FormError], Option[T]] =
     wrapped.bind(data).map(Some(_)).flatMap(applyConstraints)
@@ -34,13 +34,11 @@ case class MandatoryOptionalMapping[T](wrapped: Mapping[T], constraints: Seq[Con
   def unbind(value: Option[T]): Map[String, String] =
     value.map(wrapped.unbind).getOrElse(Map.empty)
 
-  def unbindAndValidate(value: Option[T]): (Map[String, String], Seq[FormError]) = {
+  def unbindAndValidate(value: Option[T]): (Map[String, String], Seq[FormError]) =
     val errors = collectErrors(value)
     value.map(wrapped.unbindAndValidate).map(r => r._1 -> (r._2 ++ errors)).getOrElse(Map.empty -> errors)
-  }
 
   def withPrefix(prefix: String): Mapping[Option[T]] =
     copy(wrapped = wrapped.withPrefix(prefix))
 
   val mappings: Seq[Mapping[?]] = wrapped.mappings
-}

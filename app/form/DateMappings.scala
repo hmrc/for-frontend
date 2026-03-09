@@ -18,17 +18,17 @@ package form
 
 import models.RoughDate
 import models.serviceContracts.submissions.MonthsYearDuration
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{FormError, Mapping}
 
 import scala.util.Try
-import ConditionalMapping._
+import ConditionalMapping.*
 import util.DateUtil.nowInUK
 
 import java.time.{LocalDate, LocalDateTime}
 
-object DateMappings {
+object DateMappings:
 
   private val nineteenHundred = LocalDateTime.of(1900, 1, 1, 0, 0)
 
@@ -148,7 +148,7 @@ object DateMappings {
     compare: (java.time.LocalDate, java.time.LocalDate) => Boolean,
     errorMsgKey: String,
     additionalConstraints: Seq[Constraint[RoughDate]] = Nil
-  ) extends Mapping[RoughDate] {
+  ) extends Mapping[RoughDate]:
 
     override val format: Option[(String, Seq[Any])] = roughDateMapping.format
 
@@ -159,7 +159,7 @@ object DateMappings {
     override def verifying(constraints: Constraint[RoughDate]*): Mapping[RoughDate] =
       copy(additionalConstraints = additionalConstraints ++ constraints)
 
-    def bind(data: Map[String, String]): Either[Seq[FormError], RoughDate] = {
+    def bind(data: Map[String, String]): Either[Seq[FormError], RoughDate] =
       val anotherDateOpt = data.get(anotherDateKey).map(java.time.LocalDate.parse)
       roughDateMapping.bind(data).flatMap { date =>
         if anotherDateOpt.exists(anotherDate => compare(date.toLocalDate, anotherDate)) then
@@ -167,7 +167,6 @@ object DateMappings {
         else
           Right(date)
       }
-    }
 
     def unbind(value: RoughDate): Map[String, String] =
       roughDateMapping.unbind(value)
@@ -179,7 +178,3 @@ object DateMappings {
       copy(roughDateMapping = roughDateMapping.withPrefix(prefix))
 
     val mappings: Seq[Mapping[?]] = roughDateMapping.mappings :+ this
-
-  }
-
-}

@@ -18,41 +18,44 @@ package form
 
 import models.serviceContracts.submissions.{CapitalDetails, FreePeriodDetails, IncentivesAndPayments}
 import play.api.data.Form
-import play.api.data.Forms._
-import uk.gov.voa.play.form.ConditionalMappings._
-import MappingSupport._
-import DateMappings._
+import play.api.data.Forms.*
+import uk.gov.voa.play.form.ConditionalMappings.*
+import MappingSupport.*
+import DateMappings.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import play.api.data.Mapping
 
-object PageElevenForm {
+object PageElevenForm:
 
-  val freePeriodDetailsMapping: Mapping[FreePeriodDetails] = mapping(
-    "rentFreePeriodLength"  -> intMapping(),
-    "rentFreePeriodDetails" -> default(text, "").verifying(
-      nonEmpty(errorMessage = "error.rentFreePeriod.required"),
-      maxLength(250, "error.rentFreePeriod.maxLength")
-    )
-  )(FreePeriodDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private val freePeriodDetailsMapping: Mapping[FreePeriodDetails] =
+    mapping(
+      "rentFreePeriodLength"  -> intMapping(),
+      "rentFreePeriodDetails" -> default(text, "").verifying(
+        nonEmpty(errorMessage = "error.rentFreePeriod.required"),
+        maxLength(250, "error.rentFreePeriod.maxLength")
+      )
+    )(FreePeriodDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  private def capitalDetailsMapping(prefix: String) = mapping(
-    "capitalSum"  -> currencyMapping(".paid"),
-    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".made")
-  )(CapitalDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private def capitalDetailsMapping(prefix: String) =
+    mapping(
+      "capitalSum"  -> currencyMapping(".paid"),
+      "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".made")
+    )(CapitalDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  private def capitalDetailsReceivedMapping(prefix: String) = mapping(
-    "receivedSum" -> currencyMapping(".received"),
-    "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".received")
-  )(CapitalDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private def capitalDetailsReceivedMapping(prefix: String) =
+    mapping(
+      "receivedSum" -> currencyMapping(".received"),
+      "paymentDate" -> monthYearRoughDateMapping(s"$prefix.paymentDate", ".received")
+    )(CapitalDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val pageElevenMapping: Mapping[IncentivesAndPayments] = mapping(
-    "rentFreePeriod"         -> mandatoryBooleanWithError(Errors.rentFreePeriodRequired),
-    "rentFreePeriodDetails"  -> mandatoryIfTrue("rentFreePeriod", freePeriodDetailsMapping),
-    "payCapitalSum"          -> mandatoryBooleanWithError(Errors.paidCapitalSumRequired),
-    "capitalPaidDetails"     -> mandatoryIfTrue("payCapitalSum", capitalDetailsMapping("capitalPaidDetails")),
-    "receiveCapitalSum"      -> mandatoryBooleanWithError(Errors.receivedCapitalSumRequired),
-    "capitalReceivedDetails" -> mandatoryIfTrue("receiveCapitalSum", capitalDetailsReceivedMapping("capitalReceivedDetails"))
-  )(IncentivesAndPayments.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private val pageElevenMapping: Mapping[IncentivesAndPayments] =
+    mapping(
+      "rentFreePeriod"         -> mandatoryBooleanWithError(Errors.rentFreePeriodRequired),
+      "rentFreePeriodDetails"  -> mandatoryIfTrue("rentFreePeriod", freePeriodDetailsMapping),
+      "payCapitalSum"          -> mandatoryBooleanWithError(Errors.paidCapitalSumRequired),
+      "capitalPaidDetails"     -> mandatoryIfTrue("payCapitalSum", capitalDetailsMapping("capitalPaidDetails")),
+      "receiveCapitalSum"      -> mandatoryBooleanWithError(Errors.receivedCapitalSumRequired),
+      "capitalReceivedDetails" -> mandatoryIfTrue("receiveCapitalSum", capitalDetailsReceivedMapping("capitalReceivedDetails"))
+    )(IncentivesAndPayments.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageElevenForm: Form[IncentivesAndPayments] = Form(pageElevenMapping)
-}

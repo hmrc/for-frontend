@@ -20,7 +20,7 @@ import play.api.data.validation.Constraint
 import play.api.data.{FormError, Mapping}
 
 case class ConditionalMapping[T](condition: Condition, wrapped: Mapping[T], defaultValue: T, constraints: Seq[Constraint[T]] = Nil, keys: Set[String] = Set())
-  extends Mapping[T] {
+  extends Mapping[T]:
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
@@ -39,4 +39,3 @@ case class ConditionalMapping[T](condition: Condition, wrapped: Mapping[T], defa
   def withPrefix(prefix: String): Mapping[T] = copy(wrapped = wrapped.withPrefix(prefix))
 
   val mappings: Seq[Mapping[?]] = wrapped.mappings :+ this
-}

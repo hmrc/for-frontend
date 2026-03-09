@@ -45,20 +45,19 @@
         action = routes.SurveyController.formCompleteFeedback,
         args = Symbol("novalidate") -> "novalidate" ) {
 
-        <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(NormalJourney.name)"/>
+        <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.normalJourney.name)"/>
         <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>
 
         @govukRadios(
             Radios(
                 name = "satisfaction",
                 idPrefix="satisfaction",
-                items = Seq(
-                    "verySatisfied", "satisfied", "neither", "dissatisfied", "veryDissatisfied"
-                ).map(radioItem => RadioItem(
-                    content = Text(messages("satisfactionSurveyType." + radioItem)),
-                    checked = theForm("satisfaction").value.contains(radioItem),
-                    value = Option(radioItem)
-                )
+                items = Satisfaction.values.toIndexedSeq.map(satisfaction =>
+                    RadioItem(
+                        content = Text(messages(s"satisfactionSurveyType.$satisfaction")),
+                        checked = theForm("satisfaction").value.contains(satisfaction.toString),
+                        value   = Option(satisfaction.toString)
+                    )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("satisfaction"),
                 fieldset = Option(

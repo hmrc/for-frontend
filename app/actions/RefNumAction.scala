@@ -18,25 +18,22 @@ package actions
 
 import javax.inject.Inject
 import play.api.i18n.MessagesApi
-import play.api.mvc.Results._
-import play.api.mvc._
+import play.api.mvc.Results.*
+import play.api.mvc.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RefNumRequest[A](val refNum: String, request: Request[A], messagesApi: MessagesApi) extends MessagesRequest[A](request, messagesApi)
 
-class RefNumAction @Inject() (bodyParser: BodyParsers.Default, messagesApi: MessagesApi)(implicit val executionContext: ExecutionContext)
+class RefNumAction @Inject() (bodyParser: BodyParsers.Default, messagesApi: MessagesApi)(using val executionContext: ExecutionContext)
   extends ActionBuilder[RefNumRequest, AnyContent]
   with ActionRefiner[Request, RefNumRequest]
-  with MessagesActionBuilder {
+  with MessagesActionBuilder:
 
   override def refine[A](request: Request[A]): Future[Either[Result, RefNumRequest[A]]] = Future.successful {
-
-    request.session.get("refNum") match {
-      case Some(refNum) => Right(new RefNumRequest(refNum, request, messagesApi))
+    request.session.get("refNum") match
+      case Some(refNum) => Right(RefNumRequest(refNum, request, messagesApi))
       case None         => Left(Redirect(controllers.routes.LoginController.show))
-    }
   }
 
   override def parser: BodyParser[AnyContent] = bodyParser
-}

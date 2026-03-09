@@ -24,7 +24,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.JsString
 
-class NotConnectedSerializationSpec extends AnyFlatSpec with should.Matchers with EitherValues {
+class NotConnectedSerializationSpec extends AnyFlatSpec with should.Matchers with EitherValues:
 
   /*
     GMT: Wednesday, 31 July 2019 15:18:15
@@ -44,5 +44,3 @@ class NotConnectedSerializationSpec extends AnyFlatSpec with should.Matchers wit
     result.value("createdAt") shouldBe JsString(ISO_TIME)
 
   }
-
-}

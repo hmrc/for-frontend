@@ -37,13 +37,11 @@ class PageOneController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part1: part1
-) extends ForDataCapturePage[Address](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[Address](audit, formDocumentRepository, refNumAction, cc):
 
   val format: OFormat[Address] = addressFormat
   val emptyForm: Form[Address] = pageOneForm
   val pageNumber: Int          = 1
 
-  def template(form: Form[Address], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
+  def template(form: Form[Address], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     part1(form, summary)
-
-}

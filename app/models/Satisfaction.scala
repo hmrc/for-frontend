@@ -16,36 +16,13 @@
 
 package models
 
-sealed trait Satisfaction extends NamedEnum {
-  val key = "satisfactionSurveyType"
-  val rating: Int
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum Satisfaction(val rating: Int):
 
-object VerySatisfied extends Satisfaction {
-  val name   = "verySatisfied"
-  val rating = 5
-}
-
-object Satisfied extends Satisfaction {
-  val name   = "satisfied"
-  val rating = 4
-}
-
-object Neither extends Satisfaction {
-  val name   = "neither"
-  val rating = 3
-}
-
-object Dissatisfied extends Satisfaction {
-  val name   = "dissatisfied"
-  val rating = 2
-}
-
-object VeryDissatisfied extends Satisfaction {
-  val name   = "veryDissatisfied"
-  val rating = 1
-}
-
-object SatisfactionTypes extends NamedEnumSupport[Satisfaction] {
-  val all: List[Satisfaction] = List(VerySatisfied, Satisfied, Neither, Dissatisfied, VeryDissatisfied)
-}
+  case verySatisfied extends Satisfaction(5)
+  case satisfied extends Satisfaction(4)
+  case neither extends Satisfaction(3)
+  case dissatisfied extends Satisfaction(2)
+  case veryDissatisfied extends Satisfaction(1)

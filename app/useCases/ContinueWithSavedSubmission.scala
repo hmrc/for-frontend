@@ -27,7 +27,8 @@ import useCases.SaveInProgressSubmissionForLater.UpdateDocumentInCurrentSession
 import java.time.ZonedDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
-object ContinueWithSavedSubmission {
+object ContinueWithSavedSubmission:
+
   type ContinueWithSavedSubmission = (SaveForLaterPassword, ReferenceNumber) => Future[SaveForLaterLoginResult]
   type BuildSummary                = Document => Summary
   type GetNextPageOfJourney        = Summary => TargetPage
@@ -41,7 +42,7 @@ object ContinueWithSavedSubmission {
   )(
     p: SaveForLaterPassword,
     r: ReferenceNumber
-  )(implicit hc: HeaderCarrier,
+  )(using hc: HeaderCarrier,
     ec: ExecutionContext,
     mongoHasher: MongoHasher
   ): Future[SaveForLaterLoginResult] =
@@ -51,13 +52,12 @@ object ContinueWithSavedSubmission {
       case None                                              => ErrorRetrievingSavedDocument
     }
 
-  private def auth(implicit hc: HeaderCarrier) = hc.authorization.map(_.value).getOrElse(throw AuthorizationTokenMissing)
+  private def auth(using hc: HeaderCarrier) = hc.authorization.map(_.value).getOrElse(throw AuthorizationTokenMissing)
 
-  private def matches(savedHash: Option[SaveForLaterPassword], password: SaveForLaterPassword)(implicit mongoHasher: MongoHasher): Boolean =
+  private def matches(savedHash: Option[SaveForLaterPassword], password: SaveForLaterPassword)(using mongoHasher: MongoHasher): Boolean =
     savedHash.exists(mongoHasher.verify(password, _))
 
   private def record(d: Document, n: ZonedDateTime) = d.copy(saveForLaterPassword = None, journeyResumptions = d.journeyResumptions :+ n)
-}
 
 sealed trait SaveForLaterLoginResult
 

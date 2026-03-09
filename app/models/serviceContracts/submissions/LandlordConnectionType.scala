@@ -16,24 +16,11 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum LandlordConnectionType:
 
-sealed trait LandlordConnectionType extends NamedEnum {
-  val key = "landlordConnectionType"
-}
-
-object LandlordConnectionTypeFamily extends LandlordConnectionType {
-  val name = "family"
-}
-
-object LandlordConnectionTypeNone extends LandlordConnectionType {
-  val name = "noConnected"
-}
-
-object LandlordConnectionTypeOther extends LandlordConnectionType {
-  val name = "other"
-}
-
-object LandlordConnectionTypes extends NamedEnumSupport[LandlordConnectionType] {
-  val all: List[LandlordConnectionType] = List(LandlordConnectionTypeNone, LandlordConnectionTypeFamily, LandlordConnectionTypeOther)
-}
+  case noConnected,
+    family,
+    other

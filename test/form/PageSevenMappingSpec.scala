@@ -17,19 +17,19 @@
 package form
 
 import models.pages.PageSeven
-import models.serviceContracts.submissions.ReviewIntervalTypeOther
+import models.serviceContracts.submissions.ReviewIntervalType
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
 import utils.FormBindingTestAssertions.*
 
-class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
+class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers:
 
-  import PageSevenForm._
-  import utils.MappingSpecs._
+  import PageSevenForm.*
+  import utils.MappingSpecs.*
 
   val leaseContainsRentReviews: (String, String) = "leaseContainsRentReviews"                                           -> "true"
-  val reviewIntervalType: (String, String)       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalTypeOther.name
+  val reviewIntervalType: (String, String)       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalType.other.toString
   val reviewIntervalYears: (String, String)      = "rentReviewDetails.reviewIntervalTypeSpecify.years"                  -> "11"
   val reviewIntervalMonths: (String, String)     = "rentReviewDetails.reviewIntervalTypeSpecify.months"                 -> "12"
   val lastReviewDateMonth: (String, String)      = "rentReviewDetails.lastReviewDate.month"                             -> "3"
@@ -59,13 +59,12 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
   def bind(formData: Map[String, String]): Form[PageSeven] =
     pageSevenForm.bind(formData).convertGlobalToFieldErrors()
 
-  def containsError(errors: Seq[FormError], key: String, message: String): Boolean = {
+  def containsError(errors: Seq[FormError], key: String, message: String): Boolean =
     val exists = errors.exists { err =>
       err.key == key && err.messages.contains(message)
     }
     exists should be(true)
     exists
-  }
 
   "PageSevenData" should "bind with the fields and not return issues" in {
     val res = bind(baseData)
@@ -132,4 +131,3 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers {
 
     mustNotContainErrorFor("rentReviewDetails.reviewIntervalTypeSpecify.months", res)
   }
-}

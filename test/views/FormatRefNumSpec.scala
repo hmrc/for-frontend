@@ -20,7 +20,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import template.FormatRefNum
 
-class FormatRefNumSpec extends AnyFlatSpec with should.Matchers {
+class FormatRefNumSpec extends AnyFlatSpec with should.Matchers:
 
   behavior of "format ref num"
 
@@ -29,4 +29,3 @@ class FormatRefNumSpec extends AnyFlatSpec with should.Matchers {
 
   it should "display a 7-digit-prefix ref number as xxxxxxx/xxx" in
     assert(FormatRefNum("1234567890") === "1234567/890")
-}

@@ -15,7 +15,7 @@
  *@
 
 @import models.pages.Summary
-@import models.serviceContracts.submissions.ResponsibleTypes
+@import models.serviceContracts.submissions.ResponsibleType
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
@@ -57,13 +57,12 @@
             Radios(
                 name = "responsibleOutsideRepairs",
                 idPrefix = Option("responsibleOutsideRepairs"),
-                items = EnumOptions.options(ResponsibleTypes).map(radioItem => {
+                items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
-                        content = Text(radioItem._2),
-                        checked = radioItem._1.equals(theForm("responsibleOutsideRepairs").value.getOrElse("")),
-                        value = Option(radioItem._1)
+                        content = Text(messages(s"responsibleType.$responsibleType")),
+                        checked = theForm("responsibleOutsideRepairs").value.contains(responsibleType.toString),
+                        value   = Option(responsibleType.toString)
                     )
-                }
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleOutsideRepairs"),
@@ -84,13 +83,12 @@
             Radios(
                 name = "responsibleInsideRepairs",
                 idPrefix = Option("responsibleInsideRepairs"),
-                items = EnumOptions.options(ResponsibleTypes).map(radioItem => {
+                items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
-                        content = Text(radioItem._2),
-                        checked = radioItem._1.equals(theForm("responsibleInsideRepairs").value.getOrElse("")),
-                        value = Option(radioItem._1)
+                        content = Text(messages(s"responsibleType.$responsibleType")),
+                        checked = theForm("responsibleInsideRepairs").value.contains(responsibleType.toString),
+                        value   = Option(responsibleType.toString)
                     )
-                }
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleInsideRepairs"),
@@ -111,13 +109,12 @@
             Radios(
                 name = "responsibleBuildingInsurance",
                 idPrefix = Option("responsibleBuildingInsurance"),
-                items = EnumOptions.options(ResponsibleTypes).map(radioItem => {
+                items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
-                        content = Text(radioItem._2),
-                        checked = radioItem._1.equals(theForm("responsibleBuildingInsurance").value.getOrElse("")),
-                        value = Option(radioItem._1)
+                        content = Text(messages(s"responsibleType.$responsibleType")),
+                        checked = theForm("responsibleBuildingInsurance").value.contains(responsibleType.toString),
+                        value   = Option(responsibleType.toString)
                     )
-                }
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleBuildingInsurance"),

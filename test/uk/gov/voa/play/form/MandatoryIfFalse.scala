@@ -19,13 +19,21 @@ package uk.gov.voa.play.form
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 
 // TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
 // https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
 
-class MandatoryIfFalse extends AnyFlatSpec with should.Matchers {
-  import ConditionalMappings._
+class MandatoryIfFalse extends AnyFlatSpec with should.Matchers:
+
+  import ConditionalMappings.*
+
+  val form: Form[Model] = Form(mapping(
+    "source" -> boolean,
+    "target" -> mandatoryIfFalse("source", nonEmptyText)
+  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
+
+  case class Model(source: Boolean, target: Option[String])
 
   behavior of "mandatory if false"
 
@@ -41,11 +49,3 @@ class MandatoryIfFalse extends AnyFlatSpec with should.Matchers {
 
     assert(res.errors.isEmpty)
   }
-
-  lazy val form: Form[Model] = Form(mapping(
-    "source" -> boolean,
-    "target" -> mandatoryIfFalse("source", nonEmptyText)
-  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
-
-  case class Model(source: Boolean, target: Option[String])
-}

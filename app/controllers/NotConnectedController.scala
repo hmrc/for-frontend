@@ -24,8 +24,8 @@ import form.NotConnectedPropertyForm.form
 import javax.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.NotConnected
-import play.api.mvc.MessagesControllerComponents
-import play.api.{Logging, mvc}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.Logging
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -33,7 +33,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 import models.pages.Summary
 import play.api.data.Form
-import play.api.mvc.AnyContent
 
 @Singleton
 class NotConnectedController @Inject() (
@@ -43,23 +42,23 @@ class NotConnectedController @Inject() (
   cc: MessagesControllerComponents,
   notConnectedView: views.html.notConnected,
   errorView: views.html.error.error
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends FrontendController(cc)
   with Logging:
 
-  def findSummary(implicit request: RefNumRequest[?]): Future[Option[Summary]] =
+  def findSummary(using request: RefNumRequest[?]): Future[Option[Summary]] =
     repository.findById(SessionId(using hc), request.refNum) flatMap {
       case Some(doc) => Option(SummaryBuilder.build(doc))
       case None      => None
     }
 
-  def getNotConnectedFromCache()(implicit hc: HeaderCarrier): Future[Option[NotConnected]] =
+  def getNotConnectedFromCache()(using hc: HeaderCarrier): Future[Option[NotConnected]] =
     cache.fetchAndGetEntry[NotConnected](SessionId(using hc), NotConnectedController.cacheKey).flatMap {
       case Some(x) => Some(x)
       case None    => None
     }
 
-  def findNotConnectedSummary(implicit request: RefNumRequest[?], hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
+  def findNotConnectedSummary(using request: RefNumRequest[?], hc: HeaderCarrier): Future[Option[NotConnectedSummary]] =
     findSummary.flatMap { summary =>
       getNotConnectedFromCache().flatMap { notConnected =>
         Option(NotConnectedSummary(summary.get, None, notConnected))
@@ -71,7 +70,7 @@ class NotConnectedController @Inject() (
       case Some(x) => form.fill(x)
       case None    => form
 
-  def onPageView: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def onPageView: Action[AnyContent] = refNumAction.async { implicit request =>
     findNotConnectedSummary.map {
       case Some(notConnectedSummary) => Ok(notConnectedView(getForm(notConnectedSummary), notConnectedSummary.summary))
       case None                      =>
@@ -80,7 +79,7 @@ class NotConnectedController @Inject() (
     }
   }
 
-  def onPageSubmit: mvc.Action[AnyContent] = refNumAction.async { implicit request =>
+  def onPageSubmit: Action[AnyContent] = refNumAction.async { implicit request =>
     findSummary.flatMap {
       case Some(summary) =>
         form.bindFromRequest().fold(

@@ -18,7 +18,7 @@ package connectors
 
 import play.api.i18n.Messages
 import util.DateUtil.fullDateFormatter
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit ec: ExecutionContext) {
+class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(using ec: ExecutionContext):
 
   private val emailUrl = config.baseUrl("email")
 
@@ -36,7 +36,7 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit 
     postcode: String,
     email: Option[String],
     expiryDate: LocalDate
-  )(implicit hc: HeaderCarrier,
+  )(using hc: HeaderCarrier,
     messages: Messages
   ): Future[Unit] =
     email.map { e =>
@@ -53,4 +53,3 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(implicit 
       )
       http.post[JsObject](s"$emailUrl/send-templated-email/", json).map(_ => ())
     } getOrElse Future.unit
-}

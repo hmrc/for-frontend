@@ -36,11 +36,11 @@ class PageFiveController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part5: part5
-) extends ForDataCapturePage[PageFive](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[PageFive](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[PageFive] = Json.format
   val emptyForm: Form[PageFive] = pageFiveForm
   val pageNumber: Int           = 5
 
-  def template(form: Form[PageFive], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html =
+  def template(form: Form[PageFive], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     part5(form, summary)
-}

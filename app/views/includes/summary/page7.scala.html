@@ -16,11 +16,10 @@
 
 @import helpers.summary._
 @import models.pages._
-@import models.serviceContracts.submissions._
 
 @(p7: PageSeven, isAgent: Boolean, summary: Summary)(implicit messages: Messages)
 
-@agreementType = {@summary.lease.flatMap {d=>@d.leaseAgreementType.name}}
+@agreementType = @{summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")}
 
 <h2 class="govuk-heading-m">@messages("section7.heading")</h2>
 <dl class="govuk-summary-list">
@@ -65,7 +64,7 @@
 				@if(!rd.rentAgreedBetween) {
 					@rd.rentFixedBy.map { rfb =>
 						@summaryBlock(messages("label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy"), 7, "rentReviewDetails_rentReviewResultsDetails_rentFixedBy") {
-							@messages(s"${RentFixedTypes.key}.${rfb.name}")
+							@messages(s"rentFixedTypes.$rfb")
 						}
 					}
 				}

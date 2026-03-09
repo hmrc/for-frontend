@@ -21,7 +21,7 @@ import security.ArgumentsDidNotMatch
 
 import scala.concurrent.Future
 
-trait BehaviourVerification extends should.Matchers {
+trait BehaviourVerification extends should.Matchers:
 
   def respondWith[A, B](a: A)(b: B): A => Future[B] = aa =>
     if (a == aa) Future.successful(b) else throw ArgumentsDidNotMatch(Seq(a), Seq(aa))
@@ -46,4 +46,3 @@ trait BehaviourVerification extends should.Matchers {
 
   def none[A, B, C]: (A, B) => Future[Option[C]] =
     (_, _) => None
-}

@@ -22,6 +22,7 @@ import controllers.dataCapturePages.PageZeroController
 import form.persistence.FormDocumentRepository
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -32,15 +33,17 @@ import utils.Helpers.refNumAction
 import utils.stubs.StubFormDocumentRepo
 import views.html.part0
 
-class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoExtendedSugar {
+import java.util.UUID
+
+class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoExtendedSugar:
 
   private val testRefNum         = "1234567890"
-  private val sessionId          = java.util.UUID.randomUUID().toString
+  private val sessionId          = UUID.randomUUID.toString
   private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, nowInUK)))
   private val audit              = mock[Audit]
 
-  override def fakeApplication(): play.api.Application =
-    new GuiceApplicationBuilder()
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
       .overrides(
         bind[Audit].toInstance(audit),
         bind[FormDocumentRepository].toInstance(documentRepository)
@@ -50,7 +53,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
 
   "Page zero controller" should {
     "redirect to page 1 if user want to change address" in {
-      val pageZeroController = new PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
+      val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
       val request = FakeRequest()
         .withHeaders(HeaderNames.xSessionId -> sessionId)
@@ -68,7 +71,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
     }
 
     "redirect to page 2 if user doesn't want to change address" in {
-      val pageZeroController = new PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
+      val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
       val request = FakeRequest()
         .withHeaders(HeaderNames.xSessionId -> sessionId)
@@ -86,7 +89,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
     }
 
     "redirect to not connected page if user is not connected with property " in {
-      val pageZeroController = new PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
+      val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
       val request = FakeRequest()
         .withHeaders(HeaderNames.xSessionId -> sessionId)
@@ -103,5 +106,3 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
     }
 
   }
-
-}

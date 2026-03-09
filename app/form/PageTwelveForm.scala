@@ -16,19 +16,19 @@
 
 package form
 
-import models.pages._
+import models.pages.*
 import models.serviceContracts.submissions.ChargeDetails
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
-import uk.gov.voa.play.form.ConditionalMappings._
-import uk.gov.voa.play.form._
-import MappingSupport._
+import uk.gov.voa.play.form.ConditionalMappings.*
+import uk.gov.voa.play.form.*
+import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 import play.api.data.Mapping
 
-object PageTwelveForm {
+object PageTwelveForm:
 
-  val chargeDetailsMapping: String => Mapping[ChargeDetails] = (index: String) =>
+  private val chargeDetailsMapping: String => Mapping[ChargeDetails] = (index: String) =>
     mapping(
       s"$index.chargeDescription" -> default(text, "").verifying(
         nonEmpty(errorMessage = "error.detailsOfService.required"),
@@ -37,20 +37,20 @@ object PageTwelveForm {
       s"$index.chargeCost"        -> currencyMapping(".serviceChargesPerYear")
     )(ChargeDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-  val pageTwelveMapping: Mapping[PageTwelve] = mapping(
-    "responsibleOutsideRepairs"    -> responsibleTypeMapping,
-    "responsibleInsideRepairs"     -> responsibleTypeMapping,
-    "responsibleBuildingInsurance" -> responsibleTypeMapping,
-    "ndrCharges"                   -> mandatoryBooleanWithError(Errors.businessRatesRequired),
-    "ndrDetails"                   -> mandatoryIfTrue("ndrCharges", currencyMapping(".businessRatesPerYear")),
-    "waterCharges"                 -> mandatoryBooleanWithError(Errors.waterChargesIncludedRequired),
-    "waterChargesCost"             -> mandatoryIfTrue("waterCharges", currencyMapping(".waterChargesPerYear")),
-    "includedServices"             -> mandatoryBooleanWithError(Errors.serviceChargesIncludedRequired),
-    "includedServicesDetails"      -> onlyIfTrue(
-      "includedServices",
-      IndexedMapping("includedServicesDetails", chargeDetailsMapping).verifying(Errors.tooManyServices, _.length <= 8)
-    )
-  )(PageTwelve.apply)(o => Some(Tuple.fromProductTyped(o)))
+  private val pageTwelveMapping: Mapping[PageTwelve] =
+    mapping(
+      "responsibleOutsideRepairs"    -> responsibleOutsideRepairsMapping,
+      "responsibleInsideRepairs"     -> responsibleInsideRepairsMapping,
+      "responsibleBuildingInsurance" -> responsibleBuildingInsuranceMapping,
+      "ndrCharges"                   -> mandatoryBooleanWithError(Errors.businessRatesRequired),
+      "ndrDetails"                   -> mandatoryIfTrue("ndrCharges", currencyMapping(".businessRatesPerYear")),
+      "waterCharges"                 -> mandatoryBooleanWithError(Errors.waterChargesIncludedRequired),
+      "waterChargesCost"             -> mandatoryIfTrue("waterCharges", currencyMapping(".waterChargesPerYear")),
+      "includedServices"             -> mandatoryBooleanWithError(Errors.serviceChargesIncludedRequired),
+      "includedServicesDetails"      -> onlyIfTrue(
+        "includedServices",
+        IndexedMapping("includedServicesDetails", chargeDetailsMapping).verifying(Errors.tooManyServices, _.length <= 8)
+      )
+    )(PageTwelve.apply)(o => Some(Tuple.fromProductTyped(o)))
 
   val pageTwelveForm: Form[PageTwelve] = Form(pageTwelveMapping)
-}

@@ -16,21 +16,10 @@
 
 package models.serviceContracts.submissions
 
-import models.{NamedEnum, NamedEnumSupport}
+/**
+  * @author Yuriy Tumakha
+  */
+enum RentFixedType:
 
-sealed trait RentFixedType extends NamedEnum {
-  val key = "rentFixedTypes"
-}
-
-object RentFixedTypeIndependent extends RentFixedType {
-  val name = "independent"
-}
-
-object RentFixedTypeArbitrator extends RentFixedType {
-  val name = "arbitrator"
-}
-
-object RentFixedTypes extends NamedEnumSupport[RentFixedType] {
-  val all: List[RentFixedType] = List(RentFixedTypeArbitrator, RentFixedTypeIndependent)
-  val key: String              = all.head.key
-}
+  case arbitrator,
+    independent

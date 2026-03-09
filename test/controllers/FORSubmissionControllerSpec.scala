@@ -18,8 +18,6 @@ package controllers
 
 import actions.RefNumRequest
 import form.persistence.FormDocumentRepository
-
-import javax.inject.Singleton
 import models.serviceContracts.submissions.Submission
 import org.scalatest.GivenWhenThen
 import org.scalatest.flatspec.AnyFlatSpec
@@ -28,29 +26,30 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Injecting}
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import useCases.SubmitBusinessRentalInformation
 import utils.stubs.StubFormDocumentRepoProvider
 
-import scala.concurrent.duration._
+import javax.inject.Singleton
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with GivenWhenThen with GuiceOneAppPerSuite {
+class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with GivenWhenThen with GuiceOneAppPerSuite with Injecting:
 
-  import TestData._
+  import TestData.*
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[SubmitBusinessRentalInformation].to[StubSubmitBRI].in[Singleton],
       bind[FormDocumentRepository].toProvider[StubFormDocumentRepoProvider].in[Singleton]
     )
     .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> false)).build()
 
-  def submit: StubSubmitBRI = app.injector.instanceOf[SubmitBusinessRentalInformation].asInstanceOf[StubSubmitBRI]
+  def submit: StubSubmitBRI = inject[SubmitBusinessRentalInformation].asInstanceOf[StubSubmitBRI]
 
-  def controller: FORSubmissionController = app.injector.instanceOf[FORSubmissionController]
+  def controller: FORSubmissionController = inject[FORSubmissionController]
 
   "When a submission is received and the declaration has been agreed to" should
     "A 302 response redirecting to the confirmation page is returned" in {
@@ -58,8 +57,8 @@ class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with 
         FakeRequest().withSession("refNum" -> refNum).withFormUrlEncodedBody("declaration" -> "true").withHeaders(HeaderNames.xSessionId -> sessionId)
       val response = Await.result(controller.submit()(request), 5 seconds)
 
-      response.header.status should equal(302)
-      assert(response.header.headers("Location") === confirmationUrl)
+      response.header.status                should equal(302)
+      response.header.headers("Location") shouldBe controllers.feedback.routes.SurveyController.confirmation.url
 
       And("The Business rental information submission process is initiated")
       submit.assertBRISubmittedFor(refNum)
@@ -71,29 +70,17 @@ class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with 
       val request  = FakeRequest().withSession("refNum" -> refNum).withFormUrlEncodedBody("declaration" -> "false")
       val response = Await.result(controller.submit()(request), 5 seconds)
 
-      response.header.status should equal(302)
-      assert(response.header.headers("Location") === declarationErrorUrl)
+      response.header.status                should equal(302)
+      response.header.headers("Location") shouldBe controllers.routes.ApplicationController.declarationError.url
     }
 
-  object TestData {
-    lazy val refNum    = "adfiwerq08342kfad"
-    lazy val sessionId = "sessionid"
+  object TestData:
+    val refNum    = "adfiwerq08342kfad"
+    val sessionId = "sessionid"
 
-    lazy val confirmationUrl: String = controllers.feedback.routes.SurveyController.confirmation.url
+class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers:
 
-    lazy val declarationErrorUrl: String = controllers.routes.ApplicationController.declarationError.url
-
-  }
-
-}
-
-object StubSubmitBRI {
-  def apply() = new StubSubmitBRI
-}
-
-class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers {
-
-  lazy val stubSubmission: Submission = Submission(
+  val stubSubmission: Submission = Submission(
     None,
     None,
     None,
@@ -113,15 +100,12 @@ class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers
 
   var submittedRefNums: Seq[String] = Seq.empty
 
-  def apply(refNum: String)(implicit hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] = {
+  def apply(refNum: String)(using hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] =
     Console.println(s"=== called apply with : $refNum ===")
     Future.successful {
       submittedRefNums = submittedRefNums :+ refNum
       stubSubmission
     }
-  }
 
   def assertBRISubmittedFor(refNum: String): Unit =
     submittedRefNums should equal(Seq(refNum))
-
-}

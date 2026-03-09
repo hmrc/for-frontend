@@ -27,35 +27,36 @@ import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json, Reads, Writes}
+import play.api.test.Injecting
 import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
+import views.html.helper.urlEncode
 
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-object AcceptanceTest {
+object AcceptanceTest:
   val noHeaders: Map[String, Seq[String]] = Map.empty
-}
 
-trait AcceptanceTest extends AnyFlatSpec with should.Matchers with GuiceOneServerPerSuite {
-  private lazy val testConfigs = Map("auditing.enabled" -> false, "agentApi.testAccountsOnly" -> true)
+trait AcceptanceTest extends AnyFlatSpec with should.Matchers with GuiceOneServerPerSuite with Injecting:
+
+  private val testConfigs = Map("auditing.enabled" -> false, "agentApi.testAccountsOnly" -> true)
 
   val noHeaders: Map[String, Seq[String]] = AcceptanceTest.noHeaders
 
-  def http: TestHttpClient = app.injector.instanceOf[ForHttp].asInstanceOf[TestHttpClient]
+  def http: TestHttpClient = inject[ForHttp].asInstanceOf[TestHttpClient]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure(testConfigs)
     .overrides(
       bind[ForHttp].to[TestHttpClient].in[Singleton]
     )
     .build()
-}
 
 class TestHttpClient extends ForHttp:
+
   import AcceptanceTest.noHeaders
-  import views.html.helper.urlEncode
 
   private val baseForUrl = "http://localhost:9522/for"
   type Headers = Seq[(String, String)]
@@ -130,35 +131,33 @@ class TestHttpClient extends ForHttp:
     url: String,
     queryParams: Seq[(String, String)],
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit
+  )(using
     rds: Reads[A],
     hc: HeaderCarrier
   ): Future[A] =
-    stubbedGets.find(x => x._1 == url && x._2.forall(y => headers.exists(h => h._1 == y._1 && h._2 == y._2))) match {
+    stubbedGets.find(x => x._1 == url && x._2.forall(y => headers.exists(h => h._1 == y._1 && h._2 == y._2))) match
       case Some((_, _, response)) =>
         Future.successful(response).map { r =>
           if is2xx(r.status) then Json.parse(r.body).as[A]
           else throw UpstreamErrorResponse(r.body, r.status, r.status, r.headers)
         }
-      case _                      => throw new HttpRequestNotStubbed(url, headers)
-    }
+      case _                      => throw HttpRequestNotStubbed(url, headers)
 
   def put[I](
     url: String,
     body: I,
     headers: Seq[(String, String)] = Seq.empty
-  )(implicit
+  )(using
     wts: Writes[I],
     hc: HeaderCarrier
   ): Future[HttpResponse] =
-    stubbedPuts.find(x => x._1 == url && x._2 == body && x._3.forall(y => headers.exists(h => h._1 == y._1 && h._2 == y._2))) match {
+    stubbedPuts.find(x => x._1 == url && x._2 == body && x._3.forall(y => headers.exists(h => h._1 == y._1 && h._2 == y._2))) match
       case Some((_, _, _, response)) => Future.successful(response)
-      case _                         => throw new HttpRequestNotStubbed(url, headers)
-    }
+      case _                         => throw HttpRequestNotStubbed(url, headers)
 
-  override def postForm(url: String, body: Map[String, Seq[String]], headers: Seq[(String, String)])(implicit hc: HeaderCarrier): Future[HttpResponse] = ???
+  override def postForm(url: String, body: Map[String, Seq[String]], headers: Seq[(String, String)])(using hc: HeaderCarrier): Future[HttpResponse] = ???
 
-  override def post[I](url: String, body: I, headers: Seq[(String, String)])(implicit wts: Writes[I], hc: HeaderCarrier): Future[HttpResponse] = ???
+  override def post[I](url: String, body: I, headers: Seq[(String, String)])(using wts: Writes[I], hc: HeaderCarrier): Future[HttpResponse] = ???
 
 class HttpRequestNotStubbed[A](url: String, headers: Seq[(String, String)], data: Option[A] = None)
   extends Exception(s"Request not stubbed: $url - $headers ${data.map(d => s"- $d").getOrElse("")}")

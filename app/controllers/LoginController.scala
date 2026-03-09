@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.LoginToHODAction
 import connectors.Audit
 import form.persistence.FormDocumentRepository
 import form.{Errors, MappingSupport}
@@ -27,7 +28,6 @@ import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.libs.json.{Format, Json}
 import play.api.mvc.*
-import config.LoginToHODAction
 import security.{DocumentPreviouslySaved, NoExistingDocument}
 import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, UpstreamErrorResponse}
@@ -37,12 +37,13 @@ import util.DateUtil.nowInUK
 import views.html.{login, loginFailed}
 
 import java.time.{ZoneOffset, ZonedDateTime}
+import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 case class LoginDetails(referenceNumber: String, postcode: String, startTime: ZonedDateTime)
 
-object LoginController {
+object LoginController:
 
   val loginForm: Form[LoginDetails] = Form(
     mapping(
@@ -69,7 +70,6 @@ object LoginController {
       )
     )(LoginDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
-}
 
 class LoginController @Inject() (
   audit: Audit,
@@ -80,9 +80,9 @@ class LoginController @Inject() (
   errorView: views.html.error.error,
   loginFailedView: loginFailed,
   lockedOutView: views.html.lockedOut
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends FrontendController(cc)
-  with Logging {
+  with Logging:
 
   import LoginController.loginForm
 
@@ -91,11 +91,12 @@ class LoginController @Inject() (
   }
 
   def logout: Action[AnyContent] = Action { implicit request =>
-    val refNum                     = request.session.get("refNum").getOrElse("-")
-    val refNumJson                 = Json.obj(Audit.referenceNumber -> refNum)
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    val refNum     = request.session.get("refNum").getOrElse("-")
+    val refNumJson = Json.obj(Audit.referenceNumber -> refNum)
 
-    hc.sessionId match {
+    given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    hc.sessionId match
       case Some(sessionId) =>
         documentRepo.findById(sessionId.value, refNum).map {
           case Some(doc) => refNumJson ++ Addresses.addressJson(SummaryBuilder.build(doc))
@@ -103,7 +104,6 @@ class LoginController @Inject() (
         }.map(jsObject => audit.sendExplicitAudit("Logout", jsObject))
       case None            =>
         audit.sendExplicitAudit("Logout", refNumJson)
-    }
 
     Redirect(routes.LoginController.show).withNewSession
   }
@@ -115,13 +115,15 @@ class LoginController @Inject() (
     )
   }
 
-  def verifyLogin(referenceNumber: String, postcode: String, startTime: ZonedDateTime)(implicit r: MessagesRequest[AnyContent]): Future[Result] = {
-    val sessionId = java.util.UUID.randomUUID().toString // TODO - Why new session? Why manually?
+  def verifyLogin(referenceNumber: String, postcode: String, startTime: ZonedDateTime)(using r: MessagesRequest[AnyContent]): Future[Result] =
+    val sessionId = UUID.randomUUID().toString // TODO - Why new session? Why manually?
 
-    implicit val hc2: HeaderCarrier = hc.copy(sessionId = Some(SessionId(sessionId)))
-    val cleanedRefNumber            = referenceNumber.replaceAll("[^0-9]", "")
-    var cleanPostcode               = postcode.replaceAll("[^\\w\\d]", "")
+    given hc2: HeaderCarrier = hc.copy(sessionId = Some(SessionId(sessionId)))
+
+    val cleanedRefNumber = referenceNumber.replaceAll("[^0-9]", "")
+    var cleanPostcode    = postcode.replaceAll("[^\\w\\d]", "")
     cleanPostcode = cleanPostcode.patch(cleanPostcode.length - 4, " ", 0)
+
     loginToHOD(using hc2, ec)(cleanedRefNumber, cleanPostcode, startTime).flatMap {
       case DocumentPreviouslySaved(token, address) =>
         auditLogin(cleanedRefNumber, returnUser = true, address)(using hc2)
@@ -136,23 +138,20 @@ class LoginController @Inject() (
         val failed            = Json.parse(body).as[FailedLoginResponse]
         val remainingAttempts = failed.numberOfRemainingTriesUntilIPLockout
         logger.warn(s"Failed login: RefNum: $cleanedRefNumber Attempts remaining: $remainingAttempts")
-        if (remainingAttempts < 1) {
+        if remainingAttempts < 1 then
           val clientIP = r.headers.get(trueClientIp).getOrElse("")
           auditLockedOut(cleanedRefNumber, postcode, cleanPostcode, clientIP)(using hc2)
 
           Redirect(routes.LoginController.lockedOut)
-        } else {
+        else
           Redirect(routes.LoginController.loginFailed(remainingAttempts))
-        }
     }
-  }
 
-  private def auditLogin(refNumber: String, returnUser: Boolean, address: Address)(implicit hc: HeaderCarrier): Unit = {
+  private def auditLogin(refNumber: String, returnUser: Boolean, address: Address)(using hc: HeaderCarrier): Unit =
     val json = Json.obj("returningUser" -> returnUser, Audit.referenceNumber -> refNumber, Audit.address -> Json.toJsObject(address))
     audit.sendExplicitAudit("UserLogin", json)
-  }
 
-  private def auditLockedOut(refNumber: String, postcode: String, postcodeCleaned: String, lockedIP: String)(implicit hc: HeaderCarrier): Unit = {
+  private def auditLockedOut(refNumber: String, postcode: String, postcodeCleaned: String, lockedIP: String)(using hc: HeaderCarrier): Unit =
     val detailJson = Json.obj(
       Audit.referenceNumber -> refNumber,
       "postcode"            -> postcode,
@@ -160,7 +159,6 @@ class LoginController @Inject() (
       "lockedIP"            -> lockedIP
     )
     audit.sendExplicitAudit("LockedOut", detailJson)
-  }
 
   def lockedOut: Action[AnyContent] = Action { implicit request =>
     Unauthorized(lockedOutView())
@@ -170,14 +168,12 @@ class LoginController @Inject() (
     Unauthorized(loginFailedView(attemptsRemaining))
   }
 
-  private def withNewSession(r: Result, token: String, ref: String, sessionId: String)(implicit req: Request[AnyContent]) =
+  private def withNewSession(r: Result, token: String, ref: String, sessionId: String)(using req: Request[AnyContent]) =
     r.withSession(
       (req.session.data ++ Seq(SessionKeys.sessionId -> sessionId, SessionKeys.authToken -> token, "refNum" -> ref)).toSeq*
     )
-}
 
-object FailedLoginResponse {
+object FailedLoginResponse:
   implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]
-}
 
 case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)

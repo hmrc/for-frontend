@@ -19,10 +19,11 @@ package form
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
-class PageOneFormMappingSpec extends AnyFlatSpec with should.Matchers {
-  import TestData._
-  import form.PageOneForm._
-  import utils.MappingSpecs._
+class PageOneFormMappingSpec extends AnyFlatSpec with should.Matchers:
+
+  import TestData.*
+  import form.PageOneForm.*
+  import utils.MappingSpecs.*
 
   "page one mapping" should "validate the address fields following the standard address convention for this application" in {
     val formData: Map[String, String] =
@@ -52,14 +53,9 @@ class PageOneFormMappingSpec extends AnyFlatSpec with should.Matchers {
     pageOneData.postcode           should be("AA11 1AA")
   }
 
-  object TestData {
-
+  object TestData:
     val errorKey: ErrorKey = new ErrorKey
 
-    class ErrorKey {
+    class ErrorKey:
       val addressBuildingName: String = "buildingNameNumber"
       val addressPostcode: String     = "postcode"
-    }
-
-  }
-}

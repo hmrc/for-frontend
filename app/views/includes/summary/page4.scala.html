@@ -35,8 +35,8 @@
             @Html(sl.tenantAddress.multiLine)
           }
 
-          @summaryBlock(if(sl.subletType == SubletAll) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription"), 4, s"sublet_${index}_subletPropertyPartDescription") {
-              @if(sl.subletType == SubletAll) {
+          @summaryBlock(if(sl.subletType == SubletType.all) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription"), 4, s"sublet_${index}_subletPropertyPartDescription") {
+              @if(sl.subletType == SubletType.all) {
                   @messages("subletType.all")
               }else {
                   @sl.subletPropertyPartDescription.getOrElse("")
@@ -56,4 +56,3 @@
           }
       }
     </dl>
-

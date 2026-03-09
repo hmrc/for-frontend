@@ -16,14 +16,10 @@
 
 package form
 
-import play.api.data.{Form, Mapping}
-import MappingSupport.*
+import form.MappingSupport.*
 import models.serviceContracts.submissions.Address
+import play.api.data.Form
 
 object PageOneForm:
 
-  lazy val basePageOneForm: Form[Address] = Form(basePageOneMapping)
-
-  private val basePageOneMapping: Mapping[Address] = addressMapping
-
-  val pageOneForm: Form[Address] = Form(basePageOneMapping)
+  val pageOneForm: Form[Address] = Form(addressMapping)

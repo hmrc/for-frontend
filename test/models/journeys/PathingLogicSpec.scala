@@ -16,18 +16,103 @@
 
 package models.journeys
 
-import models._
-import models.journeys.Journey._
-import models.journeys.Paths._
-import models.pages._
-import models.serviceContracts.submissions._
+import models.*
+import models.journeys.Journey.*
+import models.journeys.Paths.*
+import models.pages.*
+import models.serviceContracts.submissions.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import utils.{SummaryBuilder => summaryBuilder}
+import utils.SummaryBuilder as summaryBuilder
 
 import java.time.LocalDate
 
-class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
+class PathingLogicSpec extends AnyFlatSpec with should.Matchers:
+
+  val pageZeroData: AddressConnectionType = AddressConnectionType.yes
+
+  val pageOneData: Option[Address] = None
+
+  val pageTwoData: CustomerDetails = CustomerDetails("name", UserType.owner, ContactDetails("01234567890", "abc@mailinator.com"))
+
+  val propertyOwned: PageThree = PageThree(
+    propertyType = "property type",
+    occupierType = OccupierType.company,
+    occupierCompanyName = Some("Some Company"),
+    occupierCompanyContact = Some("Some Company Contact"),
+    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
+    None,
+    propertyOwnedByYou = true,
+    propertyRentedByYou = None,
+    noRentDetails = None
+  )
+
+  val propertyRented: PageThree = PageThree(
+    propertyType = "property type",
+    occupierType = OccupierType.company,
+    occupierCompanyName = Some("Some Company"),
+    occupierCompanyContact = Some("Some Company Contact"),
+    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
+    None,
+    propertyOwnedByYou = false,
+    propertyRentedByYou = Some(true),
+    noRentDetails = None
+  )
+
+  val propertyNotOwnedOrRented: PageThree = PageThree(
+    propertyType = "property type",
+    occupierType = OccupierType.company,
+    occupierCompanyName = Some("Some Company"),
+    occupierCompanyContact = Some("Some Company Contact"),
+    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
+    None,
+    propertyOwnedByYou = false,
+    propertyRentedByYou = Some(false),
+    noRentDetails = None
+  )
+
+  val propertyNotSublet: PageFour = PageFour(
+    false,
+    List.empty
+  )
+
+  val propertyIsSublet: PageFour = PageFour(
+    true,
+    List(SubletDetails(
+      "Something",
+      Address("Street address", None, Some("City"), "Postcode"),
+      SubletType.part,
+      Option("Description"),
+      "Reason",
+      BigDecimal(1.33),
+      RoughDate(None, Some(12), 1980)
+    ))
+  )
+
+  val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionType.noConnected, None)
+
+  val pageSixData: PageSix =
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+
+  val pageSixNoVerbal: PageSix =
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+
+  val leaseAgreementTenancy: PageSix =
+    PageSix(LeaseAgreementType.leaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
+  val pageSixVerbal: PageSix         = PageSix(LeaseAgreementType.verbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
+  val pageSevenData: PageSeven       = PageSeven(false, None)
+  val pageEightData: RentAgreement   = RentAgreement(true, None, RentSetByType.newLease)
+  val hasNoRentReviews: PageSeven    = PageSeven(false, None)
+  val hasRentReviews: PageSeven      = PageSeven(true, None)
+
+  val pageNineData: PageNine = PageNine(
+    AnnualRent(8.99),
+    rentBecomePayable = LocalDate.of(2010, 2, 27),
+    rentActuallyAgreed = LocalDate.of(2005, 4, 2),
+    negotiatingNewRent = true,
+    rentBasis = RentBaseType.openMarket,
+    None
+  )
 
   "isShortPath" should "return true when the property is owned but not sublet" in {
     val sub = summaryBuilder(page3 = Some(propertyOwned), page4 = Some(propertyNotSublet))
@@ -182,89 +267,3 @@ class PathingLogicSpec extends AnyFlatSpec with should.Matchers {
 
     lastPageFor(sub) shouldBe 14
   }
-
-  lazy val pageZeroData: AddressConnectionType = AddressConnectionTypeYes
-
-  lazy val pageOneData: Option[Address] = None
-
-  lazy val pageTwoData: CustomerDetails = CustomerDetails("name", UserTypeOwner, ContactDetails("01234567890", "abc@mailinator.com"))
-
-  lazy val propertyOwned: PageThree = PageThree(
-    propertyType = "property type",
-    occupierType = OccupierTypeCompany,
-    occupierCompanyName = Some("Some Company"),
-    occupierCompanyContact = Some("Some Company Contact"),
-    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
-    None,
-    propertyOwnedByYou = true,
-    propertyRentedByYou = None,
-    noRentDetails = None
-  )
-
-  lazy val propertyRented: PageThree = PageThree(
-    propertyType = "property type",
-    occupierType = OccupierTypeCompany,
-    occupierCompanyName = Some("Some Company"),
-    occupierCompanyContact = Some("Some Company Contact"),
-    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
-    None,
-    propertyOwnedByYou = false,
-    propertyRentedByYou = Some(true),
-    noRentDetails = None
-  )
-
-  lazy val propertyNotOwnedOrRented: PageThree = PageThree(
-    propertyType = "property type",
-    occupierType = OccupierTypeCompany,
-    occupierCompanyName = Some("Some Company"),
-    occupierCompanyContact = Some("Some Company Contact"),
-    firstOccupationDate = Some(RoughDate(Some(28), Some(2), 2015)),
-    None,
-    propertyOwnedByYou = false,
-    propertyRentedByYou = Some(false),
-    noRentDetails = None
-  )
-
-  lazy val propertyNotSublet: PageFour = PageFour(
-    false,
-    List.empty
-  )
-
-  lazy val propertyIsSublet: PageFour = PageFour(
-    true,
-    List(SubletDetails(
-      "Something",
-      Address("Street address", None, Some("City"), "Postcode"),
-      SubletPart,
-      Option("Description"),
-      "Reason",
-      BigDecimal(1.33),
-      RoughDate(None, Some(12), 1980)
-    ))
-  )
-
-  lazy val pageFiveData: PageFive = PageFive("name", Some(Address("line1", None, Some("city"), "postcode")), LandlordConnectionTypeNone, None)
-
-  lazy val pageSixData: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-
-  lazy val pageSixNoVerbal: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-
-  lazy val leaseAgreementTenancy: PageSix =
-    PageSix(LeaseAgreementTypesLeaseTenancy, Some(WrittenAgreement(RoughDate(None, None, 1), false, None, false, None, false, Nil)), VerbalAgreement())
-  lazy val pageSixVerbal: PageSix         = PageSix(LeaseAgreementTypesVerbal, None, VerbalAgreement(Some(RoughDate(None, None, 1)), Some(false)))
-  lazy val pageSevenData: PageSeven       = PageSeven(false, None)
-  lazy val pageEightData: RentAgreement   = RentAgreement(true, None, RentSetByTypeNewLease)
-  lazy val hasNoRentReviews: PageSeven    = PageSeven(false, None)
-  lazy val hasRentReviews: PageSeven      = PageSeven(true, None)
-
-  lazy val pageNineData: PageNine = PageNine(
-    AnnualRent(8.99),
-    rentBecomePayable = LocalDate.of(2010, 2, 27),
-    rentActuallyAgreed = LocalDate.of(2005, 4, 2),
-    negotiatingNewRent = true,
-    rentBasis = RentBaseTypeOpenMarket,
-    None
-  )
-}

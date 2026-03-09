@@ -96,7 +96,7 @@
         data-show-when-value-equals="true"
         data-limit="5" >
 
-        @_root_.template.repeatWithIndex(theForm("sublet"), max = 5) { (sublet, idx) =>
+        @template.repeatWithIndex(theForm("sublet"), max = 5) { (_, idx) =>
 
           <div class="multi-fields-group" id=@(s"sublet_description_div_$idx")>
 
@@ -174,13 +174,12 @@
             @govukRadios(
               Radios(
                   name = s"sublet[$idx].subletType",
-                  items = EnumOptions.options(SubletType).map(radioItem => {
+                  items = SubletType.values.toIndexedSeq.map(subletType =>
                       RadioItem(
-                          content = Text(radioItem._2),
-                          checked = radioItem._1.equals(theForm(s"sublet[$idx].subletType").value.getOrElse("")),
-                          value = Option(radioItem._1)
+                          content = Text(messages(s"subletType.$subletType")),
+                          checked = theForm(s"sublet[$idx].subletType").value.contains(subletType.toString),
+                          value   = Option(subletType.toString)
                       )
-                  }
                   ),
                   classes = "radio-button-that-show-hides govuk-radios--inline",
                   errorMessage = theForm.errors.asTextErrorMessageForField(s"sublet[$idx].subletType"),

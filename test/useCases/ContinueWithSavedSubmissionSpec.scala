@@ -16,7 +16,7 @@
 
 package useCases
 
-import _root_.utils.UnitTest
+import utils.UnitTest
 import connectors.Document
 import crypto.MongoHasher
 import models.journeys.SummaryPage
@@ -29,10 +29,10 @@ import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.*
 import scala.concurrent.Future
 
-class ContinueWithSavedSubmissionSpec extends UnitTest {
+class ContinueWithSavedSubmissionSpec extends UnitTest:
 
   implicit private val mongoHasher: MongoHasher =
-    new MongoHasher(Configuration("oneway.hash.key" -> "UkFMRCBTYXZlRm9yTGF0ZXIgcGFzd29yZCB2ZXJ5IGNvb2wgYW5kIHNlY3JldCBvbmUgd2F5IGhhc2gga2V5"))
+    MongoHasher(Configuration("oneway.hash.key" -> "UkFMRCBTYXZlRm9yTGF0ZXIgcGFzd29yZCB2ZXJ5IGNvb2wgYW5kIHNlY3JldCBvbmUgd2F5IGhhc2gga2V5"))
 
   "Continue with saved submission" when {
     val pwd                        = "anicepassword"
@@ -98,5 +98,3 @@ class ContinueWithSavedSubmissionSpec extends UnitTest {
     }
 
   }
-
-}

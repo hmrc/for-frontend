@@ -16,7 +16,7 @@
 
 package models.pages
 
-import models.serviceContracts.submissions._
+import models.serviceContracts.submissions.*
 
 import java.time.ZonedDateTime
 
@@ -40,33 +40,24 @@ case class Summary(
   otherFactors: Option[OtherFactors],
   address: Option[Address] = None,
   journeyResumptions: Seq[ZonedDateTime] = Seq.empty
-) {
+):
 
-  lazy val addressVOABelievesIsCorrect: Address = address.getOrElse(throw VOAHeldAddressSelectionError(referenceNumber))
+  def addressVOABelievesIsCorrect: Address = address.getOrElse(throw VOAHeldAddressSelectionError(referenceNumber))
 
   def addressUserBelievesIsCorrect: Address =
     addressConnection.flatMap {
-      case AddressConnectionTypeYesChangeAddress => propertyAddress orElse address
-      case _                                     => address
+      case AddressConnectionType.`yes-change-address` => propertyAddress orElse address
+      case _                                          => address
     }.orElse(address).getOrElse(throw UsersAddressSelectionError(referenceNumber))
 
-//  lazy val addressUserBelievesIsCorrect: Address = {
-//    if(propertyAddress.exists(_.isAddressCorrect)) address else propertyAddress.flatMap(_.address)
-//  }.getOrElse(throw UsersAddressSelectionError(referenceNumber))
+  val submitter: String        = customerDetails.map(_.fullName) getOrElse "No Name Supplied"
+  val isAgent: Boolean         = customerDetails.exists(c => c.userType == UserType.occupiersAgent || c.userType == UserType.ownersAgent)
+  val lastLogin: ZonedDateTime = journeyResumptions.lastOption.getOrElse(journeyStarted)
 
-  lazy val submitter: String        = customerDetails.map(_.fullName) getOrElse "No Name Supplied"
-  lazy val isAgent: Boolean         = customerDetails.exists(c => c.userType == UserTypeOccupiersAgent || c.userType == UserTypeOwnersAgent)
-  lazy val lastLogin: ZonedDateTime = journeyResumptions.lastOption.getOrElse(journeyStarted)
-//  lazy val isUnderReview =
-//    propertyAddress.exists(_.isAddressCorrect == false) && address.map(_.singleLine) != propertyAddress.flatMap(_.address.map(_.singleLine))
-
-  def isUnderReview: Boolean = addressConnection match {
-    case Some(AddressConnectionTypeYesChangeAddress) =>
+  def isUnderReview: Boolean = addressConnection match
+    case Some(AddressConnectionType.`yes-change-address`) =>
       address.map(_.singleLine) != propertyAddress.map(_.singleLine)
-    case _                                           => false
-  }
-
-}
+    case _                                                => false
 
 case class NoMainAddress(refNum: String) extends Exception(refNum)
 case object NoReferenceNumber extends Exception

@@ -19,12 +19,20 @@ package uk.gov.voa.play.form
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 
 // TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
 // https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
 
-class ProblemWithPlayFrameworkMappings extends AnyFlatSpec with should.Matchers {
+case class Model(nonUkResident: Boolean, country: Option[String], email: String)
+
+class ProblemWithPlayFrameworkMappings extends AnyFlatSpec with should.Matchers:
+
+  val form: Form[Model] = Form(mapping(
+    "nonUkResident" -> boolean,
+    "country"       -> optional(nonEmptyText),
+    "email"         -> nonEmptyText
+  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))).verifying("Error.countryRequired", x => x.nonUkResident && x.country.isDefined))
 
   behavior of "vanilla play conditional mapping"
 
@@ -44,18 +52,15 @@ class ProblemWithPlayFrameworkMappings extends AnyFlatSpec with should.Matchers 
     assert(res.errors.head.key === "")
   }
 
-  lazy val form: Form[Model] = Form(mapping(
+class SolutionUsingConditionalMappings extends AnyFlatSpec with should.Matchers:
+
+  import ConditionalMappings.*
+
+  val form: Form[Model] = Form(mapping(
     "nonUkResident" -> boolean,
-    "country"       -> optional(nonEmptyText),
+    "country"       -> mandatoryIfTrue("nonUkResident", nonEmptyText),
     "email"         -> nonEmptyText
-  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))).verifying("Error.countryRequired", x => x.nonUkResident && x.country.isDefined))
-
-}
-
-case class Model(nonUkResident: Boolean, country: Option[String], email: String)
-
-class SolutionUsingConditionalMappings extends AnyFlatSpec with should.Matchers {
-  import ConditionalMappings._
+  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
   behavior of "conditional mappings"
 
@@ -67,10 +72,3 @@ class SolutionUsingConditionalMappings extends AnyFlatSpec with should.Matchers 
     assert(res.errors.head.key === "country")
     assert(res.errors.tail.head.key === "email")
   }
-
-  lazy val form: Form[Model] = Form(mapping(
-    "nonUkResident" -> boolean,
-    "country"       -> mandatoryIfTrue("nonUkResident", nonEmptyText),
-    "email"         -> nonEmptyText
-  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
-}

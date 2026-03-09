@@ -25,7 +25,7 @@ import form.persistence.FormDocumentRepository
 import javax.inject.Inject
 import models.*
 import models.pages.{PageSeven, PageSix, Summary}
-import models.serviceContracts.submissions.LeaseAgreementTypesVerbal
+import models.serviceContracts.submissions.LeaseAgreementType
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
@@ -43,32 +43,29 @@ class PageSevenController @Inject() (
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part7: views.html.part7
-) extends ForDataCapturePage[PageSeven](audit, formDocumentRepository, refNumAction, cc) {
+) extends ForDataCapturePage[PageSeven](audit, formDocumentRepository, refNumAction, cc):
+
   val format: OFormat[PageSeven] = p7f
   val emptyForm: Form[PageSeven] = pageSevenForm
   val pageNumber: Int            = 7
 
-  def template(form: Form[PageSeven], summary: Summary)(implicit request: RefNumRequest[AnyContent]): Html = {
+  def template(form: Form[PageSeven], summary: Summary)(using request: RefNumRequest[AnyContent]): Html =
     val updatedForm: Form[PageSeven] = Await.result(
       repository.findById(SessionId(using hc), request.refNum).map { docOpt =>
-        (for {
+        (for
           doc                <- docOpt
           page6              <- doc.page(6)
           pageSix            <- pageSixForm.bindFromRequest(page6.fields).value
           agreementStartDate <- getAgreementStartDate(pageSix)
-        } yield form.copy(data = form.data + ("agreementStartDate" -> agreementStartDate.toString))).getOrElse(form)
+        yield form.copy(data = form.data + ("agreementStartDate" -> agreementStartDate.toString))).getOrElse(form)
       },
       20 seconds
     )
 
     part7(updatedForm, summary)
-  }
 
   private def getAgreementStartDate(pageSix: PageSix): Option[LocalDate] =
-    if (pageSix.leaseAgreementType == LeaseAgreementTypesVerbal) {
+    if pageSix.leaseAgreementType == LeaseAgreementType.verbal then
       pageSix.verbalAgreementDetails.startDate.map(_.toLocalDate)
-    } else {
+    else
       pageSix.writtenAgreementDetails.map(_.startDate.toLocalDate)
-    }
-
-}

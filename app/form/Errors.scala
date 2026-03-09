@@ -16,7 +16,7 @@
 
 package form
 
-object Errors {
+object Errors:
 
   // address
   val addressRequired                   = "address.required"
@@ -151,4 +151,3 @@ object Errors {
   val dateMustBeInPast      = "error.date_must_be_in_past"
   val invalidDurationMonths = "error.duration.months"
   val invalidDurationYears  = "error.duration.years"
-}

@@ -26,7 +26,8 @@ import java.security.SecureRandom
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
-object SaveInProgressSubmissionForLater {
+object SaveInProgressSubmissionForLater:
+
   type SaveInProgressSubmissionForLater = HeaderCarrier => (Document, HeaderCarrier) => Future[SaveForLaterPassword]
   type UpdateDocumentInCurrentSession   = (HeaderCarrier, ReferenceNumber, Document) => Future[Unit]
   type GenerateSaveForLaterPassword     = () => String
@@ -40,12 +41,11 @@ object SaveInProgressSubmissionForLater {
   )(
     d: Document,
     hc: HeaderCarrier
-  )(implicit ec: ExecutionContext
-  ): Future[String] = {
+  )(using ec: ExecutionContext
+  ): Future[String] =
     val p  = d.saveForLaterPassword getOrElse gp()
     val nd = d.copy(saveForLaterPassword = Some(p))
     s(nd) map { _ => u(hc, d.referenceNumber, nd) } map { _ => p }
-  }
 
   def apply(
     p: SaveForLaterPassword,
@@ -54,37 +54,30 @@ object SaveInProgressSubmissionForLater {
   )(
     d: Document,
     hc: HeaderCarrier
-  )(implicit ec: ExecutionContext
-  ): Future[String] = {
+  )(using ec: ExecutionContext
+  ): Future[String] =
     val nd = d.copy(saveForLaterPassword = Some(p))
     s(nd) map { _ => u(hc, d.referenceNumber, nd) } map { _ => p }
-  }
-}
 
-object StoreInProgressSubmissionFor90Days {
-  def apply(d: Document)(implicit hc: HeaderCarrier, hodConnector: HODConnector): Future[Unit] = hodConnector.saveForLater(d)
-}
+object StoreInProgressSubmissionFor90Days:
+  def apply(d: Document)(using hc: HeaderCarrier, hodConnector: HODConnector): Future[Unit] = hodConnector.saveForLater(d)
 
-object LoadSavedForLaterDocument {
+object LoadSavedForLaterDocument:
 
-  def apply(a: AuthToken, r: ReferenceNumber)(implicit hc: HeaderCarrier, hodConnector: HODConnector): Future[Option[Document]] =
+  def apply(a: AuthToken, r: ReferenceNumber)(using hc: HeaderCarrier, hodConnector: HODConnector): Future[Option[Document]] =
     hodConnector.loadSavedDocument(r)(using hc.copy(authorization = Some(Authorization(a))))
-}
 
-object UpdateDocumentInCurrentSession {
+object UpdateDocumentInCurrentSession:
 
-  def apply(h: HeaderCarrier, r: ReferenceNumber, d: Document)(implicit formDocumentRepository: FormDocumentRepository): Future[Unit] =
+  def apply(h: HeaderCarrier, r: ReferenceNumber, d: Document)(using formDocumentRepository: FormDocumentRepository): Future[Unit] =
     formDocumentRepository.store(SessionId(using h), r, d)
-}
 
-object Generate7LengthLowercaseAlphaNumPassword {
+object Generate7LengthLowercaseAlphaNumPassword:
   private val validDigits        = 2 to 9
   private val validChars         = "abcdefghjkmnpqrstuvwxyz".toCharArray
   private val allValid: Seq[Any] = validDigits ++ validChars
 
-  def apply(): SaveForLaterPassword = (1 to 7).map(_ => new Random(new SecureRandom()).shuffle(allValid).head).mkString
-}
+  def apply(): SaveForLaterPassword = (1 to 7).map(_ => Random(SecureRandom()).shuffle(allValid).head).mkString
 
-object UseUserAlphaNumPassword {
+object UseUserAlphaNumPassword:
   def apply(password: String): SaveForLaterPassword = password
-}

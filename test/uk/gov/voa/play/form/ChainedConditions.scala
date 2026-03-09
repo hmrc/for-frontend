@@ -19,13 +19,25 @@ package uk.gov.voa.play.form
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 
 // TODO: Remove package uk.gov.voa.play.form if library uk.gov.hmrc:play-conditional-form-mapping_2.13 for Scala 2.13 released
 // https://artefacts.tax.service.gov.uk/ui/packages?name=%2Aplay-conditional-form-mapping%2A&type=packages
 
-class ChainedConditions extends AnyFlatSpec with should.Matchers {
-  import ConditionalMappings._
+class ChainedConditions extends AnyFlatSpec with should.Matchers:
+
+  import ConditionalMappings.*
+
+  val form = Form(mapping(
+    "name"            -> nonEmptyText,
+    "age"             -> number,
+    "favouriteColour" -> mandatoryIf(
+      isEqual("name", "Francoise") `and` isEqual("age", "21"),
+      nonEmptyText
+    )
+  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
+
+  case class Model(name: String, age: Int, favouriteColour: Option[String])
 
   behavior of "chained mappings"
 
@@ -42,15 +54,3 @@ class ChainedConditions extends AnyFlatSpec with should.Matchers {
 
     assert(res.errors.isEmpty)
   }
-
-  lazy val form = Form(mapping(
-    "name"            -> nonEmptyText,
-    "age"             -> number,
-    "favouriteColour" -> mandatoryIf(
-      isEqual("name", "Francoise") `and` isEqual("age", "21"),
-      nonEmptyText
-    )
-  )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
-
-  case class Model(name: String, age: Int, favouriteColour: Option[String])
-}

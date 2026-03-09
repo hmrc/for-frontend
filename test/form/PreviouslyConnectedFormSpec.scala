@@ -21,7 +21,7 @@ import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
-class PreviouslyConnectedFormSpec extends AnyFlatSpec with should.Matchers with OptionValues {
+class PreviouslyConnectedFormSpec extends AnyFlatSpec with should.Matchers with OptionValues:
 
   val formData: Map[String, String] = Map(
     "haveYouBeenConnected" -> "true"
@@ -35,7 +35,6 @@ class PreviouslyConnectedFormSpec extends AnyFlatSpec with should.Matchers with 
     formWithData.value shouldBe defined
 
     formWithData.value.value shouldBe PreviouslyConnected(true)
-
   }
 
   it should "show error when empty form is submitted" in {
@@ -46,7 +45,4 @@ class PreviouslyConnectedFormSpec extends AnyFlatSpec with should.Matchers with 
     formWithData.errors should not be empty
 
     formWithData.errors should have size 1
-
   }
-
-}

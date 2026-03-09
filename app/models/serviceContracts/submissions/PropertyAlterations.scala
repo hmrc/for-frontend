@@ -16,4 +16,8 @@
 
 package models.serviceContracts.submissions
 
-case class PropertyAlterations(propertyAlterations: Boolean, propertyAlterationsDetails: List[PropertyAlterationsDetails], alterationsRequired: Option[Boolean])
+case class PropertyAlterations(
+  propertyAlterations: Boolean,
+  propertyAlterationsDetails: List[PropertyAlterationsDetails],
+  alterationsRequired: Option[Boolean]
+)

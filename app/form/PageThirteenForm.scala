@@ -25,37 +25,30 @@ import DateMappings.*
 import MappingSupport.*
 import play.api.data.Mapping
 
-object PageThirteenForm {
+object PageThirteenForm:
 
-  val keys: Keys = new Keys
+  private val propertyAlterations        = "propertyAlterations"
+  private val propertyAlterationsDetails = "propertyAlterationsDetails"
+  private val alterationsRequired        = "requiredAnyWorks"
 
-  class Keys {
-    val propertyAlterations          = "propertyAlterations"
-    val propertyAlterationsDetails   = "propertyAlterationsDetails"
-    val alterationDetailsDescription = "propertyAlterationsDetails.description"
-    val alterationDetailsCost        = "propertyAlterationsDetails.cost"
-    val alterationDetailsDateMonth   = "propertyAlterationsDetails.date.month"
-    val alterationDetailsDateYear    = "propertyAlterationsDetails.date.year"
-    val alterationsRequired          = "requiredAnyWorks"
-  }
-
-  val pageThirteenForm: Form[PropertyAlterations] = Form(mapping(
-    keys.propertyAlterations        -> mandatoryBooleanWithError(Errors.hasTenantDonePropertyAlterationsRequired),
-    keys.propertyAlterationsDetails -> onlyIfTrue(
-      keys.propertyAlterations,
-      IndexedMapping("propertyAlterationsDetails", propertyAlterationsDetailsMapping).verifying(Errors.tooManyAlterations, _.length <= 10)
-    ),
-    keys.alterationsRequired        -> mandatoryBooleanIfTrue(
-      keys.propertyAlterations,
-      mandatoryBooleanWithError(Errors.tenantWasRequiredToMakeAlterationsRequired)
-    )
-  )(PropertyAlterations.apply)(o => Some(Tuple.fromProductTyped(o))))
-
-  lazy val propertyAlterationsDetailsMapping: String => Mapping[PropertyAlterationsDetails] = (indexed: String) =>
+  private val propertyAlterationsDetailsMapping: String => Mapping[PropertyAlterationsDetails] = (indexed: String) =>
     mapping(
       s"$indexed.date"           -> monthYearRoughDateMapping(s"$indexed.date", ".alternationCost"),
       s"$indexed.alterationType" -> alterationSetByTypeMapping,
       s"$indexed.cost"           -> currencyMapping(".alternationCost")
     )(PropertyAlterationsDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
 
-}
+  val pageThirteenForm: Form[PropertyAlterations] =
+    Form(
+      mapping(
+        propertyAlterations        -> mandatoryBooleanWithError(Errors.hasTenantDonePropertyAlterationsRequired),
+        propertyAlterationsDetails -> onlyIfTrue(
+          propertyAlterations,
+          IndexedMapping("propertyAlterationsDetails", propertyAlterationsDetailsMapping).verifying(Errors.tooManyAlterations, _.length <= 10)
+        ),
+        alterationsRequired        -> mandatoryBooleanIfTrue(
+          propertyAlterations,
+          mandatoryBooleanWithError(Errors.tenantWasRequiredToMakeAlterationsRequired)
+        )
+      )(PropertyAlterations.apply)(o => Some(Tuple.fromProductTyped(o)))
+    )

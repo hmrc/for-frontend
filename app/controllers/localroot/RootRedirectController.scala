@@ -16,7 +16,7 @@
 
 package controllers.localroot
 
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -25,10 +25,8 @@ import javax.inject.{Inject, Singleton}
   * @author Yuriy Tumakha
   */
 @Singleton
-class RootRedirectController @Inject() (cc: MessagesControllerComponents) extends FrontendController(cc) {
+class RootRedirectController @Inject() (cc: MessagesControllerComponents) extends FrontendController(cc):
 
   def rootRedirect: Action[AnyContent] = Action {
     Redirect(controllers.routes.ApplicationController.index)
   }
-
-}

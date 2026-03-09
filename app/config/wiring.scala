@@ -24,23 +24,23 @@ import form.persistence.FormDocumentRepository
 import javax.inject.{Inject, Singleton}
 import models.journeys.Journey
 import models.pages.SummaryBuilder
-import security.LoginToHOD._
-import uk.gov.hmrc.http._
+import security.LoginToHOD.*
+import uk.gov.hmrc.http.*
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
 import useCases.SaveInProgressSubmissionForLater.SaveInProgressSubmissionForLater
-import useCases._
+import useCases.*
 import util.DateUtil.nowInUK
 
 import scala.concurrent.ExecutionContext
 
-object SessionId {
-  def apply(implicit hc: HeaderCarrier): String = hc.sessionId.map(_.value).getOrElse(throw SessionIdMissing())
-}
+object SessionId:
+  def apply(using hc: HeaderCarrier): String = hc.sessionId.map(_.value).getOrElse(throw SessionIdMissing())
+
 case class SessionIdMissing() extends Exception
 
-object SaveForLater {
+object SaveForLater:
 
-  def apply()(implicit ec: ExecutionContext, hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository): SaveInProgressSubmissionForLater =
+  def apply()(using ec: ExecutionContext, hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository): SaveInProgressSubmissionForLater =
     implicit hc =>
       SaveInProgressSubmissionForLater(
         Generate7LengthLowercaseAlphaNumPassword(),
@@ -48,19 +48,18 @@ object SaveForLater {
         UpdateDocumentInCurrentSession.apply
       )
 
-  def apply(pwd: String)(implicit ec: ExecutionContext, hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository)
+  def apply(pwd: String)(using ec: ExecutionContext, hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository)
     : SaveInProgressSubmissionForLater = implicit hc =>
     SaveInProgressSubmissionForLater(
       UseUserAlphaNumPassword(pwd),
       StoreInProgressSubmissionFor90Days.apply,
       UpdateDocumentInCurrentSession.apply
     )
-}
 
-object ContinueWithSavedSubmission {
+object ContinueWithSavedSubmission:
 
   def apply(
-  )(implicit hc: HeaderCarrier,
+  )(using hc: HeaderCarrier,
     ec: ExecutionContext,
     hodConnector: HODConnector,
     formDocumentRepository: FormDocumentRepository,
@@ -72,23 +71,20 @@ object ContinueWithSavedSubmission {
     Journey.pageToResumeAt,
     () => nowInUK
   )
-}
 
 /**
   * Temporal solution before we move all login logic to separate service class.
   * This allow us to test login controller without starting google guice.
   */
 @ImplementedBy(classOf[DefaultLoginToHodAction])
-trait LoginToHODAction {
-  def apply(implicit hc: HeaderCarrier, ec: ExecutionContext): LoginToHOD
-}
+trait LoginToHODAction:
+  def apply(using hc: HeaderCarrier, ec: ExecutionContext): LoginToHOD
 
 @Singleton
-class DefaultLoginToHodAction @Inject() (implicit hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository) extends LoginToHODAction {
+class DefaultLoginToHodAction @Inject() (implicit hodConnector: HODConnector, formDocumentRepository: FormDocumentRepository) extends LoginToHODAction:
 
-  override def apply(implicit hc: HeaderCarrier, ec: ExecutionContext): LoginToHOD = security.LoginToHOD(
+  override def apply(using hc: HeaderCarrier, ec: ExecutionContext): LoginToHOD = security.LoginToHOD(
     hodConnector.verifyCredentials,
     LoadSavedForLaterDocument.apply,
     UpdateDocumentInCurrentSession.apply
   )
-}

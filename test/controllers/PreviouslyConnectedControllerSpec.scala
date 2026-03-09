@@ -27,9 +27,9 @@ import views.html.previouslyConnected
 
 import scala.concurrent.ExecutionContext
 
-class PreviouslyConnectedControllerSpec extends TestBaseSpec {
+class PreviouslyConnectedControllerSpec extends TestBaseSpec:
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  given ExecutionContext = ExecutionContext.Implicits.global
 
   "PreviouslyConnectedController" should "redirect after form submission" in {
 
@@ -37,14 +37,11 @@ class PreviouslyConnectedControllerSpec extends TestBaseSpec {
     val formDocumentRepository = mock[FormDocumentRepository]
 
     val controller =
-      new PreviouslyConnectedController(stubMessagesControllerComponents(), cache, formDocumentRepository, refNumAction(), mock[previouslyConnected], mock[error])
+      PreviouslyConnectedController(stubMessagesControllerComponents(), cache, formDocumentRepository, refNumAction(), mock[previouslyConnected], mock[error])
 
     val request = FakeRequest()
 
     val response = controller.onPageSubmit(request)
 
     status(response) shouldBe SEE_OTHER
-
   }
-
-}
