@@ -73,18 +73,22 @@ object PageSixForm:
 
   private def noOverlappingSteps: Constraint[WrittenAgreement] = Constraint("constraints.steppedDetails.overlappingSteps") { writtenAgreement =>
     val steppedDetails = writtenAgreement.steppedDetails
-    val s              = steppedDetails.zipWithIndex.tail.filterNot { p =>
-      p._1.stepFrom.isAfter(steppedDetails(p._2 - 1).stepTo) || p._1.stepFrom.isEqual(steppedDetails(p._2 - 1).stepTo)
-    }
 
-    val f = s.map { p =>
-      s"steppedDetails[${p._2}].${keys.from}.day"
-    }
-    createFieldConstraintFor(
-      steppedDetails.isEmpty || s.isEmpty,
-      Errors.overlappingDates,
-      if steppedDetails.nonEmpty && f.nonEmpty then f else Seq("needs one field to run")
-    )
+    val steppedDetailsIndexedTail: Seq[(SteppedDetails, Int)] =
+      if steppedDetails.isEmpty then Seq.empty
+      else
+        steppedDetails.zipWithIndex.tail.filterNot { case (sd, idx) =>
+          sd.stepFrom.isAfter(steppedDetails(idx - 1).stepTo) || sd.stepFrom.isEqual(steppedDetails(idx - 1).stepTo)
+        }
+
+    val fields =
+      if steppedDetailsIndexedTail.isEmpty then Seq("needs one field to run")
+      else
+        steppedDetailsIndexedTail.map(_._2).map { idx =>
+          s"steppedDetails[$idx].${keys.from}.day"
+        }
+
+    createFieldConstraintFor(steppedDetailsIndexedTail.isEmpty, Errors.overlappingDates, fields)
   }
 
   private val steppedDetailsMapping: String => Mapping[SteppedDetails] = (index: String) =>
