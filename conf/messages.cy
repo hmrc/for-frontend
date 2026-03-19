@@ -70,9 +70,6 @@ label.startFormAgain=Dechrau’r ffurflen eto
 label.password=cyfrinair
 label.totalRent=Rhent blynyddol
 label.checkTheForm=Mae problem wedi codi
-label.phase=Mae hwn yn wasanaeth newydd – bydd eich <a href="{0}" target="_blank" id="betaFeedback">adborth<span class="visuallyhidden"> ({1})</span></a> yn ein helpu i’w wella
-label.phase2=Mae hwn yn wasanaeth newydd – bydd eich <a href="{0}" class="govuk-link" target="_blank" id="betaFeedback">adborth</a> yn ein helpu i’w wella
-label.beta=Beta
 label.section=Adran {0} o {1}
 label.footer.builtBy=Adeiladwyd gan <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Swyddfa Brisio</a>
 label.footer.licence=Mae’r holl gynnwys ar gael o dan y <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Drwydded Llywodraeth Agored f3.0</a> ac eithrio lle nodir yn wahanol

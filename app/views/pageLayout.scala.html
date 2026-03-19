@@ -19,8 +19,8 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.phasebanner.PhaseBanner
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.tag.Tag
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcLanguageSelectHelper, HmrcStandardPage}
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.{Banners, HmrcStandardPageParams, ServiceURLs, TemplateOverrides}
 @import views.html.govuk.{FullWidthMainContent, head}
@@ -29,6 +29,8 @@
 
 @this(
         hmrcStandardPage: HmrcStandardPage,
+        standardBetaBanner: StandardBetaBanner,
+        govukNotificationBanner: GovukNotificationBanner,
         fullWidthMainContent: FullWidthMainContent,
         headTemplate: head,
         scriptsTemplate: javascripts,
@@ -79,19 +81,14 @@
 
         @if(showBanner && configuration.get[Boolean]("bannerNotice.enabled") && (theForm == null || theForm.errors.isEmpty)
                 && !configuration.getOptional[String]("bannerNotice." + messages.lang.code + ".body").forall(_.isEmpty)) {
-
-            <div    class="govuk-notification-banner" role="region"
-                    aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                <div class="govuk-notification-banner__header">
-                    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                    @configuration.get[String]("bannerNotice." + messages.lang.code + ".title")
-                    </h2>
-                </div>
-                <div class="govuk-notification-banner__content">
-                    <p class="govuk-notification-banner__heading">@Html(configuration.get[String]("bannerNotice." + messages.lang.code + ".body"))</p>
-                </div>
-            </div>
+            @govukNotificationBanner(
+                NotificationBanner(
+                    content = HtmlContent("<p class='govuk-notification-banner__heading'>" + configuration.get[String]("bannerNotice." + messages.lang.code + ".body") + "</p>"),
+                    title = Text(configuration.get[String]("bannerNotice." + messages.lang.code + ".title"))
+                )
+            )
         }
+
         @if(showSection){
             <span class="govuk-caption-m" id="section-x-of-y">@messages("label.section", request.path.replaceFirst(".*/page/", "").split("/").head, numberOfSteps)</span>
         }
@@ -110,16 +107,8 @@
             serviceUrl = routes.ApplicationController.index.url
         ),
         banners = Banners(
-            displayHmrcBanner = !showFeedback,
-            phaseBanner = Option.when(showFeedback)(
-                PhaseBanner(
-                    tag = Tag(Text(messages("label.beta"))),
-                    content = HtmlContent(
-                        messages("label.phase2", controllers.feedback.routes.FeedbackController.feedback.url)
-                    ),
-                    classes = "govuk-!-display-none-print"
-                )
-            )
+            displayHmrcBanner = false,
+            phaseBanner = Some(standardBetaBanner(controllers.feedback.routes.FeedbackController.feedback.url))
         ),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = headTemplate(withTimeoutDialog),

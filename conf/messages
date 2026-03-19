@@ -70,9 +70,6 @@ label.startFormAgain=Start form again
 label.password=password
 label.totalRent=Annual rent
 label.checkTheForm=There is a problem
-label.phase=This is a new service – your <a href="{0}" target="_blank" id="betaFeedback">feedback <span class="visuallyhidden"> (Opens in a new window)</span></a> will help us to improve it.
-label.phase2=This is a new service – your <a href="{0}" class="govuk-link" target="_blank" id="betaFeedback">feedback</a> will help us to improve it.
-label.beta=Beta
 label.section=Section {0} of {1}
 label.footer.builtBy=Built by the <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Valuation Office</a>
 label.footer.licence=All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
