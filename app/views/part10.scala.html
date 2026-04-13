@@ -14,18 +14,17 @@
  * limitations under the License.
  *@
 
-@import helpers._
+@import helpers.*
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
 
 @this(  layout: pageLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
-        hmrcCurrencyInput: HmrcCurrencyInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
         formHelp: includes.formHelp)
@@ -416,21 +415,9 @@
                 )
             }
         <div style="clear:left;" class="govuk-!-margin-top-4">
-            @hmrcCurrencyInput(
-                CurrencyInput(
-                    id = "parking.annualSeparateParking",
-                    name = "parking.annualSeparateParking",
-                    value = theForm("parking.annualSeparateParking").value,
-                    classes = "govuk-input--width-5",
-                    label = Label(
-                        classes = "govuk-!-font-weight-bold",
-                        content = Text(messages("label.parking.annualSeparateParking"))
-                    ),
-                    autocomplete = Some("off"),
-                    errorMessage =  theForm.errors.asTextErrorMessageForField("parking.annualSeparateParking")
-                )
+            @govukInput(
+                CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidthOrClass = 5)
             )
-
 
             @includes.dateFields(
                 form = theForm,
