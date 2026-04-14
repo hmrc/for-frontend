@@ -20,14 +20,16 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.vo.service.model.input.CurrencyField
 
-@this(  layout: pageLayout,
+@this(
+        layout: pageLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
 @(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
@@ -416,7 +418,7 @@
             }
         <div style="clear:left;" class="govuk-!-margin-top-4">
             @govukInput(
-                CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidthOrClass = 5)
+                CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidth = 5)
             )
 
             @includes.dateFields(

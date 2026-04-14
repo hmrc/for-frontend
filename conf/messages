@@ -267,7 +267,7 @@ label.sublet.tenantFullName=The tenant’s name
 label.sublet.subletPropertyPartDescription=What part of the property is let or sub-let?
 label.sublet.subletPropertyReasonDescription=What is the let or sub-let property used for?
 hint.sublet.subletPropertyReasonDescription=For example, residential use or commercial use.
-label.sublet.annualRent=How much rent is paid each year for this let or sub-let (excluding VAT)?
+sublet.annualRent.label=How much rent is paid each year for this let or sub-let (excluding VAT)?
 label.sublet.annualRent.annualRentExcludingVat.generic=Sub-let rent (excluding VAT)
 hint.sublet.annualRentExcludingVat=Excluding VAT
 
@@ -404,9 +404,8 @@ help.steprent.datefrom=For example, {0}
 help.steprent.dateto=For example, {0}
 label.writtenAgreement.steppedDetails.stepFrom=Date rent starts
 label.writtenAgreement.steppedDetails.stepTo=Date rent ends
-label.writtenAgreement.steppedDetails.amount=The rent paid or to be paid per year during this period (excluding VAT).
-label.writtenAgreement.steppedDetails.amount.agent=The rent paid or to be paid per year during this period (excluding VAT).
-label.writtenAgreement.steppedDetails.hint=Enter the yearly amount even if the period is for less or more than a year.
+writtenAgreement.steppedDetails.amount.label=The rent paid or to be paid per year during this period (excluding VAT).
+writtenAgreement.steppedDetails.amount.hint=Enter the yearly amount even if the period is for less or more than a year.
 label.writtenAgreement.steppedDetails=Stepped-rent details
 hint.leaseAgreementType=For multiple leases or tenancy agreements, enter details of the primary lease then contact the Valuation Office to provide details of the other lease or agreements.
 
@@ -501,9 +500,9 @@ error.isThisRent.required=Select the type of rent agreement
 #SECTION 9
 ###############################
 section9.heading=The rent
-label.totalRent.annualRentExcludingVat=What is the current annual rent?
-label.totalRent.annualRentExcludingVat.agent=What is your client’s current annual rent?
-hint.totalRent.annualRentExcludingVat=Enter the full amount of rent paid each year (excluding VAT). Ignore any rent-free period.
+totalRent.annualRentExcludingVat.label=What is the current annual rent?
+totalRent.annualRentExcludingVat.label.agent=What is your client’s current annual rent?
+totalRent.annualRentExcludingVat.hint=Enter the full amount of rent paid each year (excluding VAT). Ignore any rent-free period.
 label.totalRent.rentLengthType=The rent is paid
 label.rentBecomePayable=When did the tenant start paying the current rent?
 label.rentBecomePayable.agent=When did your client start paying this rent?

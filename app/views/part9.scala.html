@@ -15,22 +15,24 @@
  *@
 
 @import models.pages.Summary
-@import models.serviceContracts.submissions._
+@import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import uk.gov.hmrc.vo.service.model.input.*
 @import models.pages.PageSeven
 
-@this(  layout: pageLayout,
+@this(
+        layout: pageLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
+        govukInput: GovukInput,
         govukDateInput: GovukDateInput,
-        hmrcCurrencyInput: HmrcCurrencyInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
 @(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
@@ -44,6 +46,16 @@
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="percentageOpenMarket">@messages("hint.rentBasedOnDetailsOpenMarket")</span>
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="percentageTurnover">@messages("hint.rentBasedOnDetailsPercentageTurnover")</span>
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="other">@messages("hint.rentBasedOnDetailsOther")</span>
+}
+
+@annualRentInput = @{
+    val currencyInput = CurrencyField.input(theForm, "", "totalRent.annualRentExcludingVat", inputWidth = 10)
+
+    if (summary.isAgent) {
+        currencyInput.withLabelText(messages("totalRent.annualRentExcludingVat.label.agent"))
+    } else {
+        currencyInput
+    }
 }
 
 @layout(
@@ -60,20 +72,7 @@
     args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
   ) {
 
-      @hmrcCurrencyInput(
-          CurrencyInput(
-              id = "totalRent.annualRentExcludingVat",
-              name = "totalRent.annualRentExcludingVat",
-              value = theForm("totalRent.annualRentExcludingVat").value,
-              classes = "govuk-input--width-10 total-annual-rent",
-              label = Label(
-                  content = Text(if(summary.isAgent) messages("label.totalRent.annualRentExcludingVat.agent") else messages("label.totalRent.annualRentExcludingVat"))
-              ),
-              hint = Hint(content = Text(messages("hint.totalRent.annualRentExcludingVat"))),
-              autocomplete = Some("off"),
-              errorMessage =  theForm.errors.asTextErrorMessageForField("totalRent.annualRentExcludingVat")
-          )
-      )
+      @govukInput(annualRentInput)
 
       @includes.dateFields(form=theForm, field="rentBecomePayable", govukDate=govukDateInput, showDays = true)
       @includes.dateFields(form=theForm, field="rentActuallyAgreed", govukDate=govukDateInput, showDays = true)

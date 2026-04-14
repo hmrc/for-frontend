@@ -17,18 +17,19 @@
 @import models.pages.{PageFour, Summary}
 @import models.serviceContracts.submissions.SubletType
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
 
-@this(  layout: pageLayout,
+@this(
+        layout: pageLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
-        hmrcCurrencyInput: HmrcCurrencyInput,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
 @(theForm: Form[PageFour], summary: Summary)(implicit request: Request[?],  messages: Messages)
@@ -248,17 +249,8 @@
           )
 
 
-          @hmrcCurrencyInput(
-              CurrencyInput(
-                  id = s"sublet[$idx].annualRent",
-                  name = s"sublet[$idx].annualRent",
-                  value = theForm(s"sublet[$idx].annualRent").value,
-                  classes = "govuk-input--width-10",
-                  label = Label(
-                      content = Text(messages("label.sublet.annualRent"))
-                  ),
-                  errorMessage =  theForm.errors.asTextErrorMessageForField(s"sublet[$idx].annualRent")
-              )
+          @govukInput(
+              CurrencyField.input(theForm, "", s"sublet[$idx].annualRent", inputWidth = 10)
           )
 
           @includes.dateFields(
