@@ -16,17 +16,19 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.ResponsibleType
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
 
-@this(layout: pageLayout,
+@this(
+        layout: pageLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
-        hmrcCurrencyInput: HmrcCurrencyInput,
+        govukInput: GovukInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
 @(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
@@ -163,22 +165,12 @@
             )
         )
 
-
-        @hmrcCurrencyInput(
-            CurrencyInput(
-                id = "ndrDetails",
-                name = "ndrDetails",
-                value = theForm("ndrDetails").value,
-                classes = "govuk-input--width-10",
+        @govukInput(
+            CurrencyField.input(theForm, "ndrCharges", "ndrDetails", inputWidth = 10,
                 attributes = Map(
                     "data-hidden-by" -> "ndrCharges",
                     "data-show-when-value-equals" -> "true"
-                ),
-                label = Label(
-                    content = Text(messages("label.ndrDetails")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("ndrDetails")
+                )
             )
         )
 
@@ -212,21 +204,13 @@
                 )
             )
         )
-        @hmrcCurrencyInput(
-            CurrencyInput(
-                id = "waterChargesCost",
-                name = "waterChargesCost",
-                value = theForm("waterChargesCost").value,
+
+        @govukInput(
+            CurrencyField.input(theForm, "", "waterChargesCost", inputWidth = 10,
                 attributes = Map(
                     "data-hidden-by" -> "waterCharges",
                     "data-show-when-value-equals" -> "true"
-                ),
-                classes = "govuk-input--width-10",
-                label = Label(
-                    classes = "govuk-!-font-weight-bold",
-                    content = Text(messages("label.waterChargesCost"))
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("waterChargesCost")
+                )
             )
         )
 
@@ -268,20 +252,8 @@
             data-show-when-value-equals="true"
             data-hides-this="true" >
 
-            @hmrcCurrencyInput(
-                CurrencyInput(
-                    id = "includedServicesDetails[0].chargeCost",
-                    name = "includedServicesDetails[0].chargeCost",
-                    value = theForm("includedServicesDetails[0].chargeCost").value,
-                    classes = "govuk-input--width-10",
-                    label = Label(
-                        classes = "govuk-!-font-weight-bold",
-                        content = Text(messages("label.includedServicesDetails.chargeCost"))
-                    ),
-                    hint = Hint(content = Text(messages("hint.includedServicesDetails.chargeCost"))),
-                    autocomplete = Some("off"),
-                    errorMessage =  theForm.errors.asTextErrorMessageForField("includedServicesDetails[0].chargeCost")
-                )
+            @govukInput(
+                CurrencyField.input(theForm, "", "includedServicesDetails[0].chargeCost", inputWidth = 10)
             )
 
             @govukCharacterCount(
