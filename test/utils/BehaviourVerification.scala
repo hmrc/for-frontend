@@ -16,6 +16,7 @@
 
 package utils
 
+import controllers.toFut
 import org.scalatest.matchers.should
 import security.ArgumentsDidNotMatch
 

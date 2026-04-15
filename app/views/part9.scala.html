@@ -22,9 +22,10 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.vo.service.model.input.*
 @import models.pages.PageSeven
+@import views.html.components.PrimaryLayout
 
 @this(
-        layout: pageLayout,
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
@@ -35,7 +36,7 @@
 )
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @previousPage = @{
     if(summary.rentReviews.getOrElse(PageSeven(leaseContainsRentReviews=false, None)).leaseContainsRentReviews) 7
@@ -59,11 +60,9 @@
 }
 
 @layout(
+    pageTitle = messages("section9.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(previousPage).url ,
-    pageHeading = messages("section9.heading"),
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 

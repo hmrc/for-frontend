@@ -22,9 +22,10 @@
 @import uk.gov.hmrc.vo.service.model.input.CurrencyField
 @import util.DateUtil
 @import controllers.dataCapturePages.ForDataCapturePage.variantAttr
+@import views.html.components.PrimaryLayout
 
 @this(
-        layout: pageLayout,
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
@@ -35,7 +36,8 @@
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
@@ -67,11 +69,9 @@
 }
 
 @layout(
+  pageTitle = messages("section6.heading"),
   backLinkUrl = dataCapturePages.routes.PageController.showPage(5).url,
-  pageHeading = messages("section6.heading"),
-  summary = Some(summary),
-  showAccountInfo = true,
-  showSection = true,
+  summary = summary,
   theForm = theForm
 ){
 

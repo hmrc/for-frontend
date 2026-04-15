@@ -1,10 +1,11 @@
 #COMMON
 ##############################
 project.name=Submit rent and lease details
-project.header=Rent and lease details
 service.name=Rent and lease details
 service.homePageUrl=/sending-rental-information/login
 gov.name = GOV.UK
+service.accountInfo.key1 = Reference
+service.accountInfo.key2 = Property
 skip.content=Skip to main content
 login.heading=Enter your reference number
 failedLogin.heading=Login error
@@ -65,21 +66,19 @@ label.tryAgain=Try again
 label.startFormAgain=Start form again
 label.password=password
 label.totalRent=Annual rent
-label.checkTheForm=There is a problem
 label.section=Section {0} of {1}
 label.footer.builtBy=Built by the <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Valuation Office</a>
 label.footer.licence=All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
 label.footer.ogl=Open Government Licence
 label.footer.crown=Crown copyright
 label.edit=Change
-label.account.ref=Reference
-label.account.property=Property
 label.confirmPassword=Error on confirm password
 placeholder.address.1=Address line 1
 placeholder.address.2=Address line 2
 placeholder.address.3=Address line 3
 label. = Error
 label.error = Error
+error.prefix = Error:
 
 #WELSH YES/NO
 #############

@@ -17,26 +17,28 @@
 @import models.serviceContracts.submissions.NotConnected
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.textarea.Textarea
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukTextarea: GovukTextarea,
         govukInput: GovukInput,
         govukButton: GovukButton,
-        formWithCSRF: FormWithCSRF)
+        formWithCSRF: FormWithCSRF
+)
 
-@(theForm: Form[NotConnected], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[NotConnected], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
-    pageHeading = messages("notConnected.heading"),
+    pageTitle = messages("notConnected.heading"),
     backLinkUrl = routes.PreviouslyConnectedController.onPageView.url,
-    summary = Some(summary),
-    showAccountInfo = true,
+    summary = summary,
     theForm = theForm
 ) {
 

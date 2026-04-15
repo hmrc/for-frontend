@@ -19,9 +19,10 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.vo.service.model.input.CurrencyField
+@import views.html.components.PrimaryLayout
 
 @this(
-        layout: pageLayout,
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
@@ -31,14 +32,12 @@
 )
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
+    pageTitle = messages("section12.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(11).url,
-    pageHeading = messages("section12.heading"),
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ) {
 

@@ -17,18 +17,21 @@
 @import models.pages.NotConnectedSummary
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukButton: GovukButton,
-        formWithCSRF: FormWithCSRF)
+        formWithCSRF: FormWithCSRF
+)
 
-@(notConnectedSummary: NotConnectedSummary)(implicit request: Request[?],  messages: Messages)
+
+@(notConnectedSummary: NotConnectedSummary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
-    pageHeading = messages("heading.summary"),
+    pageTitle = messages("heading.summary"),
     backLinkUrl = routes.NotConnectedController.onPageView.url,
-    summary = Some(notConnectedSummary.summary),
-    showAccountInfo = true,
+    summary = notConnectedSummary.summary,
     fullWidth = true
 ) {
 

@@ -15,17 +15,21 @@
  *@
 
 @import models.journeys.Journey
+@import models.pages.Summary
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout, formHelp: includes.formHelp)
+@this(
+        layout: PrimaryLayout,
+        formHelp: includes.formHelp
+)
 
 
-@(summary: models.pages.Summary)(implicit request: Request[?],  messages: Messages)
+@(summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
+    pageTitle = messages("heading.summary"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(Journey.lastPageFor(summary)).url,
-    pageHeading = messages("heading.summary"),
-    summary = Some(summary),
-    showAccountInfo = true,
+    summary = summary,
     fullWidth = true
 ){
 
@@ -36,7 +40,6 @@
         <a href="@routes.SaveForLaterController.saveForLater(request.path)" class="govuk-button govuk-button--secondary" role="link">@messages("button.label.save")</a>
     </div>
     <a href="#" class="govuk-link print-link">@messages("label.print.printorsave")</a>
-
 
     @views.html.includes.signFooter(summary)
 

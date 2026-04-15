@@ -14,7 +14,6 @@ lazy val microservice = Project("for-frontend", file("."))
     maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:msg=Implicit parameters should be provided with a \\`using\\` clause&src=views/.*:s",
-    scalacOptions += "-feature",
     javaOptions += "-XX:+EnableDynamicAgentLoading",
     libraryDependencies ++= AppDependencies.appDependencies
   )

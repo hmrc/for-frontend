@@ -23,21 +23,22 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
+@import views.html.components.PrimaryLayout
 
 @this(
-        layout: pageLayout,
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukErrorSummary:GovukErrorSummary,
-        govukButton:GovukButton,
+        govukButton: GovukButton,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF
 )
 
-@(theForm: Form[SurveyFeedback])(implicit request: Request[?], messages: Messages)
+@(theForm: Form[SurveyFeedback])(implicit request: RequestHeader, messages: Messages)
 
-@layout(pageHeading = messages("label.feedback.heading"), showFeedback = false) {
-
-    @includes.summaryErrors(theForm, govukErrorSummary)
+@layout(
+    pageTitle = messages("label.feedback.heading"),
+    theForm = theForm
+) {
 
     <p class="govuk-body">@messages("label.feedback.p1")</p>
 

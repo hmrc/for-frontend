@@ -17,11 +17,12 @@
 package useCases
 
 import connectors.Document
+import controllers.toFut
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import util.DateUtil.nowInUK
-import utils.{UnitTest, toFut}
+import utils.UnitTest
 
 import java.security.SecureRandom
 import java.util.UUID

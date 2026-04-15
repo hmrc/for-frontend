@@ -14,12 +14,18 @@
  * limitations under the License.
  *@
 
-@this( layout: pageLayout)
+@import views.html.components.PrimaryLayout
 
-@()(implicit request: Request[?],  messages: Messages)
+@this(
+        layout: PrimaryLayout
+)
+
+@()(implicit request: RequestHeader,  messages: Messages)
 
 
-@layout(pageHeading = messages("heading.sessionTimeout")){
+@layout(
+ pageTitle = messages("heading.sessionTimeout")
+) {
 
     <p class="govuk-body">@Messages("sessionTimeout.copy")</p>
 

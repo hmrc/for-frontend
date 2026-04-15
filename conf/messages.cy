@@ -1,10 +1,11 @@
 #COMMON
 ##############################
 project.name=Cyflwyno manylion rhent a phrydles
-project.header=Manylion rhent a phrydles
 service.name=Manylion rhent a phrydles
 service.homePageUrl=/sending-rental-information/login
 gov.name = GOV.UK
+service.accountInfo.key1 = Cyfeirnod
+service.accountInfo.key2 = Eiddo
 skip.content=Ewch yn syth i’r prif gynnwys
 login.heading=Rhowch eich cyfeirnod
 failedLogin.heading=Gwall mewngofnodi
@@ -65,21 +66,19 @@ label.tryAgain=Cynnig eto
 label.startFormAgain=Dechrau’r ffurflen eto
 label.password=cyfrinair
 label.totalRent=Rhent blynyddol
-label.checkTheForm=Mae problem wedi codi
 label.section=Adran {0} o {1}
 label.footer.builtBy=Adeiladwyd gan <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Swyddfa Brisio</a>
 label.footer.licence=Mae’r holl gynnwys ar gael o dan y <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Drwydded Llywodraeth Agored f3.0</a> ac eithrio lle nodir yn wahanol
 label.footer.ogl=Trwydded Llywodraeth Agored
 label.footer.crown=Hawlfraint y Goron
 label.edit=Newid
-label.account.ref=Cyfeirnod
-label.account.property=Eiddo
 label.confirmPassword=Gwall ar cadarnhau’r cyfrinair
 placeholder.address.1=Llinell gyntaf y cyfeiriad
 placeholder.address.2=Ail linell y cyfeiriad
 placeholder.address.3=Trydedd linell y cyfeiriad
 label. = Gwall
 label.error = Gwall
+error.prefix = Gwall:
 
 #WELSH YES/NO
 #############

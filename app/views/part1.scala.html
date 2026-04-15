@@ -21,15 +21,18 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukInput: GovukInput,
         govukButton: GovukButton,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[Address], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[Address], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @getAddressFieldValueOrDefaultUnlessErrors(field:String, defaultAddressValue: String) = @{
     if(theForm.hasErrors) {
@@ -40,9 +43,8 @@
     }
 }
 @layout(
-    pageHeading = messages("section1.heading"),
+    pageTitle = messages("section1.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
-    showSection = true,
     theForm = theForm
 ){
 

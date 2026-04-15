@@ -15,32 +15,33 @@
  *@
 
 @import models.pages.{PageFive, Summary}
-@import models.serviceContracts.submissions._
+@import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput:  GovukInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[PageFive], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[PageFive], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
+    pageTitle = messages("section5.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(4).url,
-    pageHeading = messages("section5.heading"),
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 

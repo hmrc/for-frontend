@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import views.html.components.PrimaryLayout
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
@@ -21,9 +22,14 @@
 
 @import java.time.LocalDate
 
-@this(main_template: pageLayout, govukWarningText: GovukWarningText, formHelp: includes.formHelp)
+@this(
+        layout: PrimaryLayout,
+        govukWarningText: GovukWarningText,
+        formHelp: includes.formHelp
+)
 
-@(password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: Request[?],  messages: Messages)
+
+@(password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: RequestHeader,  messages: Messages)
 
 @title = @{
     if(!hasTimedOut) {
@@ -33,13 +39,15 @@
     }
 }
 
-@main_template(pageHeading = title, withTimeoutDialog = false) {
+@layout(
+    pageTitle = title
+) {
 
-        @govukWarningText(
-            WarningText(
-                content = Text(messages("saveForLater.info"))
-            )
+    @govukWarningText(
+        WarningText(
+            content = Text(messages("saveForLater.info"))
         )
+    )
 
 
     <p class="govuk-body">@messages("saveForLater.info.p.2")</p>

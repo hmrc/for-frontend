@@ -15,37 +15,38 @@
  *@
 
 @import models.pages.Summary
-@import models.serviceContracts.submissions._
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import models.serviceContracts.submissions.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import util.DateUtil
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukDateInput:GovukDateInput,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?], messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 @agreementType = @{summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")}
 
 @layout(
+  pageTitle = messages("section7.heading"),
   backLinkUrl = dataCapturePages.routes.PageController.showPage(6).url,
-  pageHeading = messages("section7.heading"),
-  summary = Some(summary),
-  showAccountInfo = true,
-  showSection = true,
+  summary = summary,
   theForm = theForm,
   fullWidth = true
 ){
 
   @formWithCSRF(
-action = dataCapturePages.routes.PageController.savePage(7),
-args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+    action = dataCapturePages.routes.PageController.savePage(7),
+    args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
   ) {
 
     @theForm("agreementStartDate").value.map { agreementStartDate =>

@@ -17,7 +17,7 @@
 package connectors
 
 import com.google.inject.ImplementedBy
-import config.ForConfig
+import config.AppConfig
 import play.api.libs.json.{Json, Reads, Writes}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.WSBodyWritables.writeableOf_urlEncodedForm
@@ -69,12 +69,12 @@ trait ForHttp:
 
 @Singleton
 class ForHttpClient @Inject() (
-  forConfig: ForConfig,
+  appConfig: AppConfig,
   httpClientV2: HttpClientV2
 )(using ec: ExecutionContext
 ) extends ForHttp:
 
-  private val useDummyIp = forConfig.useDummyIp
+  private val useDummyIp = appConfig.useDummyIp
 
   private def useDummyIPInTrueClientIPHeader(headers: Seq[(String, String)]): Seq[(String, String)] =
     if useDummyIp then (trueClientIp, "") +: headers.filterNot(x => x._1.toLowerCase == trueClientIp.toLowerCase)
