@@ -47,7 +47,7 @@
         @displayBoolean(p12.waterCharges, "7")
     }
     @if(p12.waterCharges) {
-        @summaryBlock(messages("ndrCharges.ndrDetails.label"), 12, "waterChargesCost") {
+        @summaryBlock(messages("waterChargesCost.label"), 12, "waterChargesCost") {
             @(s"£${NumberFormat.getNumberInstance().format(p12.waterChargesCost.getOrElse(""))} ")
         }
     }
