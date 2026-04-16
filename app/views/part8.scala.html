@@ -68,7 +68,7 @@
                 ).map(radioItem => RadioItem(
                     content = Text(radioItem._2),
                     checked = radioItem._1.equals(theForm("wasRentFixedBetween").value.getOrElse("")),
-                    value = Option(radioItem._1)
+                    value = radioItem._1
                 )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("wasRentFixedBetween"),

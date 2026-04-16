@@ -51,7 +51,7 @@
                 ).map(i => RadioItem(
                     content = Text(i._2),
                     checked = i._1.equals(theForm("haveYouBeenConnected").value.getOrElse("")),
-                    value = Option(i._1)
+                    value = i._1
                 )
                 ),
                 classes = "govuk-radios--inline",
