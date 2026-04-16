@@ -1,0 +1,81 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.pages.Summary
+@import scala.util.Try
+@import template.FormatRefNum
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{ErrorSummary, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.AccountInfo
+@import uk.gov.hmrc.vo.service.view.html.*
+@import util.OptionUtil.combineAllWithSpace
+
+@this(
+        standardPage: StandardPage
+)
+
+@(
+        pageTitle: String,
+        summary: Option[Summary] = None,
+        theForm: Option[Form[?]] = None,
+        errorSummary: Option[ErrorSummary] = None,
+        backLinkUrl: Option[String] = None,
+        showH1: Boolean = true,
+        fullWidth: Boolean = false
+)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+
+@accountInfo = @{
+    summary.map { s =>
+        AccountInfo(
+            FormatRefNum(s.referenceNumber),
+            combineAllWithSpace(s.address.map(_.singleLine), Option.when(s.isUnderReview)(messages("label.underReview")))
+        )
+    }
+}
+
+@pageErrorSummary = @{
+    errorSummary.orElse {
+        theForm.filter(_.hasErrors).map { form =>
+            ErrorSummary(
+                errorList = form.errors.map(error =>
+                    FormError(
+                        error.key,
+                        error.messages.map(_.replaceAll("[\\[|\\]]", "")),
+                        error.args
+                    )
+                ).asTextErrorLinks,
+                title = Text(messages("error.summary.title"))
+            )
+        }
+    }
+}
+
+@pageNumberOpt = @{
+    request.path.split("/").sliding(2).collectFirst {
+        case Array("page", num) => Try(num.toInt).toOption
+    }.flatten.filter(_ != 0)
+}
+
+@standardPage(
+    pageTitle,
+    accountInfo,
+    backLinkUrl,
+    pageErrorSummary,
+    sectionName = pageNumberOpt.map(page => messages("label.section", page, 14)),
+    showH1 = showH1,
+    fullWidth = fullWidth,
+    additionalScriptsBlock = Scripts()
+)(contentBlock)

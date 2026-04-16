@@ -23,7 +23,7 @@
 
 	<h2 class="govuk-heading-m">@messages("section9.heading")</h2>
 	<dl class="govuk-summary-list">
-    @summaryBlock(messages("label.totalRent.annualRentExcludingVat"), 9, "totalRent_annualRentExcludingVat") {
+    @summaryBlock(messages("totalRent.annualRentExcludingVat.label"), 9, "totalRent_annualRentExcludingVat") {
 		   <span class='rentAmount'>£@NumberFormat.getNumberInstance().format(p9.totalRent.amount)</span>
 		}
 

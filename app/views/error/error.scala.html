@@ -14,13 +14,17 @@
  * limitations under the License.
  *@
 
-@this(layout: pageLayout)
+@import views.html.components.PrimaryLayout
 
-@(errorCode: Int)(implicit request: Request[?],  messages: Messages)
+@this(
+        layout: PrimaryLayout
+)
+
+@(errorCode: Int)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
     backLinkUrl = routes.ApplicationController.index.url,
-    pageHeading = messages(s"error.$errorCode.heading")
+    pageTitle = messages(s"error.$errorCode.heading")
 ){
   @if(errorCode == 409){
    <p class="govuk-body">@Html(messages("error.409.body"))</p>

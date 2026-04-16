@@ -14,27 +14,30 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions._
+@import models.serviceContracts.submissions.*
 @import models.pages.Summary
-@import helpers._
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import helpers.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
 @import util.DateUtil
 @import controllers.dataCapturePages.ForDataCapturePage.variantAttr
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
-        govukDateInput:GovukDateInput,
-        hmrcCurrencyInput : HmrcCurrencyInput,
+        govukInput: GovukInput,
+        govukDateInput: GovukDateInput,
         govukCharacterCount: GovukCharacterCount,
         govukDetails: GovukDetails,
         formWithCSRF: FormWithCSRF,
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
@@ -66,11 +69,9 @@
 }
 
 @layout(
+  pageTitle = messages("section6.heading"),
   backLinkUrl = dataCapturePages.routes.PageController.showPage(5).url,
-  pageHeading = messages("section6.heading"),
-  summary = Some(summary),
-  showAccountInfo = true,
-  showSection = true,
+  summary = summary,
   theForm = theForm
 ){
 
@@ -359,22 +360,11 @@
                     helpText = messages("help.steprent.dateto", DateUtil.exampleDayMonthYear(0))
                   )
 
-                  @hmrcCurrencyInput(
-                    CurrencyInput(
-                      id = s"writtenAgreement.steppedDetails[$idx].amount",
-                      name = s"writtenAgreement.steppedDetails[$idx].amount",
-                      value = theForm(s"writtenAgreement.steppedDetails[$idx].amount").value,
-                      classes = "govuk-input--width-10",
-                      hint = Hint(content = Text(messages("label.writtenAgreement.steppedDetails.hint"))),
-                      label = Label(
-                        content = Text(messages("label.writtenAgreement.steppedDetails.amount" + labelSuffix) ),
-                        classes = "govuk-!-font-weight-bold"
-                      ),
-                      errorMessage =  theForm.errors.asTextErrorMessageForField(s"writtenAgreement.steppedDetails[$idx].amount")
-                    )
+                  @govukInput(
+                    CurrencyField.input(theForm, "", s"writtenAgreement.steppedDetails[$idx].amount", inputWidth = 10)
                   )
 
-                <div class="clearfix"></div>
+                  <div class="clearfix"></div>
 
                   <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display:none">@messages("label.add.remove")</a>
 

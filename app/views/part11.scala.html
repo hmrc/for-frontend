@@ -15,24 +15,26 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput:  GovukInput,
         govukDateInput:GovukDateInput,
-        hmrcCurrencyInput : HmrcCurrencyInput,
         govukCharacterCount: GovukCharacterCount,
         govukFieldset: GovukFieldset,
         govukHint: GovukHint,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
@@ -59,11 +61,9 @@
 }
 
 @layout(
+    pageTitle = messages("section11.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(10).url,
-    pageHeading = messages("section11.heading"),
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 
@@ -72,64 +72,61 @@
         args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
 
     ) {
-    @govukRadios(
-        Radios(
-            name = "rentFreePeriod",
-            idPrefix = Option("rentFreePeriod"),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            items = Seq(
-                "true" -> messages("label.yes.do"),
-                "false" -> messages("label.no.naddo")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("rentFreePeriod").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriod"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages("label.rentFreePeriod" + labelSuffix)),
-                            classes = "govuk-!-font-weight-bold"
+        @govukRadios(
+            Radios(
+                name = "rentFreePeriod",
+                idPrefix = Option("rentFreePeriod"),
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                items = Seq(
+                    "true" -> messages("label.yes.do"),
+                    "false" -> messages("label.no.naddo")
+                ).map( radioItem => {
+                    RadioItem (
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("rentFreePeriod").value.getOrElse("")),
+                        value   = Option(radioItem._1)
+                    )
+                }
+                ),
+                errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriod"),
+                fieldset = Option(
+                    Fieldset(
+                        legend = Option(
+                            Legend(
+                                content = Text(messages("label.rentFreePeriod" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
                         )
                     )
                 )
             )
         )
-    )
 
-
-    <div data-hidden-by="rentFreePeriod" data-show-when-value-equals="true" data-hides-this="true" >
-
-        @govukFieldset(Fieldset(
-            legend = Legend(
-                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength")),
-                classes = "govuk-!-font-weight-bold"
-            ),
-            html = rentFreeMonthsInput
-        ))
-
-        @govukCharacterCount(
-            CharacterCount(
-                id = "rentFreePeriodDetails.rentFreePeriodDetails",
-                name = "rentFreePeriodDetails.rentFreePeriodDetails",
-                value = theForm("rentFreePeriodDetails.rentFreePeriodDetails").value,
-                rows = 6,
-                maxLength = 250,
-                errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodDetails"),
-                label = Label(
-                    content = Text( messages("label.rentFreePeriodDetails.rentFreePeriodDetails" + labelSuffix)),
+        <div data-hidden-by="rentFreePeriod" data-show-when-value-equals="true" data-hides-this="true" >
+            @govukFieldset(Fieldset(
+                legend = Legend(
+                    content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength")),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                hint = Hint(content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodDetails")))
-            )
-        )
+                html = rentFreeMonthsInput
+            ))
 
-    </div>
+            @govukCharacterCount(
+                CharacterCount(
+                    id = "rentFreePeriodDetails.rentFreePeriodDetails",
+                    name = "rentFreePeriodDetails.rentFreePeriodDetails",
+                    value = theForm("rentFreePeriodDetails.rentFreePeriodDetails").value,
+                    rows = 6,
+                    maxLength = 250,
+                    errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodDetails"),
+                    label = Label(
+                        content = Text( messages("label.rentFreePeriodDetails.rentFreePeriodDetails" + labelSuffix)),
+                        classes = "govuk-!-font-weight-bold"
+                    ),
+                    hint = Hint(content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodDetails")))
+                )
+            )
+        </div>
 
         @govukRadios(
             Radios(
@@ -162,31 +159,18 @@
             )
         )
 
+        <div data-hidden-by="payCapitalSum" data-show-when-value-equals="true" data-hides-this="true" >
+            @govukInput(
+                CurrencyField.input(theForm, "", "capitalPaidDetails.capitalSum", inputWidth = 10)
+            )
 
-     <div data-hidden-by="payCapitalSum" data-show-when-value-equals="true" data-hides-this="true" >
+            @includes.dateFields(
+                form=theForm,
+                field= "capitalPaidDetails.paymentDate",
+                govukDate = govukDateInput
+            )
+        </div>
 
-         @hmrcCurrencyInput(
-             CurrencyInput(
-                 id = "capitalPaidDetails.capitalSum",
-                 name = "capitalPaidDetails.capitalSum",
-                 value = theForm("capitalPaidDetails.capitalSum").value,
-                 classes = "govuk-input--width-10 total-annual-rent",
-                 label = Label(
-                     content = Text(messages("label.capitalPaidDetails.capitalSum"))
-                 ),
-                 autocomplete = Some("off"),
-                 errorMessage =  theForm.errors.asTextErrorMessageForField("capitalPaidDetails.capitalSum")
-             )
-         )
-
-      @includes.dateFields(
-          form=theForm,
-          field= "capitalPaidDetails.paymentDate",
-          govukDate = govukDateInput
-      )
-
-
-    </div>
         @govukRadios(
             Radios(
                 name = "receiveCapitalSum",
@@ -217,35 +201,21 @@
             )
         )
 
-
         <div data-hidden-by="receiveCapitalSum" data-show-when-value-equals="true" data-hides-this="true" >
-
-            @hmrcCurrencyInput(
-                CurrencyInput(
-                    id = "capitalReceivedDetails.receivedSum",
-                    name = "capitalReceivedDetails.receivedSum",
-                    value = theForm("capitalReceivedDetails.receivedSum").value,
-                    classes = "govuk-input--width-10",
-                    label = Label(
-                        content = Text(messages("label.capitalReceivedDetails.receivedSum")),
-                        classes = "govuk-!-font-weight-bold"
-                    ),
-                    autocomplete = Some("off"),
-                    errorMessage =  theForm.errors.asTextErrorMessageForField("capitalReceivedDetails.receivedSum")
-                )
+            @govukInput(
+                CurrencyField.input(theForm, "", "capitalReceivedDetails.receivedSum", inputWidth = 10)
             )
 
-        @includes.dateFields(
-            form=theForm,
-            field= "capitalReceivedDetails.paymentDate",
-            govukDate = govukDateInput
-        )
+            @includes.dateFields(
+                form=theForm,
+                field= "capitalReceivedDetails.paymentDate",
+                govukDate = govukDateInput
+            )
+        </div>
 
-    </div>
+        @includes.continueSaveForLaterButtons(govukButton)
 
-    @includes.continueSaveForLaterButtons(govukButton)
-
-     @formHelp()
+        @formHelp()
 
     }
 }

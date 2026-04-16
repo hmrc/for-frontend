@@ -5,10 +5,6 @@
         return 'sending-rental-information';
     };
 
-    VORALD.showHistoryBackLink = function(){
-        $('a#history-back').show();
-    };
-
     VORALD.setHelpGDSClasses = function(){
         var $helpFormWrapper = $('#helpFormWrapper');
         $helpFormWrapper.find('input[type=text]')

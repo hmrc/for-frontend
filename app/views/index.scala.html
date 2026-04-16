@@ -17,13 +17,18 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.WarningText
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import views.html.components.PrimaryLayout
 
-@this( layout: pageLayout, govukWarningText: GovukWarningText)
-@()(implicit request: Request[?],  messages: Messages)
+@this(
+        layout: PrimaryLayout,
+        govukWarningText: GovukWarningText
+)
+
+
+@()(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
-    pageHeading = messages("index.title"),
-    withTimeoutDialog = false
+    pageTitle = messages("index.title")
 ){
 
     <p class="govuk-body">@Html(messages("index.subheader"))</p>

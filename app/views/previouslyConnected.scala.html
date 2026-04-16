@@ -14,32 +14,33 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions._
+@import models.serviceContracts.submissions.*
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Fieldset
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Legend
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
-        govukErrorSummary: GovukErrorSummary,
-        formWithCSRF: FormWithCSRF)
+        formWithCSRF: FormWithCSRF
+)
 
-@(theForm: Form[PreviouslyConnected], summary: Summary)(implicit request: Request[?],  messages: Messages)
+
+@(theForm: Form[PreviouslyConnected], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
+    pageTitle = messages("notConnected.previouslyConnected"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
-    pageHeading = messages("notConnected.previouslyConnected"),
     showH1 = false,
-    summary = Some(summary),
-    showAccountInfo = true
+    summary = summary,
+    theForm = theForm
 ){
-
-    @includes.summaryErrors(theForm, govukErrorSummary)
 
     @formWithCSRF(action = controllers.routes.PreviouslyConnectedController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
 

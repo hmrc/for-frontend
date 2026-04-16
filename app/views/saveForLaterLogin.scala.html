@@ -15,14 +15,15 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import views.html.components.PrimaryLayout
 
 @this(
-        main_template: pageLayout,
+        layout: PrimaryLayout,
         govukInput: GovukInput,
         govukButton: GovukButton,
         formWithCSRF: FormWithCSRF,
@@ -30,9 +31,12 @@
 )
 
 
-@(theForm: Form[SaveForLaterLogin])(implicit request: Request[?], messages: Messages)
+@(theForm: Form[SaveForLaterLogin])(implicit request: RequestHeader, messages: Messages)
 
-@main_template(pageHeading = messages("saveForLater.pleaseEnterPassword"), theForm = theForm) {
+@layout(
+    pageTitle = messages("saveForLater.pleaseEnterPassword"),
+    theForm = theForm
+) {
 
     <h3 class="govuk-body">@messages("saveForLater.hint")</h3>
 

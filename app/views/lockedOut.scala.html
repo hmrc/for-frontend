@@ -14,10 +14,15 @@
  * limitations under the License.
  *@
 
-@this( layout: pageLayout)
+@import views.html.components.PrimaryLayout
 
-@()(implicit request: Request[?],  messages: Messages)
+@this(
+        layout: PrimaryLayout
+)
 
-@layout(pageHeading = messages("heading.login.lockedOut")){
+
+@()(implicit request: RequestHeader,  messages: Messages)
+
+@layout(pageTitle = messages("heading.login.lockedOut")){
     <p class="govuk-body">@messages("error.login.lockedOut")</p>
 }

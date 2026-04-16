@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.pages._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
 
   @(p4: PageFour, isAgent: Boolean)(implicit messages: Messages)
     <h2 class="govuk-heading-m">@messages("section4.heading")</h2>
@@ -47,7 +47,7 @@
             @sl.subletPropertyReasonDescription
           }
 
-          @summaryBlock(messages("label.sublet.annualRent"), 4, s"sublet_${index}_annualRent") {
+          @summaryBlock(messages("sublet.annualRent.label"), 4, s"sublet_${index}_annualRent") {
             £@sl.annualRent
           }
 

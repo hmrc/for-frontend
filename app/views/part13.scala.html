@@ -16,29 +16,30 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.AlterationSetByType
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
-        govukDateInput:GovukDateInput,
-        hmrcCurrencyInput : HmrcCurrencyInput,
+        govukInput: GovukInput,
+        govukDateInput: GovukDateInput,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
 @layout(
+  pageTitle = messages("section13.heading"),
   backLinkUrl = dataCapturePages.routes.PageController.showPage(12).url,
-  pageHeading = messages("section13.heading"),
-  summary = Some(summary),
-  showAccountInfo = true,
-  showSection = true,
+  summary = summary,
   theForm = theForm
 ){
 
@@ -124,19 +125,9 @@
             govukDate = govukDateInput
           )
 
-          @hmrcCurrencyInput(
-            CurrencyInput(
-              id = s"propertyAlterationsDetails[$idx].cost",
-              name = s"propertyAlterationsDetails[$idx].cost",
-              value = theForm(s"propertyAlterationsDetails[$idx].cost").value,
-              classes = "govuk-input--width-10",
-              label = Label(
-                content = Text(messages("label.propertyAlterationsDetails.cost"))
-              ),
-              errorMessage =  theForm.errors.asTextErrorMessageForField(s"propertyAlterationsDetails[$idx].cost")
-            )
+          @govukInput(
+            CurrencyField.input(theForm, "", s"propertyAlterationsDetails[$idx].cost", inputWidth = 10)
           )
-
 
           <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display: none">@messages("label.add.remove")</a>
         </div>

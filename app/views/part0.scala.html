@@ -15,32 +15,34 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import models.serviceContracts.submissions.AddressConnectionType
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Text, Legend}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
+@import views.html.components.PrimaryLayout
 
 @this(
-    main_template: pageLayout,
+    layout: PrimaryLayout,
     govukButton: GovukButton,
     govukRadios: GovukRadios,
-    govukErrorSummary: GovukErrorSummary,
     formWithCSRF: FormWithCSRF,
     formHelp: includes.formHelp
 )
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @heading = @{messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))}
 
-@main_template(pageHeading = heading, showH1 = false) {
+@layout(
+    pageTitle = heading,
+    showH1 = false,
+    theForm = theForm
+) {
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0),
         args = Symbol("class") -> "section0", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate") {
-
-        @includes.summaryErrors(theForm, govukErrorSummary)
 
         @helper.CSRF.formField
 

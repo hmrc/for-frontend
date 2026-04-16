@@ -1,5 +1,6 @@
 # Add all the application app.routes to the app.app.routes file
-->         /sending-rental-information     app.Routes
-->         /                               health.Routes
+->         /sending-rental-information      app.Routes
 
-GET        /                               controllers.localroot.RootRedirectController.rootRedirect
+GET        /ping/ping                       uk.gov.hmrc.play.health.HealthController.ping
+
+GET        /                                uk.gov.hmrc.vo.service.controller.local.RootRedirectController.rootRedirect

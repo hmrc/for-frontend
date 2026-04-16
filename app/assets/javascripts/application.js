@@ -20,7 +20,6 @@ var ref;
 
         /** Init functions **/
         //voRALD.js
-        VORALD.showHistoryBackLink();
         VORALD.printLinkSetup();
         VORALD.printPageShouldPrintOnLoad();
         VORALD.addField();

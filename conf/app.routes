@@ -1,31 +1,30 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
-# ~~~~
 
-# Home page
-->         /hmrc-frontend              hmrcfrontend.Routes
-GET         /                          controllers.ApplicationController.index
+->          /hmrc-frontend                  hmrcfrontend.Routes
 
-GET         /confirmation              controllers.feedback.SurveyController.confirmation
-GET         /declaration               controllers.ApplicationController.declaration
-GET         /declarationError          controllers.ApplicationController.declarationError
-POST        /declaration               controllers.FORSubmissionController.submit
-GET         /check-your-answers        controllers.ApplicationController.checkYourAnswers
-GET         /startagain                controllers.ApplicationController.startAgain
-GET         /sessiontimeout            controllers.ApplicationController.sessionTimeout
+GET         /                               controllers.ApplicationController.index
+
+GET         /confirmation                   controllers.feedback.SurveyController.confirmation
+GET         /declaration                    controllers.ApplicationController.declaration
+GET         /declarationError               controllers.ApplicationController.declarationError
+POST        /declaration                    controllers.FORSubmissionController.submit
+GET         /check-your-answers             controllers.ApplicationController.checkYourAnswers
+GET         /startagain                     controllers.ApplicationController.startAgain
+GET         /sessiontimeout                 controllers.ApplicationController.sessionTimeout
 
 #LANGUAGE
-GET     	/language/:lang       	   controllers.CustomLanguageController.switchToLanguage(lang: String)
-GET         /login/en                  controllers.CustomLanguageController.showEnglish
-GET         /login/cy                  controllers.CustomLanguageController.showWelsh
+GET     	/language/:lang       	        controllers.CustomLanguageController.switchToLanguage(lang: String)
+GET         /login/en                       controllers.CustomLanguageController.showEnglish
+GET         /login/cy                       controllers.CustomLanguageController.showWelsh
 
 #SAVE4LATER
-GET         /saved                     controllers.SaveForLaterController.saveForLater(path: String)
-POST        /saved                     controllers.SaveForLaterController.customPasswordSaveForLater(path: String)
-GET         /saved/login               controllers.SaveForLaterController.login
-POST 		/resume					   controllers.SaveForLaterController.resume
-GET 		/immediateresume		   controllers.SaveForLaterController.immediateResume
-GET         /timeout                   controllers.SaveForLaterController.timeout
+GET         /saved                          controllers.SaveForLaterController.saveForLater(path: String)
+POST        /saved                          controllers.SaveForLaterController.customPasswordSaveForLater(path: String)
+GET         /saved/login                    controllers.SaveForLaterController.login
+POST 		/resume					        controllers.SaveForLaterController.resume
+GET 		/immediateresume		        controllers.SaveForLaterController.immediateResume
+GET         /timeout                        controllers.SaveForLaterController.timeout
 
 GET         /login                                      controllers.LoginController.show
 POST        /login                                      controllers.LoginController.submit
@@ -34,32 +33,32 @@ GET         /lockedout                                  controllers.LoginControl
 GET         /logout                                     controllers.LoginController.logout
 
 # not connected form
-GET         /previously-connected       controllers.PreviouslyConnectedController.onPageView
-POST        /previously-connected       controllers.PreviouslyConnectedController.onPageSubmit
+GET         /previously-connected           controllers.PreviouslyConnectedController.onPageView
+POST        /previously-connected           controllers.PreviouslyConnectedController.onPageSubmit
 
-GET         /not-connected              controllers.NotConnectedController.onPageView
-POST        /not-connected              controllers.NotConnectedController.onPageSubmit
+GET         /not-connected                  controllers.NotConnectedController.onPageView
+POST        /not-connected                  controllers.NotConnectedController.onPageSubmit
 
-GET         /not-connected-summary      controllers.NotConnectedCheckYourAnswersController.onPageView
-POST        /not-connected-summary      controllers.NotConnectedCheckYourAnswersController.onPageSubmit
-GET         /not-connected-confirmation controllers.NotConnectedCheckYourAnswersController.onConfirmationView
+GET         /not-connected-summary          controllers.NotConnectedCheckYourAnswersController.onPageView
+POST        /not-connected-summary          controllers.NotConnectedCheckYourAnswersController.onPageSubmit
+GET         /not-connected-confirmation     controllers.NotConnectedCheckYourAnswersController.onConfirmationView
 
 
-GET         /page/:pageNumber          controllers.dataCapturePages.PageController.showPage(pageNumber:Int)
-POST        /page/:pageNumber          controllers.dataCapturePages.PageController.savePage(pageNumber:Int)
+GET         /page/:pageNumber               controllers.dataCapturePages.PageController.showPage(pageNumber:Int)
+POST        /page/:pageNumber               controllers.dataCapturePages.PageController.savePage(pageNumber:Int)
 
 # TODO: Remove after A/B testing VOA-3424
-GET         /page/:page/:variant       controllers.dataCapturePages.PageController.showPageVariant(page: Int, variant: Int)
+GET         /page/:page/:variant            controllers.dataCapturePages.PageController.showPageVariant(page: Int, variant: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
 
 # ERROR PAGES
-GET         /404                       controllers.ApplicationController.error404
-GET         /408                       controllers.ApplicationController.error408
-GET         /409                       controllers.ApplicationController.error409
-GET         /410                       controllers.ApplicationController.error410
-GET         /500                       controllers.ApplicationController.error500
+GET         /404                            controllers.ApplicationController.error404
+GET         /408                            controllers.ApplicationController.error408
+GET         /409                            controllers.ApplicationController.error409
+GET         /410                            controllers.ApplicationController.error410
+GET         /500                            controllers.ApplicationController.error500
 
 # SURVEY
 GET         /survey                         controllers.feedback.SurveyController.onPageView(journey: String)

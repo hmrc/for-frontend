@@ -17,7 +17,7 @@
 package controllers
 
 import actions.RefNumAction
-import config.ForConfig
+import config.AppConfig
 import connectors.Audit
 import form.Errors
 import form.persistence.FormDocumentRepository
@@ -25,7 +25,6 @@ import models.Addresses
 
 import javax.inject.{Inject, Singleton}
 import models.pages.*
-import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.libs.json.Json
@@ -47,9 +46,8 @@ class ApplicationController @Inject() (
   indexView: views.html.index,
   sessionTimeoutView: views.html.sessionTimeout,
   importantInformationView: views.html.importantInformation,
-  configuration: Configuration,
   audit: Audit,
-  forConfig: ForConfig
+  appConfig: AppConfig
 )(using ec: ExecutionContext
 ) extends FrontendController(cc):
 
@@ -89,8 +87,8 @@ class ApplicationController @Inject() (
   }
 
   def index: Action[AnyContent] = Action { implicit request =>
-    if forConfig.startPageRedirect then
-      Redirect(forConfig.govukStartPage)
+    if appConfig.startPageRedirect then
+      Redirect(appConfig.govukStartPage)
     else
       Ok(indexView())
   }
@@ -128,7 +126,7 @@ class ApplicationController @Inject() (
   }
 
   def importantInformation: Action[AnyContent] = Action { implicit request =>
-    if configuration.get[Boolean]("bannerNotice.enabled") then
+    if appConfig.getBoolean("notificationBanner.enabled") then
       Ok(importantInformationView())
     else
       Redirect(routes.LoginController.show)

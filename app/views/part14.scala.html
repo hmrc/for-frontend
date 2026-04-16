@@ -15,28 +15,29 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
 @layout(
+    pageTitle = messages("label.anyOtherFactors"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(13).url,
-    pageHeading = messages("label.anyOtherFactors"),
     showH1 = false,
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 

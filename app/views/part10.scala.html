@@ -14,33 +14,33 @@
  * limitations under the License.
  *@
 
-@import helpers._
+@import helpers.*
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcCurrencyInput, CurrencyInput}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.input.CurrencyField
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
-        hmrcCurrencyInput: HmrcCurrencyInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
-        formHelp: includes.formHelp)
+        formHelp: includes.formHelp
+)
 
 
-@(theForm: Form[?], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
 
 @layout(
+    pageTitle = messages("section10.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(9).url,
-    pageHeading = messages("section10.heading"),
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 
@@ -416,21 +416,9 @@
                 )
             }
         <div style="clear:left;" class="govuk-!-margin-top-4">
-            @hmrcCurrencyInput(
-                CurrencyInput(
-                    id = "parking.annualSeparateParking",
-                    name = "parking.annualSeparateParking",
-                    value = theForm("parking.annualSeparateParking").value,
-                    classes = "govuk-input--width-5",
-                    label = Label(
-                        classes = "govuk-!-font-weight-bold",
-                        content = Text(messages("label.parking.annualSeparateParking"))
-                    ),
-                    autocomplete = Some("off"),
-                    errorMessage =  theForm.errors.asTextErrorMessageForField("parking.annualSeparateParking")
-                )
+            @govukInput(
+                CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidth = 5)
             )
-
 
             @includes.dateFields(
                 form = theForm,

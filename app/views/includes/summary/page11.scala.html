@@ -46,7 +46,7 @@
 	@if(p11.payCapitalSum) {
 		@p11.capitalPaidDetails.map { cpd =>
 
-			@summaryBlock(messages("label.capitalPaidDetails.capitalSum"), 11, "capitalPaidDetails_capitalSum")	{
+			@summaryBlock(messages("capitalPaidDetails.capitalSum.label"), 11, "capitalPaidDetails_capitalSum")	{
 				£@NumberFormat.getNumberInstance().format(cpd.capitalSum)
 			}
 

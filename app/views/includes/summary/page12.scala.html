@@ -37,7 +37,7 @@
     @if(p12.ndrCharges) {
         @p12.ndrDetails.map { ndrSpecifics =>
 
-            @summaryBlock(messages("label.ndrDetails"), 12, "ndrDetails") {
+            @summaryBlock(messages("ndrCharges.ndrDetails.label"), 12, "ndrDetails") {
                 @(s"£${NumberFormat.getNumberInstance().format(ndrSpecifics)} ")
             }
         }
@@ -47,7 +47,7 @@
         @displayBoolean(p12.waterCharges, "7")
     }
     @if(p12.waterCharges) {
-        @summaryBlock(messages("label.ndrDetails"), 12, "waterChargesCost") {
+        @summaryBlock(messages("waterChargesCost.label"), 12, "waterChargesCost") {
             @(s"£${NumberFormat.getNumberInstance().format(p12.waterChargesCost.getOrElse(""))} ")
         }
     }

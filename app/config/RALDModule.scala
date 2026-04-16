@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.localroot
+package config
 
-import play.api.mvc.*
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
-import javax.inject.{Inject, Singleton}
+import config.AppConfig
+import play.api.inject.{Binding, Module}
+import play.api.{Configuration, Environment}
+import uk.gov.hmrc.vo.service.config.VOServiceConfig
 
 /**
   * @author Yuriy Tumakha
   */
-@Singleton
-class RootRedirectController @Inject() (cc: MessagesControllerComponents) extends FrontendController(cc):
+class RALDModule extends Module:
 
-  def rootRedirect: Action[AnyContent] = Action {
-    Redirect(controllers.routes.ApplicationController.index)
-  }
+  override def bindings(env: Environment, conf: Configuration): Seq[Binding[?]] = Seq(
+    bind[VOServiceConfig].to[AppConfig]
+  )

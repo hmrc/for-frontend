@@ -77,7 +77,7 @@
             }
         }
 
-        @summaryBlock(messages("label.parking.annualSeparateParking"), 10, "parking_annualSeparateParking") {
+        @summaryBlock(messages("parking.annualSeparateParking.label"), 10, "parking_annualSeparateParking") {
             @p10.parking.annualSeparateParkingAmount.map { sp =>
                 £@NumberFormat.getNumberInstance().format(sp)
             }

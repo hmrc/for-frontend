@@ -14,11 +14,17 @@
  * limitations under the License.
  *@
 
-@this(layout:pageLayout)
+@import views.html.components.PrimaryLayout
 
-@()(implicit requestHeader: Request[?],  messages: Messages)
+@this(
+        layout: PrimaryLayout
+)
 
-@layout(pageHeading = messages("copy.feedback.thankyou"), showFeedback=false) {
+@()(implicit requestHeader: RequestHeader,  messages: Messages)
+
+@layout(
+ pageTitle = messages("copy.feedback.thankyou")
+) {
 
  <p class="govuk-body">
    <a href="login">@messages("copy.feedback.anotherForm")</a>

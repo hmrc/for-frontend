@@ -1,10 +1,11 @@
 #COMMON
 ##############################
 project.name=Cyflwyno manylion rhent a phrydles
-project.header=Manylion rhent a phrydles
 service.name=Manylion rhent a phrydles
 service.homePageUrl=/sending-rental-information/login
 gov.name = GOV.UK
+service.accountInfo.key1 = Cyfeirnod
+service.accountInfo.key2 = Eiddo
 skip.content=Ewch yn syth i’r prif gynnwys
 login.heading=Rhowch eich cyfeirnod
 failedLogin.heading=Gwall mewngofnodi
@@ -16,17 +17,13 @@ optional=(dewisol)
 help.date.month.year=Er enghraifft, {0}
 help.optional.date.month.year=Er enghraifft, {0} (dewisol)
 help.date.years.months=Er enghraifft, 1 10
-label.date.month=Mis
-label.date.year=Blwyddyn
 label.date.months=Mis
-label.date.day=Diwrnod
 label.date.years=Bl.
 help.date.day.month.year=Er enghraifft, {0}
 link.label.calculate=Helpwch fi i gyfrifo’r rhent blynyddol
 button.label.calculate=Cyfrifo
 label.excluding.vat=Heb gynnwys TAW
 label.amount=Swm
-label.year=Blwyddyn
 label.add.individual=Ychwanegu unigolyn arall
 heading.steppedRent1=Cyfnod rhent cyntaf
 heading.steppedRent2=Ail gyfnod rhent
@@ -69,21 +66,19 @@ label.tryAgain=Cynnig eto
 label.startFormAgain=Dechrau’r ffurflen eto
 label.password=cyfrinair
 label.totalRent=Rhent blynyddol
-label.checkTheForm=Mae problem wedi codi
 label.section=Adran {0} o {1}
 label.footer.builtBy=Adeiladwyd gan <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Swyddfa Brisio</a>
 label.footer.licence=Mae’r holl gynnwys ar gael o dan y <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Drwydded Llywodraeth Agored f3.0</a> ac eithrio lle nodir yn wahanol
 label.footer.ogl=Trwydded Llywodraeth Agored
 label.footer.crown=Hawlfraint y Goron
 label.edit=Newid
-label.account.ref=Cyfeirnod
-label.account.property=Eiddo
 label.confirmPassword=Gwall ar cadarnhau’r cyfrinair
 placeholder.address.1=Llinell gyntaf y cyfeiriad
 placeholder.address.2=Ail linell y cyfeiriad
 placeholder.address.3=Trydedd linell y cyfeiriad
 label. = Gwall
 label.error = Gwall
+error.prefix = Gwall:
 
 #WELSH YES/NO
 #############
@@ -260,7 +255,7 @@ label.sublet.tenantFullName=Enw’r tenant
 label.sublet.subletPropertyPartDescription=Pa ran o’r eiddo sy’n cael ei osod neu ei is-osod?
 label.sublet.subletPropertyReasonDescription=At ba ddiben y defnyddir yr eiddo sy’n cael ei osod neu isosod?
 hint.sublet.subletPropertyReasonDescription=Er enghraifft, defnydd preswyl neu fasnachol.
-label.sublet.annualRent=Faint o rent sy’n cael ei dalu bob blwyddyn am y gosod neu’r is-osod hwn (ac eithrio TAW)?
+sublet.annualRent.label=Faint o rent sy’n cael ei dalu bob blwyddyn am y gosod neu’r is-osod hwn (ac eithrio TAW)?
 label.sublet.section.heading=Is-osod
 
 label.sublet.annualRent.annualRentExcludingVat.generic=Rhent isosod (heb gynnwys TAW)
@@ -400,8 +395,8 @@ help.steprent.datefrom=Er enghraifft, {0}
 help.steprent.dateto=Er enghraifft, {0}
 label.writtenAgreement.steppedDetails.stepFrom=Dyddiad dechrau‘r rhent
 label.writtenAgreement.steppedDetails.stepTo=Dyddiad y daw‘r rhent i ben
-label.writtenAgreement.steppedDetails.amount=Y rhent a dalwyd neu sydd i’w dalu bob blwyddyn yn ystod y cyfnod hwn (heb gynnwys TAW)
-label.writtenAgreement.steppedDetails.hint=Nodwch y swm blynyddol hyd yn oed os yw’r cyfnod am lai neu fwy na blwyddyn.
+writtenAgreement.steppedDetails.amount.label=Y rhent a dalwyd neu sydd i’w dalu bob blwyddyn yn ystod y cyfnod hwn (heb gynnwys TAW)
+writtenAgreement.steppedDetails.amount.hint=Nodwch y swm blynyddol hyd yn oed os yw’r cyfnod am lai neu fwy na blwyddyn.
 label.writtenAgreement.steppedDetails=Manylion rhent grisiog
 hint.leaseAgreementType=Ar gyfer prydlesi neu gytundebau tenantiaeth lluosog, nodwch fanylion y brydles sylfaenol ac yna cysylltwch â’r Swyddfa Brisio i roi manylion yn ymwneud â phrydlesi neu gytundebau eraill.
 
@@ -517,9 +512,9 @@ error.isThisRent.required=Dewiswch y math o gytundeb rhent
 #SECTION 9
 ###############################
 section9.heading=Y rhent
-label.totalRent.annualRentExcludingVat=Beth yw’r rhent blynyddol ar hyn o bryd?
-label.totalRent.annualRentExcludingVat.agent=Faint yw rhent blynyddol cyfredol eich cleient?
-hint.totalRent.annualRentExcludingVat=Nodwch swm llawn y rhent a delir bob blwyddyn (ac eithrio TAW).
+totalRent.annualRentExcludingVat.label=Beth yw’r rhent blynyddol ar hyn o bryd?
+totalRent.annualRentExcludingVat.label.agent=Faint yw rhent blynyddol cyfredol eich cleient?
+totalRent.annualRentExcludingVat.hint=Nodwch swm llawn y rhent a delir bob blwyddyn (ac eithrio TAW).
 label.totalRent.rentLengthType=Caiff y rhent ei dalu
 label.rentBecomePayable=Pryd dechreuodd y tenant dalu’r rhent presennol?
 label.rentBecomePayable.agent=Pryd dechreuodd eich cleient dalu’r rhent hwn?
@@ -600,7 +595,7 @@ label.parking.rentSeparateParking=A yw’r tenant yn talu’n ychwanegol am ddef
 label.parking.rentSeparateParking.agent=A yw’ch cleient yn talu’n ychwanegol am ddefnyddio garejis neu fannau parcio?
 label.parking.rentSeparateParkingDetails=Am sawl garej neu fan parcio y mae’r tenant yn talu’n ychwanegol?
 label.parking.rentSeparateParkingDetails.agent=Am sawl garej neu fan parcio y mae’ch cleient yn talu’n ychwanegol?
-label.parking.annualSeparateParking=Swm blynyddol sefydlog a delir am garejis neu fannau parcio sy’n uwch na’r rhent (heb gynnwys TAW)
+parking.annualSeparateParking.label=Swm blynyddol sefydlog a delir am garejis neu fannau parcio sy’n uwch na’r rhent (heb gynnwys TAW)
 label.parking.annualSeparateParkingDate=Pryd cafodd y taliad hwn ei bennu?
 label.noJs.rentIncludeParkingDetails=Dylech ond ateb hyn os ydych wedi dewis ‘Ydy/Ydw’
 label.noJs.rentSeparateParkingDetails=Dylech ond ateb hyn os ydych wedi dewis ‘Ydy/Ydw’
@@ -662,14 +657,14 @@ hint.rentFreePeriodDetails.rentFreePeriodDetails=Er enghraifft, ar gyfer gwaith 
 label.payCapitalSum=A wnaeth y tenant dalu unrhyw beth i’r landlord er mwyn ymrwymo i’r brydles?
 label.payCapitalSum.agent=A wnaeth eich cleient dalu swm cyfalaf?
 hint.payCapitalSum=Dyma swm o arian y gwnaethoch ei dalu i’ch landlord er mwyn cymryd prydles neu gytundeb
-label.capitalPaidDetails.capitalSum=Y swm a dalwyd (ac eithrio TAW)
+capitalPaidDetails.capitalSum.label=Y swm a dalwyd (ac eithrio TAW)
 label.capitalPaidDetails.paymentDate=Dyddiad y gwnaed y taliad
 label.receiveCapitalSum=A gafodd y tenant unrhyw arian oddi wrth y landlord neu’r tenant blaenorol er mwyn ymrwymo i’r brydles?
 label.receiveCapitalSum.agent=A gafodd eich cleient swm cyfalaf?
 label.capitalReceivedDetails.capitalSum=Y swm a gafwyd (ac eithrio TAW)
 label.capitalReceivedDetails.paymentDate=Dyddiad y cafwyd y taliad
 
-label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
+capitalReceivedDetails.receivedSum.label=Amount received (excluding VAT)
 
 hint.rentFreePeriodDetails.rentFreePeriodLength=Os oedd y cyfnod di-rent wedi para am lai nag 1 mis, nodwch “1” a rhoi rhagor o wybodaeth o dan ‘Pam oedd cyfnod di-rent?’.
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=Os oedd cyfnod di-rent eich cleient wedi para am lai nag 1 mis, nodwch "1" a rhoi rhagor o wybodaeth o dan ‘Pam y rhoddwyd cyfnod di-rent i’ch cleient?’.
@@ -717,16 +712,16 @@ label.responsibleBuildingInsurance=Pwy sy’n gyfrifol am dalu yswiriant adeilad
 hint.label.responsibleBuildingInsurance=Os mai dim ond am ddefnydd o dir y mae’r rhent yn cael ei dalu, dewiswch ‘Tenant’.
 label.ndrCharges=Ydy trethi busnes yn cael eu cynnwys yn y rhent?
 label.ndrDetails.chargeDescription=Manylion gwasanaethau
-label.ndrDetails=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
+ndrCharges.ndrDetails.label=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
 label.waterCharges=Ydy taliadau dŵr wedi’u cynnwys yn y rhent?
 label.includeWaterChargesDetails=Manylion gwasanaethau
-label.waterChargesCost=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
+waterChargesCost.label=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
 label.includedServices=Ydy taliadau gwasanaeth yn cael eu cynnwys yn y rhent?
 hint.includedServices=Er enghraifft goleuadau, gwres a chynnal a chadw mannau a rennir.
 label.includedServicesDetails.chargeDescription=Rhowch fanylion y gwasanaethau
 hint.includedServicesDetails.chargeDescription=Er enghraifft “goleuadau £150, gwres £50, glanhau £50”.  Os oes angen i chi roi mwy o wybodaeth i ni, parhewch o dan ‘Unrhyw ffactorau eraill’ yn Adran 14.
-label.includedServicesDetails.chargeCost=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
-hint.includedServicesDetails.chargeCost=Os nad ydych yn gallu rhoi unrhyw symiau cost, nodwch “1”.
+includedServicesDetails.chargeCost.label=Cyfanswm sydd wedi’i gynnwys yn y rhent bob blwyddyn (ac eithrio TAW)
+includedServicesDetails.chargeCost.hint=Os nad ydych yn gallu rhoi unrhyw symiau cost, nodwch “1”.
 info.responsibilitiesAndCosts.paying=Dewiswch ‘Landlord’ os yw’r landlord yn talu biliau’r eitemau hyn yn uniongyrchol, heb ofyn am gyfraniad gan y tenant.
 info.responsibilitiesAndCosts.surcharge=Dewiswch ‘Tenant’ os yw’r tenant yn talu’n uniongyrchol am yr eitemau hyn, neu’n talu swm fel tâl gwasanaeth er mwyn talu’r costau.
 label.noJs.secton12=Dylech ond ateb hyn os ydych wedi dewis ‘Ie’
@@ -756,7 +751,7 @@ section13.heading=Addasiadau a gwelliannau
 label.propertyAlterations=A yw’r tenant wedi gwneud unrhyw addasiadau mawr i’r eiddo yn ystod y 15 mlynedd diwethaf?
 label.propertyAlterations.agent=A yw eich cleient wedi cynnal unrhyw addasiadau mawr i’r eiddo?
 hint.propertyAlterations=Er enghraifft, estyniadau a dymchweliadau, neu wedi ychwanegu lle i barcio, lifftiau neu aerdymheru.
-label.propertyAlterationsDetails.cost=Cost y gwaith (ac eithrio TAW)
+propertyAlterationsDetails.cost.label=Cost y gwaith (ac eithrio TAW)
 label.propertyAlterationsDetails=Amcan o ddyddiad y gwaith
 label.propertyAlterationsDetails.date=Amcan o ddyddiad y gwaith
 label.requiredAnyWorks=A oedd yn ofynnol i’r tenant wneud unrhyw waith fel un o amodau’r brydles neu’r cytundeb presennol?
@@ -1132,7 +1127,6 @@ heading.termsandconditions=Telerau ac Amodau
 content.termsandconditions=<p>Mae’r telerau ac amodau hyn yn llywodraethu eich defnydd o wasanaeth Manylion Rhent a Phrydles ar-lein Swyddfa Brisio, fel y’i llywodraethir gan ddeddfau Cymru a Lloegr. Darllenwch y telerau ac amodau hyn yn ofalus gan eu bod yn effeithio ar eich hawliau a’ch cyfrifoldebau yn y gyfraith.</p><p>Wrth ddefnyddio’r wefan hon, rydych yn cytuno ar y telerau ac amodau fel y’u darparwyd.</p><h2 class="heading-medium">Defnyddio’r gwasanaeth ar-lein hwn</h2><p>Rydym yn gwneud pob ymdrech i sicrhau bod y wybodaeth a gyhoeddir ar y wefan yn gywir. Fodd bynnag, ni all Asiantaeth y Swyddfa Brisio dderbyn unrhyw gyfrifoldeb am gywirdeb y wybodaeth hon, ac mae’r rhai sy’n ei defnyddio yn gwneud hynny ar eu menter eu hunain.</p> <p>Ni allwn warantu y bydd y gwasanaeth heb unrhyw ddiffygion. Os bydd problem gyda’r gwasanaeth, dylech ddefnyddio’r ddolen ‘Cael help gyda’r dudalen hon’ ar waelod pob tudalen a byddwn yn cysylltu â chi cyn gynted ag y gallwn.</p> <h2 class="heading-medium">Diogelu rhag feirysau</h2> <p>Rydym yn gwneud pob ymdrech i wirio a phrofi’r holl ddeunydd yn ofalus, ond byddem yn cynghori defnyddwyr i redeg rhaglen gwrthfeirysau ar bob deunydd a lawrlwythir ar-lein.</p> <p>Nid yw Asiantaeth y Swyddfa Brisio yn derbyn unrhyw gyfrifoldeb am unrhyw golled, amhariad na difrod i’ch data na’ch system gyfrifiadurol tra byddwch yn defnyddio’r wefan hon.</p> <h2 class="heading-medium">Diwygiadau i’r telerau ac amodau</h2> <p>Gallwn ddiweddaru’r telerau ac amodau o bryd i’w gilydd a drwy barhau i ddefnyddio’r wefan rydych yn cadarnhau eich bod yn parhau i gytuno ar y telerau ac amodau defnydd hyn.</p> <h2 class="heading-medium">Diogelwch</h2> <p>Er mwyn sicrhau bod eich data’n cael eu cadw’n ddiogel, rydym yn defnyddio diogelwch Haen Socedi Diogel (SSL), un o’r systemau diogelwch cryfaf, ac amgryptiad 128 bit i storio a throsglwyddo eich data.</p> <p>Mae SSL yn gweithio drwy wneud y canlynol:</p> <ul class="list-bullet"> <li>atal pobl rhag dynwared rhywun arall - gallwch weld eich bod yn defnyddio gwefan SSL go iawn drwy’r symbol clo clap ar waelod y sgrin neu ym mar cyfeiriad eich porwr</li> <li>amgryptio data - cyn gynted ag y bydd eich cyfrifiadur wedi adnabod eich cyfrifiadur ni, bydd yn amgryptio’r holl wybodaeth a drosglwyddir rhyngddynt. Mae amgryptio data yn golygu na all unrhyw un arall ddarllen eich gwybodaeth wrth iddo deithio ar draws y Rhyngrwyd na’i newid </li> <li>atal anhrefnu (scrambling) - mae SSL yn defnyddio Cod Dilysu Neges (MAC) i atal unrhyw un rhag ymyrryd â’n gwefan. Bydd eich cyfrifiadur yn gwirio’r cod hwn bob tro cyn derbyn neges gennym. Golyga hyn, os bydd rhywun yn ceisio ymyrryd â neges, na fydd eich cyfrifiadur yn adnabod y cod a bydd yn eich rhybuddio.</li> </ul>
 heading.cookies=Cwcis
 content.cookies=<p>Mae’r gwasanaeth Manylion Rhent a Phrydles (RALD) yn rhoi ffeiliau bach, a elwir yn ‘cookies’, ar eich cyfrifiadur er mwyn casglu gwybodaeth ynglŷn â sut rydych yn pori’r wefan.</p>Defnyddir cwcis er mwyn:<ul class="list-bullet"><li>mesur sut rydych yn defnyddio’r wefan fel ei bod yn cael ei diweddaru a’i gwella yn seiliedig ar eich anghenion</li><li>cofio’r hysbysiadau rydych wedi’u gweld fel nad ydym yn eu dangos i chi eto</li></ul><p>Ni ddefnyddir cwcis RALD i’ch adnabod chi’n bersonol.</p> Byddwch fel arfer yn gweld neges ar y safle cyn y byddwn yn storio cwcis ar eich cyfrifiadur. <p>Rhagor o wybodaeth ynglŷn â <a href="http://www.aboutcookies.org/">sut rydym yn rheoli cwcis</a>.</p> <h2 class="heading-medium">Sut y defnyddir cwcis ar RALD</h2> <h3 class="heading-small">Mesur defnydd o’r wefan (Google Analytics)</h3> <p>Rydym yn defnyddio meddalwedd Google Analytics i gasglu gwybodaeth ynglŷn â sut rydych yn defnyddio RALD. Rydym yn gwneud hyn er mwyn helpu i wneud yn siŵr bod y safle’n diwallu anghenion ei defnyddiwr ac i’n helpu i wneud gwelliannau.</p> <p>Mae Google Analytics yn storio gwybodaeth am y canlynol:</p> <ul class="list-bullet"> <li>y tudalennau y gwnaethoch ymweld â nhw ar RALD</li> <li>faint o amser y gwnaethoch ei dreulio ar bob tudalen</li> <li>sut y daethoch i’r safle</li> </ul> <p>Nid ydym yn casglu nac yn storio eich gwybodaeth bersonol (er enghraifft eich enw neu eich cyfeiriad) felly ni ellir defnyddio’r wybodaeth i nodi pwy ydych.</p> <p>Nid ydym yn caniatáu i Google ddefnyddio na rhannu ein data dadansoddi.</p> <p>Mae Google Analytics yn gosod y cwcis canlynol:</p> <h3 class="heading-small">Universal Analytics</h3> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> <tr> <td>_ga</td> <td>Mae hyn yn ei helpu i gyfrif faint o bobl sy’n ymweld â RALD drwy weld a ydych wedi ymweld o’r blaen</td> <td>2 flynedd</td> </tr> <tr> <td>_gat</td> <td>Fe’i defnyddir i reoli’r raddfa y gwneir ceisiadau i weld tudalen newydd</td> <td>10 munud</td> </tr> </tbody> </table> <h3 class="heading-small">Cwcis sy’n benodol ar gyfer RALD</h3> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> </thead> <tbody> <tr> <td>mdtp</td> <td>Storio data sesiynau</td> <td>Pan fyddwch yn cau eich porwr</td> </tr> <tr> <td>mdtpdf</td> <td>Storio data sesiynau</td> <td>Pan fyddwch yn cau eich porwr</td> </tr> </tbody> </table> <h3 class="heading-small">Ein neges ragarweiniol</h3> <p>Efallai y byddwch yn gweld neges groeso naid pan fyddwch yn ymweld am y tro cyntaf. Storir cwcis ar eich porwr fel bod eich cyfrifiadur yn gwybod eich bod wedi ei gweld, a’i fod yn gwybod i beidio â’i dangos eto.</p> <table> <thead> <tr> <th>Enw</th> <th>Diben</th> <th>Dod i ben</th> </tr> </thead> <tbody> <tr> <td>seen_cookie_message</td> <td>Mae’n cadw neges i roi gwybod i ni eich bod wedi gweld ein neges cwcis.</td> <td>1 mis</td> </tr> </tbody> </table>
-label.writtenAgreement.steppedDetails.amount.agent=Y rhent a dalwyd neu sydd i’w dalu bob blwyddyn yn ystod y cyfnod hwn (heb gynnwys TAW).
 section2.heading.1=Oherwydd diogelwch data, ni allwn gyn-boblogi’r ffurflen hon.
 label.writtenAgreement.rentOpenEnded.help=Dewiswch ‘Nac ydy’ os yw’n rhedeg am dymor wedi’i ddiffinio neu fod ganddo ddyddiad dod i ben y cytunwyd arno.
 

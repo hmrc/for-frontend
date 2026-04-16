@@ -16,14 +16,13 @@
 
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-@import play.api.mvc.Request
 @import play.api.i18n.Messages
 @import play.api.Configuration
 
 @this(servicesConfig: ServicesConfig, contactFrontendConfig: ContactFrontendConfig, configuration: Configuration)
 
 
-@()(implicit request: Request[?], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @reportProblemContactFrontendUrl = @{
     val serviceId = contactFrontendConfig.serviceId.getOrElse("RALD")

@@ -14,18 +14,19 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions._
+@import models.serviceContracts.submissions.*
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Fieldset
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Legend
+@import views.html.components.PrimaryLayout
 
-@this(  layout: pageLayout,
+@this(  layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukInput:  GovukInput,
@@ -33,14 +34,12 @@
         formHelp: includes.formHelp)
 
 
-@(theForm: Form[CustomerDetails], summary: Summary)(implicit request: Request[?],  messages: Messages)
+@(theForm: Form[CustomerDetails], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
 
 @layout(
-    pageHeading = messages("section2.heading"),
+    pageTitle = messages("section2.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
-    summary = Some(summary),
-    showAccountInfo = true,
-    showSection = true,
+    summary = summary,
     theForm = theForm
 ){
 

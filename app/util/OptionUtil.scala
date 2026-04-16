@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package util
 
-@()
-<!-- Javascript -->
-<script type="text/javascript">
-    document.documentElement.className = document.documentElement.className.replace("no-js","js");
-</script>
+/**
+  * @author Yuriy Tumakha
+  */
+object OptionUtil:
 
-	<script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.versioned("javascripts/app.js")" type="text/javascript"></script>
+  def combineAllWithSpace(values: Option[String]*): Option[String] =
+    values.flatten match
+      case Nil => None
+      case xs  => Some(xs.mkString(" "))

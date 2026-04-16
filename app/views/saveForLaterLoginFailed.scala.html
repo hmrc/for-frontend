@@ -14,11 +14,18 @@
  * limitations under the License.
  *@
 
-@this(main_template: pageLayout, formHelp: includes.formHelp)
+@import views.html.components.PrimaryLayout
 
-@()(implicit request: Request[?], messages: Messages)
+@this(
+        layout: PrimaryLayout,
+        formHelp: includes.formHelp
+)
 
-@main_template(pageHeading = messages("saveForLater.invalidPassword")) {
+@()(implicit request: RequestHeader, messages: Messages)
+
+@layout(
+    pageTitle = messages("saveForLater.invalidPassword")
+) {
 
     <p class="govuk-body">
         <a href="@routes.SaveForLaterController.login" class="govuk-button">@messages("label.tryAgain")</a>

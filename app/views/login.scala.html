@@ -15,31 +15,25 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import views.html.components.PrimaryLayout
 
-@this(main_template: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukInput: GovukInput,
         govukButton: GovukButton,
-        formWithCSRF: FormWithCSRF)
+        formWithCSRF: FormWithCSRF
+)
 
-@(theForm: Form[LoginDetails])(implicit request: Request[?], messages: Messages)
 
-@title = @{
-    var title: String = messages("login.heading")
-    if(theForm.hasErrors)
-        title = (messages("label.error") + ": " ) + title
-    title
-}
+@(theForm: Form[LoginDetails])(implicit request: RequestHeader, messages: Messages)
 
-@main_template(
-    pageHeading = messages("login.heading"),
-    pageTitle = title,
-    theForm = theForm,
-    showBanner = true,
-    withTimeoutDialog = false
+@layout(
+    pageTitle = messages("login.heading"),
+    theForm = theForm
 ) {
 
     <p class="govuk-body">@messages("label.letter")</p>

@@ -14,9 +14,14 @@
  * limitations under the License.
  *@
 
-@this(main_template: pageLayout)
+@import views.html.components.PrimaryLayout
 
-@(remainingAttempts: Int)(implicit request: Request[?], messages: Messages)
+@this(
+        layout: PrimaryLayout
+)
+
+
+@(remainingAttempts: Int)(implicit request: RequestHeader, messages: Messages)
 
 @warningMessage = @{
     if(remainingAttempts == 1) {
@@ -27,11 +32,11 @@
     }
 }
 
-@main_template(pageHeading = warningMessage) {
-
+@layout(
+    pageTitle = warningMessage
+) {
     <p class="govuk-body">@messages("heading.login.loginFailed")</p>
     <p class="govuk-body">@messages("error.login.failed")</p>
 
     <a href="@routes.LoginController.show" class="govuk-button" data-module="govuk-button" >@messages("label.retryLogin")</a>
-
 }

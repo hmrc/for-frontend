@@ -15,22 +15,25 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import views.html.components.PrimaryLayout
 
-@this(layout: pageLayout,
+@this(
+        layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukCharacterCount: GovukCharacterCount,
-        formWithCSRF: FormWithCSRF)
+        formWithCSRF: FormWithCSRF
+)
 
-@(theForm: Form[?], email: Option[String], summary: Summary)(implicit request: Request[?], messages: Messages)
+
+@(theForm: Form[?], email: Option[String], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
     @layout(
-        pageHeading = messages("label.confirm.heading"),
+        pageTitle = messages("label.confirm.heading"),
         showH1 = false,
-        summary = Some(summary),
-        showAccountInfo = true,
+        summary = summary,
         theForm = theForm
     ) {
 

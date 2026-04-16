@@ -1,10 +1,11 @@
 #COMMON
 ##############################
 project.name=Submit rent and lease details
-project.header=Rent and lease details
 service.name=Rent and lease details
 service.homePageUrl=/sending-rental-information/login
 gov.name = GOV.UK
+service.accountInfo.key1 = Reference
+service.accountInfo.key2 = Property
 skip.content=Skip to main content
 login.heading=Enter your reference number
 failedLogin.heading=Login error
@@ -16,17 +17,13 @@ optional=(optional)
 help.date.month.year=For example, {0}
 help.optional.date.month.year=For example, {0} (optional)
 help.date.years.months=For example, 1 10
-label.date.month=Month
-label.date.year=Year
 label.date.months=Months
-label.date.day=Day
 label.date.years=Years
 help.date.day.month.year=For example, {0}
 link.label.calculate=Help me calculate the annual rent
 button.label.calculate=Calculate
 label.excluding.vat=Excluding VAT
 label.amount=Amount
-label.year=Year
 label.add.individual=Add another individual
 heading.steppedRent1=First rent period
 heading.steppedRent2=Second rent period
@@ -69,21 +66,19 @@ label.tryAgain=Try again
 label.startFormAgain=Start form again
 label.password=password
 label.totalRent=Annual rent
-label.checkTheForm=There is a problem
 label.section=Section {0} of {1}
 label.footer.builtBy=Built by the <a href="https://www.gov.uk/government/organisations/valuation-office-agency">Valuation Office</a>
 label.footer.licence=All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
 label.footer.ogl=Open Government Licence
 label.footer.crown=Crown copyright
 label.edit=Change
-label.account.ref=Reference
-label.account.property=Property
 label.confirmPassword=Error on confirm password
 placeholder.address.1=Address line 1
 placeholder.address.2=Address line 2
 placeholder.address.3=Address line 3
 label. = Error
 label.error = Error
+error.prefix = Error:
 
 #WELSH YES/NO
 #############
@@ -267,7 +262,7 @@ label.sublet.tenantFullName=The tenant’s name
 label.sublet.subletPropertyPartDescription=What part of the property is let or sub-let?
 label.sublet.subletPropertyReasonDescription=What is the let or sub-let property used for?
 hint.sublet.subletPropertyReasonDescription=For example, residential use or commercial use.
-label.sublet.annualRent=How much rent is paid each year for this let or sub-let (excluding VAT)?
+sublet.annualRent.label=How much rent is paid each year for this let or sub-let (excluding VAT)?
 label.sublet.annualRent.annualRentExcludingVat.generic=Sub-let rent (excluding VAT)
 hint.sublet.annualRentExcludingVat=Excluding VAT
 
@@ -404,9 +399,8 @@ help.steprent.datefrom=For example, {0}
 help.steprent.dateto=For example, {0}
 label.writtenAgreement.steppedDetails.stepFrom=Date rent starts
 label.writtenAgreement.steppedDetails.stepTo=Date rent ends
-label.writtenAgreement.steppedDetails.amount=The rent paid or to be paid per year during this period (excluding VAT).
-label.writtenAgreement.steppedDetails.amount.agent=The rent paid or to be paid per year during this period (excluding VAT).
-label.writtenAgreement.steppedDetails.hint=Enter the yearly amount even if the period is for less or more than a year.
+writtenAgreement.steppedDetails.amount.label=The rent paid or to be paid per year during this period (excluding VAT).
+writtenAgreement.steppedDetails.amount.hint=Enter the yearly amount even if the period is for less or more than a year.
 label.writtenAgreement.steppedDetails=Stepped-rent details
 hint.leaseAgreementType=For multiple leases or tenancy agreements, enter details of the primary lease then contact the Valuation Office to provide details of the other lease or agreements.
 
@@ -501,9 +495,9 @@ error.isThisRent.required=Select the type of rent agreement
 #SECTION 9
 ###############################
 section9.heading=The rent
-label.totalRent.annualRentExcludingVat=What is the current annual rent?
-label.totalRent.annualRentExcludingVat.agent=What is your client’s current annual rent?
-hint.totalRent.annualRentExcludingVat=Enter the full amount of rent paid each year (excluding VAT). Ignore any rent-free period.
+totalRent.annualRentExcludingVat.label=What is the current annual rent?
+totalRent.annualRentExcludingVat.label.agent=What is your client’s current annual rent?
+totalRent.annualRentExcludingVat.hint=Enter the full amount of rent paid each year (excluding VAT). Ignore any rent-free period.
 label.totalRent.rentLengthType=The rent is paid
 label.rentBecomePayable=When did the tenant start paying the current rent?
 label.rentBecomePayable.agent=When did your client start paying this rent?
@@ -586,7 +580,7 @@ label.parking.rentSeparateParking=Does the tenant pay extra for the use of parki
 label.parking.rentSeparateParking.agent=Does your client pay extra for the use of parking spaces or garages?
 label.parking.rentSeparateParkingDetails=How many parking spaces or garages does the tenant pay extra for?
 label.parking.rentSeparateParkingDetails.agent=How many parking spaces or garages does your client pay extra for?
-label.parking.annualSeparateParking=Fixed annual amount paid for parking or garages over and above the rent (excluding VAT)
+parking.annualSeparateParking.label=Fixed annual amount paid for parking or garages over and above the rent (excluding VAT)
 label.parking.annualSeparateParkingDate=When was this payment fixed?
 label.noJs.rentIncludeParkingDetails=Answer this only if you selected ‘Yes’
 label.noJs.rentSeparateParkingDetails=Answer this only if you selected ‘Yes’
@@ -648,14 +642,14 @@ hint.rentFreePeriodDetails.rentFreePeriodDetails=For example, repairs or fitting
 label.payCapitalSum=Did the tenant pay anything to the landlord to take on the lease?
 label.payCapitalSum.agent=Did your client pay a capital sum?
 hint.payCapitalSum=Not including any rent, money for the business itself, goodwill, trade fixtures or refundable deposits.
-label.capitalPaidDetails.capitalSum=Amount paid (excluding VAT)
+capitalPaidDetails.capitalSum.label=Amount paid (excluding VAT)
 label.capitalPaidDetails.paymentDate=Date payment made
 label.receiveCapitalSum=Did the tenant receive any money from the landlord or previous tenant to take on the lease?
 label.receiveCapitalSum.agent=Did your client receive a capital sum?
 hint.rentFreePeriodDetails.rentFreePeriodLength=If the rent-free period was for less than 1 month, enter “1” and tell us more under ‘Why was there a rent-free period?’.
 hint.rentFreePeriodDetails.rentFreePeriodLength.agent=If your client’s rent free period was for less than 1 month, enter "1" and tell us more under ‘Why was your client given a rent-free period?’.
 
-label.capitalReceivedDetails.receivedSum=Amount received (excluding VAT)
+capitalReceivedDetails.receivedSum.label=Amount received (excluding VAT)
 label.capitalReceivedDetails.paymentDate=Date payment received
 label.noJs.capitalReceivedDetails.paymentDate=Answer this only if you’ve selected ‘Yes’
 label.noJs.capitalReceivedDetails.receivedSum=Answer this only if you’ve selected ‘Yes’
@@ -701,17 +695,17 @@ label.responsibleBuildingInsurance=Who is responsible for paying for buildings i
 hint.label.responsibleBuildingInsurance=If rent is paid for the use of land only, select ‘Tenant’.
 label.ndrCharges=Are business rates included in the rent?
 label.ndrDetails.chargeDescription=Details of service
-label.ndrDetails=Total amount per year included in the rent (excluding VAT)
+ndrCharges.ndrDetails.label=Total amount per year included in the rent (excluding VAT)
 label.waterCharges=Are water charges included in the rent?
 label.includeWaterChargesDetails=Details of service
-label.waterChargesCost=Total amount per year included in the rent (excluding VAT)
+waterChargesCost.label=Total amount per year included in the rent (excluding VAT)
 label.includedServices=Are service charges included in the rent?
 hint.includedServices=For example, lighting, heating, maintenance of shared areas.
 label.includedServicesDetails=Included Services
 label.includedServicesDetails.chargeDescription=Provide details of the services
 hint.includedServicesDetails.chargeDescription=For example "lighting £150, heating £50, cleaning £50".  If you need to tell us more, please continue in ‘Any other factors’ in Section 14.
-label.includedServicesDetails.chargeCost=Total amount per year included in the rent (excluding VAT)
-hint.includedServicesDetails.chargeCost=If you cannot provide any cost amounts, enter "1".
+includedServicesDetails.chargeCost.label=Total amount per year included in the rent (excluding VAT)
+includedServicesDetails.chargeCost.hint=If you cannot provide any cost amounts, enter "1".
 info.responsibilitiesAndCosts.paying=Select ‘Landlord’ if the landlord directly pays the bills for these items without asking for any contribution from the tenant.
 info.responsibilitiesAndCosts.surcharge=Select ‘Tenant’ if the tenant pays directly for these items or pays an amount such as a service charge, to cover the costs.
 label.noJs.secton12=Answer this only if you’ve selected ‘Yes’
@@ -741,7 +735,7 @@ section13.heading=Alterations and improvements
 label.propertyAlterations=Has the tenant carried out any major alterations to the property in the last 15 years?
 label.propertyAlterations.agent=Has your client carried out any major alterations to the property?
 hint.propertyAlterations=For example, extensions and demolitions, or added parking, lifts or air conditioning.
-label.propertyAlterationsDetails.cost=Cost of work (excluding VAT)
+propertyAlterationsDetails.cost.label=Cost of work (excluding VAT)
 label.propertyAlterationsDetails=Approximate date of works
 label.propertyAlterationsDetails.date=Approximate date of works
 
