@@ -14,56 +14,59 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.pages._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
+@import util.*
 
 @(p3: PageThree, isAgent: Boolean)(implicit messages: Messages)
 
 <h2 class="govuk-heading-m">@messages("section3.heading")</h2>
 <dl class="govuk-summary-list">
-  @summaryBlock(messages("label.propertyType"), 3, "propertyType") {
-    @p3.propertyType
-  }
-
-  @summaryBlock(messages("label.occupierTypes"), 3, "occupierType") {
-    @messages(s"occupierType.${p3.occupierType}")
-  }
-
-  @if(p3.occupierType == OccupierType.company) {
-    @summaryBlock(messages("label.companyName"), 3, "occupierCompanyName") {
-      @p3.occupierCompanyName.getOrElse("")
+    @summaryBlock(messages("label.propertyType"), 3, "propertyType") {
+        @p3.propertyType
     }
-    @summaryBlock(messages("label.occupierCompanyContact"), 3, "occupierCompanyContact") {
-      @p3.occupierCompanyContact.getOrElse("")
+
+    @summaryBlock(messages("label.occupierTypes"), 3, "occupierType") {
+        @messages(s"occupierType.${p3.occupierType}")
     }
-  }
 
-  @if(p3.occupierType == OccupierType.individuals || p3.occupierType == OccupierType.company) {
-    @summaryBlock(messages(if(isAgent) messages("label.firstOccupationDate.agent") else messages("label.firstOccupationDate")), 3, "firstOccupationDate_month") {
-      @{ p3.firstOccupationDate.map { d => displayRoughDate(d) }}
+    @if(p3.occupierType == OccupierType.company) {
+        @summaryBlock(messages("label.companyName"), 3, "occupierCompanyName") {
+            @p3.occupierCompanyName.getOrElse("")
+        }
+        @summaryBlock(messages("label.occupierCompanyContact"), 3, "occupierCompanyContact") {
+            @p3.occupierCompanyContact.getOrElse("")
+        }
     }
-  }
 
-  @p3.mainOccupierName.map { n =>
-      @summaryBlock(messages("label.mainOccupierName"), 3, "mainOccupierName") {
-        @n
-      }
-  }
-
-  @summaryBlock(messages(if(isAgent) messages("label.propertyOwnedByYou.agent") else messages("label.propertyOwnedByYou")), 3, "propertyOwnedByYou") {
-    @displayBoolean(p3.propertyOwnedByYou, if(isAgent) "2" else "1")
-  }
-
-  @if(!p3.propertyOwnedByYou) {
-    @summaryBlock(messages(if(isAgent) messages("label.propertyRentedBy.agent") else messages("label.propertyRentedBy")), 3, "propertyRentedByYou") {
-      @p3.propertyRentedByYou.map(x => displayBoolean(x, if(isAgent) "2" else "1"))
+    @if(p3.occupierType == OccupierType.individuals || p3.occupierType == OccupierType.company) {
+        @summaryBlock(messages(if(isAgent) messages("label.firstOccupationDate.agent") else messages("label.firstOccupationDate")), 3, "firstOccupationDate_month") {
+            @{
+                p3.firstOccupationDate.map(_.display)
+            }
+        }
     }
-  }
 
-  @p3.noRentDetails.map { z =>
-      @summaryBlock(messages("label.noRentDetails"), 3, "noRentDetails") {
-          @z
-      }
-  }
+    @p3.mainOccupierName.map { n =>
+        @summaryBlock(messages("label.mainOccupierName"), 3, "mainOccupierName") {
+            @n
+        }
+    }
+
+    @summaryBlock(messages(if(isAgent) messages("label.propertyOwnedByYou.agent") else messages("label.propertyOwnedByYou")), 3, "propertyOwnedByYou") {
+        @displayBoolean(p3.propertyOwnedByYou, if(isAgent) "2" else "1")
+    }
+
+    @if(!p3.propertyOwnedByYou) {
+        @summaryBlock(messages(if(isAgent) messages("label.propertyRentedBy.agent") else messages("label.propertyRentedBy")), 3, "propertyRentedByYou") {
+            @p3.propertyRentedByYou.map(x => displayBoolean(x, if(isAgent) "2" else "1"))
+        }
+    }
+
+    @p3.noRentDetails.map { z =>
+        @summaryBlock(messages("label.noRentDetails"), 3, "noRentDetails") {
+            @z
+        }
+    }
 </dl>

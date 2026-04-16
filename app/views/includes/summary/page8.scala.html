@@ -14,24 +14,28 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.serviceContracts.submissions.*
 
 @(p8: RentAgreement, isAgent: Boolean)(implicit messages: Messages)
 
-    <h2 class="govuk-heading-m">@if(isAgent){ @messages("section8.heading.agent") }else{ @messages("section8.heading")}</h2>
-    <dl class="govuk-summary-list">
-      @summaryBlock(messages(if(isAgent) messages("label.wasRentFixedBetween.agent") else messages("label.wasRentFixedBetween")), 8, "wasRentFixedBetween") {
+<h2 class="govuk-heading-m">@if(isAgent) {
+    @messages("section8.heading.agent")
+} else {
+    @messages("section8.heading")
+}</h2>
+<dl class="govuk-summary-list">
+    @summaryBlock(messages(if(isAgent) messages("label.wasRentFixedBetween.agent") else messages("label.wasRentFixedBetween")), 8, "wasRentFixedBetween") {
         @displayBoolean(p8.wasRentFixedBetween, "6")
-      }
+    }
 
-      @if(!p8.wasRentFixedBetween) {
+    @if(!p8.wasRentFixedBetween) {
         @summaryBlock(messages("label.notReviewRentFixed"), 8, "notReviewRentFixed") {
-          @p8.notReviewRentFixed.map(rentType => messages(s"notReviewRentFixedTypes.$rentType"))
+            @p8.notReviewRentFixed.map(rentType => messages(s"notReviewRentFixedTypes.$rentType"))
         }
-      }
+    }
 
-      @summaryBlock(messages("label.rentSetByType"), 8, "rentSetByType") {
+    @summaryBlock(messages("label.rentSetByType"), 8, "rentSetByType") {
         @messages(s"rentSetByTypes.${p8.rentSetByType}")
-      }
-    </dl>
+    }
+</dl>

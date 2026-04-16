@@ -25,246 +25,236 @@
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
-        govukDateInput:GovukDateInput,
+        govukDateInput: GovukDateInput,
         formWithCSRF: FormWithCSRF,
         formHelp: includes.formHelp
 )
 
-
 @(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
-@agreementType = @{summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")}
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
+@agreementType = @{
+    summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")
+}
 
 @layout(
-  pageTitle = messages("section7.heading"),
-  backLinkUrl = dataCapturePages.routes.PageController.showPage(6).url,
-  summary = summary,
-  theForm = theForm,
-  fullWidth = true
-){
+    pageTitle = messages("section7.heading"),
+    backLinkUrl = dataCapturePages.routes.PageController.showPage(6).url,
+    summary = summary,
+    theForm = theForm,
+    fullWidth = true
+) {
 
-  @formWithCSRF(
-    action = dataCapturePages.routes.PageController.savePage(7),
-    args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
-  ) {
+    @formWithCSRF(
+        action = dataCapturePages.routes.PageController.savePage(7),
+        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+    ) {
 
-    @theForm("agreementStartDate").value.map { agreementStartDate =>
-      <input type="hidden" name="agreementStartDate" value="@agreementStartDate"/>
-    }
-
-     <!-- Does your lease or agreement contain rent reviews? -->
-    @govukRadios(
-      Radios(
-        name = "leaseContainsRentReviews",
-        items = Seq(
-          "true" -> messages("label.yes.ydy"),
-          "false" -> messages("label.no.nac.ydy")
-        ).map(radioItem => {
-          RadioItem(
-            content = Text(radioItem._2),
-            checked = radioItem._1.equals(theForm("leaseContainsRentReviews").value.getOrElse("")),
-            value = Option(radioItem._1)
-          )
+        @theForm("agreementStartDate").value.map { agreementStartDate =>
+            <input type="hidden" name="agreementStartDate" value="@agreementStartDate"/>
         }
-        ),
-        hint = Hint(content = HtmlContent(messages("hint.leaseContainsRentReviews"))),
-        classes = "radio-button-that-show-hides govuk-radios--inline",
-        errorMessage = theForm.errors.asTextErrorMessageForField("leaseContainsRentReviews"),
-        fieldset = Option(
-          Fieldset(
-            legend = Option(
-              Legend(
-                content = Text(messages("label.leaseContainsRentReviews" + labelSuffix + "." + agreementType)),
-                classes = "govuk-!-font-weight-bold"
-              )
+
+            <!-- Does your lease or agreement contain rent reviews? -->
+        @govukRadios(
+            Radios(
+                name = "leaseContainsRentReviews",
+                items = Seq(
+                    "true" -> messages("label.yes.ydy"),
+                    "false" -> messages("label.no.nac.ydy")
+                ).map(radioItem =>
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("leaseContainsRentReviews").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                ),
+                hint = Hint(content = HtmlContent(messages("hint.leaseContainsRentReviews"))),
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                errorMessage = theForm.errors.asTextErrorMessageForField("leaseContainsRentReviews"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.leaseContainsRentReviews" + labelSuffix + "." + agreementType)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
             )
-          )
         )
-      )
-    )
 
 
-    <div class="leaseContainsRentReviewsx "
+        <div class="leaseContainsRentReviewsx "
         data-hidden-by="leaseContainsRentReviews"
-                  data-hides-this="true"
-                  data-show-when-value-equals="true">
+        data-hides-this="true"
+        data-show-when-value-equals="true">
 
-      @govukRadios(
-        Radios(
-          name = "rentReviewDetails.reviewIntervalType",
-          items = ReviewIntervalType.values.toIndexedSeq.map(intervalType =>
-            RadioItem(
-              content = Text(messages(s"reviewIntervalType.$intervalType")),
-              checked = theForm("rentReviewDetails.reviewIntervalType").value.contains(intervalType.toString),
-              value = Option(intervalType.toString)
-            )
-          ),
-          classes = "radio-button-that-show-hides",
-          errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.reviewIntervalType"),
-          fieldset = Option(
-            Fieldset(
-              legend = Option(
-                Legend(
-                  content = Text(messages("label.rentReviewDetails.reviewIntervalType")),
-                  classes = "govuk-!-font-weight-bold"
+            @govukRadios(
+                Radios(
+                    name = "rentReviewDetails.reviewIntervalType",
+                    items = ReviewIntervalType.values.toIndexedSeq.map(intervalType =>
+                        RadioItem(
+                            content = Text(messages(s"reviewIntervalType.$intervalType")),
+                            checked = theForm("rentReviewDetails.reviewIntervalType").value.contains(intervalType.toString),
+                            value = intervalType.toString
+                        )
+                    ),
+                    classes = "radio-button-that-show-hides",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.reviewIntervalType"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(messages("label.rentReviewDetails.reviewIntervalType")),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
                 )
-              )
             )
-          )
-        )
-      )
 
-      <div  data-hidden-by="rentReviewDetails.reviewIntervalType"
+            <div  data-hidden-by="rentReviewDetails.reviewIntervalType"
             data-hides-this="true"
             data-show-when-value-equals="other">
 
-        @includes.durationYearsMonths2(
-          form = theForm,
-          govukDate = govukDateInput,
-          field ="rentReviewDetails.reviewIntervalTypeSpecify"
-         )
-      </div>
-
-      @includes.dateFields(
-        form = theForm,
-        field = "rentReviewDetails.lastReviewDate",
-        govukDate = govukDateInput,
-        helpText = "<p>" + messages("hint.lastReviewDate") + "</p><p>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>"
-      )
-      @govukRadios(
-        Radios(
-          name = "rentReviewDetails.canRentReduced",
-          items = Seq(
-            "true" -> messages("label.yes.gall"),
-            "false" -> messages("label.no.na.all")
-          ).map(radioItem => {
-            RadioItem(
-              content = Text(radioItem._2),
-              checked = radioItem._1.equals(theForm("rentReviewDetails.canRentReduced").value.getOrElse("")),
-              value = Option(radioItem._1)
+            @includes.durationYearsMonths2(
+                form = theForm,
+                govukDate = govukDateInput,
+                field = "rentReviewDetails.reviewIntervalTypeSpecify"
             )
-          }
-          ),
-          classes = "govuk-radios--inline",
-          hint = Hint(content = HtmlContent(messages("hint.canRentReduced"))),
-          errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.canRentReduced"),
-          fieldset = Option(
-            Fieldset(
-              legend = Option(
-                Legend(
-                  content = Text(messages("label.rentReviewDetails.canRentReduced")),
-                  classes = "govuk-!-font-weight-bold"
-                )
-              )
-            )
-          )
-        )
-      )
-
-      @govukRadios(
-        Radios(
-          name = "rentReviewDetails.rentResultOfRentReview",
-          items = Seq(
-            "true" -> messages("label.yes.ydy"),
-            "false" -> messages("label.no.nac.ydy")
-          ).map(radioItem => {
-            RadioItem(
-              content = Text(radioItem._2),
-              checked = radioItem._1.equals(theForm("rentReviewDetails.rentResultOfRentReview").value.getOrElse("")),
-              value = Option(radioItem._1)
-            )
-          }
-          ),
-          hint = Hint(content = HtmlContent(messages("hint.rentOnThisPropertyTheResultOf"))),
-          classes = "radio-button-that-show-hides govuk-radios--inline",
-          errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentResultOfRentReview"),
-          fieldset = Option(
-            Fieldset(
-              legend = Option(
-                Legend(
-                  content = Text(messages("label.rentReviewDetails.rentResultOfRentReview")),
-                  classes = "govuk-!-font-weight-bold"
-                )
-              )
-            )
-          )
-        )
-      )
-
-          <div  data-hidden-by="rentReviewDetails.rentResultOfRentReview"
-                data-hides-this="true"
-                data-show-when-value-equals="true">
+            </div>
 
             @includes.dateFields(
-              form = theForm,
-              field = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview",
-              govukDate = govukDateInput
+                form = theForm,
+                field = "rentReviewDetails.lastReviewDate",
+                govukDate = govukDateInput,
+                helpText = "<p>" + messages("hint.lastReviewDate") + "</p><p>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>"
+            )
+            @govukRadios(
+                Radios(
+                    name = "rentReviewDetails.canRentReduced",
+                    items = Seq(
+                        "true" -> messages("label.yes.gall"),
+                        "false" -> messages("label.no.na.all")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("rentReviewDetails.canRentReduced").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    classes = "govuk-radios--inline",
+                    hint = Hint(content = HtmlContent(messages("hint.canRentReduced"))),
+                    errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.canRentReduced"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(messages("label.rentReviewDetails.canRentReduced")),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
+                )
             )
 
             @govukRadios(
-              Radios(
-                name = "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
-                items = Seq(
-                  "true" -> messages("label.yes.do"),
-                  "false" -> messages("label.no.naddo")
-                ).map(radioItem => {
-                  RadioItem(
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween").value.getOrElse("")),
-                    value = Option(radioItem._1)
-                  )
-                }
-                ),
-                classes = "radio-button-that-show-hides govuk-radios--inline",
-                errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween"),
-                fieldset = Option(
-                  Fieldset(
-                    legend = Option(
-                      Legend(
-                        content = Text(messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween" + labelSuffix)),
-                        classes = "govuk-!-font-weight-bold"
-                      )
-                    )
-                  )
+                Radios(
+                    name = "rentReviewDetails.rentResultOfRentReview",
+                    items = Seq(
+                        "true" -> messages("label.yes.ydy"),
+                        "false" -> messages("label.no.nac.ydy")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("rentReviewDetails.rentResultOfRentReview").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    hint = Hint(content = HtmlContent(messages("hint.rentOnThisPropertyTheResultOf"))),
+                    classes = "radio-button-that-show-hides govuk-radios--inline",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentResultOfRentReview"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(messages("label.rentReviewDetails.rentResultOfRentReview")),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
                 )
-              )
             )
 
-            @govukRadios(
-              Radios(
-                name = "rentReviewDetails.rentReviewResultsDetails.rentFixedBy",
-                items = RentFixedType.values.toIndexedSeq.map(rentFixedType =>
-                  RadioItem(
-                    content = Text(messages(s"rentFixedTypes.$rentFixedType")),
-                    checked = theForm("rentReviewDetails.rentReviewResultsDetails.rentFixedBy").value.contains(rentFixedType.toString),
-                    value = Option(rentFixedType.toString)
-                  )
-                ),
-                attributes = Map(
-                  "data-hidden-by" -> "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
-                  "data-show-when-value-equals" -> "false"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentReviewResultsDetails.rentFixedBy"),
-                fieldset = Option(
-                  Fieldset(
-                    legend = Option(
-                      Legend(
-                        content = Text(messages("label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy")),
-                        classes = "govuk-!-font-weight-bold"
-                      )
-                    )
-                  )
-                )
-              )
-            )
+            <div  data-hidden-by="rentReviewDetails.rentResultOfRentReview"
+            data-hides-this="true"
+            data-show-when-value-equals="true">
 
-          </div>
+                @includes.dateFields(
+                    form = theForm,
+                    field = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview",
+                    govukDate = govukDateInput
+                )
+
+                @govukRadios(
+                    Radios(
+                        name = "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
+                        items = Seq(
+                            "true" -> messages("label.yes.do"),
+                            "false" -> messages("label.no.naddo")
+                        ).map(radioItem => {
+                            RadioItem(
+                                content = Text(radioItem._2),
+                                checked = radioItem._1.equals(theForm("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween").value.getOrElse("")),
+                                value = radioItem._1
+                            )
+                        }
+                        ),
+                        classes = "radio-button-that-show-hides govuk-radios--inline",
+                        errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween"),
+                        fieldset =
+                            Fieldset(
+                                legend =
+                                    Legend(
+                                        content = Text(messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween" + labelSuffix)),
+                                        classes = "govuk-!-font-weight-bold"
+                                    )
+                            )
+                    )
+                )
+
+                @govukRadios(
+                    Radios(
+                        name = "rentReviewDetails.rentReviewResultsDetails.rentFixedBy",
+                        items = RentFixedType.values.toIndexedSeq.map(rentFixedType =>
+                            RadioItem(
+                                content = Text(messages(s"rentFixedTypes.$rentFixedType")),
+                                checked = theForm("rentReviewDetails.rentReviewResultsDetails.rentFixedBy").value.contains(rentFixedType.toString),
+                                value = rentFixedType.toString
+                            )
+                        ),
+                        attributes = Map(
+                            "data-hidden-by" -> "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
+                            "data-show-when-value-equals" -> "false"
+                        ),
+                        errorMessage = theForm.errors.asTextErrorMessageForField("rentReviewDetails.rentReviewResultsDetails.rentFixedBy"),
+                        fieldset =
+                            Fieldset(
+                                legend =
+                                    Legend(
+                                        content = Text(messages("label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy")),
+                                        classes = "govuk-!-font-weight-bold"
+                                    )
+                            )
+                    )
+                )
+
+            </div>
         </div>
 
         @includes.continueSaveForLaterButtons(govukButton)
 
     }
 
-        @formHelp()
+    @formHelp()
 }

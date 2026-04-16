@@ -14,15 +14,18 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
+@import helpers.summary.*
+@import models.serviceContracts.submissions.*
+@import util.*
+
 @import java.text.NumberFormat
-@import models.serviceContracts.submissions._
 
 @(p10: WhatRentIncludes, isAgent: Boolean, address: Option[String] = None)(implicit messages: Messages)
+
 <h2 class="govuk-heading-m">@messages("section10.heading")</h2>
 
 <dl class="govuk-summary-list">
-    @summaryBlock(messages(if(isAgent)  messages("label.livingAccommodation.agent") else messages("label.livingAccommodation")), 10, "livingAccommodation") {
+    @summaryBlock(messages(if(isAgent) messages("label.livingAccommodation.agent") else messages("label.livingAccommodation")), 10, "livingAccommodation") {
         @displayBoolean(p10.livingAccommodation, "2")
     }
 
@@ -55,9 +58,15 @@
     @if(p10.parking.rentIncludesParking) {
         @summaryBlock(messages("label.parking.rentIncludeParkingDetails"), 10, "parking.rentIncludeParkingDetails") {
             @p10.parking.rentIncludedParkingDetails.map { pd =>
-                @pd.openSpaces @if(pd.openSpaces > 1){@messages("label.openSpaces.summary.greaterthan1")}else{@messages("label.openSpaces.summary")}<br />
-                @pd.coveredSpaces @if(pd.coveredSpaces > 1){@messages("label.coveredSpaces.summary.greaterthan1")}else{@messages("label.coveredSpaces.summary")}<br />
-                @pd.garages @if(pd.garages > 1){@messages("label.garages.summary.greaterthan1")}else{@messages("label.garages.summary")}
+                @pd.openSpaces @if(pd.openSpaces > 1) {@messages("label.openSpaces.summary.greaterthan1")} else {
+                @messages("label.openSpaces.summary")
+            } <br />
+                @pd.coveredSpaces @if(pd.coveredSpaces > 1) {@messages("label.coveredSpaces.summary.greaterthan1")} else {
+                @messages("label.coveredSpaces.summary")
+            } <br />
+                @pd.garages @if(pd.garages > 1) {@messages("label.garages.summary.greaterthan1")} else {
+                @messages("label.garages.summary")
+            }
             }
         }
     }
@@ -70,22 +79,28 @@
         @summaryBlock(messages(if(isAgent) messages("label.parking.rentSeparateParkingDetails.agent") else messages("label.parking.rentSeparateParkingDetails")), 10, "parking.rentSeparateParkingDetails") {
             @p10.parking.rentSeparateParkingDetails.map { pd =>
 
-                @pd.openSpaces @if(pd.openSpaces > 1){@messages("label.openSpaces.summary.greaterthan1")}else{@messages("label.openSpaces.summary")}<br />
-                @pd.coveredSpaces @if(pd.coveredSpaces > 1){@messages("label.coveredSpaces.summary.greaterthan1")}else{@messages("label.coveredSpaces.summary")}<br />
-                @pd.garages @if(pd.garages > 1){@messages("label.garages.summary.greaterthan1")}else{@messages("label.garages.summary")}
+                @pd.openSpaces @if(pd.openSpaces > 1) {@messages("label.openSpaces.summary.greaterthan1")} else {
+                @messages("label.openSpaces.summary")
+            } <br />
+                @pd.coveredSpaces @if(pd.coveredSpaces > 1) {@messages("label.coveredSpaces.summary.greaterthan1")} else {
+                @messages("label.coveredSpaces.summary")
+            } <br />
+                @pd.garages @if(pd.garages > 1) {@messages("label.garages.summary.greaterthan1")} else {
+                @messages("label.garages.summary")
+            }
 
             }
         }
 
         @summaryBlock(messages("parking.annualSeparateParking.label"), 10, "parking_annualSeparateParking") {
             @p10.parking.annualSeparateParkingAmount.map { sp =>
-                £@NumberFormat.getNumberInstance().format(sp)
+            £@NumberFormat.getNumberInstance().format(sp)
             }
         }
 
         @summaryBlock(messages("label.parking.annualSeparateParkingDate"), 10, "parking_annualSeparateParkingDate_year") {
             @p10.parking.annualSeparateParkingFixedDate.map { as =>
-                @displayRoughDate(as)
+                @as.display
             }
         }
 

@@ -14,19 +14,20 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.serviceContracts.submissions.*
 
 @(p14: OtherFactors, isAgent: Boolean)(implicit messages: Messages)
+
 <h2 class="govuk-heading-m">@messages("section14.heading")</h2>
 <dl class="govuk-summary-list">
-	@summaryBlock(messages(if(isAgent) messages("label.anyOtherFactors.agent") else messages("label.anyOtherFactors")), 14, "anyOtherFactors") {
-	    @displayBoolean(p14.anyOtherFactors, "3")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.anyOtherFactors.agent") else messages("label.anyOtherFactors")), 14, "anyOtherFactors") {
+        @displayBoolean(p14.anyOtherFactors, "3")
+    }
 
-	@if(p14.anyOtherFactors) {
-	    @summaryBlock(messages("label.anyOtherFactorsDetails"), 14, "anyOtherFactorsDetails") {
-	        @p14.anyOtherFactorsDetails
-	    }
-	}
+    @if(p14.anyOtherFactors) {
+        @summaryBlock(messages("label.anyOtherFactorsDetails"), 14, "anyOtherFactorsDetails") {
+            @p14.anyOtherFactorsDetails
+        }
+    }
 </dl>

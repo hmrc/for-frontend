@@ -32,7 +32,6 @@
         formWithCSRF: FormWithCSRF
 )
 
-
 @(theForm: Form[Feedback])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
@@ -44,11 +43,11 @@
 
     @formWithCSRF(
         action = routes.FeedbackController.handleFeedbackSubmit.copy(url = request.uri),
-        args = Symbol("novalidate") -> "novalidate" ) {
+        args = Symbol("novalidate") -> "novalidate") {
 
         <input type="hidden" name="feedback-name" value="Anonymous user"/>
         <input type="hidden" name="feedback-email" value="anonymous@@anonymous.com"/>
-        <input type="hidden" name="referrer" value="@request.host@request.uri"/>
+        <input type="hidden" name="referrer" value="@request.host @request.uri"/>
         <input type="hidden" name="service"  value="RALD">
         <input type="hidden" name="canOmitComments"  value="true">
         <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.feedbackPage.name)"/>
@@ -56,7 +55,7 @@
         @govukRadios(
             Radios(
                 name = "feedback-rating",
-                idPrefix="feedback-rating",
+                idPrefix = "feedback-rating",
                 items = Seq(
                     "5" -> messages("feedback.rating.5"),
                     "4" -> messages("feedback.rating.4"),
@@ -66,21 +65,19 @@
                 ).map(radioItem => RadioItem(
                     content = Text(radioItem._2),
                     checked = radioItem._1.equals(theForm("feedback-rating").value.getOrElse("")),
-                    value = Option(radioItem._1)
+                    value = radioItem._1
                 )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("feedback-rating"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("feedback.satisfaction.label")),
                                 isPageHeading = true,
                                 classes = "govuk-fieldset__legend--s"
                             )
-                        )
                     )
-                )
             )
         )
 

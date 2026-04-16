@@ -30,7 +30,6 @@
         formHelp: includes.formHelp
 )
 
-
 @(theForm: Form[SaveForLaterLogin])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
@@ -44,7 +43,7 @@
         action = routes.SaveForLaterController.resume,
         args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
     ) {
-       @helper.CSRF.formField
+        @helper.CSRF.formField
 
         @govukInput(
             Input(
@@ -56,7 +55,7 @@
                 label = Label(
                     content = Text(messages("saveForLater.password"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("password")
+                errorMessage = theForm.errors.asTextErrorMessageForField("password")
             )
         )
         @govukButton(
@@ -65,7 +64,7 @@
                     "id" -> "continue",
                     "novalidate" -> "novalidate"
                 ),
-                name = Some("submit"),
+                name = "submit",
                 content = Text(messages("label.continue"))
             )
         )
@@ -74,7 +73,6 @@
     <p class="govuk-body">
         <a href="@routes.ApplicationController.startAgain" class="govuk-link" >@messages("saveForm.start")</a>
     </p>
-
 
     @formHelp()
 }

@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions.*
-@import models.pages.Summary
+@import controllers.dataCapturePages.ForDataCapturePage.variantAttr
 @import helpers.*
+@import models.pages.Summary
+@import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.vo.service.model.input.CurrencyField
 @import util.DateUtil
-@import controllers.dataCapturePages.ForDataCapturePage.variantAttr
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -36,352 +36,345 @@
         formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
-
-@variant = @{ request.attrs.get(variantAttr).getOrElse(0) }
+@variant = @{
+    request.attrs.get(variantAttr).getOrElse(0)
+}
 
 @agreementIsSteppedLabel = @{
-  variant match {
-    case 2 => messages("label.writtenAgreement.agreementIsStepped.variant2")
-    case _ => messages("label.writtenAgreement.agreementIsStepped" + labelSuffix)
-  }
+    variant match {
+        case 2 => messages("label.writtenAgreement.agreementIsStepped.variant2")
+        case _ => messages("label.writtenAgreement.agreementIsStepped" + labelSuffix)
+    }
 }
 
 @steppedRentContentV1 = {
-  <p class="govuk-body">@messages("details.answer.steppedRent.variant1.p1")</p>
-  <p class="govuk-body">@messages("details.answer.steppedRent.variant1.p2")</p>
+    <p class="govuk-body">@messages("details.answer.steppedRent.variant1.p1")</p>
+    <p class="govuk-body">@messages("details.answer.steppedRent.variant1.p2")</p>
 }
 
 @steppedRentHint = @{
-  variant match {
-    case 1 =>
-      HtmlContent(govukDetails(Details(
-        summary = Text(messages("details.answer.steppedRent.variant1.summary")),
-        content = HtmlContent(steppedRentContentV1)
-      )))
-    case 2 => Text(messages("details.answer.steppedRent.variant2"))
-    case 3 => Text(messages("details.answer.steppedRent.variant3"))
-    case _ => Text(messages("details.answer.steppedRent" + labelSuffix))
-  }
+    variant match {
+        case 1 =>
+            HtmlContent(govukDetails(Details(
+                summary = Text(messages("details.answer.steppedRent.variant1.summary")),
+                content = HtmlContent(steppedRentContentV1)
+            )))
+        case 2 => Text(messages("details.answer.steppedRent.variant2"))
+        case 3 => Text(messages("details.answer.steppedRent.variant3"))
+        case _ => Text(messages("details.answer.steppedRent" + labelSuffix))
+    }
 }
 
 @layout(
-  pageTitle = messages("section6.heading"),
-  backLinkUrl = dataCapturePages.routes.PageController.showPage(5).url,
-  summary = summary,
-  theForm = theForm
-){
+    pageTitle = messages("section6.heading"),
+    backLinkUrl = dataCapturePages.routes.PageController.showPage(5).url,
+    summary = summary,
+    theForm = theForm
+) {
 
-  <script>
-          var steppedRentHeadings = [
-            '@messages(s"heading.steppedRent1")',
-            '@messages(s"heading.steppedRent2")',
-            '@messages(s"heading.steppedRent3")',
-            '@messages(s"heading.steppedRent4")',
-            '@messages(s"heading.steppedRent5")',
-            '@messages(s"heading.steppedRent6")',
-            '@messages(s"heading.steppedRent7")'
-          ];
-  </script>
+    <script>
+            var steppedRentHeadings = [
+                '@messages(s"heading.steppedRent1")',
+                '@messages(s"heading.steppedRent2")',
+                '@messages(s"heading.steppedRent3")',
+                '@messages(s"heading.steppedRent4")',
+                '@messages(s"heading.steppedRent5")',
+                '@messages(s"heading.steppedRent6")',
+                '@messages(s"heading.steppedRent7")'
+            ];
+    </script>
 
-  @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(6), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(6), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
 
-    <input type="hidden" name="variant" value="@variant" />
+        <input type="hidden" name="variant" value="@variant" />
 
-    @theForm("rentReviewDate").value.map { rentReviewDate =>
-      <input type="hidden" name="rentReviewDate" value="@rentReviewDate"/>
-    }
-    @theForm("lastReviewDate").value.map { lastReviewDate =>
-      <input type="hidden" name="lastReviewDate" value="@lastReviewDate"/>
-    }
+        @theForm("rentReviewDate").value.map { rentReviewDate =>
+            <input type="hidden" name="rentReviewDate" value="@rentReviewDate"/>
+        }
+        @theForm("lastReviewDate").value.map { lastReviewDate =>
+            <input type="hidden" name="lastReviewDate" value="@lastReviewDate"/>
+        }
 
-    <!-- What type of lease or agreement do you have? -->
-    @govukRadios(
-      Radios(
-        name = "leaseAgreementType",
-        items = LeaseAgreementType.values.toIndexedSeq.map(leaseAgreement =>
-          RadioItem(
-            content = Text(messages(s"leaseAgreementTypes.$leaseAgreement")),
-            checked = theForm("leaseAgreementType").value.contains(leaseAgreement.toString),
-            value = Option(leaseAgreement.toString)
-          )
-        ),
-        hint = Hint(content = HtmlContent(messages("hint.leaseAgreementType"))),
-        classes = "radio-button-that-show-hides",
-        errorMessage = theForm.errors.asTextErrorMessageForField("leaseAgreementType"),
-        fieldset = Option(
-          Fieldset(
-            legend = Option(
-              Legend(
-                content = Text(messages("label.leaseAgreementType" + labelSuffix)),
-                classes = "govuk-!-font-weight-bold"
-              )
+            <!-- What type of lease or agreement do you have? -->
+        @govukRadios(
+            Radios(
+                name = "leaseAgreementType",
+                items = LeaseAgreementType.values.toIndexedSeq.map(leaseAgreement =>
+                    RadioItem(
+                        content = Text(messages(s"leaseAgreementTypes.$leaseAgreement")),
+                        checked = theForm("leaseAgreementType").value.contains(leaseAgreement.toString),
+                        value = leaseAgreement.toString
+                    )
+                ),
+                hint = Hint(content = HtmlContent(messages("hint.leaseAgreementType"))),
+                classes = "radio-button-that-show-hides",
+                errorMessage = theForm.errors.asTextErrorMessageForField("leaseAgreementType"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.leaseAgreementType" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
             )
-          )
         )
-      )
-    )
 
-    <div class="leaseAgreementVerbal-x"
-          data-hidden-by="leaseAgreementType"
-          data-hides-this="true"
-          data-show-when-value-equals="verbal">
+        <div class="leaseAgreementVerbal-x"
+        data-hidden-by="leaseAgreementType"
+        data-hides-this="true"
+        data-show-when-value-equals="verbal">
 
-      @includes.dateFields(
-        form = theForm,
-        field = "verbalAgreement.startDate",
-        labelSuffix = labelSuffix,
-        helpText = messages("help.optional.date.month.year", DateUtil.exampleMonthYear(1)),
-        govukDate = govukDateInput
-      )
-
-      @govukRadios(
-        Radios(
-          name = "verbalAgreement.rentOpenEnded",
-          items = Seq(
-            "true" -> messages("label.yes.ydy"),
-            "false" -> messages("label.no.nac.ydy")
-          ).map(radioItem => {
-            RadioItem(
-              content = Text(radioItem._2),
-              checked = radioItem._1.equals(theForm("verbalAgreement.rentOpenEnded").value.getOrElse("")),
-              value = Option(radioItem._1)
+            @includes.dateFields(
+                form = theForm,
+                field = "verbalAgreement.startDate",
+                labelSuffix = labelSuffix,
+                helpText = messages("help.optional.date.month.year", DateUtil.exampleMonthYear(1)),
+                govukDate = govukDateInput
             )
-          }
-          ),
-          hint = Hint(content = HtmlContent(messages("optional"))),
-          classes = "radio-button-that-show-hides govuk-radios--inline",
-          errorMessage = theForm.errors.asTextErrorMessageForField("verbalAgreement.rentOpenEnded"),
-          fieldset = Option(
-            Fieldset(
-              legend = Option(
-                Legend(
-                  content = Text(messages("label.verbalAgreement.rentOpenEnded" + labelSuffix)),
-                  classes = "govuk-!-font-weight-bold"
+
+            @govukRadios(
+                Radios(
+                    name = "verbalAgreement.rentOpenEnded",
+                    items = Seq(
+                        "true" -> messages("label.yes.ydy"),
+                        "false" -> messages("label.no.nac.ydy")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("verbalAgreement.rentOpenEnded").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    hint = Hint(content = HtmlContent(messages("optional"))),
+                    classes = "radio-button-that-show-hides govuk-radios--inline",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("verbalAgreement.rentOpenEnded"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(messages("label.verbalAgreement.rentOpenEnded" + labelSuffix)),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
                 )
-              )
             )
-          )
-        )
-      )
 
 
-        <div data-hidden-by="verbalAgreement.rentOpenEnded"
-           data-hides-this="true"
-           data-show-when-value-equals="false">
+            <div data-hidden-by="verbalAgreement.rentOpenEnded"
+            data-hides-this="true"
+            data-show-when-value-equals="false">
 
             @includes.durationYearsMonths2(
-              form = theForm,
-              field = "verbalAgreement.leaseLength",
-              govukDate = govukDateInput,
-              labelSuffix = labelSuffix
-            )
-        </div>
-
-      </div>
-
-    <div class="leaseAgreementWritten-x"
-          data-hidden-by="leaseAgreementType"
-          data-hides-this="true"
-          data-show-when-value-equals="licenceOther|leaseTenancy">
-
-        @includes.dateFields(
-          form = theForm,
-          field = "writtenAgreement.startDate",
-          govukDate = govukDateInput,
-          labelSuffix = labelSuffix
-        )
-
-        @govukRadios(
-          Radios(
-            name = "writtenAgreement.rentOpenEnded",
-            items = Seq(
-              "true" -> messages("label.yes.ydy"),
-              "false" -> messages("label.no.nac.ydy")
-            ).map(radioItem => {
-              RadioItem(
-                content = Text(radioItem._2),
-                checked = radioItem._1.equals(theForm("writtenAgreement.rentOpenEnded").value.getOrElse("")),
-                value = Option(radioItem._1)
-              )
-            }
-            ),
-            hint = Hint(content = HtmlContent(messages("label.writtenAgreement.rentOpenEnded.help"))),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.rentOpenEnded"),
-            fieldset = Option(
-              Fieldset(
-                legend = Option(
-                  Legend(
-                    content = HtmlContent(messages("label.writtenAgreement.rentOpenEnded" + labelSuffix)),
-                    classes = "govuk-!-font-weight-bold"
-                  )
-                )
-              )
-            )
-          )
-        )
-
-        <div
-          data-hidden-by="writtenAgreement.rentOpenEnded"
-          data-hides-this="true"
-          data-show-when-value-equals="false">
-              @includes.durationYearsMonths2(
-                form=theForm,
-                field ="writtenAgreement.leaseLength",
+                form = theForm,
+                field = "verbalAgreement.leaseLength",
                 govukDate = govukDateInput,
                 labelSuffix = labelSuffix
-              )
+            )
+            </div>
 
         </div>
 
-          @govukRadios(
-            Radios(
-              name = "writtenAgreement.leaseAgreementHasBreakClause",
-              items = Seq(
-                "true" -> messages("label.yes.ydy"),
-                "false" -> messages("label.no.nac.ydy")
-              ).map(radioItem => {
-                RadioItem(
-                  content = Text(radioItem._2),
-                  checked = radioItem._1.equals(theForm("writtenAgreement.leaseAgreementHasBreakClause").value.getOrElse("")),
-                  value = Option(radioItem._1)
+        <div class="leaseAgreementWritten-x"
+        data-hidden-by="leaseAgreementType"
+        data-hides-this="true"
+        data-show-when-value-equals="licenceOther|leaseTenancy">
+
+            @includes.dateFields(
+                form = theForm,
+                field = "writtenAgreement.startDate",
+                govukDate = govukDateInput,
+                labelSuffix = labelSuffix
+            )
+
+            @govukRadios(
+                Radios(
+                    name = "writtenAgreement.rentOpenEnded",
+                    items = Seq(
+                        "true" -> messages("label.yes.ydy"),
+                        "false" -> messages("label.no.nac.ydy")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("writtenAgreement.rentOpenEnded").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    hint = Hint(content = HtmlContent(messages("label.writtenAgreement.rentOpenEnded.help"))),
+                    classes = "radio-button-that-show-hides govuk-radios--inline",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.rentOpenEnded"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = HtmlContent(messages("label.writtenAgreement.rentOpenEnded" + labelSuffix)),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
                 )
-              }
-              ),
-              hint = Hint(content = HtmlContent(messages("details.answer.isBreakClause" + labelSuffix))),
-              classes = "radio-button-that-show-hides govuk-radios--inline",
-              errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.leaseAgreementHasBreakClause"),
-              fieldset = Option(
-                Fieldset(
-                  legend = Option(
-                    Legend(
-                      content = Text(messages("label.writtenAgreement.leaseAgreementHasBreakClause")),
-                      classes = "govuk-!-font-weight-bold"
+            )
+
+            <div
+            data-hidden-by="writtenAgreement.rentOpenEnded"
+            data-hides-this="true"
+            data-show-when-value-equals="false">
+            @includes.durationYearsMonths2(
+                form = theForm,
+                field = "writtenAgreement.leaseLength",
+                govukDate = govukDateInput,
+                labelSuffix = labelSuffix
+            )
+
+            </div>
+
+            @govukRadios(
+                Radios(
+                    name = "writtenAgreement.leaseAgreementHasBreakClause",
+                    items = Seq(
+                        "true" -> messages("label.yes.ydy"),
+                        "false" -> messages("label.no.nac.ydy")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("writtenAgreement.leaseAgreementHasBreakClause").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    hint = Hint(content = HtmlContent(messages("details.answer.isBreakClause" + labelSuffix))),
+                    classes = "radio-button-that-show-hides govuk-radios--inline",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.leaseAgreementHasBreakClause"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(messages("label.writtenAgreement.leaseAgreementHasBreakClause")),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
+                )
+            )
+
+            <div
+            data-hidden-by="writtenAgreement.leaseAgreementHasBreakClause"
+            data-hides-this="true"
+            data-show-when-value-equals="true">
+
+            @govukCharacterCount(
+                CharacterCount(
+                    id = "writtenAgreement.breakClauseDetails",
+                    name = "writtenAgreement.breakClauseDetails",
+                    value = theForm("writtenAgreement.breakClauseDetails").value,
+                    rows = 5,
+                    maxLength = 124,
+                    hint = Hint(content = Text(messages("label.writtenAgreement.breakClauseDetails.hint"))),
+                    errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.breakClauseDetails"),
+                    label = Label(
+                        classes = "govuk-!-font-weight-bold",
+                        content = Text(messages("label.writtenAgreement.breakClauseDetails"))
                     )
-                  )
                 )
-              )
             )
-          )
 
-        <div
-              data-hidden-by="writtenAgreement.leaseAgreementHasBreakClause"
-              data-hides-this="true"
-              data-show-when-value-equals="true">
+            </div>
 
-          @govukCharacterCount(
-            CharacterCount(
-              id = "writtenAgreement.breakClauseDetails",
-              name = "writtenAgreement.breakClauseDetails",
-              value = theForm("writtenAgreement.breakClauseDetails").value,
-              rows = 5,
-              maxLength = 124,
-              hint = Hint(content = Text(messages("label.writtenAgreement.breakClauseDetails.hint"))),
-              errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.breakClauseDetails"),
-              label = Label(
-                classes = "govuk-!-font-weight-bold",
-                content = Text(messages("label.writtenAgreement.breakClauseDetails"))
-              )
-            )
-          )
-
-        </div>
-
-          @govukRadios(
-          Radios(
-            name = "writtenAgreement.agreementIsStepped",
-            items = Seq(
-              "true" -> messages("label.yes.ydy"),
-              "false" -> messages("label.no.nac.ydy")
-            ).map(radioItem => {
-              RadioItem(
-                content = Text(radioItem._2),
-                checked = radioItem._1.equals(theForm("writtenAgreement.agreementIsStepped").value.getOrElse("")),
-                value = Option(radioItem._1)
-              )
-            }
-            ),
-            hint = Hint(content = steppedRentHint),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.agreementIsStepped"),
-            fieldset = Option(
-              Fieldset(
-                legend = Option(
-                  Legend(
-                    content = Text(agreementIsSteppedLabel),
-                    classes = "govuk-!-font-weight-bold"
-                  )
+            @govukRadios(
+                Radios(
+                    name = "writtenAgreement.agreementIsStepped",
+                    items = Seq(
+                        "true" -> messages("label.yes.ydy"),
+                        "false" -> messages("label.no.nac.ydy")
+                    ).map(radioItem => {
+                        RadioItem(
+                            content = Text(radioItem._2),
+                            checked = radioItem._1.equals(theForm("writtenAgreement.agreementIsStepped").value.getOrElse("")),
+                            value = radioItem._1
+                        )
+                    }
+                    ),
+                    hint = Hint(content = steppedRentHint),
+                    classes = "radio-button-that-show-hides govuk-radios--inline",
+                    errorMessage = theForm.errors.asTextErrorMessageForField("writtenAgreement.agreementIsStepped"),
+                    fieldset =
+                        Fieldset(
+                            legend =
+                                Legend(
+                                    content = Text(agreementIsSteppedLabel),
+                                    classes = "govuk-!-font-weight-bold"
+                                )
+                        )
                 )
-              )
             )
-          )
-        )
 
 
-          <fieldset class="form-group writtenAgreement.agreementIsSteppedx"
-                  data-hidden-by="writtenAgreement.agreementIsStepped"
-                  data-hides-this="true"
-                  data-show-when-value-equals="true"
-                  data-min-size="2"
-                  data-limit="7">
+            <fieldset class="form-group writtenAgreement.agreementIsSteppedx"
+            data-hidden-by="writtenAgreement.agreementIsStepped"
+            data-hides-this="true"
+            data-show-when-value-equals="true"
+            data-min-size="2"
+            data-limit="7">
 
 
-              <legend class="govuk-heading-m govuk-!-font-weight-bold" style="margin-bottom: 5px;">@messages("label.writtenAgreement.steppedDetailsYear")</legend>
-              <div class="govuk-hint">@messages("hint.writtenAgreement.steppedDetailsYear" + labelSuffix)</div>
+                <legend class="govuk-heading-m govuk-!-font-weight-bold" style="margin-bottom: 5px;">@messages("label.writtenAgreement.steppedDetailsYear")</legend>
+                <div class="govuk-hint">@messages("hint.writtenAgreement.steppedDetailsYear" + labelSuffix)</div>
 
-            <hr/>
+                <hr/>
 
-              @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
+                @template.repeatWithIndex(theForm("writtenAgreement.steppedDetails"), max = 7) { (steppedDetail, idx) =>
 
-                @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {
+                    @multiFieldErrorWrapper(fields = Seq(steppedDetail("year"), steppedDetail("amount")), id = s"writtenAgreement.steppedDetails_$idx", false, classes = "multi-fields-group") {
 
-                <h3 class="govuk-heading-m section-heading stepped-rent">@messages(s"heading.steppedRent${idx + 1}")</h3>
+                        <h3 class="govuk-heading-m section-heading stepped-rent">@messages(s"heading.steppedRent${idx + 1}")</h3>
 
-                  <input type="hidden" name="writtenAgreement.steppedDetails[@idx].indexSizeHolder" value="x">
+                        <input type="hidden" name="writtenAgreement.steppedDetails[@idx].indexSizeHolder" value="x">
 
-                  @includes.dateFields(
-                    form= theForm,
-                    showDays = true,
-                    field = s"writtenAgreement.steppedDetails[$idx].stepFrom",
-                    govukDate = govukDateInput,
-                    label = messages("label.steppedDetails.stepFrom"),
-                    helpText = messages("help.steprent.datefrom", DateUtil.exampleDayMonthYear(1))
-                  )
-                  @includes.dateFields(
-                    form= theForm,
-                    showDays = true,
-                    field = s"writtenAgreement.steppedDetails[$idx].stepTo",
-                    govukDate = govukDateInput,
-                    label = messages("label.steppedDetails.stepTo"),
-                    helpText = messages("help.steprent.dateto", DateUtil.exampleDayMonthYear(0))
-                  )
+                        @includes.dateFields(
+                            form = theForm,
+                            showDays = true,
+                            field = s"writtenAgreement.steppedDetails[$idx].stepFrom",
+                            govukDate = govukDateInput,
+                            label = messages("label.steppedDetails.stepFrom"),
+                            helpText = messages("help.steprent.datefrom", DateUtil.exampleDayMonthYear(1))
+                        )
+                        @includes.dateFields(
+                            form = theForm,
+                            showDays = true,
+                            field = s"writtenAgreement.steppedDetails[$idx].stepTo",
+                            govukDate = govukDateInput,
+                            label = messages("label.steppedDetails.stepTo"),
+                            helpText = messages("help.steprent.dateto", DateUtil.exampleDayMonthYear(0))
+                        )
 
-                  @govukInput(
-                    CurrencyField.input(theForm, "", s"writtenAgreement.steppedDetails[$idx].amount", inputWidth = 10)
-                  )
+                        @govukInput(
+                            CurrencyField.input(theForm, "", s"writtenAgreement.steppedDetails[$idx].amount", inputWidth = 10)
+                        )
 
-                  <div class="clearfix"></div>
+                        <div class="clearfix"></div>
 
-                  <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display:none">@messages("label.add.remove")</a>
+                        <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display: none">@messages("label.add.remove")</a>
+
+                    }
 
                 }
 
-              }
-
-            <p class="govuk-body">
-              <a href="#" class="add-multi-fields hide-if-no-js govuk-link govuk-body" >@messages("label.add.steppedRent")</a>
-            </p>
-          </fieldset>
-      </div>
+                <p class="govuk-body">
+                    <a href="#" class="add-multi-fields hide-if-no-js govuk-link govuk-body" >@messages("label.add.steppedRent")</a>
+                </p>
+            </fieldset>
+        </div>
 
 
         @includes.continueSaveForLaterButtons(govukButton)
 
     }
 
-        @formHelp()
+    @formHelp()
 }

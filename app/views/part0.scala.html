@@ -15,25 +15,26 @@
  *@
 
 @import models.pages.Summary
+@import models.serviceContracts.submissions.AddressConnectionType
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import models.serviceContracts.submissions.AddressConnectionType
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Text, Legend}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import views.html.components.PrimaryLayout
 
 @this(
-    layout: PrimaryLayout,
-    govukButton: GovukButton,
-    govukRadios: GovukRadios,
-    formWithCSRF: FormWithCSRF,
-    formHelp: includes.formHelp
+        layout: PrimaryLayout,
+        govukButton: GovukButton,
+        govukRadios: GovukRadios,
+        formWithCSRF: FormWithCSRF,
+        formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@heading = @{messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))}
+@heading = @{
+    messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))
+}
 
 @layout(
     pageTitle = heading,
@@ -49,7 +50,7 @@
         @govukRadios(
             Radios(
                 name = "isRelated",
-                idPrefix = Option("isRelated"),
+                idPrefix = "isRelated",
                 items = Seq(
                     AddressConnectionType.yes.toString -> messages("label.yes.oes"),
                     AddressConnectionType.`yes-change-address`.toString -> Messages("label.yes.change.address"),
@@ -57,20 +58,18 @@
                 ).map(i => RadioItem(
                     content = Text(i._2),
                     checked = theForm("isRelated").value.contains(i._1),
-                    value   = Option(i._1)
+                    value = i._1
                 )),
                 errorMessage = theForm.errors.asTextErrorMessageForField("isRelated"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(heading),
                                 isPageHeading = true,
                                 classes = "govuk-fieldset__legend--l"
                             )
-                        )
                     )
-                )
             )
         )
         @includes.continueButton(govukButton)

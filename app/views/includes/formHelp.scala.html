@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
+@import play.api.Configuration
+@import play.api.i18n.Messages
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-@import play.api.i18n.Messages
-@import play.api.Configuration
 
 @this(servicesConfig: ServicesConfig, contactFrontendConfig: ContactFrontendConfig, configuration: Configuration)
-
 
 @()(implicit request: RequestHeader, messages: Messages)
 
@@ -29,8 +28,8 @@
     val protocol = servicesConfig.getConfString(s"contact-frontend.protocol", "http")
 
     val platformFrontendHost = configuration
-            .getOptional[String]("platform.frontend.host")
-            .getOrElse(s"$protocol://${request.host}")
+    .getOptional[String]("platform.frontend.host")
+    .getOrElse(s"$protocol://${request.host}")
 
     val referrerUrl = if(request.uri.contains("http")) {
         request.uri
@@ -38,7 +37,7 @@
         s"$platformFrontendHost${request.uri}"
     }
 
-    val contactPublicBase = Option(servicesConfig.baseUrl("contact-frontend")).filter(_.contains("localhost")).getOrElse("")
+    val contactPublicBase = servicesConfig.baseUrl("contact-frontend").filter(_.contains("localhost")).getOrElse("")
 
     s"$contactPublicBase/contact/report-technical-problem?service=$serviceId&referrerUrl=$referrerUrl"
 }

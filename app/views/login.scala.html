@@ -28,7 +28,6 @@
         formWithCSRF: FormWithCSRF
 )
 
-
 @(theForm: Form[LoginDetails])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
@@ -50,7 +49,7 @@
                 label = Label(
                     content = Text(messages("label.referenceNumber"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("referenceNumber")
+                errorMessage = theForm.errors.asTextErrorMessageForField("referenceNumber")
             )
         )
 
@@ -63,7 +62,7 @@
                 label = Label(
                     content = Text(messages("label.postcode"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("postcode")
+                errorMessage = theForm.errors.asTextErrorMessageForField("postcode")
             )
         )
 

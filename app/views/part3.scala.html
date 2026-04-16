@@ -25,30 +25,30 @@
 @import views.html.components.PrimaryLayout
 
 @this(
-    layout: PrimaryLayout,
-    govukRadios: GovukRadios,
-    govukButton: GovukButton,
-    govukInput: GovukInput,
-    govukDateInput: GovukDateInput,
-    govukCharacterCount: GovukCharacterCount,
-    formWithCSRF: FormWithCSRF,
-    formHelp: includes.formHelp
+        layout: PrimaryLayout,
+        govukRadios: GovukRadios,
+        govukButton: GovukButton,
+        govukInput: GovukInput,
+        govukDateInput: GovukDateInput,
+        govukCharacterCount: GovukCharacterCount,
+        formWithCSRF: FormWithCSRF,
+        formHelp: includes.formHelp
 )
 
+@(theForm: Form[PageThree], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[PageThree], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(2).url,
     pageTitle = messages("section3.heading"),
     summary = summary,
     theForm = theForm
-){
+) {
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(3), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
-
         @* What is the property used for? *@
         @govukInput(
             Input(
@@ -57,39 +57,36 @@
                 value = theForm("propertyType").value,
                 classes = "govuk-input--width-20",
                 label = Label(
-                    content = Text(messages("label.propertyType") ),
+                    content = Text(messages("label.propertyType")),
                     classes = "govuk-!-font-weight-bold"
                 ),
                 hint = Hint(content = Text(messages("propertyTypes.help"))),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("propertyType")
+                errorMessage = theForm.errors.asTextErrorMessageForField("propertyType")
             )
         )
-
-        @*  Who occupies the property?  *@
+        @* Who occupies the property? *@
         @govukRadios(
             Radios(
                 name = "occupierType",
-                idPrefix = Option("occupierType"),
+                idPrefix = "occupierType",
                 classes = "radio-button-that-show-hides",
                 items = OccupierType.values.toIndexedSeq.map(occupierType =>
-                    RadioItem (
+                    RadioItem(
                         content = Text(messages(s"occupierType.$occupierType")),
                         checked = theForm("occupierType").value.contains(occupierType.toString),
-                        value = Option(occupierType.toString)
+                        value = occupierType.toString
                     )
                 ),
                 hint = Hint(content = Text(messages("occupierType.help"))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("occupierType"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.occupierTypes")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -104,10 +101,10 @@
                     "data-show-when-value-equals" -> "company"
                 ),
                 label = Label(
-                    content = Text(messages("label.companyName") ),
+                    content = Text(messages("label.companyName")),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("occupierCompanyName")
+                errorMessage = theForm.errors.asTextErrorMessageForField("occupierCompanyName")
             )
         )
 
@@ -125,14 +122,14 @@
                     content = Text(messages("label.occupierCompanyContact")),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("occupierCompanyContact")
+                errorMessage = theForm.errors.asTextErrorMessageForField("occupierCompanyContact")
             )
         )
 
         <div data-hidden-by="occupierType" data-show-when-value-equals="company|individuals" data-hides-this="true">
 
         @includes.dateFields(
-            form =theForm,
+            form = theForm,
             field = "firstOccupationDate",
             helpText = "<span>" + messages("label.firstOccupationDate.help") + "</span><br/><br/><span>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>",
             labelSuffix = labelSuffix,
@@ -150,73 +147,69 @@
                     "data-hidden-by" -> "occupierType", "data-show-when-value-equals" -> "individuals"
                 ),
                 label = Label(
-                    content = Text(messages("label.mainOccupierName") ),
+                    content = Text(messages("label.mainOccupierName")),
                     classes = "govuk-!-font-weight-bold"
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("mainOccupierName")
+                errorMessage = theForm.errors.asTextErrorMessageForField("mainOccupierName")
             )
         )
 
 
-      <!-- Do you own the property? -->
+            <!-- Do you own the property? -->
         @govukRadios(
             Radios(
                 name = "propertyOwnedByYou",
-                idPrefix = Option("propertyOwnedByYou"),
+                idPrefix = "propertyOwnedByYou",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydw")),
                     "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydw"))
-                ).map( radioItem => RadioItem (
+                ).map(radioItem => RadioItem(
                     content = Text(radioItem._2),
                     checked = radioItem._1.equals(theForm("propertyOwnedByYou").value.getOrElse("")),
-                    value=Option(radioItem._1)
+                    value = Option(radioItem._1)
                 )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("propertyOwnedByYou"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
-                                content = Text(messages(if(summary.isAgent)  messages("label.propertyOwnedByYou.agent")  else  messages("label.propertyOwnedByYou"))),
+                                content = Text(messages(if(summary.isAgent) messages("label.propertyOwnedByYou.agent") else messages("label.propertyOwnedByYou"))),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         <fieldset
-            data-hidden-by="propertyOwnedByYou"
-            data-hides-this="true"
-            data-show-when-value-equals="false">
+        data-hidden-by="propertyOwnedByYou"
+        data-hides-this="true"
+        data-show-when-value-equals="false">
 
             @govukRadios(
                 Radios(
                     name = "propertyRentedByYou",
-                    idPrefix = Option("propertyRentedByYou"),
+                    idPrefix = "propertyRentedByYou",
                     classes = "radio-button-that-show-hides govuk-radios--inline",
                     items = Seq(
                         "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydw")),
                         "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydw"))
-                    ).map( radioItem => RadioItem (
+                    ).map(radioItem => RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("propertyRentedByYou").value.getOrElse("")),
-                        value=Option(radioItem._1)
+                        value = Option(radioItem._1)
                     )
                     ),
                     errorMessage = theForm.errors.asTextErrorMessageForField("propertyRentedByYou"),
-                    fieldset = Option(
+                    fieldset =
                         Fieldset(
-                            legend = Option(
+                            legend =
                                 Legend(
                                     content = Text(messages(if(summary.isAgent) messages("label.propertyRentedByYou.agent") else messages("label.propertyRentedByYou"))),
                                     classes = "govuk-!-font-weight-bold"
                                 )
-                            )
                         )
-                    )
                 )
             )
             @govukCharacterCount(
@@ -232,17 +225,17 @@
                     maxLength = 249,
                     errorMessage = theForm.errors.asTextErrorMessageForField("noRentDetails"),
                     label = Label(
-                        content = Text(if(summary.isAgent)  messages("label.noRentDetails.agent")  else  messages("label.noRentDetails")),
+                        content = Text(if(summary.isAgent) messages("label.noRentDetails.agent") else messages("label.noRentDetails")),
                         classes = "govuk-!-font-weight-bold"
 
                     )
                 )
             )
 
-            </fieldset>
+        </fieldset>
 
-      @includes.continueSaveForLaterButtons(govukButton)
+        @includes.continueSaveForLaterButtons(govukButton)
     }
-  
+
     @formHelp()
 }

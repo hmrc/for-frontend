@@ -28,10 +28,11 @@
         formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
 @layout(
     pageTitle = messages("label.anyOtherFactors"),
@@ -39,67 +40,63 @@
     showH1 = false,
     summary = summary,
     theForm = theForm
-){
+) {
 
     @formWithCSRF(
         action = dataCapturePages.routes.PageController.savePage(14),
         args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
     ) {
 
-    @govukRadios(
-        Radios(
-            name = "anyOtherFactors",
-            idPrefix = Option("anyOtherFactors"),
-            items = Seq(
-                "true" -> Messages("label.yes.oes"),
-                "false" -> Messages("label.no.nac.oes")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("anyOtherFactors").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            hint = Hint(content = Text(messages("hint.anyOtherFactorsDetails"))),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            errorMessage = theForm.errors.asTextErrorMessageForField("anyOtherFactors"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages("label.anyOtherFactors" + labelSuffix)),
-                            isPageHeading = true,
-                            classes = "govuk-fieldset__legend--l"
-                        )
+        @govukRadios(
+            Radios(
+                name = "anyOtherFactors",
+                idPrefix = "anyOtherFactors",
+                items = Seq(
+                    "true" -> Messages("label.yes.oes"),
+                    "false" -> Messages("label.no.nac.oes")
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("anyOtherFactors").value.getOrElse("")),
+                        value = radioItem._1
                     )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.anyOtherFactorsDetails"))),
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                errorMessage = theForm.errors.asTextErrorMessageForField("anyOtherFactors"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.anyOtherFactors" + labelSuffix)),
+                                isPageHeading = true,
+                                classes = "govuk-fieldset__legend--l"
+                            )
+                    )
+            )
+        )
+
+        @govukCharacterCount(
+            CharacterCount(
+                id = "anyOtherFactorsDetails",
+                name = "anyOtherFactorsDetails",
+                value = theForm("anyOtherFactorsDetails").value,
+                rows = 4,
+                maxLength = 124,
+                errorMessage = theForm.errors.asTextErrorMessageForField("anyOtherFactorsDetails"),
+                attributes = Map(
+                    "data-hidden-by" -> "anyOtherFactors",
+                    "data-show-when-value-equals" -> "true"),
+                label = Label(
+                    classes = "govuk-!-font-weight-bold",
+                    content = Text(messages("label.anyOtherFactorsDetails"))
                 )
             )
         )
-    )
 
-    @govukCharacterCount(
-        CharacterCount(
-            id = "anyOtherFactorsDetails",
-            name = "anyOtherFactorsDetails",
-            value = theForm("anyOtherFactorsDetails").value,
-            rows = 4,
-            maxLength=124,
-            errorMessage = theForm.errors.asTextErrorMessageForField("anyOtherFactorsDetails"),
-            attributes = Map(
-                "data-hidden-by" -> "anyOtherFactors",
-                "data-show-when-value-equals" -> "true"),
-            label = Label(
-                classes = "govuk-!-font-weight-bold",
-                content = Text( messages("label.anyOtherFactorsDetails"))
-            )
-        )
-    )
-
-
-
-     @includes.continueSaveForLaterButtons(govukButton)
+        @includes.continueSaveForLaterButtons(govukButton)
 
     }
-     @formHelp()
+    @formHelp()
 }

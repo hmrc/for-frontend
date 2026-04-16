@@ -23,15 +23,14 @@
         formHelp: includes.formHelp
 )
 
-
-@(summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@(summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("heading.summary"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(Journey.lastPageFor(summary)).url,
     summary = summary,
     fullWidth = true
-){
+) {
 
     @includes.checkYourAnswersTable(summary)
 

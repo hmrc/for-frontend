@@ -44,7 +44,7 @@
 
     @formWithCSRF(
         action = routes.SurveyController.formCompleteFeedback,
-        args = Symbol("novalidate") -> "novalidate" ) {
+        args = Symbol("novalidate") -> "novalidate") {
 
         <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.normalJourney.name)"/>
         <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>
@@ -52,26 +52,24 @@
         @govukRadios(
             Radios(
                 name = "satisfaction",
-                idPrefix="satisfaction",
+                idPrefix = "satisfaction",
                 items = Satisfaction.values.toIndexedSeq.map(satisfaction =>
                     RadioItem(
                         content = Text(messages(s"satisfactionSurveyType.$satisfaction")),
                         checked = theForm("satisfaction").value.contains(satisfaction.toString),
-                        value   = Option(satisfaction.toString)
+                        value = satisfaction.toString
                     )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("satisfaction"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.satisfactionSurvey")),
                                 isPageHeading = true,
                                 classes = "govuk-fieldset__legend--s"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -90,7 +88,6 @@
                 hint = Hint(content = Text(messages("text.survey.bottomCopy")))
             )
         )
-
 
         <p class="govuk-body">
         @govukButton(

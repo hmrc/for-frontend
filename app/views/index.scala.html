@@ -24,12 +24,11 @@
         govukWarningText: GovukWarningText
 )
 
-
-@()(implicit request: RequestHeader,  messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("index.title")
-){
+) {
 
     <p class="govuk-body">@Html(messages("index.subheader"))</p>
 
@@ -48,7 +47,7 @@
     @govukWarningText(WarningText(content = Text(messages("index.takenToCourt"))))
 
     <a href="@routes.LoginController.show.url"
-        class="govuk-button button-get-started">@messages("index.start")</a>
+    class="govuk-button button-get-started">@messages("index.start")</a>
 
     <h2 class="govuk-heading-m">@messages("index.before")</h2>
     <p class="govuk-body">@messages("index.before.p1")</p>

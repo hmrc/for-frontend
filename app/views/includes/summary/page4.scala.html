@@ -17,42 +17,44 @@
 @import helpers.summary.*
 @import models.pages.*
 @import models.serviceContracts.submissions.*
+@import util.*
 
-  @(p4: PageFour, isAgent: Boolean)(implicit messages: Messages)
-    <h2 class="govuk-heading-m">@messages("section4.heading")</h2>
-    <dl class="govuk-summary-list">
-      @summaryBlock(messages("label.propertyIsSublet"), 4, "propertyIsSublet") {
+@(p4: PageFour, isAgent: Boolean)(implicit messages: Messages)
+
+<h2 class="govuk-heading-m">@messages("section4.heading")</h2>
+<dl class="govuk-summary-list">
+    @summaryBlock(messages("label.propertyIsSublet"), 4, "propertyIsSublet") {
         @displayBoolean(p4.propertyIsSublet, if(isAgent) "2" else "1")
-      }
+    }
 
-      @p4.sublet.zipWithIndex.map {  case (sl, index) =>
+    @p4.sublet.zipWithIndex.map { case (sl, index) =>
 
-          @summaryBlock(messages("label.sublet.tenantFullName"), 4, s"sublet_${index}_tenantFullName") {
+        @summaryBlock(messages("label.sublet.tenantFullName"), 4, s"sublet_${index}_tenantFullName") {
             @sl.tenantFullName
-          }
+        }
 
-          @summaryBlock(messages("label.address"), 4, s"sublet_${index}_tenantAddress_buildingNameNumber") {
+        @summaryBlock(messages("label.address"), 4, s"sublet_${index}_tenantAddress_buildingNameNumber") {
             @Html(sl.tenantAddress.multiLine)
-          }
+        }
 
-          @summaryBlock(if(sl.subletType == SubletType.all) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription"), 4, s"sublet_${index}_subletPropertyPartDescription") {
-              @if(sl.subletType == SubletType.all) {
-                  @messages("subletType.all")
-              }else {
-                  @sl.subletPropertyPartDescription.getOrElse("")
-              }
-          }
+        @summaryBlock(if(sl.subletType == SubletType.all) messages("label.sublet.subletType") else messages("label.sublet.subletPropertyPartDescription"), 4, s"sublet_${index}_subletPropertyPartDescription") {
+            @if(sl.subletType == SubletType.all) {
+                @messages("subletType.all")
+            } else {
+                @sl.subletPropertyPartDescription.getOrElse("")
+            }
+        }
 
-          @summaryBlock(messages("label.sublet.subletPropertyReasonDescription"), 4, s"sublet_${index}_subletPropertyReasonDescription") {
+        @summaryBlock(messages("label.sublet.subletPropertyReasonDescription"), 4, s"sublet_${index}_subletPropertyReasonDescription") {
             @sl.subletPropertyReasonDescription
-          }
+        }
 
-          @summaryBlock(messages("sublet.annualRent.label"), 4, s"sublet_${index}_annualRent") {
+        @summaryBlock(messages("sublet.annualRent.label"), 4, s"sublet_${index}_annualRent") {
             £@sl.annualRent
-          }
+        }
 
-          @summaryBlock(messages(if(isAgent) messages("label.sublet.rentFixedDate.agent") else messages("label.sublet.rentFixedDate")), 4, s"sublet_${index}_rentFixedDate_month") {
-            @displayRoughDate(sl.rentFixedDate)
-          }
-      }
-    </dl>
+        @summaryBlock(messages(if(isAgent) messages("label.sublet.rentFixedDate.agent") else messages("label.sublet.rentFixedDate")), 4, s"sublet_${index}_rentFixedDate_month") {
+            @sl.rentFixedDate.display
+        }
+    }
+</dl>

@@ -31,7 +31,6 @@
         formHelp: includes.formHelp
 )
 
-
 @(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
@@ -53,114 +52,105 @@
         args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
     ) {
 
-
         @govukRadios(
             Radios(
                 name = "responsibleOutsideRepairs",
-                idPrefix = Option("responsibleOutsideRepairs"),
+                idPrefix = "responsibleOutsideRepairs",
                 items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
                         content = Text(messages(s"responsibleType.$responsibleType")),
                         checked = theForm("responsibleOutsideRepairs").value.contains(responsibleType.toString),
-                        value   = Option(responsibleType.toString)
+                        value = responsibleType.toString
                     )
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleOutsideRepairs"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.responsibleOutsideRepairs")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         @govukRadios(
             Radios(
                 name = "responsibleInsideRepairs",
-                idPrefix = Option("responsibleInsideRepairs"),
+                idPrefix = "responsibleInsideRepairs",
                 items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
                         content = Text(messages(s"responsibleType.$responsibleType")),
                         checked = theForm("responsibleInsideRepairs").value.contains(responsibleType.toString),
-                        value   = Option(responsibleType.toString)
+                        value = responsibleType.toString
                     )
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleInsideRepairs"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.responsibleInsideRepairs")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         @govukRadios(
             Radios(
                 name = "responsibleBuildingInsurance",
-                idPrefix = Option("responsibleBuildingInsurance"),
+                idPrefix = "responsibleBuildingInsurance",
                 items = ResponsibleType.values.toIndexedSeq.map(responsibleType =>
                     RadioItem(
                         content = Text(messages(s"responsibleType.$responsibleType")),
                         checked = theForm("responsibleBuildingInsurance").value.contains(responsibleType.toString),
-                        value   = Option(responsibleType.toString)
+                        value = responsibleType.toString
                     )
                 ),
                 classes = "govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("responsibleBuildingInsurance"),
                 hint = Hint(content = Text(messages("hint.label.responsibleBuildingInsurance"))),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.responsibleBuildingInsurance")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         @govukRadios(
             Radios(
                 name = "ndrCharges",
-                idPrefix = Option("ndrCharges"),
+                idPrefix = "ndrCharges",
                 items = Seq(
                     "true" -> messages("label.yes.ydyn"),
                     "false" -> messages("label.no.nac.ydyn")
                 )
-                        .map(radioItem => {
+                .map(radioItem => {
                     RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("ndrCharges").value.getOrElse("")),
-                        value = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("ndrCharges"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.ndrCharges")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -176,31 +166,29 @@
         @govukRadios(
             Radios(
                 name = "waterCharges",
-                idPrefix = Option("waterCharges"),
+                idPrefix = "waterCharges",
                 items = Seq(
                     "true" -> messages("label.yes.ydyn"),
                     "false" -> messages("label.no.nac.ydyn")
                 )
-                        .map(radioItem => {
+                .map(radioItem => {
                     RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("waterCharges").value.getOrElse("")),
-                        value = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 errorMessage = theForm.errors.asTextErrorMessageForField("waterCharges"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.waterCharges")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -216,40 +204,37 @@
         @govukRadios(
             Radios(
                 name = "includedServices",
-                idPrefix = Option("includedServices"),
+                idPrefix = "includedServices",
                 items = Seq(
                     "true" -> messages("label.yes.ydy"),
                     "false" -> messages("label.no.nac.ydy")
                 )
-                        .map( radioItem => {
-                    RadioItem (
+                .map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("includedServices").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 hint = Hint(content = Text(messages("hint.includedServices"))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("includedServices"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.includedServices")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
-
         <fieldset
-            data-hidden-by="includedServices"
-            data-show-when-value-equals="true"
-            data-hides-this="true" >
+        data-hidden-by="includedServices"
+        data-show-when-value-equals="true"
+        data-hides-this="true" >
 
             @govukInput(
                 CurrencyField.input(theForm, "", "includedServicesDetails[0].chargeCost", inputWidth = 10)
@@ -261,16 +246,15 @@
                     name = "includedServicesDetails[0].chargeDescription",
                     value = theForm("includedServicesDetails[0].chargeDescription").value,
                     rows = 3,
-                    maxLength=50,
+                    maxLength = 50,
                     hint = Hint(content = Text(messages("hint.includedServicesDetails.chargeDescription"))),
                     errorMessage = theForm.errors.asTextErrorMessageForField("includedServicesDetails[0].chargeDescription"),
                     label = Label(
                         classes = "govuk-!-font-weight-bold",
-                        content = Text( messages("label.includedServicesDetails.chargeDescription"))
+                        content = Text(messages("label.includedServicesDetails.chargeDescription"))
                     )
                 )
             )
-
 
         </fieldset>
 

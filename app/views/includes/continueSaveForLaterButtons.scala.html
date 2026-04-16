@@ -21,23 +21,23 @@
 @(govukButton: GovukButton)(implicit messages: Messages)
 
 <div class="govuk-button-group">
- @govukButton(
-  Button(
-   attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
-   content = Text(messages("button.label.continue")),
-   name = "continue_button",
-   value = "continue_button",
-   inputType = "submit"
-  )
- )
- @govukButton(
-  Button(
-   classes="govuk-button--secondary",
-   attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
-   content = Text(messages("button.label.save")),
-   name = "save_button",
-   value = "save_button",
-   inputType = "submit"
-  )
- )
+    @govukButton(
+        Button(
+            attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
+            content = Text(messages("button.label.continue")),
+            name = "continue_button",
+            value = "continue_button",
+            inputType = "submit"
+        )
+    )
+    @govukButton(
+        Button(
+            classes = "govuk-button--secondary",
+            attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
+            content = Text(messages("button.label.save")),
+            name = "save_button",
+            value = "save_button",
+            inputType = "submit"
+        )
+    )
 </div>

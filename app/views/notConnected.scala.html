@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions.NotConnected
 @import models.pages.Summary
+@import models.serviceContracts.submissions.NotConnected
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
@@ -33,7 +33,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(theForm: Form[NotConnected], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@(theForm: Form[NotConnected], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("notConnected.heading"),
@@ -55,7 +55,7 @@
                 label = Label(
                     content = Text(messages("label.fullName"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("fullName")
+                errorMessage = theForm.errors.asTextErrorMessageForField("fullName")
             )
         )
 
@@ -68,18 +68,18 @@
                 label = Label(
                     content = Text(messages("label.email"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("email")
+                errorMessage = theForm.errors.asTextErrorMessageForField("email")
             )
         )
 
-         @govukInput(
+        @govukInput(
             Input(
                 id = "phoneNumber",
                 name = "phoneNumber",
                 value = theForm("phoneNumber").value,
                 classes = "govuk-input--width-20",
                 label = Label(content = Text(messages("label.phoneNumber"))),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("phoneNumber")
+                errorMessage = theForm.errors.asTextErrorMessageForField("phoneNumber")
             )
         )
 

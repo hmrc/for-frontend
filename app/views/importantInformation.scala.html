@@ -22,19 +22,17 @@
         appConfig: AppConfig
 )
 
-
-@()(implicit request: RequestHeader,  messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = appConfig.getString("importantInformation." + messages.lang.language + ".title"),
     backLinkUrl = routes.LoginController.show.url
-){
+) {
 
-    <p class="govuk-body">@Html(appConfig.getString("importantInformation."+ messages.lang.language + ".body"))</p>
+    <p class="govuk-body">@Html(appConfig.getString("importantInformation." + messages.lang.language + ".body"))</p>
 
     <p class="govuk-body">
         <a  class="govuk-link"
-            href="@routes.LoginController.show">@messages("button.label.back")</a>
+        href="@routes.LoginController.show">@messages("button.label.back")</a>
     </p>
-
 }

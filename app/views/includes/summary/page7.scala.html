@@ -14,64 +14,67 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.pages._
+@import helpers.summary.*
+@import models.pages.*
+@import util.*
 
 @(p7: PageSeven, isAgent: Boolean, summary: Summary)(implicit messages: Messages)
 
-@agreementType = @{summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")}
+@agreementType = @{
+    summary.lease.flatMap(_.leaseAgreementType.toString).getOrElse("")
+}
 
 <h2 class="govuk-heading-m">@messages("section7.heading")</h2>
 <dl class="govuk-summary-list">
-	@summaryBlock(messages(if(isAgent) messages("label.leaseContainsRentReviews.agent."+agreementType) else messages("label.leaseContainsRentReviews."+agreementType)), 7, "leaseContainsRentReviews") {
-		@displayBoolean(p7.leaseContainsRentReviews, "2")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.leaseContainsRentReviews.agent." + agreementType) else messages("label.leaseContainsRentReviews." + agreementType)), 7, "leaseContainsRentReviews") {
+        @displayBoolean(p7.leaseContainsRentReviews, "2")
+    }
 
-	@if(p7.leaseContainsRentReviews) {
-		@p7.pageSevenDetails.map { rrd =>
+    @if(p7.leaseContainsRentReviews) {
+        @p7.pageSevenDetails.map { rrd =>
 
-			@rrd.reviewIntervalTypeSpecify.map { rts =>
-				@summaryBlock(messages("label.rentReviewDetails.reviewIntervalType"), 7, "rentReviewDetails_reviewIntervalType") {
-					@displayMonthsYearDuration(rts)
-				}
-			}
+            @rrd.reviewIntervalTypeSpecify.map { rts =>
+                @summaryBlock(messages("label.rentReviewDetails.reviewIntervalType"), 7, "rentReviewDetails_reviewIntervalType") {
+                    @rts.display
+                }
+            }
 
-			@rrd.lastReviewDate.map { rd =>
-				@summaryBlock(messages("label.rentReviewDetails.lastReviewDate"), 7, "rentReviewDetails_lastReviewDate_month") {
-					@displayRoughDate(rd)
-				}
-			}
-
-
-			@summaryBlock(messages("label.rentReviewDetails.canRentReduced"), 7, "rentReviewDetails_canRentReduced") {
-				@displayBoolean(rrd.canRentReduced, "5")
-			}
-
-			@summaryBlock(messages("label.rentReviewDetails.rentResultOfRentReview"), 7, "rentReviewDetails_rentResultOfRentReview") {
-				@displayBoolean(rrd.rentResultOfRentReview, "2")
-			}
-
-			@rrd.reviewDetails.map { rd =>
-
-				@summaryBlock(messages("label.rentReviewDetails.rentReviewResultsDetails.whenWasRentReview"), 7, "rentReviewDetails_rentReviewResultsDetails_whenWasRentReview_month") {
-					@displayRoughDate(rd.whenWasRentReview)
-				}
-
-				@summaryBlock(messages(if(isAgent) messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween.agent") else messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween")), 7, "rentReviewDetails_rentReviewResultsDetails_rentAgreedBetween") {
-					@displayBoolean(rd.rentAgreedBetween, "6")
-				}
-
-				@if(!rd.rentAgreedBetween) {
-					@rd.rentFixedBy.map { rfb =>
-						@summaryBlock(messages("label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy"), 7, "rentReviewDetails_rentReviewResultsDetails_rentFixedBy") {
-							@messages(s"rentFixedTypes.$rfb")
-						}
-					}
-				}
-
-			}
+            @rrd.lastReviewDate.map { rd =>
+                @summaryBlock(messages("label.rentReviewDetails.lastReviewDate"), 7, "rentReviewDetails_lastReviewDate_month") {
+                    @rd.display
+                }
+            }
 
 
-		}
-	}
+            @summaryBlock(messages("label.rentReviewDetails.canRentReduced"), 7, "rentReviewDetails_canRentReduced") {
+                @displayBoolean(rrd.canRentReduced, "5")
+            }
+
+            @summaryBlock(messages("label.rentReviewDetails.rentResultOfRentReview"), 7, "rentReviewDetails_rentResultOfRentReview") {
+                @displayBoolean(rrd.rentResultOfRentReview, "2")
+            }
+
+            @rrd.reviewDetails.map { rd =>
+
+                @summaryBlock(messages("label.rentReviewDetails.rentReviewResultsDetails.whenWasRentReview"), 7, "rentReviewDetails_rentReviewResultsDetails_whenWasRentReview_month") {
+                    @rd.whenWasRentReview.display
+                }
+
+                @summaryBlock(messages(if(isAgent) messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween.agent") else messages("label.rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween")), 7, "rentReviewDetails_rentReviewResultsDetails_rentAgreedBetween") {
+                    @displayBoolean(rd.rentAgreedBetween, "6")
+                }
+
+                @if(!rd.rentAgreedBetween) {
+                    @rd.rentFixedBy.map { rfb =>
+                        @summaryBlock(messages("label.rentReviewDetails.rentReviewResultsDetails.rentFixedBy"), 7, "rentReviewDetails_rentReviewResultsDetails_rentFixedBy") {
+                            @messages(s"rentFixedTypes.$rfb")
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+    }
 </dl>

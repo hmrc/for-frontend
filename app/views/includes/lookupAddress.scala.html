@@ -14,66 +14,64 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Label, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukInput
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Label
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 
 @(theForm: Form[?], govukInput: GovukInput)(implicit messages: Messages)
 
-    <h2 class="govuk-heading-m xx ">@messages("section5.subheading")</h2>
-    @govukInput(
-        Input(
-            id = "landlordAddress.buildingNameNumber",
-            name = "landlordAddress.buildingNameNumber",
-            value = theForm("landlordAddress.buildingNameNumber").value,
-            classes = "govuk-input--width-20",
-            formGroup = FormGroup(
-                classes = "address-field-one address-fields"
-            ),
-            label = Label(content = Text(messages("label.buildingNameNumber.optional") )),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordAddress.buildingNameNumber")
-        )
+<h2 class="govuk-heading-m xx ">@messages("section5.subheading")</h2>
+@govukInput(
+    Input(
+        id = "landlordAddress.buildingNameNumber",
+        name = "landlordAddress.buildingNameNumber",
+        value = theForm("landlordAddress.buildingNameNumber").value,
+        classes = "govuk-input--width-20",
+        formGroup = FormGroup(
+            classes = "address-field-one address-fields"
+        ),
+        label = Label(content = Text(messages("label.buildingNameNumber.optional"))),
+        errorMessage = theForm.errors.asTextErrorMessageForField("landlordAddress.buildingNameNumber")
     )
-    @govukInput(
-        Input(
-            id = "landlordAddress.street1",
-            name = "landlordAddress.street1",
-            value = theForm("landlordAddress.street1").value,
-            classes = "govuk-input--width-20",
-            formGroup = FormGroup(
-                classes = "address-field-two address-fields"
-            ),
-            label = Label(content = Text(messages("label.street1") )),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordAddress.street1")
-        )
+)
+@govukInput(
+    Input(
+        id = "landlordAddress.street1",
+        name = "landlordAddress.street1",
+        value = theForm("landlordAddress.street1").value,
+        classes = "govuk-input--width-20",
+        formGroup = FormGroup(
+            classes = "address-field-two address-fields"
+        ),
+        label = Label(content = Text(messages("label.street1"))),
+        errorMessage = theForm.errors.asTextErrorMessageForField("landlordAddress.street1")
     )
-    @govukInput(
-        Input(
-            id = "landlordAddress.street2",
-            name = "landlordAddress.street2",
-            value = theForm("landlordAddress.street2").value,
-            classes = "govuk-input--width-20",
-            formGroup = FormGroup(
-                classes = "address-field-three address-fields"
-            ),
-            label = Label(content = Text(messages("label.street2") )),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordAddress.street2")
-        )
+)
+@govukInput(
+    Input(
+        id = "landlordAddress.street2",
+        name = "landlordAddress.street2",
+        value = theForm("landlordAddress.street2").value,
+        classes = "govuk-input--width-20",
+        formGroup = FormGroup(
+            classes = "address-field-three address-fields"
+        ),
+        label = Label(content = Text(messages("label.street2"))),
+        errorMessage = theForm.errors.asTextErrorMessageForField("landlordAddress.street2")
     )
-
-    @govukInput(
-        Input(
-            id = "landlordAddress.postcode",
-            name = "landlordAddress.postcode",
-            value = theForm("landlordAddress.postcode").value,
-            classes = "govuk-input--width-10",
-            formGroup = FormGroup(
-                classes = "address-field-postcode"
-            ),
-            label = Label(content = Text(messages("label.address.postcode") )),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordAddress.postcode")
-        )
+)
+@govukInput(
+    Input(
+        id = "landlordAddress.postcode",
+        name = "landlordAddress.postcode",
+        value = theForm("landlordAddress.postcode").value,
+        classes = "govuk-input--width-10",
+        formGroup = FormGroup(
+            classes = "address-field-postcode"
+        ),
+        label = Label(content = Text(messages("label.address.postcode"))),
+        errorMessage = theForm.errors.asTextErrorMessageForField("landlordAddress.postcode")
     )
+)

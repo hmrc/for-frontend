@@ -14,59 +14,68 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
+@import util.*
+
 @import java.text.NumberFormat
-@import models.pages._
-@import models.serviceContracts.submissions._
 
 @(p6: PageSix, isAgent: Boolean)(implicit messages: Messages)
 
 <h2 class="govuk-heading-m">@messages("section6.heading")</h2>
 <dl class="govuk-summary-list">
     @summaryBlock(messages(if(isAgent) messages("label.leaseAgreementType.agent") else messages("label.leaseAgreementType")), 6, "leaseAgreementType") {
-      @messages(s"leaseAgreementTypes.${p6.leaseAgreementType}")
+        @messages(s"leaseAgreementTypes.${p6.leaseAgreementType}")
     }
 
     @p6.writtenAgreementDetails.map { wa =>
 
-        @summaryBlock(if(isAgent) messages("label.writtenAgreement.startDate.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.startDate."+p6.leaseAgreementType), 6, "writtenAgreement_startDate_month") {
-           @displayRoughDate(wa.startDate)
+        @summaryBlock(if(isAgent) messages("label.writtenAgreement.startDate.agent." + p6.leaseAgreementType) else messages("label.writtenAgreement.startDate." + p6.leaseAgreementType), 6, "writtenAgreement_startDate_month") {
+            @wa.startDate.display
         }
 
-        @summaryBlock(if(isAgent) messages("label.writtenAgreement.rentOpenEnded.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.rentOpenEnded."+p6.leaseAgreementType), 6, "writtenAgreement_rentOpenEnded") {
-          @displayBoolean(wa.rentOpenEnded, "2")
+        @summaryBlock(if(isAgent) messages("label.writtenAgreement.rentOpenEnded.agent." + p6.leaseAgreementType) else messages("label.writtenAgreement.rentOpenEnded." + p6.leaseAgreementType), 6, "writtenAgreement_rentOpenEnded") {
+            @displayBoolean(wa.rentOpenEnded, "2")
         }
 
 
         @if(!wa.rentOpenEnded) {
-          @summaryBlock(if(isAgent) messages("label.writtenAgreement.leaseLength.agent."+p6.leaseAgreementType) else messages("label.writtenAgreement.leaseLength."+p6.leaseAgreementType), 6, "writtenAgreement_leaseLength_years") {
-            @wa.leaseLength.map { ll => <span class="yNumber">@{ll.years}</span> <span class="yText">years</span>, <span class="mNumber">@{ll.months}</span> <span class="mText">months</span> }
-          }
+            @summaryBlock(if(isAgent) messages("label.writtenAgreement.leaseLength.agent." + p6.leaseAgreementType) else messages("label.writtenAgreement.leaseLength." + p6.leaseAgreementType), 6, "writtenAgreement_leaseLength_years") {
+                @wa.leaseLength.map { ll => <span class="yNumber">@{
+                    ll.years
+                }</span> <span class="yText">years</span>, <span class="mNumber">@{
+                    ll.months
+                }</span> <span class="mText">months</span>
+                }
+            }
         }
 
 
 
         @summaryBlock(messages("label.writtenAgreement.leaseAgreementHasBreakClause"), 6, "writtenAgreement_leaseAgreementHasBreakClause") {
-          @displayBoolean(wa.leaseAgreementHasBreakClause, "3")
+            @displayBoolean(wa.leaseAgreementHasBreakClause, "3")
         }
 
         @if(wa.leaseAgreementHasBreakClause) {
-          @summaryBlock(messages("label.writtenAgreement.breakClauseDetails"), 6, "writtenAgreement_breakClauseDetails") {
-            @wa.breakClauseDetails.getOrElse("")
-          }
+            @summaryBlock(messages("label.writtenAgreement.breakClauseDetails"), 6, "writtenAgreement_breakClauseDetails") {
+                @wa.breakClauseDetails.getOrElse("")
+            }
         }
 
         @summaryBlock(messages(if(isAgent) messages("label.writtenAgreement.agreementIsStepped.agent") else messages("label.writtenAgreement.agreementIsStepped")), 6, "writtenAgreement_agreementIsStepped") {
-          @displayBoolean(wa.agreementIsStepped, "2")
+            @displayBoolean(wa.agreementIsStepped, "2")
         }
 
         @if(wa.agreementIsStepped) {
-          @summaryBlock(messages("label.writtenAgreement.steppedDetailsYear"), 6,
-            "writtenAgreement_steppedDetails_0") {
+            @summaryBlock(messages("label.writtenAgreement.steppedDetailsYear"), 6,
+                "writtenAgreement_steppedDetails_0") {
                 <ol class="list-number">
-                  @wa.steppedDetails.map { sd =>
-                    <li><span class="appleLink">@displayLocalDate(sd.stepFrom)</span> - <span class="appleLink">@displayLocalDate(sd.stepTo)</span> - £@NumberFormat.getNumberInstance().format(sd.amount)</li>
-                  }
+                @wa.steppedDetails.map { sd =>
+                    <li><span class="appleLink">@sd.stepFrom.display</span>
+                        - <span class="appleLink">@sd.stepTo.display</span>
+                        - £@NumberFormat.getNumberInstance().format(sd.amount)</li>
+                }
                 </ol>
             }
         }
@@ -76,12 +85,12 @@
     @if(p6.leaseAgreementType == LeaseAgreementType.verbal) {
         @p6.verbalAgreementDetails.startDate.map { sd =>
             @summaryBlock(messages(if(isAgent) messages("label.verbalAgreement.startDate.agent") else messages("label.verbalAgreement.startDate")), 6, "verbalAgreement.startDate_month") {
-                @displayRoughDate(sd)
+                @sd.display
             }
         }
 
         @p6.verbalAgreementDetails.rentOpenEnded.map { ro =>
-            @summaryBlock(messages(if(isAgent) messages("label.verbalAgreement.rentOpenEnded.agent")  else messages("label.verbalAgreement.rentOpenEnded")), 6, "verbalAgreement.rentOpenEnded") {
+            @summaryBlock(messages(if(isAgent) messages("label.verbalAgreement.rentOpenEnded.agent") else messages("label.verbalAgreement.rentOpenEnded")), 6, "verbalAgreement.rentOpenEnded") {
                 @displayBoolean(ro, "2")
             }
 
@@ -90,7 +99,11 @@
         @if(!p6.verbalAgreementDetails.rentOpenEnded.getOrElse(true)) {
             @summaryBlock(messages(if(isAgent) messages("label.verbalAgreement.leaseLength.agent") else messages("label.verbalAgreement.leaseLength")), 6, "verbalAgreement_leaseLength_years_anchor") {
                 @p6.verbalAgreementDetails.leaseLength.map { d =>
-                    @{d.years} years, @{d.months} months
+                    @{
+                        d.years
+                    } years, @{
+                    d.months
+                } months
                 }
             }
         }

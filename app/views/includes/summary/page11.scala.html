@@ -14,62 +14,64 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
+@import helpers.summary.*
+@import models.serviceContracts.submissions.*
+@import util.*
+
 @import java.text.NumberFormat
-@import models.serviceContracts.submissions._
 
 @(p11: IncentivesAndPayments, isAgent: Boolean)(implicit messages: Messages)
 
 <h2 class="govuk-heading-m">@messages("section11.heading")</h2>
 <dl class="govuk-summary-list">
-	@summaryBlock(messages(if(isAgent) messages("label.rentFreePeriod.agent") else messages("label.rentFreePeriod")), 11, "rentFreePeriod") {
-		@displayBoolean(p11.rentFreePeriod, "6")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.rentFreePeriod.agent") else messages("label.rentFreePeriod")), 11, "rentFreePeriod") {
+        @displayBoolean(p11.rentFreePeriod, "6")
+    }
 
-	@if(p11.rentFreePeriod) {
-		@p11.rentFreePeriodDetails.map { rfp =>
+    @if(p11.rentFreePeriod) {
+        @p11.rentFreePeriodDetails.map { rfp =>
 
-			@summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodLength"), 11, "rentFreePeriodDetails_rentFreePeriodLength") {
-				@rfp.lengthInMonths @messages("label.rentFreePeriodDetails.rentFreePeriodLength.months").toLowerCase
-			}
+            @summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodLength"), 11, "rentFreePeriodDetails_rentFreePeriodLength") {
+                @rfp.lengthInMonths @messages("label.rentFreePeriodDetails.rentFreePeriodLength.months").toLowerCase
+            }
 
-			@summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodDetails"), 11, "rentFreePeriodDetails_rentFreePeriodDetails") {
-				@rfp.description
-			}
-		}
-	}
+            @summaryBlock(messages("label.rentFreePeriodDetails.rentFreePeriodDetails"), 11, "rentFreePeriodDetails_rentFreePeriodDetails") {
+                @rfp.description
+            }
+        }
+    }
 
-	@summaryBlock(messages(if(isAgent) messages("label.payCapitalSum.agent") else messages("label.payCapitalSum")), 11, "payCapitalSum") {
-		@displayBoolean(p11.payCapitalSum, "6")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.payCapitalSum.agent") else messages("label.payCapitalSum")), 11, "payCapitalSum") {
+        @displayBoolean(p11.payCapitalSum, "6")
+    }
 
-	@if(p11.payCapitalSum) {
-		@p11.capitalPaidDetails.map { cpd =>
+    @if(p11.payCapitalSum) {
+        @p11.capitalPaidDetails.map { cpd =>
 
-			@summaryBlock(messages("capitalPaidDetails.capitalSum.label"), 11, "capitalPaidDetails_capitalSum")	{
-				£@NumberFormat.getNumberInstance().format(cpd.capitalSum)
-			}
+            @summaryBlock(messages("capitalPaidDetails.capitalSum.label"), 11, "capitalPaidDetails_capitalSum") {
+                £@NumberFormat.getNumberInstance().format(cpd.capitalSum)
+            }
 
-			@summaryBlock(messages("label.capitalPaidDetails.paymentDate"), 11, "capitalPaidDetails_paymentDate_month") {
-				@displayRoughDate(cpd.paymentDate)
-			}
-		}
-	}
+            @summaryBlock(messages("label.capitalPaidDetails.paymentDate"), 11, "capitalPaidDetails_paymentDate_month") {
+                @cpd.paymentDate.display
+            }
+        }
+    }
 
-	@summaryBlock(messages(if(isAgent) messages("label.receiveCapitalSum.agent") else messages("label.receiveCapitalSum")), 11, "receiveCapitalSum") {
-		@displayBoolean(p11.receiveCapitalSum, "6")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.receiveCapitalSum.agent") else messages("label.receiveCapitalSum")), 11, "receiveCapitalSum") {
+        @displayBoolean(p11.receiveCapitalSum, "6")
+    }
 
-	@if(p11.receiveCapitalSum) {
-		@p11.capitalReceivedDetails.map { crd =>
+    @if(p11.receiveCapitalSum) {
+        @p11.capitalReceivedDetails.map { crd =>
 
-			@summaryBlock(messages("label.capitalReceivedDetails.capitalSum"), 11, "capitalReceivedDetails_capitalSum") {
-				£@NumberFormat.getNumberInstance().format(crd.capitalSum)
-			}
+            @summaryBlock(messages("label.capitalReceivedDetails.capitalSum"), 11, "capitalReceivedDetails_capitalSum") {
+                £@NumberFormat.getNumberInstance().format(crd.capitalSum)
+            }
 
-			@summaryBlock(messages("label.capitalReceivedDetails.paymentDate"), 11, "capitalReceivedDetails_paymentDate_month") {
-				@displayRoughDate(crd.paymentDate)
-			}
-		}
-	}
+            @summaryBlock(messages("label.capitalReceivedDetails.paymentDate"), 11, "capitalReceivedDetails_paymentDate_month") {
+                @crd.paymentDate.display
+            }
+        }
+    }
 </dl>
