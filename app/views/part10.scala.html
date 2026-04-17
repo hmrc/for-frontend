@@ -24,11 +24,11 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
@@ -414,7 +414,7 @@
             </div>
         </fieldset>
 
-        @includes.continueSaveForLaterButtons(govukButton)
+        @continueSaveForLaterButtons()
 
     }
     @formHelp()

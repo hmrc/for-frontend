@@ -17,6 +17,7 @@
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -111,17 +112,8 @@
                 )
             )
 
-
             <p class="govuk-body">
-            @govukButton(
-                Button(
-                    attributes = Map("id" -> "send", "novalidate" -> "novalidate"),
-                    content = Text(messages("button.label.submitFeedback")),
-                    name = "send",
-                    value = "send",
-                    inputType = "submit"
-                )
-            )
+            @govukButton(SubmitButton("submitFeedback"))
             </p>
         }
     </section>

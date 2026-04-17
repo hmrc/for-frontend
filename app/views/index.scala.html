@@ -15,12 +15,14 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.Aliases.WarningText
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukButton, GovukWarningText}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+@import uk.gov.hmrc.vo.service.model.button.StartButton
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
+        govukButton: GovukButton,
         govukWarningText: GovukWarningText
 )
 
@@ -46,8 +48,7 @@
 
     @govukWarningText(WarningText(content = Text(messages("index.takenToCourt"))))
 
-    <a href="@routes.LoginController.show.url"
-    class="govuk-button button-get-started">@messages("index.start")</a>
+    @govukButton(StartButton(routes.LoginController.show.url))
 
     <h2 class="govuk-heading-m">@messages("index.before")</h2>
     <p class="govuk-body">@messages("index.before.p1")</p>

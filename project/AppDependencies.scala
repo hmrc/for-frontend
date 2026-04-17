@@ -5,13 +5,13 @@ object AppDependencies {
 
   private val bootstrapVersion    = "10.7.0"
   private val playFrontendVersion = "13.3.0"
-  private val voServiceVersion    = "0.8.0"
+  private val voServiceVersion    = "0.9.0-SNAPSHOT"
   private val mongoVersion        = "2.12.0"
   private val jQueryVersion       = "4.0.0"
   private val mailApiVersion      = "2.0.2"
 
   // Test dependencies
-  private val voTestVersion = "0.4.0"
+  private val voTestVersion = "0.5.0"
 
   private val compile = Seq(
     filters,

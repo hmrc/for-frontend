@@ -16,6 +16,7 @@
 
 @import models.pages.NotConnectedSummary
 @import uk.gov.hmrc.govukfrontend.views.html.components.{FormWithCSRF, GovukButton}
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -37,7 +38,7 @@
 
         @includes.notConnectedCheckYourAnswersTable(notConnectedSummary)
 
-        @includes.submitButton(govukButton)
+        @govukButton(SubmitButton("submit"))
 
     }
 }

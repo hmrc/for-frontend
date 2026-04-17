@@ -10,9 +10,8 @@ skip.content=Skip to main content
 login.heading=Enter your reference number
 failedLogin.heading=Login error
 lockedOut.heading=Locked out
-label.continue=Continue
-button.label.submit=Submit
-button.label.submitFeedback=Submit your feedback
+button.submit.label = Submit
+button.submitFeedback.label = Submit your feedback
 optional=(optional)
 help.date.month.year=For example, {0}
 help.optional.date.month.year=For example, {0} (optional)
@@ -105,9 +104,9 @@ label.no.na = No
 
 #BUTTON LABELS
 ##############################
-button.label.back=Back
-button.label.continue=Continue
-button.label.save=Save for later
+button.back.label = Back
+button.continue.label = Continue
+button.save.label = Save for later
 
 #LOGIN
 ##############################
@@ -849,7 +848,7 @@ saveForLater.haveYouForgotten=If you have forgotten your password, you’ll need
 saveForLater.logout=Log out
 saveForLater.or=or
 saveForLater.createPassword=Create a password to retrieve your saved information
-saveForLater.next=Save password
+button.savePassword.label = Save password
 
 #SAVEDFORM
 ###############################
@@ -908,7 +907,6 @@ heading.summary.pdf.footnote=This is a Notice served under paragraph 5(1) of sch
 ###############################
 heading.giveFeedback=Give feedback for rent and lease details
 copy.giveFeedback=Leave your suggestions or comments about our service.
-button.label.submit.feedback=Send feedback
 link.feedback=Feedback
 label.help.link=Report a problem with this page
 label.help.title=Page help
@@ -1157,7 +1155,7 @@ index.rentDetails=details of your rent, including the date your rent was fixed
 index.landlordDetails=the name and address of your landlord, if you’re a tenant
 index.reviewDetails=any rent review periods
 index.rentFreePeriodDetails=any rent-free periods or other incentives
-index.start=Start now
+button.start.label = Start now
 index.before=Before you start
 index.before.p1=It takes about 30 mins to use this service.
 index.before.p2=You don’t have to complete it in one go. You can save what you’ve done and return to finish later on.

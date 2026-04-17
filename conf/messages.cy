@@ -10,9 +10,8 @@ skip.content=Ewch yn syth i’r prif gynnwys
 login.heading=Rhowch eich cyfeirnod
 failedLogin.heading=Gwall mewngofnodi
 lockedOut.heading=Wedi eich cloi allan
-label.continue=Yn eich blaen
-button.label.submit=Cyflwyno
-button.label.submitFeedback=Cyflwyno eich adborth
+button.submit.label = Cyflwyno
+button.submitFeedback.label = Cyflwyno eich adborth
 optional=(dewisol)
 help.date.month.year=Er enghraifft, {0}
 help.optional.date.month.year=Er enghraifft, {0} (dewisol)
@@ -106,9 +105,9 @@ label.no.na = Na
 
 #BUTTON LABELS
 ##############################
-button.label.back=Yn ôl
-button.label.continue=Yn eich blaen
-button.label.save=Cadw ar gyfer nes ymlaen
+button.back.label = Yn ôl
+button.continue.label = Yn eich blaen
+button.save.label = Cadw ar gyfer nes ymlaen
 
 #LOGIN
 ##############################
@@ -859,7 +858,7 @@ saveForLater.haveYouForgotten=Os ydych wedi anghofio eich cyfrinair, bydd angen 
 saveForLater.logout=Allgofnodi
 saveForLater.or=neu
 saveForLater.createPassword=Creu cyfrinair i adfer eich gwybodaeth
-saveForLater.next=Cadw cyfrinair
+button.savePassword.label = Cadw cyfrinair
 
 #SAVEDFORM
 ###############################
@@ -918,8 +917,6 @@ heading.summary.pdf.footnote=Hysbysiad yw hwn o dan baragraff 5(1) o atodlen 9 i
 ###############################
 heading.giveFeedback=Rhoi adborth ar gyfer manylion rhent a phrydles
 copy.giveFeedback=Gadewch awgrymiadau neu sylwadau ynglŷn â’n gwasanaeth.
-button.label.submit.feedback=Anfon adborth
-button.label.submitFeedback=Cyflwyno eich adborth
 link.feedback=Adborth
 label.help.link=Rhowch wybod am broblem gyda’r dudalen hon
 label.help.title=Help ar gyfer y dudalen
@@ -1147,7 +1144,7 @@ index.rentDetails=eich rhent, yn cynnwys dyddiad a osodiwyd
 index.landlordDetails=enw eich landlord, os chi yw y tenant
 index.reviewDetails=unrhyw gyfnodau adolygu rhent
 index.rentFreePeriodDetails=unrhyw gyfnodau di-rent neu gymhellion eraill
-index.start=Dechrau nawr
+button.start.label = Dechrau nawr
 index.before=Cyn i chi ddechrau
 index.before.p1=Mae’n cymryd tua 30 munud i ddefnyddio’r gwasanaeth hwn.
 index.before.p2=Nid oes rhaid i chi ei gwblhau mewn un cam. Gallwch safio yr hyn rydych chi wedi’i wneud a dychwelyd i orffen yn nes ymlaen.

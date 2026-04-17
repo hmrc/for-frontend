@@ -15,10 +15,13 @@
  *@
 
 @import config.AppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.vo.service.model.button.LinkButton
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
+        govukButton: GovukButton,
         appConfig: AppConfig
 )
 
@@ -32,7 +35,6 @@
     <p class="govuk-body">@Html(appConfig.getString("importantInformation." + messages.lang.language + ".body"))</p>
 
     <p class="govuk-body">
-        <a  class="govuk-link"
-        href="@routes.LoginController.show">@messages("button.label.back")</a>
+    @govukButton(LinkButton("back", routes.LoginController.show.url))
     </p>
 }

@@ -27,9 +27,9 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         govukInput: GovukInput,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
@@ -122,7 +122,7 @@
 
         </fieldset>
 
-        @includes.continueSaveForLaterButtons(govukButton)
+        @continueSaveForLaterButtons()
 
     }
 

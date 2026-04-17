@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -109,8 +110,7 @@
 
         }
 
-        @includes.continueButton(govukButton)
-
+        @govukButton(SubmitButton("continue"))
     }
     @formHelp()
 }

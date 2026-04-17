@@ -28,10 +28,10 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         govukInput: GovukInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
@@ -111,7 +111,7 @@
             )
         )
 
-        @includes.continueSaveForLaterButtons(govukButton)
+        @continueSaveForLaterButtons()
     }
 
     @formHelp()

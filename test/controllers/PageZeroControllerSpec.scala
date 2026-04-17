@@ -60,7 +60,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
           "isRelated"       -> "yes-change-address",
-          "continue_button" -> ""
+          "continue-button" -> ""
         )
 
       val res = await(pageZeroController.save()(request))
@@ -78,7 +78,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
           "isRelated"       -> "yes",
-          "continue_button" -> ""
+          "continue-button" -> ""
         )
 
       val res = await(pageZeroController.save()(request))
@@ -96,7 +96,7 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
           "isRelated"       -> "no",
-          "continue_button" -> ""
+          "continue-button" -> ""
         )
 
       val res = await(pageZeroController.save()(request))

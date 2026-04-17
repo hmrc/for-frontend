@@ -14,30 +14,16 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
+@import uk.gov.hmrc.vo.service.model.button.{SecondaryButton, SubmitButton}
 
-@(govukButton: GovukButton)(implicit messages: Messages)
+@this(
+        govukButton: GovukButton
+)
+
+@()(implicit messages: Messages)
 
 <div class="govuk-button-group">
-    @govukButton(
-        Button(
-            attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
-            content = Text(messages("button.label.continue")),
-            name = "continue_button",
-            value = "continue_button",
-            inputType = "submit"
-        )
-    )
-    @govukButton(
-        Button(
-            classes = "govuk-button--secondary",
-            attributes = Map("id" -> "continue", "novalidate" -> "novalidate"),
-            content = Text(messages("button.label.save")),
-            name = "save_button",
-            value = "save_button",
-            inputType = "submit"
-        )
-    )
+    @govukButton(SubmitButton("continue"))
+    @govukButton(SecondaryButton())
 </div>

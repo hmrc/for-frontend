@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import views.html.components.PrimaryLayout
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 
 @this(
         layout: PrimaryLayout,
@@ -67,7 +68,7 @@
                     )
             )
         )
-        @includes.continueButton(govukButton)
 
+        @govukButton(SubmitButton("continue"))
     }
 }

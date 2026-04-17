@@ -17,6 +17,7 @@
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -60,7 +61,7 @@
             )
         )
 
-        @includes.submitButton(govukButton)
+        @govukButton(SubmitButton("submit"))
 
     }
 

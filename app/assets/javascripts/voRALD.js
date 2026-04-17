@@ -308,7 +308,7 @@
 
     VORALD.isEdit = function () {
         if (VOCommon.getQueryString('edit')) {
-            $('[name="continue_button"]').text(VOMessages.textLabel('buttonUpdate')).attr('name', 'update_button');
+            $('[name="continue-button"]').text(VOMessages.textLabel('buttonUpdate')).attr('name', 'update-button');
         }
     };
 

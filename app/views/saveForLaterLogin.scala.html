@@ -17,9 +17,9 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -58,16 +58,7 @@
                 errorMessage = theForm.errors.asTextErrorMessageForField("password")
             )
         )
-        @govukButton(
-            Button(
-                attributes = Map(
-                    "id" -> "continue",
-                    "novalidate" -> "novalidate"
-                ),
-                name = "submit",
-                content = Text(messages("label.continue"))
-            )
-        )
+        @govukButton(SubmitButton("continue"))
     }
 
     <p class="govuk-body">
