@@ -111,7 +111,7 @@ button.save.label = Save for later
 #LOGIN
 ##############################
 label.letter=You’ll find your reference number and postcode in your rent and lease detail letter.
-label.referenceNumber=Reference number
+referenceNumber.label = Reference number
 hint.letter=As it appears on the request for information letter
 error.invalid_refnum=Enter your reference number as it appears on your letter
 error.invalid_postcode_as_on_letter=Enter your postcode as it appears on your letter
@@ -136,7 +136,7 @@ label.UKInternationaladdress= UK/International Address
 label.address.street1=Address line 2
 label.address.street2=Town or city
 label.addresss.townCity=Town or city
-label.postcode=Postcode
+postcode.label = Postcode
 label.ukOrInternationalPostcode=Postcode / Zipcode
 label.buildingNameNumber.optional=Address line 1  (optional)
 label.street1=Address line 2 (optional)

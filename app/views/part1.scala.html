@@ -102,7 +102,7 @@
                     value = getAddressFieldValueOrDefaultUnlessErrors("postcode", address.postcode.getOrElse("")).replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2"),
                     classes = "govuk-!-width-one-half",
                     label = Label(
-                        content = Text(messages("label.postcode"))
+                        content = Text(messages("postcode.label"))
                     ),
                     errorMessage = theForm.errors.asTextErrorMessageForField("postcode")
                 )

@@ -112,7 +112,7 @@ button.save.label = Cadw ar gyfer nes ymlaen
 #LOGIN
 ##############################
 label.letter=Gallwch weld eich cyfeirnod a’ch cod post yn eich llythyr manylion rhent a phrydles.
-label.referenceNumber=Cyfeirnod
+referenceNumber.label = Cyfeirnod
 hint.letter=Fel y mae’n ymddangos ar y llythyr cais am wybodaeth
 error.invalid_refnum=Rhowch y cyfeirnod fel y mae’n ymddangos ar eich llythyr
 error.invalid_postcode_as_on_letter=Nodwch eich cod post fel mae’n ymddangos ar eich llythyr
@@ -137,8 +137,7 @@ label.address=Cyfeiriad
 label.address.street1=Linell 2 y cyfeiriad
 label.address.street2=Tref neu ddinas
 label.addresss.townCity=Tref neu ddinas
-label.postcode=Cod post
-
+postcode.label = Cod post
 label.buildingNameNumber.optional=Llinell 1 y cyfeiriad (dewisol)
 label.street1=Ail linell y cyfeiriad (dewisol)
 label.street2=Tref neu ddinas (dewisol)
