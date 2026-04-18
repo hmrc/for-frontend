@@ -23,19 +23,19 @@
 
 <h2 class="govuk-heading-m">@messages("section3.heading")</h2>
 <dl class="govuk-summary-list">
-    @summaryBlock(messages("label.propertyType"), 3, "propertyType") {
+    @summaryBlock(messages("propertyType.label"), 3, "propertyType") {
         @p3.propertyType
     }
 
-    @summaryBlock(messages("label.occupierTypes"), 3, "occupierType") {
-        @messages(s"occupierType.${p3.occupierType}")
+    @summaryBlock(messages("occupierType.label"), 3, "occupierType") {
+        @messages(s"occupierType.${p3.occupierType}.label")
     }
 
     @if(p3.occupierType == OccupierType.company) {
-        @summaryBlock(messages("label.companyName"), 3, "occupierCompanyName") {
+        @summaryBlock(messages("companyName.label"), 3, "occupierCompanyName") {
             @p3.occupierCompanyName.getOrElse("")
         }
-        @summaryBlock(messages("label.occupierCompanyContact"), 3, "occupierCompanyContact") {
+        @summaryBlock(messages("occupierCompanyContact.label"), 3, "occupierCompanyContact") {
             @p3.occupierCompanyContact.getOrElse("")
         }
     }
@@ -49,23 +49,23 @@
     }
 
     @p3.mainOccupierName.map { n =>
-        @summaryBlock(messages("label.mainOccupierName"), 3, "mainOccupierName") {
+        @summaryBlock(messages("mainOccupierName.label"), 3, "mainOccupierName") {
             @n
         }
     }
 
-    @summaryBlock(messages(if(isAgent) messages("label.propertyOwnedByYou.agent") else messages("label.propertyOwnedByYou")), 3, "propertyOwnedByYou") {
+    @summaryBlock(messages(if(isAgent) messages("propertyOwnedByYou.label.agent") else messages("propertyOwnedByYou.label")), 3, "propertyOwnedByYou") {
         @displayBoolean(p3.propertyOwnedByYou, if(isAgent) "2" else "1")
     }
 
     @if(!p3.propertyOwnedByYou) {
-        @summaryBlock(messages(if(isAgent) messages("label.propertyRentedBy.agent") else messages("label.propertyRentedBy")), 3, "propertyRentedByYou") {
+        @summaryBlock(messages(if(isAgent) messages("propertyRentedByYou.label.agent") else messages("propertyRentedByYou.label")), 3, "propertyRentedByYou") {
             @p3.propertyRentedByYou.map(x => displayBoolean(x, if(isAgent) "2" else "1"))
         }
     }
 
     @p3.noRentDetails.map { z =>
-        @summaryBlock(messages("label.noRentDetails"), 3, "noRentDetails") {
+        @summaryBlock(messages("noRentDetails.label"), 3, "noRentDetails") {
             @z
         }
     }

@@ -18,9 +18,8 @@
 @import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcCharacterCount
+@import uk.gov.hmrc.vo.service.model.input.*
 @import util.DateUtil
 @import views.html.components.PrimaryLayout
 
@@ -29,107 +28,64 @@
         govukRadios: GovukRadios,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
+        hmrcCharacterCount: HmrcCharacterCount,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
         continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[PageThree], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[PageThree], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @labelSuffix = @{
     if(summary.isAgent) ".agent" else ""
+}
+
+@yesNoLabels = @{
+    Seq(
+        "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydw")),
+        "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydw"))
+    )
 }
 
 @layout(
     backLinkUrl = dataCapturePages.routes.PageController.showPage(2).url,
     pageTitle = messages("section3.heading"),
     summary = summary,
-    theForm = theForm
+    theForm = form
 ) {
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(3)) {
-        @* What is the property used for? *@
-        @govukInput(
-            Input(
-                id = "propertyType",
-                name = "propertyType",
-                value = theForm("propertyType").value,
-                classes = "govuk-input--width-20",
-                label = Label(
-                    content = Text(messages("label.propertyType")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                hint = Hint(content = Text(messages("propertyTypes.help"))),
-                errorMessage = theForm.errors.asTextErrorMessageForField("propertyType")
-            )
-        )
-        @* Who occupies the property? *@
+
+        @govukInput(TextField.input(form, "", "propertyType", inputWidth = 20))
+
         @govukRadios(
-            Radios(
-                name = "occupierType",
-                idPrefix = "occupierType",
-                classes = "radio-button-that-show-hides",
-                items = OccupierType.values.toIndexedSeq.map(occupierType =>
-                    RadioItem(
-                        content = Text(messages(s"occupierType.$occupierType")),
-                        checked = theForm("occupierType").value.contains(occupierType.toString),
-                        value = occupierType.toString
-                    )
-                ),
-                hint = Hint(content = Text(messages("occupierType.help"))),
-                errorMessage = theForm.errors.asTextErrorMessageForField("occupierType"),
-                fieldset =
-                    Fieldset(
-                        legend =
-                            Legend(
-                                content = Text(messages("label.occupierTypes")),
-                                classes = "govuk-!-font-weight-bold"
-                            )
-                    )
+            RadioField.radios(form, "", "occupierType", OccupierType.values, isPageHeading = false).copy(
+                classes = "radio-button-that-show-hides"
             )
         )
 
         @govukInput(
-            Input(
-                id = "occupierCompanyName",
-                name = "occupierCompanyName",
-                value = theForm("occupierCompanyName").value,
-                classes = "govuk-input--width-20",
+            TextField.input(form, "", "occupierCompanyName", inputWidth = 20,
                 attributes = Map(
                     "data-hidden-by" -> "occupierType",
                     "data-show-when-value-equals" -> "company"
-                ),
-                label = Label(
-                    content = Text(messages("label.companyName")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("occupierCompanyName")
+                )
             )
         )
 
         @govukInput(
-            Input(
-                id = "occupierCompanyContact",
-                name = "occupierCompanyContact",
-                value = theForm("occupierCompanyContact").value,
-                classes = "govuk-input--width-20",
+            TextField.input(form, "", "occupierCompanyContact", inputWidth = 20,
                 attributes = Map(
                     "data-hidden-by" -> "occupierType",
                     "data-show-when-value-equals" -> "company"
-                ),
-                label = Label(
-                    content = Text(messages("label.occupierCompanyContact")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("occupierCompanyContact")
+                )
             )
         )
 
         <div data-hidden-by="occupierType" data-show-when-value-equals="company|individuals" data-hides-this="true">
-
         @includes.dateFields(
-            form = theForm,
+            form = form,
             field = "firstOccupationDate",
             helpText = "<span>" + messages("label.firstOccupationDate.help") + "</span><br/><br/><span>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>",
             labelSuffix = labelSuffix,
@@ -138,47 +94,18 @@
         </div>
 
         @govukInput(
-            Input(
-                id = "mainOccupierName",
-                name = "mainOccupierName",
-                value = theForm("mainOccupierName").value,
-                classes = "govuk-input--width-20",
+            TextField.input(form, "", "mainOccupierName", inputWidth = 20,
                 attributes = Map(
-                    "data-hidden-by" -> "occupierType", "data-show-when-value-equals" -> "individuals"
-                ),
-                label = Label(
-                    content = Text(messages("label.mainOccupierName")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("mainOccupierName")
+                    "data-hidden-by" -> "occupierType",
+                    "data-show-when-value-equals" -> "individuals"
+                )
             )
         )
 
-
-            <!-- Do you own the property? -->
         @govukRadios(
-            Radios(
-                name = "propertyOwnedByYou",
-                idPrefix = "propertyOwnedByYou",
-                classes = "radio-button-that-show-hides govuk-radios--inline",
-                items = Seq(
-                    "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydw")),
-                    "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydw"))
-                ).map(radioItem => RadioItem(
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("propertyOwnedByYou").value.getOrElse("")),
-                    value = radioItem._1
-                )
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("propertyOwnedByYou"),
-                fieldset =
-                    Fieldset(
-                        legend =
-                            Legend(
-                                content = Text(messages(if(summary.isAgent) messages("label.propertyOwnedByYou.agent") else messages("label.propertyOwnedByYou"))),
-                                classes = "govuk-!-font-weight-bold"
-                            )
-                    )
+            RadioField.radios(form, "", "propertyOwnedByYou", valuesWithLabels = yesNoLabels, isPageHeading = false, inline = true,
+                labelText = messages(s"propertyOwnedByYou.label$labelSuffix"),
+                classes = "radio-button-that-show-hides",
             )
         )
 
@@ -188,46 +115,18 @@
         data-show-when-value-equals="false">
 
             @govukRadios(
-                Radios(
-                    name = "propertyRentedByYou",
-                    idPrefix = "propertyRentedByYou",
-                    classes = "radio-button-that-show-hides govuk-radios--inline",
-                    items = Seq(
-                        "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydw")),
-                        "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydw"))
-                    ).map(radioItem => RadioItem(
-                        content = Text(radioItem._2),
-                        checked = radioItem._1.equals(theForm("propertyRentedByYou").value.getOrElse("")),
-                        value = radioItem._1
-                    )
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("propertyRentedByYou"),
-                    fieldset =
-                        Fieldset(
-                            legend =
-                                Legend(
-                                    content = Text(messages(if(summary.isAgent) messages("label.propertyRentedByYou.agent") else messages("label.propertyRentedByYou"))),
-                                    classes = "govuk-!-font-weight-bold"
-                                )
-                        )
+                RadioField.radios(form, "", "propertyRentedByYou", valuesWithLabels = yesNoLabels, isPageHeading = false, inline = true,
+                    labelText = messages(s"propertyRentedByYou.label$labelSuffix"),
+                    classes = "radio-button-that-show-hides",
                 )
             )
-            @govukCharacterCount(
-                CharacterCount(
-                    id = "noRentDetails",
-                    name = "noRentDetails",
-                    value = theForm("noRentDetails").value,
+
+            @hmrcCharacterCount(
+                TextAreaField.characterCount(form, "", "noRentDetails", rows = 8, maxLength = 249,
+                    labelText = messages(s"noRentDetails.label$labelSuffix"),
                     attributes = Map(
                         "data-hidden-by" -> "propertyRentedByYou",
                         "data-show-when-value-equals" -> "false"
-                    ),
-                    rows = 8,
-                    maxLength = 249,
-                    errorMessage = theForm.errors.asTextErrorMessageForField("noRentDetails"),
-                    label = Label(
-                        content = Text(if(summary.isAgent) messages("label.noRentDetails.agent") else messages("label.noRentDetails")),
-                        classes = "govuk-!-font-weight-bold"
-
                     )
                 )
             )

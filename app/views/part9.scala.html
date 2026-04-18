@@ -36,6 +36,10 @@
 
 @(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
+
 @previousPage = @{
     if(summary.rentReviews.getOrElse(PageSeven(leaseContainsRentReviews = false, None)).leaseContainsRentReviews) 7
     else 8
@@ -45,16 +49,6 @@
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="percentageOpenMarket">@messages("hint.rentBasedOnDetailsOpenMarket")</span>
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="percentageTurnover">@messages("hint.rentBasedOnDetailsPercentageTurnover")</span>
     <span data-hidden-by="rentBasedOn" data-hides-this="true" data-show-when-value-equals="other">@messages("hint.rentBasedOnDetailsOther")</span>
-}
-
-@annualRentInput = @{
-    val currencyInput = CurrencyField.input(theForm, "", "totalRent.annualRentExcludingVat", inputWidth = 10)
-
-    if(summary.isAgent) {
-        currencyInput.withLabelText(messages("totalRent.annualRentExcludingVat.label.agent"))
-    } else {
-        currencyInput
-    }
 }
 
 @layout(
@@ -68,7 +62,11 @@
         action = dataCapturePages.routes.PageController.savePage(9)
     ) {
 
-        @govukInput(annualRentInput)
+        @govukInput(
+            CurrencyField.input(theForm, "", "totalRent.annualRentExcludingVat", inputWidth = 10,
+                labelText = messages(s"totalRent.annualRentExcludingVat.label$labelSuffix")
+            )
+        )
 
         @includes.dateFields(form = theForm, field = "rentBecomePayable", govukDate = govukDateInput, showDays = true)
         @includes.dateFields(form = theForm, field = "rentActuallyAgreed", govukDate = govukDateInput, showDays = true)
