@@ -16,11 +16,9 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.AddressConnectionType
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
 @import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.*
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -31,7 +29,7 @@
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @heading = @{
     messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))
@@ -40,7 +38,7 @@
 @layout(
     pageTitle = heading,
     showH1 = false,
-    theForm = theForm
+    theForm = form
 ) {
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0),
@@ -48,31 +46,7 @@
 
         @helper.CSRF.formField
 
-        @govukRadios(
-            Radios(
-                name = "isRelated",
-                idPrefix = "isRelated",
-                items = Seq(
-                    AddressConnectionType.yes.toString -> messages("label.yes.oes"),
-                    AddressConnectionType.`yes-change-address`.toString -> Messages("label.yes.change.address"),
-                    AddressConnectionType.no.toString -> messages("label.no.nac.oes")
-                ).map(i => RadioItem(
-                    content = Text(i._2),
-                    checked = theForm("isRelated").value.contains(i._1),
-                    value = i._1
-                )),
-                errorMessage = theForm.errors.asTextErrorMessageForField("isRelated"),
-                fieldset =
-                    Fieldset(
-                        legend =
-                            Legend(
-                                content = Text(heading),
-                                isPageHeading = true,
-                                classes = "govuk-fieldset__legend--l"
-                            )
-                    )
-            )
-        )
+        @govukRadios(RadioField.radios(form, "section0", "isRelated", AddressConnectionType.values, labelText = heading))
 
         @govukButton(SubmitButton("continue"))
     }

@@ -121,9 +121,12 @@ label.retryLogin=Try again
 
 #SECTION 0
 ##############################
-label.isRelated=Select ‘Yes’ if you are still connected
-section0.intro.text=Are you still connected to {0}?
-error.isRelated=Select ‘Yes’ if you are still connected
+section0.intro.text = Are you still connected to {0}?
+section0.isRelated.label = Are you still connected to the property?
+section0.isRelated.yes.label = Yes
+section0.isRelated.yes-change-address.label = Yes - I want to edit the address
+section0.isRelated.no.label = No
+error.isRelated = Select ‘Yes’ if you are still connected
 
 #SECTION 1
 ##############################

@@ -122,9 +122,12 @@ label.retryLogin=Rhowch gynnig arall ar fewngofnodi
 
 #SECTION 0
 ##############################
-label.isRelated=Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
-section0.intro.text=A oes gennych gysylltiad o hyd â {0}?
-error.isRelated=Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
+section0.intro.text = A oes gennych gysylltiad o hyd â {0}?
+section0.isRelated.label = A oes gennych gysylltiad o hyd â’r eiddo?
+section0.isRelated.yes.label = Oes
+section0.isRelated.yes-change-address.label = Oes - rydw i am olygu’r cyfeiriad
+section0.isRelated.no.label = Nac oes
+error.isRelated = Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
 
 #SECTION 1
 ##############################
