@@ -16,12 +16,8 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.*
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
+@import uk.gov.hmrc.vo.service.model.input.*
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -33,93 +29,34 @@
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[CustomerDetails], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[CustomerDetails], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("section2.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
     summary = summary,
-    theForm = theForm
+    theForm = form
 ) {
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(2)) {
 
         <p class="govuk-body">@messages("section2.subheading")</p>
-
         <p class="govuk-inset-text">@messages("section2.heading.1")</p>
 
-        @govukInput(
-            Input(
-                id = "fullName",
-                name = "fullName",
-                value = theForm("fullName").value,
-                classes = "govuk-input--width-20",
-                label = Label(
-                    content = Text(messages("label.fullName")),
-                    classes = "govuk-!-font-weight-bold"
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("fullName")
-            )
-        )
+        @govukInput(TextField.input(form, "", "fullName", inputWidth = 20))
 
-        @govukRadios(
-            Radios(
-                name = "userType",
-                classes = "radio-button-that-show-hides",
-                idPrefix = "userType",
-                items = UserType.values.toSeq.filter(_ != UserType.vacated).map(userType =>
-                    RadioItem(
-                        content = Text(messages(s"userType.$userType")),
-                        checked = theForm("userType").value.contains(userType.toString),
-                        value = userType.toString
-                    )
-                ),
-                hint = Hint(content = Text(messages("hint.occupierExplanation"))),
-                errorMessage = theForm.errors.asTextErrorMessageForField("userType"),
-                fieldset =
-                    Fieldset(
-                        legend =
-                            Legend(
-                                content = Text(messages("label.userType")),
-                                classes = "govuk-!-font-weight-bold"
-                            )
-                    )
-            )
-        )
+        @govukRadios(RadioField.radios(form, "", "userType", UserType.values.filter(_ != UserType.vacated), isPageHeading = false))
 
         <fieldset class="govuk-fieldset" aria-describedby="contactDetails-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                 <h2 class="govuk-fieldset__heading">@messages("label.contactDetails")</h2>
             </legend>
-
             <div id="contactDetails-hint" class="govuk-hint">
             @messages("hint.anyQueries")
             </div>
 
-            @govukInput(
-                Input(
-                    classes = "govuk-input--width-20 ",
-                    attributes = Map("maxlength" -> "50"),
-                    label = Label(
-                        content = Text(messages("label.email1")),
-                        classes = "govuk-!-font-weight-bold"
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("contactDetails.email1")
-                ).withFormField(theForm("contactDetails.email1"))
-            )
-
-            @govukInput(
-                Input(
-                    classes = "govuk-input--width-20 ",
-                    attributes = Map("maxlength" -> "20"),
-                    label = Label(
-                        content = Text(messages("label.phone")),
-                        classes = "govuk-!-font-weight-bold"
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("contactDetails.phone")
-                ).withFormField(theForm("contactDetails.phone"))
-            )
-
+            @govukInput(TextField.input(form, "", "contactDetails.email1", inputWidth = 20, attributes = Map("maxlength" -> "50")))
+            @govukInput(TextField.input(form, "", "contactDetails.phone", inputWidth = 20, attributes = Map("maxlength" -> "20")))
         </fieldset>
 
         @continueSaveForLaterButtons()

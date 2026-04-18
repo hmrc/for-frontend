@@ -21,16 +21,16 @@
 
 <h2 class="govuk-heading-m">@messages("section2.heading")</h2>
 <dl class="govuk-summary-list">
-    @summaryBlock(messages("label.fullName"), 2, "fullName") {
+    @summaryBlock(messages("fullName.label"), 2, "fullName") {
         @p2.fullName
     }
-    @summaryBlock(messages("label.userType"), 2, "userType") {
-        @messages(s"userType.${p2.userType}")
+    @summaryBlock(messages("userType.label"), 2, "userType") {
+        @messages(s"userType.${p2.userType}.label")
     }
-    @summaryBlock(messages("label.email1"), 2, "contactDetails_email1") {
+    @summaryBlock(messages("contactDetails.email1.label"), 2, "contactDetails_email1") {
         @p2.contactDetails.email
     }
-    @summaryBlock(messages("label.phone"), 2, "contactDetails_phone") {
+    @summaryBlock(messages("contactDetails.phone.label"), 2, "contactDetails_phone") {
         @p2.contactDetails.phone
     }
 </dl>

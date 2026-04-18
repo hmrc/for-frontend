@@ -20,7 +20,7 @@
 
 <div class="sign-footer" >
     <h3>@messages("heading.summary.pdf")</h3>
-    <p>@Html(Messages("label.declaration", summary.submitter, messages("userType." + summary.customerDetails.map(_.userType).getOrElse("")).toLowerCase, summary.addressUserBelievesIsCorrect.singleLine))</p>
+    <p>@Html(messages("label.declaration", summary.submitter, messages(s"userType.${summary.customerDetails.map(_.userType).getOrElse("")}.label").toLowerCase, summary.addressUserBelievesIsCorrect.singleLine))</p>
     <h4>@messages("heading.summary.pdf.name")</h4>
     <h4>@messages("heading.summary.pdf.signature")</h4>
     <h4>@messages("heading.summary.pdf.date")</h4>
