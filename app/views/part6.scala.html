@@ -90,7 +90,7 @@
             ];
     </script>
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(6), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(6)) {
 
         <input type="hidden" name="variant" value="@variant" />
 

@@ -39,9 +39,7 @@
 ) {
 
     @formWithCSRF(
-        action = routes.FORSubmissionController.submit,
-        args = Symbol("class") -> "declaration", Symbol("id") -> "myFormId"
-
+        action = routes.FORSubmissionController.submit
     ) {
 
         @govukWarningText(WarningText(

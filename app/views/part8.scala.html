@@ -52,9 +52,7 @@
     theForm = theForm
 ) {
 
-    @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(8),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(8)) {
 
         <!-- Was the rent fixed between you (or your agent) and the landlord? -->
         @govukRadios(

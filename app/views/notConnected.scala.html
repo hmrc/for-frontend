@@ -45,7 +45,7 @@
 
     <p class="govuk-body">@messages("notConnected.subheading")</p>
 
-    @formWithCSRF(action = controllers.routes.NotConnectedController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = controllers.routes.NotConnectedController.onPageSubmit) {
 
         @govukInput(
             Input(

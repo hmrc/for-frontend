@@ -16,12 +16,9 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.*
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.TextField
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -32,79 +29,53 @@
         formHelp: includes.formHelp
 )
 
-@(theForm: Form[Address], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[Address], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @getAddressFieldValueOrDefaultUnlessErrors(field: String, defaultAddressValue: String) = @{
-    if(theForm.hasErrors) {
-        theForm(field).value.getOrElse("")
+    if(form.hasErrors) {
+        form(field).value.getOrElse("")
     } else {
         // if there are no errors on the form (i.e. it hasn't been submitted) then auto-populate with the default address
-        theForm(field).value.getOrElse(defaultAddressValue)
+        form(field).value.getOrElse(defaultAddressValue)
     }
 }
 @layout(
     pageTitle = messages("section1.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
-    theForm = theForm
+    theForm = form
 ) {
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(1),
-        args = Symbol("class") -> "section1", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(1), args = Symbol("novalidate") -> "novalidate") {
 
         @defining(Addresses.getAddress(summary)) { address =>
 
             @govukInput(
-                Input(
-                    id = "buildingNameNumber",
-                    name = "buildingNameNumber",
-                    value = getAddressFieldValueOrDefaultUnlessErrors("buildingNameNumber", address.buildingNameNumber),
-                    classes = "govuk-!-width-one-half",
-                    label = Label(
-                        content = Text(messages("label.buildingNameNumber"))
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("buildingNameNumber")
+                TextField.input(form, "", "buildingNameNumber", inputWidth = "half").copy(
+                    value = getAddressFieldValueOrDefaultUnlessErrors("buildingNameNumber", address.buildingNameNumber)
                 )
             )
 
             @govukInput(
-                Input(
-                    id = "street1",
-                    name = "street1",
-                    value = getAddressFieldValueOrDefaultUnlessErrors("street1", address.street1.getOrElse("")),
-                    attributes = Map("data-undo-value" -> address.street1.getOrElse("")),
-                    classes = "govuk-!-width-one-half",
-                    label = Label(
-                        content = Text(messages("label.street1"))
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("street1")
+                TextField.input(form, "", "street1", inputWidth = "half",
+                    attributes = Map("data-undo-value" -> address.street1.getOrElse(""))
+                ).copy(
+                    value = getAddressFieldValueOrDefaultUnlessErrors("street1", address.street1.getOrElse(""))
                 )
             )
 
             @govukInput(
-                Input(
-                    id = "street2",
-                    name = "street2",
-                    value = getAddressFieldValueOrDefaultUnlessErrors("street2", address.street2.getOrElse("")),
-                    attributes = Map("data-undo-value" -> address.street2.getOrElse("")),
-                    classes = "govuk-!-width-one-half",
-                    label = Label(
-                        content = Text(messages("label.street2"))
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("street2")
+                TextField.input(form, "", "street2", inputWidth = "half",
+                    attributes = Map("data-undo-value" -> address.street2.getOrElse(""))
+                ).copy(
+                    value = getAddressFieldValueOrDefaultUnlessErrors("street2", address.street2.getOrElse(""))
                 )
             )
 
             @govukInput(
-                Input(
-                    id = "postcode",
-                    name = "postcode",
-                    attributes = Map("data-undo-value" -> address.postcode.replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2")),
-                    value = getAddressFieldValueOrDefaultUnlessErrors("postcode", address.postcode.getOrElse("")).replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2"),
-                    classes = "govuk-!-width-one-half",
-                    label = Label(
-                        content = Text(messages("postcode.label"))
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("postcode")
+                TextField.input(form, "", "postcode", inputWidth = "half",
+                    attributes = Map("data-undo-value" -> address.postcode.replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2"))
+                ).copy(
+                    value = getAddressFieldValueOrDefaultUnlessErrors("postcode", address.postcode.getOrElse("")).replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2")
                 )
             )
 

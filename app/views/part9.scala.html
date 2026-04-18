@@ -65,8 +65,7 @@
 ) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(9),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = dataCapturePages.routes.PageController.savePage(9)
     ) {
 
         @govukInput(annualRentInput)

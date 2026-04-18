@@ -71,9 +71,7 @@
         <h2 class="govuk-heading-m">@messages("heading.giveFeedback")</h2>
 
         <p class="govuk-body">
-        @formWithCSRF(
-            action = feedback.routes.SurveyController.formCompleteFeedback,
-            args = Symbol("novalidate") -> "novalidate") {
+        @formWithCSRF(action = feedback.routes.SurveyController.formCompleteFeedback) {
 
             <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.notConnected.name)"/>
             <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>

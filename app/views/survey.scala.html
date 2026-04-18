@@ -42,9 +42,7 @@
 
     <p class="govuk-body">@messages("label.feedback.p1")</p>
 
-    @formWithCSRF(
-        action = routes.SurveyController.formCompleteFeedback,
-        args = Symbol("novalidate") -> "novalidate") {
+    @formWithCSRF(action = routes.SurveyController.formCompleteFeedback) {
 
         <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.normalJourney.name)"/>
         <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>

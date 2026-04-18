@@ -40,7 +40,7 @@
     theForm = theForm
 ) {
 
-    @formWithCSRF(action = controllers.routes.PreviouslyConnectedController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = controllers.routes.PreviouslyConnectedController.onPageSubmit) {
 
         @govukRadios(
             Radios(

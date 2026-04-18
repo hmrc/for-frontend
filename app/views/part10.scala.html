@@ -46,8 +46,7 @@
 ) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(10),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate"
+        action = dataCapturePages.routes.PageController.savePage(10)
     ) {
 
         @govukRadios(

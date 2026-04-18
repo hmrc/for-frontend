@@ -46,7 +46,7 @@
 
     <p class="govuk-body">@messages("section5.heading.help")</p>
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(5), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(5)) {
 
         @govukInput(
             Input(

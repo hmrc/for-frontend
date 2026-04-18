@@ -40,8 +40,7 @@
     <h3 class="govuk-body">@messages("saveForLater.hint")</h3>
 
     @formWithCSRF(
-        action = routes.SaveForLaterController.resume,
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = routes.SaveForLaterController.resume
     ) {
         @helper.CSRF.formField
 

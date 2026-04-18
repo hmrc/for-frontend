@@ -55,8 +55,7 @@
 ) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(4),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = dataCapturePages.routes.PageController.savePage(4)
     ) {
 
         @govukRadios(
@@ -142,7 +141,7 @@
                                     classes = "govuk-input--width-20 keep-val",
                                     errorMessage = theForm.errors.asTextErrorMessageForField(s"sublet[$idx].tenantAddress.street1"),
                                     attributes = Map(
-                                        "placeholder" -> messages("label.street1")
+                                        "placeholder" -> messages("street1.label")
                                     )
                                 )
                             )
@@ -154,7 +153,7 @@
                                     classes = "govuk-input--width-20 keep-val",
                                     errorMessage = theForm.errors.asTextErrorMessageForField(s"sublet[$idx].tenantAddress.street2"),
                                     attributes = Map(
-                                        "placeholder" -> messages("label.street2")
+                                        "placeholder" -> messages("street2.label")
                                     )
                                 )
                             )

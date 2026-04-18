@@ -34,7 +34,7 @@
     fullWidth = true
 ) {
 
-    @formWithCSRF(action = controllers.routes.NotConnectedCheckYourAnswersController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = controllers.routes.NotConnectedCheckYourAnswersController.onPageSubmit) {
 
         @includes.notConnectedCheckYourAnswersTable(notConnectedSummary)
 

@@ -41,8 +41,7 @@
     theForm = form
 ) {
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0),
-        args = Symbol("class") -> "section0", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0), args = Symbol("novalidate") -> "novalidate") {
 
         @helper.CSRF.formField
 

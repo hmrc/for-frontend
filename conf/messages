@@ -131,8 +131,7 @@ error.isRelated = Select ‘Yes’ if you are still connected
 #SECTION 1
 ##############################
 section1.heading=Edit address
-label.yes.change.address=Yes - I want to edit the address
-label.buildingNameNumber=Address line 1
+buildingNameNumber.label = Address line 1
 label.changedAddress=Changed address
 label.address=Address
 label.UKInternationaladdress= UK/International Address
@@ -142,8 +141,8 @@ label.addresss.townCity=Town or city
 postcode.label = Postcode
 label.ukOrInternationalPostcode=Postcode / Zipcode
 label.buildingNameNumber.optional=Address line 1  (optional)
-label.street1=Address line 2 (optional)
-label.street2=Address line 3 (optional)
+street1.label = Address line 2 (optional)
+street2.label = Address line 3 (optional)
 label.townCity=Town or city
 label.address.townCity=Town or city
 label.address.postcode=Postcode (optional)

@@ -48,8 +48,7 @@
 ) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(7),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = dataCapturePages.routes.PageController.savePage(7)
     ) {
 
         @theForm("agreementStartDate").value.map { agreementStartDate =>

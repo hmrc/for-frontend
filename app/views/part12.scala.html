@@ -48,8 +48,7 @@
     <p class="govuk-!-font-size-27 govuk-!-font-weight-bold govuk-body">@messages("section12.under.terms.text")</p>
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(12),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = dataCapturePages.routes.PageController.savePage(12)
     ) {
 
         @govukRadios(

@@ -41,9 +41,7 @@
 
     <p class="govuk-body">@messages("label.feedback.p1")</p>
 
-    @formWithCSRF(
-        action = routes.FeedbackController.handleFeedbackSubmit.copy(url = request.uri),
-        args = Symbol("novalidate") -> "novalidate") {
+    @formWithCSRF(action = routes.FeedbackController.handleFeedbackSubmit.copy(url = request.uri)) {
 
         <input type="hidden" name="feedback-name" value="Anonymous user"/>
         <input type="hidden" name="feedback-email" value="anonymous@@anonymous.com"/>

@@ -48,7 +48,7 @@
     theForm = theForm
 ) {
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(3), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(3)) {
         @* What is the property used for? *@
         @govukInput(
             Input(
