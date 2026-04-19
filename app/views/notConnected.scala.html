@@ -16,87 +16,38 @@
 
 @import models.pages.Summary
 @import models.serviceContracts.submissions.NotConnected
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.textarea.Textarea
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcCharacterCount
 @import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.*
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
-        govukTextarea: GovukTextarea,
         govukInput: GovukInput,
         govukButton: GovukButton,
+        hmrcCharacterCount: HmrcCharacterCount,
         formWithCSRF: FormWithCSRF
 )
 
-@(theForm: Form[NotConnected], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[NotConnected], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("notConnected.heading"),
     backLinkUrl = routes.PreviouslyConnectedController.onPageView.url,
     summary = summary,
-    theForm = theForm
+    theForm = form
 ) {
 
     <p class="govuk-body">@messages("notConnected.subheading")</p>
 
     @formWithCSRF(action = controllers.routes.NotConnectedController.onPageSubmit) {
 
-        @govukInput(
-            Input(
-                id = "fullName",
-                name = "fullName",
-                value = theForm("fullName").value,
-                classes = "govuk-input--width-20",
-                label = Label(
-                    content = Text(messages("fullName.label"))
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("fullName")
-            )
-        )
+        @govukInput(TextField.input(form, "", "fullName", inputWidth = 20, autocomplete = "name"))
+        @govukInput(TextField.input(form, "", "email", inputWidth = 20, autocomplete = "email", inputType = "email"))
+        @govukInput(TextField.input(form, "", "phoneNumber", inputWidth = 20, autocomplete = "tel", inputType = "tel"))
 
-        @govukInput(
-            Input(
-                id = "email",
-                name = "email",
-                value = theForm("email").value,
-                classes = "govuk-input--width-20",
-                label = Label(
-                    content = Text(messages("label.email"))
-                ),
-                errorMessage = theForm.errors.asTextErrorMessageForField("email")
-            )
-        )
-
-        @govukInput(
-            Input(
-                id = "phoneNumber",
-                name = "phoneNumber",
-                value = theForm("phoneNumber").value,
-                classes = "govuk-input--width-20",
-                label = Label(content = Text(messages("label.phoneNumber"))),
-                errorMessage = theForm.errors.asTextErrorMessageForField("phoneNumber")
-            )
-        )
-
-        @govukTextarea(
-            Textarea(
-                id = "additionalInformation",
-                name = "additionalInformation",
-                value = theForm("additionalInformation").value,
-                label = Label(
-                    content = Text(messages("notConnected.additionalInformation") + " " + messages("optional"))
-                ),
-                hint = Hint(
-                    content = Text(messages("notConnected.additionalInformationHelp"))
-                )
-            )
-        )
+        @hmrcCharacterCount(TextAreaField.characterCount(form, "notConnected", "additionalInformation"))
 
         @govukButton(SubmitButton("continue"))
     }

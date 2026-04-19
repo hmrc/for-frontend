@@ -953,12 +953,13 @@ hint.vacated.form=<p>Please send:</p>\
 
 #NOT connected journey
 ######################
-label.email=Email address
-label.phoneNumber=Phone number
+email.label = Email address
+phoneNumber.label = Phone number
 notConnected.heading = Remove connection to this property
 notConnected.subheading = We’ll use these details if we need to contact you.
 notConnected.additionalInformation = Additional information
-notConnected.additionalInformationHelp = For example, the name of the current owner or occupier.
+notConnected.additionalInformation.label = Additional information (optional)
+notConnected.additionalInformation.hint = For example, the name of the current owner or occupier.
 notConnected.emailOrPhone = You must provide a phone number or email address
 notConnected.error.nameInvalid = You can only enter these characters: A-Z, a-z, -, ., (), ", commas, and spaces
 
@@ -968,7 +969,7 @@ notConnected.whatNext2 = You will not receive any further letters unless they ha
 notConnected.whatNext3 = You should also tell your local authority that you are no longer connected to \
   this property or you may be asked to provide these details again.
 
-notConnected.previouslyConnected = Have you ever had a connection to the property?
+notConnected.haveYouBeenConnected.label = Have you ever had a connection to the property?
 previously-connected.mandatory = Select ‘Yes’ if you were previously connected
 
 

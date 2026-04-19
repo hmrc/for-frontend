@@ -17,7 +17,6 @@
 @import models.pages.{PageThree, Summary}
 @import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcCharacterCount
 @import uk.gov.hmrc.vo.service.model.input.*
 @import util.DateUtil
@@ -29,7 +28,6 @@
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
         hmrcCharacterCount: HmrcCharacterCount,
-        govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
         continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp

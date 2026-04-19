@@ -961,12 +961,13 @@ hint.vacated.form=<p>Anfonwch:</p>\
 
 #NOT connected journey
 ######################
-label.email=Cyfeiriad e-bost
-label.phoneNumber=Rhif ffôn
+email.label = Cyfeiriad e-bost
+phoneNumber.label = Rhif ffôn
 notConnected.heading = Dileu eich cysylltiad â’r eiddo hwn
 notConnected.subheading = Byddwn yn defnyddio’r manylion hyn os bydd angen i ni gysylltu â chi.
 notConnected.additionalInformation = Gwybodaeth ychwanegol
-notConnected.additionalInformationHelp = Er enghraifft, enw’r perchennog neu’r meddiannydd presennol.
+notConnected.additionalInformation.label = Gwybodaeth ychwanegol (dewisol)
+notConnected.additionalInformation.hint = Er enghraifft, enw’r perchennog neu’r meddiannydd presennol.
 notConnected.emailOrPhone = Rhaid i chi roi rhif ffôn neu gyfeiriad e-bost
 notConnected.error.nameInvalid = Gallwch ond nodi’r cymeriadau hyn: A-Y, a-y, -, ., (), ", comaau, a bylchau
 
@@ -976,7 +977,7 @@ notConnected.whatNext2 = Ni fyddwch yn cael unrhyw lythyrau pellach oni bai eu b
 notConnected.whatNext3 = Dylech hefyd roi gwybod i’ch awdurdod lleol am y ffaith nad ydych yn gysylltiedig â’r \
   eiddo hwn bellach neu efallai y gofynnir i chi roi’r manylion hyn eto.
 
-notConnected.previouslyConnected = Ydych chi erioed wedi cael cysylltiad â’r eiddo?
+notConnected.haveYouBeenConnected.label = Ydych chi erioed wedi cael cysylltiad â’r eiddo?
 previously-connected.mandatory = Dewiswch ‘Iawn’ os oedd cysylltiad yn arfer bod gennych
 
 

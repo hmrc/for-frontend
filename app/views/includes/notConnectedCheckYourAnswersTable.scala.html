@@ -21,7 +21,7 @@
 
 <dl class="govuk-summary-list">
 
-    @notConnectedSummaryBlock(messages("notConnected.previouslyConnected"),
+    @notConnectedSummaryBlock(messages("notConnected.haveYouBeenConnected.label"),
         "/sending-rental-information/previously-connected?edit=haveYouBeenConnected#haveYouBeenConnected",
         "haveYouBeenConnected") {
         @{
@@ -40,7 +40,7 @@
     }
 
     @if(notConnectedSummary.notConnected.get.emailAddress.nonEmpty) {
-        @notConnectedSummaryBlock(messages("label.email"),
+        @notConnectedSummaryBlock(messages("email.label"),
             "/sending-rental-information/not-connected?edit=email#email",
             "email") {
             @notConnectedSummary.notConnected.get.emailAddress.getOrElse("-")
@@ -48,7 +48,7 @@
     }
 
     @if(notConnectedSummary.notConnected.get.phoneNumber.nonEmpty) {
-        @notConnectedSummaryBlock(messages("label.phoneNumber"),
+        @notConnectedSummaryBlock(messages("phoneNumber.label"),
             "/sending-rental-information/not-connected?edit=phoneNumber#phoneNumber", "phoneNumber") {
             @notConnectedSummary.notConnected.get.phoneNumber.getOrElse("-")
         }
