@@ -160,10 +160,10 @@ object ForDataCapturePage:
   object Unknown extends FormAction
 
   def extractAction(fields: Option[Map[String, Seq[String]]]): FormAction = fields map { fs =>
-    fs.get("continue_button").map(_ => Continue)
-      .orElse(fs.get("save_button").map(_ => Save))
-      .orElse(fs.get("back_button").map(_ => Back))
-      .orElse(fs.get("update_button").map(_ => Update))
+    fs.get("continue-button").map(_ => Continue)
+      .orElse(fs.get("save-button").map(_ => Save))
+      .orElse(fs.get("back-button").map(_ => Back))
+      .orElse(fs.get("update-button").map(_ => Update))
       .getOrElse(Unknown)
   } getOrElse Unknown
 

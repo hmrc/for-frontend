@@ -10,9 +10,8 @@ skip.content=Skip to main content
 login.heading=Enter your reference number
 failedLogin.heading=Login error
 lockedOut.heading=Locked out
-label.continue=Continue
-button.label.submit=Submit
-button.label.submitFeedback=Submit your feedback
+button.submit.label = Submit
+button.submitFeedback.label = Submit your feedback
 optional=(optional)
 help.date.month.year=For example, {0}
 help.optional.date.month.year=For example, {0} (optional)
@@ -105,14 +104,14 @@ label.no.na = No
 
 #BUTTON LABELS
 ##############################
-button.label.back=Back
-button.label.continue=Continue
-button.label.save=Save for later
+button.back.label = Back
+button.continue.label = Continue
+button.save.label = Save for later
 
 #LOGIN
 ##############################
 label.letter=You’ll find your reference number and postcode in your rent and lease detail letter.
-label.referenceNumber=Reference number
+referenceNumber.label = Reference number
 hint.letter=As it appears on the request for information letter
 error.invalid_refnum=Enter your reference number as it appears on your letter
 error.invalid_postcode_as_on_letter=Enter your postcode as it appears on your letter
@@ -122,26 +121,28 @@ label.retryLogin=Try again
 
 #SECTION 0
 ##############################
-label.isRelated=Select ‘Yes’ if you are still connected
-section0.intro.text=Are you still connected to {0}?
-error.isRelated=Select ‘Yes’ if you are still connected
+section0.intro.text = Are you still connected to {0}?
+section0.isRelated.label = Are you still connected to the property?
+section0.isRelated.yes.label = Yes
+section0.isRelated.yes-change-address.label = Yes - I want to edit the address
+section0.isRelated.no.label = No
+error.isRelated = Select ‘Yes’ if you are still connected
 
 #SECTION 1
 ##############################
 section1.heading=Edit address
-label.yes.change.address=Yes - I want to edit the address
-label.buildingNameNumber=Address line 1
+buildingNameNumber.label = Address line 1
 label.changedAddress=Changed address
 label.address=Address
 label.UKInternationaladdress= UK/International Address
 label.address.street1=Address line 2
 label.address.street2=Town or city
 label.addresss.townCity=Town or city
-label.postcode=Postcode
+postcode.label = Postcode
 label.ukOrInternationalPostcode=Postcode / Zipcode
 label.buildingNameNumber.optional=Address line 1  (optional)
-label.street1=Address line 2 (optional)
-label.street2=Address line 3 (optional)
+street1.label = Address line 2 (optional)
+street2.label = Address line 3 (optional)
 label.townCity=Town or city
 label.address.townCity=Town or city
 label.address.postcode=Postcode (optional)
@@ -154,13 +155,17 @@ label.suggestedChanges=Suggested changes to the address may not be<br />accepted
 section2.heading=About you
 section2.subheading=These should be the details of the person completing this.
 section2.heading.1=Due to data security, we are unable to pre-populate this form.
-label.fullName=Full name
+fullName.label = Full name
 label.contactDetails=What are your contact details?
-label.userType=I am (or represent) the
-hint.userType=If you are no longer the owner/occupier or have recently vacated the property, please click <a href="{0}" target="_self" id="inpageVacatedForm">here<span class="visuallyhidden"> ({1})</span></a> or continue below.
+userType.label = I am (or represent) the
+userType.occupier.label = Occupier or trustee for occupier
+userType.occupiersAgent.label = Occupier’s agent
+userType.owner.label = Owner or trustee for owner
+userType.ownersAgent.label = Owner’s agent
+userType.vacated.label = No longer the occupier or recently vacated
 hint.beforeyoustart=Before you start
-label.email1=Email address
-label.phone=Telephone number
+contactDetails.email1.label = Email address
+contactDetails.phone.label = Telephone number
 label.contactDetails.phone=Phone
 label.contactAddressType=Which address would you like us to use if we need to write to you in future?
 hint.contacts=In case we need to contact them about the property
@@ -185,7 +190,7 @@ label.alternativeContact.address.postcode=Postcode
 label.alternativeContact.contactDetails=Alternative contact
 label.alternativeContact.address=Alternative contact’s address
 hint.anyQueries=We will only use these details to update you about your enquiry.
-hint.occupierExplanation=If you’re renting or leasing the property, even as a charity or non-profit organisation, you’re considered the occupier. If you are both the owner and occupier, select ‘Owner or trustee for owner’.
+userType.hint = If you’re renting or leasing the property, even as a charity or non-profit organisation, you’re considered the occupier. If you are both the owner and occupier, select ‘Owner or trustee for owner’.
 label.noJs.contactDetails.email1=Answer this only if you’ve selected ‘Email’ or ‘Both’
 label.noJs.contactDetails.phone=Answer this only if you’ve selected ‘Phone’ or ‘Both’
 label.noJs.contactDetails.contactAddressType=Answer this only if you’ve selected ‘Occupier’ or ‘Owner’
@@ -200,39 +205,35 @@ error.userType.required=Select your connection to the property
 #SECTION 3
 ##############################
 section3.heading=About the property
-label.propertyTypes=What is the property used for?
+propertyType.label = What is the property used for?
 propertyTypes.shop=Shop
 propertyTypes.factory=Factory
 propertyTypes.office=Office
 propertyTypes.warehouse=Warehouse
 propertyTypes.other=Other
 label.otherPropertyType=Other property
-propertyTypes.help=For example, office, shop, store.
-label.occupierTypes=Who occupies the property?
-occupierType.help=If the occupier is a charity, trust, or any other non-commercial organisation, select ‘A company’.
-occupierType.individuals=One or more individuals
-occupierType.company=A company
-occupierType.nobody=Nobody, the property is empty
-label.companyName=Company name (occupier)
-label.occupierCompanyContact=Name of contact for occupier
+propertyType.hint = For example, office, shop, store.
+occupierType.label = Who occupies the property?
+occupierType.hint = If the occupier is a charity, trust, or any other non-commercial organisation, select ‘A company’.
+occupierType.individuals.label = One or more individuals
+occupierType.company.label = A company
+occupierType.nobody.label = Nobody, the property is empty
+companyName.label = Company name (occupier)
+occupierCompanyContact.label = Name of contact for occupier
 label.firstOccupationDate=When did they first occupy the property?
 label.firstOccupationDate.agent=When did they first occupy the property?
 label.firstOccupationDate.help=Enter the date the person or company took on the property, even if they did not start trading or paying rent from that date.
-label.mainOccupierName=Main occupier’s name
-label.propertyOwnedByYou=Do you own the property?
-label.propertyOwnedByYou.agent=Does your client own the property?
-label.propertyRentedBy=Do you pay rent on the property?
-label.propertyRentedBy.agent=Does your client pay rent on the property?
-label.propertyRentedByYou=Do you pay rent on the property?
-label.propertyRentedByYou.agent=Does your client pay rent on the property?
-label.propertyType=What is the property used for?
-label.occupierType=Who occupies the property?
-label.occupierCompanyName=Company name
+mainOccupierName.label = Main occupier’s name
+propertyOwnedByYou.label = Do you own the property?
+propertyOwnedByYou.label.agent = Does your client own the property?
+propertyRentedByYou.label = Do you pay rent on the property?
+propertyRentedByYou.label.agent = Does your client pay rent on the property?
+occupierCompanyName.label = Company name
 label.noJs.occupierCompanyName=Answer this only if you’ve selected ‘A company’
 label.noJs.firstOccupationDate=Answer this only if you’ve selected ‘One or more individuals’ or ‘A company’
 label.noJs.propertyRentedBy=Answer this only if you’ve selected ‘No’
-label.noRentDetails.agent=Tell us why your client does not have to pay rent on this property
-label.noRentDetails=Tell us why you do not pay rent on this property
+noRentDetails.label.agent = Tell us why your client does not have to pay rent on this property
+noRentDetails.label = Tell us why you do not pay rent on this property
 
 error.propertyType.required=Enter what the property is used for
 error.propertyType.maxLength=The property use must be 100 characters or fewer
@@ -849,7 +850,7 @@ saveForLater.haveYouForgotten=If you have forgotten your password, you’ll need
 saveForLater.logout=Log out
 saveForLater.or=or
 saveForLater.createPassword=Create a password to retrieve your saved information
-saveForLater.next=Save password
+button.savePassword.label = Save password
 
 #SAVEDFORM
 ###############################
@@ -908,7 +909,6 @@ heading.summary.pdf.footnote=This is a Notice served under paragraph 5(1) of sch
 ###############################
 heading.giveFeedback=Give feedback for rent and lease details
 copy.giveFeedback=Leave your suggestions or comments about our service.
-button.label.submit.feedback=Send feedback
 link.feedback=Feedback
 label.help.link=Report a problem with this page
 label.help.title=Page help
@@ -953,12 +953,13 @@ hint.vacated.form=<p>Please send:</p>\
 
 #NOT connected journey
 ######################
-label.email=Email address
-label.phoneNumber=Phone number
+email.label = Email address
+phoneNumber.label = Phone number
 notConnected.heading = Remove connection to this property
 notConnected.subheading = We’ll use these details if we need to contact you.
 notConnected.additionalInformation = Additional information
-notConnected.additionalInformationHelp = For example, the name of the current owner or occupier.
+notConnected.additionalInformation.label = Additional information (optional)
+notConnected.additionalInformation.hint = For example, the name of the current owner or occupier.
 notConnected.emailOrPhone = You must provide a phone number or email address
 notConnected.error.nameInvalid = You can only enter these characters: A-Z, a-z, -, ., (), ", commas, and spaces
 
@@ -968,7 +969,7 @@ notConnected.whatNext2 = You will not receive any further letters unless they ha
 notConnected.whatNext3 = You should also tell your local authority that you are no longer connected to \
   this property or you may be asked to provide these details again.
 
-notConnected.previouslyConnected = Have you ever had a connection to the property?
+notConnected.haveYouBeenConnected.label = Have you ever had a connection to the property?
 previously-connected.mandatory = Select ‘Yes’ if you were previously connected
 
 
@@ -977,11 +978,6 @@ previously-connected.mandatory = Select ‘Yes’ if you were previously connect
 contactAddressType.mainAddress=Your address
 contactAddressType.alternativeAddress=I want to be contacted at an alternative address
 contactAddressType.contactsAddress=I want someone else to be contacted on my behalf
-userType.occupier=Occupier or trustee for occupier
-userType.occupiersAgent=Occupier’s agent
-userType.owner=Owner or trustee for owner
-userType.ownersAgent=Owner’s agent
-userType.vacated=No longer the occupier or recently vacated
 leaseAgreementTypes.verbal= No agreement or a verbal agreement
 leaseAgreementTypes.leaseTenancy=A lease or tenancy agreement
 leaseAgreementTypes.licenceOther=Licence or other type of written agreement
@@ -1157,7 +1153,7 @@ index.rentDetails=details of your rent, including the date your rent was fixed
 index.landlordDetails=the name and address of your landlord, if you’re a tenant
 index.reviewDetails=any rent review periods
 index.rentFreePeriodDetails=any rent-free periods or other incentives
-index.start=Start now
+button.start.label = Start now
 index.before=Before you start
 index.before.p1=It takes about 30 mins to use this service.
 index.before.p2=You don’t have to complete it in one go. You can save what you’ve done and return to finish later on.

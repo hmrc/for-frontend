@@ -23,41 +23,42 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
-        govukInput:  GovukInput,
-        govukDateInput:GovukDateInput,
+        govukInput: GovukInput,
+        govukDateInput: GovukDateInput,
         govukCharacterCount: GovukCharacterCount,
         govukFieldset: GovukFieldset,
         govukHint: GovukHint,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
 @rentFreeMonthsInput = {
-    @govukHint(
-        Hint(
-            id = Some("rentFreePeriodDetails.rentFreePeriodLength-hint"),
-            content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodLength" + labelSuffix))
+@govukHint(
+    Hint(
+        id = "rentFreePeriodDetails.rentFreePeriodLength-hint",
+        content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodLength" + labelSuffix))
+    )
+)
+@govukInput(
+    Input(
+        id = "rentFreePeriodDetails.rentFreePeriodLength",
+        name = "rentFreePeriodDetails.rentFreePeriodLength",
+        value = theForm("rentFreePeriodDetails.rentFreePeriodLength").value,
+        classes = "govuk-input--width-3",
+        errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodLength"),
+        attributes = Map("maxLength" -> "3"),
+        label = Label(
+            content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength.months"))
         )
     )
-    @govukInput(
-        Input(
-            id = "rentFreePeriodDetails.rentFreePeriodLength",
-            name = "rentFreePeriodDetails.rentFreePeriodLength",
-            value = theForm("rentFreePeriodDetails.rentFreePeriodLength").value,
-            classes = "govuk-input--width-3",
-            errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodLength"),
-            attributes = Map("maxLength" -> "3"),
-            label = Label(
-                content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodLength.months"))
-            )
-        )
-    )
+)
 }
 
 @layout(
@@ -65,40 +66,36 @@
     backLinkUrl = dataCapturePages.routes.PageController.showPage(10).url,
     summary = summary,
     theForm = theForm
-){
+) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(11),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
-
+        action = dataCapturePages.routes.PageController.savePage(11)
     ) {
         @govukRadios(
             Radios(
                 name = "rentFreePeriod",
-                idPrefix = Option("rentFreePeriod"),
+                idPrefix = "rentFreePeriod",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.do"),
                     "false" -> messages("label.no.naddo")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("rentFreePeriod").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriod"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.rentFreePeriod" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -120,7 +117,7 @@
                     maxLength = 250,
                     errorMessage = theForm.errors.asTextErrorMessageForField("rentFreePeriodDetails.rentFreePeriodDetails"),
                     label = Label(
-                        content = Text( messages("label.rentFreePeriodDetails.rentFreePeriodDetails" + labelSuffix)),
+                        content = Text(messages("label.rentFreePeriodDetails.rentFreePeriodDetails" + labelSuffix)),
                         classes = "govuk-!-font-weight-bold"
                     ),
                     hint = Hint(content = Text(messages("hint.rentFreePeriodDetails.rentFreePeriodDetails")))
@@ -131,31 +128,29 @@
         @govukRadios(
             Radios(
                 name = "payCapitalSum",
-                idPrefix = Option("payCapitalSum"),
+                idPrefix = "payCapitalSum",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.do"),
                     "false" -> messages("label.no.naddo")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("payCapitalSum").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 hint = Hint(content = Text(messages("hint.payCapitalSum"))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("payCapitalSum"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.payCapitalSum" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -165,8 +160,8 @@
             )
 
             @includes.dateFields(
-                form=theForm,
-                field= "capitalPaidDetails.paymentDate",
+                form = theForm,
+                field = "capitalPaidDetails.paymentDate",
                 govukDate = govukDateInput
             )
         </div>
@@ -174,30 +169,28 @@
         @govukRadios(
             Radios(
                 name = "receiveCapitalSum",
-                idPrefix = Option("receiveCapitalSum"),
+                idPrefix = "receiveCapitalSum",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.do"),
                     "false" -> messages("label.no.naddo")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("receiveCapitalSum").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("receiveCapitalSum"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.receiveCapitalSum" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -207,13 +200,13 @@
             )
 
             @includes.dateFields(
-                form=theForm,
-                field= "capitalReceivedDetails.paymentDate",
+                form = theForm,
+                field = "capitalReceivedDetails.paymentDate",
                 govukDate = govukDateInput
             )
         </div>
 
-        @includes.continueSaveForLaterButtons(govukButton)
+        @continueSaveForLaterButtons()
 
         @formHelp()
 

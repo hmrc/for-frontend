@@ -16,28 +16,30 @@
 
 @import models.journeys.Journey
 @import models.pages.Summary
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.vo.service.model.button.{LinkButton, LinkSecondaryButton}
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
+        govukButton: GovukButton,
         formHelp: includes.formHelp
 )
 
-
-@(summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@(summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("heading.summary"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(Journey.lastPageFor(summary)).url,
     summary = summary,
     fullWidth = true
-){
+) {
 
     @includes.checkYourAnswersTable(summary)
 
-    <div class="summary-actions govuk-button-group dontprint" >
-        <a id="continue" href="@routes.ApplicationController.declaration" class="govuk-button" role="link">@messages("button.label.continue")</a>
-        <a href="@routes.SaveForLaterController.saveForLater(request.path)" class="govuk-button govuk-button--secondary" role="link">@messages("button.label.save")</a>
+    <div class="govuk-button-group dontprint">
+        @govukButton(LinkButton("continue", routes.ApplicationController.declaration.url))
+        @govukButton(LinkSecondaryButton("save", routes.SaveForLaterController.saveForLater(request.path).url))
     </div>
     <a href="#" class="govuk-link print-link">@messages("label.print.printorsave")</a>
 

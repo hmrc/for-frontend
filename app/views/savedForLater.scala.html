@@ -14,11 +14,11 @@
  * limitations under the License.
  *@
 
-@import views.html.components.PrimaryLayout
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
 @import util.DateUtil.fullDateFormatter
+@import views.html.components.PrimaryLayout
 
 @import java.time.LocalDate
 
@@ -28,12 +28,11 @@
         formHelp: includes.formHelp
 )
 
-
-@(password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: RequestHeader,  messages: Messages)
+@(password: String, expiryDate: LocalDate, hasTimedOut: Boolean = false)(implicit request: RequestHeader, messages: Messages)
 
 @title = @{
     if(!hasTimedOut) {
-       messages("saveForLater.preHeader")
+        messages("saveForLater.preHeader")
     } else {
         messages("saveForLater.preHeaderTimeout")
     }
@@ -49,7 +48,6 @@
         )
     )
 
-
     <p class="govuk-body">@messages("saveForLater.info.p.2")</p>
 
     <div class="govuk-panel govuk-panel--confirmation">
@@ -60,7 +58,9 @@
 
     <p class="govuk-body">
         @messages("saveForLater.paragraph")
-        @{fullDateFormatter.format(expiryDate)}
+        @{
+            fullDateFormatter.format(expiryDate)
+        }
     </p>
 
     <p>
@@ -79,7 +79,6 @@
     <p>
         <a href="#" class="govuk-link print-link hide-if-no-js">@messages("saveForLater.print")</a>
     </p>
-
 
     @formHelp()
 }

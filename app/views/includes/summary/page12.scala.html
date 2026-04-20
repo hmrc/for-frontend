@@ -14,11 +14,13 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
+@import helpers.summary.*
+@import models.pages.*
+
 @import java.text.NumberFormat
-@import models.pages._
 
 @(p12: PageTwelve)(implicit messages: Messages)
+
 <h2 class="govuk-heading-m">@messages("section12.heading")</h2>
 <dl class="govuk-summary-list">
     @summaryBlock(messages("label.responsibleOutsideRepairs"), 12, "responsibleOutsideRepairs") {
@@ -57,7 +59,7 @@
     }
     @if(p12.includedServices) {
         @p12.includedServicesDetails.zipWithIndex.map { case (serviceDetails, idx) =>
-            @summaryBlock(s"${idx+1}. " + messages("label.includedServicesDetails.chargeDescription"), 12, s"includedServicesDetails_${idx}_chargeDescription_text") {
+            @summaryBlock(s"${idx + 1}. " + messages("label.includedServicesDetails.chargeDescription"), 12, s"includedServicesDetails_${idx}_chargeDescription_text") {
                 @serviceDetails.chargeDescription
                 <br/>
                 @(s"£${NumberFormat.getNumberInstance().format(serviceDetails.chargeCost)}")

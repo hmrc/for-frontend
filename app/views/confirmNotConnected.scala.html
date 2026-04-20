@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -25,27 +26,26 @@
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         govukCharacterCount: GovukCharacterCount,
-        formWithCSRF:FormWithCSRF
+        formWithCSRF: FormWithCSRF
 )
 
-@(theForm: Form[?], notConnectedSummary: Option[NotConnectedSummary])(implicit request: RequestHeader,  messages: Messages)
-
+@(theForm: Form[?], notConnectedSummary: Option[NotConnectedSummary])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("label.confirm.heading"),
     showH1 = false,
     summary = notConnectedSummary.map(_.summary),
     theForm = theForm
-){
+) {
 
     <div class="govuk-panel govuk-panel--confirmation no-print">
         <h1 class="govuk-panel__title">@messages("label.confirm.heading")</h1>
     </div>
 
     <p class="govuk-body">
-        @if(notConnectedSummary.get.notConnected.get.emailAddress.nonEmpty) {
-            @messages("emailAddress.confirmation") <span style="font-weight:bold;">@notConnectedSummary.get.notConnected.get.emailAddress.getOrElse("")</span>
-        }
+    @if(notConnectedSummary.get.notConnected.get.emailAddress.nonEmpty) {
+        @messages("emailAddress.confirmation") <span style="font-weight: bold;">@notConnectedSummary.get.notConnected.get.emailAddress.getOrElse("")</span>
+    }
     </p>
 
     @includes.printConfirmation()
@@ -57,7 +57,7 @@
 
 
     <div class="print-only">
-        @includes.notConnectedCheckYourAnswersTable(notConnectedSummary.get)
+    @includes.notConnectedCheckYourAnswersTable(notConnectedSummary.get)
     </div>
 
 
@@ -71,9 +71,7 @@
         <h2 class="govuk-heading-m">@messages("heading.giveFeedback")</h2>
 
         <p class="govuk-body">
-        @formWithCSRF(
-            action = feedback.routes.SurveyController.formCompleteFeedback,
-            args = Symbol("novalidate") -> "novalidate") {
+        @formWithCSRF(action = feedback.routes.SurveyController.formCompleteFeedback) {
 
             <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.notConnected.name)"/>
             <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>
@@ -86,21 +84,19 @@
                         RadioItem(
                             content = Text(messages(s"satisfactionSurveyType.$satisfaction")),
                             checked = theForm("satisfaction").value.contains(satisfaction.toString),
-                            value   = Option(satisfaction.toString)
+                            value = satisfaction.toString
                         )
                     ),
                     errorMessage = theForm.errors.asTextErrorMessageForField("satisfaction"),
-                    fieldset = Option(
+                    fieldset =
                         Fieldset(
-                            legend = Option(
+                            legend =
                                 Legend(
                                     content = Text(messages("label.satisfaction.1")),
                                     isPageHeading = true,
                                     classes = "govuk-fieldset--s"
                                 )
-                            )
                         )
-                    )
                 )
             )
 
@@ -119,15 +115,7 @@
                 )
             )
 
-            @govukButton(
-                Button(
-                    attributes = Map("id" -> "send", "novalidate" -> "novalidate"),
-                    content = Text(messages("button.label.submitFeedback")),
-                    name = "send",
-                    value = "send",
-                    inputType = "submit"
-                )
-            )
+            @govukButton(SubmitButton("submitFeedback"))
         }
         </p>
     </section>

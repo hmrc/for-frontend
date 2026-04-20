@@ -20,9 +20,8 @@
         layout: PrimaryLayout
 )
 
+@()(implicit request: RequestHeader, messages: Messages)
 
-@()(implicit request: RequestHeader,  messages: Messages)
-
-@layout(pageTitle = messages("heading.login.lockedOut")){
+@layout(pageTitle = messages("heading.login.lockedOut")) {
     <p class="govuk-body">@messages("error.login.lockedOut")</p>
 }

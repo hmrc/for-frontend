@@ -20,13 +20,13 @@
         layout: PrimaryLayout
 )
 
-@()(implicit requestHeader: RequestHeader,  messages: Messages)
+@()(implicit requestHeader: RequestHeader, messages: Messages)
 
 @layout(
- pageTitle = messages("copy.feedback.thankyou")
+    pageTitle = messages("copy.feedback.thankyou")
 ) {
 
- <p class="govuk-body">
-   <a href="login">@messages("copy.feedback.anotherForm")</a>
- </p>
+    <p class="govuk-body">
+        <a href="login">@messages("copy.feedback.anotherForm")</a>
+    </p>
 }

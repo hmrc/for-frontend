@@ -19,102 +19,99 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
-        govukInput:  GovukInput,
+        govukInput: GovukInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
-
-@(theForm: Form[PageFive], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@(theForm: Form[PageFive], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("section5.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(4).url,
     summary = summary,
     theForm = theForm
-){
+) {
 
     <p class="govuk-body">@messages("section5.heading.help")</p>
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(5), args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(5)) {
 
-    @govukInput(
-        Input(
-            id = "landlordFullName",
-            name = "landlordFullName",
-            value = theForm("landlordFullName").value,
-            classes = "govuk-input--width-20",
-            formGroup = FormGroup(
-                classes = ""
-            ),
-            label = Label(
-                content = Text(messages("label.landlordFullName") ),
-                classes = "govuk-!-font-weight-bold"
-            ),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordFullName")
-        )
-    )
-
-    @includes.lookupAddress(theForm, govukInput)
-
-    @govukRadios(
-        Radios(
-            name = "landlordConnectType",
-            idPrefix = Option("landlordConnectType"),
-            items = LandlordConnectionType.values.toIndexedSeq.map(landlordConnection =>
-                RadioItem(
-                    content = Text(messages(s"landlordConnectionType.$landlordConnection")),
-                    checked = theForm("landlordConnectType").value.contains(landlordConnection.toString),
-                    value   = Option(landlordConnection.toString)
-                )
-            ),
-            classes = "radio-button-that-show-hides",
-            errorMessage = theForm.errors.asTextErrorMessageForField("landlordConnectType"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages(if(summary.isAgent) messages("label.LandlordConnectionTypes.agent") else messages("label.LandlordConnectionTypes"))),
-                            classes = "govuk-!-font-weight-bold"
-                        )
-                    )
-                )
+        @govukInput(
+            Input(
+                id = "landlordFullName",
+                name = "landlordFullName",
+                value = theForm("landlordFullName").value,
+                classes = "govuk-input--width-20",
+                formGroup = FormGroup(
+                    classes = ""
+                ),
+                label = Label(
+                    content = Text(messages("label.landlordFullName")),
+                    classes = "govuk-!-font-weight-bold"
+                ),
+                errorMessage = theForm.errors.asTextErrorMessageForField("landlordFullName")
             )
         )
-    )
 
-    @govukCharacterCount(
-        CharacterCount(
-            id = "landlordConnectText",
-            name = "landlordConnectText",
-            value = theForm("landlordConnectText").value,
-            attributes = Map(
-                "data-hidden-by" -> "landlordConnectType",
-                "data-show-when-value-equals" -> "other"
-            ),
-            rows = 4,
-            maxLength = 100,
-            label = Label(
-                content = Text(if(summary.isAgent) messages("label.landlordConnectText.agent") else messages("label.landlordConnectText")  ),
-                classes = "govuk-!-font-weight-bold"
-            ),
-            hint = Hint(content = Text(messages("hint.landlordConnect"))),
-            errorMessage =  theForm.errors.asTextErrorMessageForField("landlordConnectText")
+        @includes.lookupAddress(theForm, govukInput)
+
+        @govukRadios(
+            Radios(
+                name = "landlordConnectType",
+                idPrefix = "landlordConnectType",
+                items = LandlordConnectionType.values.toIndexedSeq.map(landlordConnection =>
+                    RadioItem(
+                        content = Text(messages(s"landlordConnectionType.$landlordConnection")),
+                        checked = theForm("landlordConnectType").value.contains(landlordConnection.toString),
+                        value = landlordConnection.toString
+                    )
+                ),
+                classes = "radio-button-that-show-hides",
+                errorMessage = theForm.errors.asTextErrorMessageForField("landlordConnectType"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages(if(summary.isAgent) messages("label.LandlordConnectionTypes.agent") else messages("label.LandlordConnectionTypes"))),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
+            )
         )
-    )
 
-        @includes.continueSaveForLaterButtons(govukButton)
+        @govukCharacterCount(
+            CharacterCount(
+                id = "landlordConnectText",
+                name = "landlordConnectText",
+                value = theForm("landlordConnectText").value,
+                attributes = Map(
+                    "data-hidden-by" -> "landlordConnectType",
+                    "data-show-when-value-equals" -> "other"
+                ),
+                rows = 4,
+                maxLength = 100,
+                label = Label(
+                    content = Text(if(summary.isAgent) messages("label.landlordConnectText.agent") else messages("label.landlordConnectText")),
+                    classes = "govuk-!-font-weight-bold"
+                ),
+                hint = Hint(content = Text(messages("hint.landlordConnect"))),
+                errorMessage = theForm.errors.asTextErrorMessageForField("landlordConnectText")
+            )
+        )
+
+        @continueSaveForLaterButtons()
     }
 
     @formHelp()

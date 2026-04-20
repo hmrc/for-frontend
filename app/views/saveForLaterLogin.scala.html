@@ -17,9 +17,9 @@
 @import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.button.Button
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -29,7 +29,6 @@
         formWithCSRF: FormWithCSRF,
         formHelp: includes.formHelp
 )
-
 
 @(theForm: Form[SaveForLaterLogin])(implicit request: RequestHeader, messages: Messages)
 
@@ -41,10 +40,9 @@
     <h3 class="govuk-body">@messages("saveForLater.hint")</h3>
 
     @formWithCSRF(
-        action = routes.SaveForLaterController.resume,
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
+        action = routes.SaveForLaterController.resume
     ) {
-       @helper.CSRF.formField
+        @helper.CSRF.formField
 
         @govukInput(
             Input(
@@ -56,25 +54,15 @@
                 label = Label(
                     content = Text(messages("saveForLater.password"))
                 ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("password")
+                errorMessage = theForm.errors.asTextErrorMessageForField("password")
             )
         )
-        @govukButton(
-            Button(
-                attributes = Map(
-                    "id" -> "continue",
-                    "novalidate" -> "novalidate"
-                ),
-                name = Some("submit"),
-                content = Text(messages("label.continue"))
-            )
-        )
+        @govukButton(SubmitButton("continue"))
     }
 
     <p class="govuk-body">
         <a href="@routes.ApplicationController.startAgain" class="govuk-link" >@messages("saveForm.start")</a>
     </p>
-
 
     @formHelp()
 }

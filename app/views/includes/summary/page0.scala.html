@@ -14,25 +14,28 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.pages._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
 
 @(add: Address, summary: Summary)(implicit messages: Messages)
 
 @underReview = @{
-  if(summary.isUnderReview){"<br />" + messages("label.underReview")} else{""}
+    if(summary.isUnderReview) {
+        "<br />" + messages("label.underReview")
+    } else {
+        ""
+    }
 }
 
 <h2 class="govuk-heading-m">@messages("section1.heading")</h2>
 
- @summaryBlock(messages("label.currentAddress"), 0, "isAddressCorrect") {
-   	@Html(summary.address.map(_.multiLine).getOrElse("") + underReview)
- }
- 
+@summaryBlock(messages("label.currentAddress"), 0, "isAddressCorrect") {
+    @Html(summary.address.map(_.multiLine).getOrElse("") + underReview)
+}
 
 @if(summary.address.map(_.singleLine) != summary.propertyAddress.map(_.singleLine)) {
-	@summaryBlock(messages("label.changedAddress"), 0, "address_buildingNameNumber") {
- 		@displayAddress(add)
-	}
+    @summaryBlock(messages("label.changedAddress"), 0, "address_buildingNameNumber") {
+        @Html(add.multiLine)
+    }
 }

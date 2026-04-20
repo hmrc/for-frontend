@@ -14,14 +14,11 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions.*
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Fieldset
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Legend
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.RadioField
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -31,48 +28,27 @@
         formWithCSRF: FormWithCSRF
 )
 
-
-@(theForm: Form[PreviouslyConnected], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
+@(form: Form[PreviouslyConnected], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
-    pageTitle = messages("notConnected.previouslyConnected"),
+    pageTitle = messages("notConnected.haveYouBeenConnected.label"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(0).url,
     showH1 = false,
     summary = summary,
-    theForm = theForm
-){
+    theForm = form
+) {
 
-    @formWithCSRF(action = controllers.routes.PreviouslyConnectedController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = controllers.routes.PreviouslyConnectedController.onPageSubmit) {
 
         @govukRadios(
-            Radios(
-                name = "haveYouBeenConnected",
-                idPrefix = Option("haveYouBeenConnected"),
-                items = Seq(
+            RadioField.radios(form, "notConnected", "haveYouBeenConnected", inline = true,
+                valuesWithLabels = Seq(
                     "true" -> messages("label.yes.ydw"),
                     "false" -> messages("label.no.nac.ydw")
-                ).map(i => RadioItem (
-                    content = Text(i._2),
-                    checked = i._1.equals(theForm("haveYouBeenConnected").value.getOrElse("")),
-                    value=Option(i._1)
-                )
-                ),
-                classes = "govuk-radios--inline",
-                errorMessage = theForm.errors.asTextErrorMessageForField("haveYouBeenConnected"),
-                fieldset = Option(
-                    Fieldset(
-                        legend = Option(
-                            Legend(
-                                content = Text(messages("notConnected.previouslyConnected")),
-                                isPageHeading = true,
-                                classes = "govuk-fieldset__legend--l "
-                            )
-                        )
-                    )
                 )
             )
         )
-        @includes.continueButton(govukButton)
 
+        @govukButton(SubmitButton("continue"))
     }
 }

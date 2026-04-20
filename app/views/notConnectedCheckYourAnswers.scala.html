@@ -15,8 +15,8 @@
  *@
 
 @import models.pages.NotConnectedSummary
-@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
+@import uk.gov.hmrc.govukfrontend.views.html.components.{FormWithCSRF, GovukButton}
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -25,8 +25,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-
-@(notConnectedSummary: NotConnectedSummary)(implicit request: RequestHeader,  messages: Messages)
+@(notConnectedSummary: NotConnectedSummary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("heading.summary"),
@@ -35,11 +34,11 @@
     fullWidth = true
 ) {
 
-    @formWithCSRF(action = controllers.routes.NotConnectedCheckYourAnswersController.onPageSubmit, args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = controllers.routes.NotConnectedCheckYourAnswersController.onPageSubmit) {
 
         @includes.notConnectedCheckYourAnswersTable(notConnectedSummary)
 
-        @includes.submitButton(govukButton)
+        @govukButton(SubmitButton("submit"))
 
     }
 }

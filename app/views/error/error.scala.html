@@ -20,13 +20,13 @@
         layout: PrimaryLayout
 )
 
-@(errorCode: Int)(implicit request: RequestHeader,  messages: Messages)
+@(errorCode: Int)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     backLinkUrl = routes.ApplicationController.index.url,
     pageTitle = messages(s"error.$errorCode.heading")
-){
-  @if(errorCode == 409){
-   <p class="govuk-body">@Html(messages("error.409.body"))</p>
-  }
+) {
+    @if(errorCode == 409) {
+        <p class="govuk-body">@Html(messages("error.409.body"))</p>
+    }
 }

@@ -24,157 +24,151 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
 @layout(
-  pageTitle = messages("section13.heading"),
-  backLinkUrl = dataCapturePages.routes.PageController.showPage(12).url,
-  summary = summary,
-  theForm = theForm
-){
+    pageTitle = messages("section13.heading"),
+    backLinkUrl = dataCapturePages.routes.PageController.showPage(12).url,
+    summary = summary,
+    theForm = theForm
+) {
 
-  @formWithCSRF(
-    action = dataCapturePages.routes.PageController.savePage(13),
-    args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId"
-  ) {
+    @formWithCSRF(
+        action = dataCapturePages.routes.PageController.savePage(13)
+    ) {
 
-    @govukRadios(
-      Radios(
-        name = "propertyAlterations",
-        idPrefix = Option("propertyAlterations"),
-        items = Seq(
-          "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydy")),
-          "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydy"))
-        ).map(radioItem => {
-          RadioItem(
-            content = Text(radioItem._2),
-            checked = radioItem._1.equals(theForm("propertyAlterations").value.getOrElse("")),
-            value = Option(radioItem._1)
-          )
-        }
-        ),
-        hint = Hint(content = Text(messages("hint.propertyAlterations"))),
-        classes = "radio-button-that-show-hides govuk-radios--inline",
-        errorMessage = theForm.errors.asTextErrorMessageForField("propertyAlterations"),
-        fieldset = Option(
-          Fieldset(
-            legend = Option(
-              Legend(
-                content = Text(messages("label.propertyAlterations")),
-                classes = "govuk-!-font-weight-bold"
-              )
+        @govukRadios(
+            Radios(
+                name = "propertyAlterations",
+                idPrefix = "propertyAlterations",
+                items = Seq(
+                    "true" -> (if(summary.isAgent) messages("label.yes.ydy") else messages("label.yes.ydy")),
+                    "false" -> (if(summary.isAgent) messages("label.no.nac.ydy") else messages("label.no.nac.ydy"))
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("propertyAlterations").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.propertyAlterations"))),
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                errorMessage = theForm.errors.asTextErrorMessageForField("propertyAlterations"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.propertyAlterations")),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
             )
-          )
         )
-      )
-    )
 
-
-    <fieldset
+        <fieldset
         data-hidden-by="propertyAlterations"
         data-show-when-value-equals="true"
         data-hides-this="true"
         data-limit="10">
 
-      @template.repeatWithIndex(theForm("propertyAlterationsDetails"), max = 10) { (_, idx) =>
+            @template.repeatWithIndex(theForm("propertyAlterationsDetails"), max = 10) { (_, idx) =>
 
-        <div  class="multi-fields-group"
-              id=@(s"propertyAlterationsDetails_description_div_$idx")>
+                <div  class="multi-fields-group"
+                id=@(s"propertyAlterationsDetails_description_div_$idx")>
 
-          <h3 class="govuk-heading-m section-heading">@messages("alteration.section.heading") <span>@{idx + 1}</span></h3>
+                    <h3 class="govuk-heading-m section-heading">@messages("alteration.section.heading") <span>@{
+                        idx + 1
+                    }</span></h3>
 
-          @govukRadios(
-            Radios(
-              name = s"propertyAlterationsDetails[$idx].alterationType",
-              idPrefix = Option(s"propertyAlterationsDetails[$idx].alterationType"),
-              items = AlterationSetByType.values.toIndexedSeq.map(alterationType =>
-                RadioItem(
-                  content = Text(messages(s"alterationType.$alterationType")),
-                  checked = theForm(s"propertyAlterationsDetails[$idx].alterationType").value.contains(alterationType.toString),
-                  value   = Option(alterationType.toString)
-                )
-              ),
-              errorMessage = theForm.errors.asTextErrorMessageForField(s"propertyAlterationsDetails[$idx].alterationType"),
-              fieldset = Option(
-                Fieldset(
-                  legend = Option(
-                    Legend(
-                      content = Text(messages("label.propertyAlterationsDetails.alterationType")),
-                      classes = "govuk-!-font-weight-bold"
+                    @govukRadios(
+                        Radios(
+                            name = s"propertyAlterationsDetails[$idx].alterationType",
+                            idPrefix = s"propertyAlterationsDetails[$idx].alterationType",
+                            items = AlterationSetByType.values.toIndexedSeq.map(alterationType =>
+                                RadioItem(
+                                    content = Text(messages(s"alterationType.$alterationType")),
+                                    checked = theForm(s"propertyAlterationsDetails[$idx].alterationType").value.contains(alterationType.toString),
+                                    value = alterationType.toString
+                                )
+                            ),
+                            errorMessage = theForm.errors.asTextErrorMessageForField(s"propertyAlterationsDetails[$idx].alterationType"),
+                            fieldset =
+                                Fieldset(
+                                    legend =
+                                        Legend(
+                                            content = Text(messages("label.propertyAlterationsDetails.alterationType")),
+                                            classes = "govuk-!-font-weight-bold"
+                                        )
+                                )
+                        )
                     )
-                  )
-                )
-              )
+
+                    @includes.dateFields(
+                        form = theForm,
+                        field = s"propertyAlterationsDetails[$idx].date",
+                        label = "label.propertyAlterationsDetails",
+                        govukDate = govukDateInput
+                    )
+
+                    @govukInput(
+                        CurrencyField.input(theForm, "", s"propertyAlterationsDetails[$idx].cost", inputWidth = 10)
+                    )
+
+                    <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display: none">@messages("label.add.remove")</a>
+                </div>
+            }
+
+            <p class="govuk-body">
+                <a href="#" class="add-multi-fields govuk-link">@messages("label.add.propertyAlterations")</a>
+            </p>
+
+        </fieldset>
+
+        @govukRadios(
+            Radios(
+                name = "requiredAnyWorks",
+                idPrefix = "requiredAnyWorks",
+                classes = "govuk-radios--inline",
+                attributes = Map(
+                    "data-hidden-by" -> "propertyAlterations",
+                    "data-show-when-value-equals" -> "true"
+                ),
+                items = Seq(
+                    "true" -> messages("label.yes.oedd"),
+                    "false" -> messages("label.no.nac.oedd")
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("requiredAnyWorks").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                errorMessage = theForm.errors.asTextErrorMessageForField("requiredAnyWorks"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.requiredAnyWorks" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
             )
-          )
-
-          @includes.dateFields(
-            form = theForm,
-            field = s"propertyAlterationsDetails[$idx].date",
-            label = "label.propertyAlterationsDetails",
-            govukDate = govukDateInput
-          )
-
-          @govukInput(
-            CurrencyField.input(theForm, "", s"propertyAlterationsDetails[$idx].cost", inputWidth = 10)
-          )
-
-          <a href="#" class="remove-multi-fields govuk-link govuk-body" style="display: none">@messages("label.add.remove")</a>
-        </div>
-      }
-
-
-      <p class="govuk-body">
-        <a href="#" class="add-multi-fields govuk-link">@messages("label.add.propertyAlterations")</a>
-      </p>
-
-    </fieldset>
-
-    @govukRadios(
-      Radios(
-        name = "requiredAnyWorks",
-        idPrefix = Option("requiredAnyWorks"),
-        classes = "govuk-radios--inline",
-        attributes = Map(
-          "data-hidden-by" -> "propertyAlterations",
-          "data-show-when-value-equals" -> "true"
-        ),
-        items = Seq(
-          "true" -> messages("label.yes.oedd"),
-          "false" -> messages("label.no.nac.oedd")
-        ).map(radioItem => {
-          RadioItem(
-            content = Text(radioItem._2),
-            checked = radioItem._1.equals(theForm("requiredAnyWorks").value.getOrElse("")),
-            value = Option(radioItem._1)
-          )
-        }
-        ),
-        errorMessage = theForm.errors.asTextErrorMessageForField("requiredAnyWorks"),
-        fieldset = Option(
-          Fieldset(
-            legend = Option(
-              Legend(
-                content = Text(messages("label.requiredAnyWorks" + labelSuffix)),
-                classes = "govuk-!-font-weight-bold"
-              )
-            )
-          )
         )
-      )
-    )
 
-    @includes.continueSaveForLaterButtons(govukButton)
-  }
-  @formHelp()
+        @continueSaveForLaterButtons()
+    }
+    @formHelp()
 }

@@ -14,38 +14,40 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
+@import util.*
+
 @import java.text.NumberFormat
-@import models.pages._
-@import models.serviceContracts.submissions._
 
 @(p9: PageNine, isAgent: Boolean)(implicit messages: Messages)
 
-	<h2 class="govuk-heading-m">@messages("section9.heading")</h2>
-	<dl class="govuk-summary-list">
+<h2 class="govuk-heading-m">@messages("section9.heading")</h2>
+<dl class="govuk-summary-list">
     @summaryBlock(messages("totalRent.annualRentExcludingVat.label"), 9, "totalRent_annualRentExcludingVat") {
-		   <span class='rentAmount'>£@NumberFormat.getNumberInstance().format(p9.totalRent.amount)</span>
-		}
+        <span class='rentAmount'>£@NumberFormat.getNumberInstance().format(p9.totalRent.amount)</span>
+    }
 
-		@summaryBlock(messages(if(isAgent) messages("label.rentBecomePayable.agent") else messages("label.rentBecomePayable")), 9, "rentBecomePayable_day") {
-			@displayLocalDate(p9.rentBecomePayable)
-		}
+    @summaryBlock(messages(if(isAgent) messages("label.rentBecomePayable.agent") else messages("label.rentBecomePayable")), 9, "rentBecomePayable_day") {
+        @p9.rentBecomePayable.display
+    }
 
-		@summaryBlock(messages("label.rentActuallyAgreed"), 9, "rentActuallyAgreed_day") {
-			@displayLocalDate(p9.rentActuallyAgreed)
-		}
+    @summaryBlock(messages("label.rentActuallyAgreed"), 9, "rentActuallyAgreed_day") {
+        @p9.rentActuallyAgreed.display
+    }
 
-		@summaryBlock(messages(if(isAgent) messages("label.negotiatingNewRent.agent") else messages("label.negotiatingNewRent")), 9, "negotiatingNewRent") {
-			@displayBoolean(p9.negotiatingNewRent, if(isAgent) "1" else "7")
-		}
+    @summaryBlock(messages(if(isAgent) messages("label.negotiatingNewRent.agent") else messages("label.negotiatingNewRent")), 9, "negotiatingNewRent") {
+        @displayBoolean(p9.negotiatingNewRent, if(isAgent) "1" else "7")
+    }
 
-		@summaryBlock(messages("label.rentBasedOn"), 9, "rentBasedOn") {
-			@messages(s"rentBaseTypes.${p9.rentBasis}")
-		}
+    @summaryBlock(messages("label.rentBasedOn"), 9, "rentBasedOn") {
+        @messages(s"rentBaseTypes.${p9.rentBasis}")
+    }
 
-		@if(p9.rentBasis != RentBaseType.openMarket) {
-			@summaryBlock(messages("label.rentBasedOnDetails"), 9, "rentBasedOnDetails") {
-				@p9.rentBasisOtherDetails.getOrElse("")
-			}
-		}
-	</dl>
+    @if(p9.rentBasis != RentBaseType.openMarket) {
+        @summaryBlock(messages("label.rentBasedOnDetails"), 9, "rentBasedOnDetails") {
+            @p9.rentBasisOtherDetails.getOrElse("")
+        }
+    }
+</dl>

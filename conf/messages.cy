@@ -10,9 +10,8 @@ skip.content=Ewch yn syth i’r prif gynnwys
 login.heading=Rhowch eich cyfeirnod
 failedLogin.heading=Gwall mewngofnodi
 lockedOut.heading=Wedi eich cloi allan
-label.continue=Yn eich blaen
-button.label.submit=Cyflwyno
-button.label.submitFeedback=Cyflwyno eich adborth
+button.submit.label = Cyflwyno
+button.submitFeedback.label = Cyflwyno eich adborth
 optional=(dewisol)
 help.date.month.year=Er enghraifft, {0}
 help.optional.date.month.year=Er enghraifft, {0} (dewisol)
@@ -106,14 +105,14 @@ label.no.na = Na
 
 #BUTTON LABELS
 ##############################
-button.label.back=Yn ôl
-button.label.continue=Yn eich blaen
-button.label.save=Cadw ar gyfer nes ymlaen
+button.back.label = Yn ôl
+button.continue.label = Yn eich blaen
+button.save.label = Cadw ar gyfer nes ymlaen
 
 #LOGIN
 ##############################
 label.letter=Gallwch weld eich cyfeirnod a’ch cod post yn eich llythyr manylion rhent a phrydles.
-label.referenceNumber=Cyfeirnod
+referenceNumber.label = Cyfeirnod
 hint.letter=Fel y mae’n ymddangos ar y llythyr cais am wybodaeth
 error.invalid_refnum=Rhowch y cyfeirnod fel y mae’n ymddangos ar eich llythyr
 error.invalid_postcode_as_on_letter=Nodwch eich cod post fel mae’n ymddangos ar eich llythyr
@@ -123,26 +122,27 @@ label.retryLogin=Rhowch gynnig arall ar fewngofnodi
 
 #SECTION 0
 ##############################
-label.isRelated=Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
-section0.intro.text=A oes gennych gysylltiad o hyd â {0}?
-error.isRelated=Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
+section0.intro.text = A oes gennych gysylltiad o hyd â {0}?
+section0.isRelated.label = A oes gennych gysylltiad o hyd â’r eiddo?
+section0.isRelated.yes.label = Oes
+section0.isRelated.yes-change-address.label = Oes - rydw i am olygu’r cyfeiriad
+section0.isRelated.no.label = Nac oes
+error.isRelated = Dewiswch ‘Oes’ os oes gennych gysylltiad o hyd
 
 #SECTION 1
 ##############################
 section1.heading=Golygu’r cyfeiriad
-label.yes.change.address=Oes - rydw i am olygu’r cyfeiriad
-label.buildingNameNumber=Llinell 1 y cyfeiriad
+buildingNameNumber.label = Llinell 1 y cyfeiriad
 label.changedAddress=Newid cyfeiriad
 label.address=Cyfeiriad
 
 label.address.street1=Linell 2 y cyfeiriad
 label.address.street2=Tref neu ddinas
 label.addresss.townCity=Tref neu ddinas
-label.postcode=Cod post
-
+postcode.label = Cod post
 label.buildingNameNumber.optional=Llinell 1 y cyfeiriad (dewisol)
-label.street1=Ail linell y cyfeiriad (dewisol)
-label.street2=Tref neu ddinas (dewisol)
+street1.label = Ail linell y cyfeiriad (dewisol)
+street2.label = Tref neu ddinas (dewisol)
 label.townCity=Tref neu ddinas
 label.address.townCity=Tref neu ddinas
 label.address.postcode=Cod post (dewisol)
@@ -154,11 +154,17 @@ label.suggestedChanges=Efallai na chaiff newidiadau a awgrymir i’r cyfeiriad e
 ##############################
 section2.heading=Amdanoch chi
 section2.subheading=Dylai’r rhain fod yn fanylion y sawl sy’n llenwi hwn.
-label.fullName=Enw llawn
+fullName.label = Enw llawn
 label.contactDetails=Beth yw eich manylion cyswllt?
-label.userType=Fi yw’r (neu rwyf yn cynrychioli’r)
-label.email1=Cyfeiriad ebost
-label.phone=Rhif ffôn
+userType.label = Fi yw’r (neu rwyf yn cynrychioli’r)
+userType.occupier.label = Meddiannydd neu ymddiriedolwr ar ran y meddiannydd
+userType.occupiersAgent.label = Asiant y meddiannydd
+userType.owner.label = Perchennog neu ymddiriedolwr ar ran y perchennog
+userType.ownerOccupier.label = Perchennog a meddiannydd
+userType.ownersAgent.label = Asiant y perchennog
+userType.vacated.label = Nid y perchennog mwyach neu wedi gadael yn ddiweddar
+contactDetails.email1.label = Cyfeiriad ebost
+contactDetails.phone.label = Rhif ffôn
 label.contactDetails.phone=Ffôn
 label.contactAddressType=Pa gyfeiriad hoffech chi i ni ei ddefnyddio os bydd angen i ni ysgrifennu atoch yn y dyfodol?
 hint.contacts=Rhag ofn y bydd angen i ni gysylltu â nhw ynglŷn â’r eiddo
@@ -182,7 +188,7 @@ label.alternativeContact.address.postcode=Cod post
 label.alternativeContact.contactDetails=Person cyswllt amgen
 label.alternativeContact.address=Cyfeiriad y person cyswllt amgen
 hint.anyQueries=Byddwn ond yn defnyddio’r manylion hyn i’ch diweddaru am eich ymholiad.
-hint.occupierExplanation=Os ydych yn rhentu neu’n prydlesu’r eiddo, hyd yn oed fel elusen neu sefydliad di-elw, ystyrir mai chi yw’r meddiannydd.  Os mai chi yw’r perchennog a’r meddiannydd, dewiswch ‘Perchennog neu ymddiriedolwr ar ran y perchennog’.
+userType.hint = Os ydych yn rhentu neu’n prydlesu’r eiddo, hyd yn oed fel elusen neu sefydliad di-elw, ystyrir mai chi yw’r meddiannydd.  Os mai chi yw’r perchennog a’r meddiannydd, dewiswch ‘Perchennog neu ymddiriedolwr ar ran y perchennog’.
 label.noJs.contactDetails.email1=Dylech ond ateb hyn os ydych wedi dewis ‘E-bost’ neu ‘Y ddau’
 label.noJs.contactDetails.phone=Dylech ond ateb hyn os ydych wedi dewis ‘Ffôn’ neu ‘Y ddau’
 label.noJs.contactDetails.contactAddressType=Dylech ond ateb hyn os ydych wedi dewis ‘Y Deiliad’ neu ‘Y Perchennog’
@@ -194,39 +200,35 @@ error.userType.required=Dewiswch eich cysylltiad â’r eiddo
 #SECTION 3
 ##############################
 section3.heading=Ynglŷn â’r eiddo
-label.propertyTypes=At ba ddiben y defnyddir yr eiddo?
 propertyTypes.shop=Siop
 propertyTypes.factory=Ffatri
 propertyTypes.office=Swyddfa
 propertyTypes.warehouse=Warws
 propertyTypes.other=Arall
 label.otherPropertyType=Eiddo arall
-propertyTypes.help=Er enghraifft, swyddfa, siop, storfa.
-label.occupierTypes=Pwy yw meddiannydd yr eiddo?
-occupierType.help=Os yw’r meddiannydd yn elusen, yn ymddiriedolaeth neu’n unrhyw sefydliad anfasnachol arall, dewiswch ‘Cwmni’.
-occupierType.individuals=Un neu fwy o unigolion
-occupierType.company=Cwmni
-occupierType.nobody=Neb, mae’r eiddo yn wag
-label.companyName=Enw’r cwmni (meddiannydd)
-label.occupierCompanyContact=Enw cyswllt y meddiannydd
+propertyType.hint = Er enghraifft, swyddfa, siop, storfa.
+occupierType.label = Pwy yw meddiannydd yr eiddo?
+occupierType.hint = Os yw’r meddiannydd yn elusen, yn ymddiriedolaeth neu’n unrhyw sefydliad anfasnachol arall, dewiswch ‘Cwmni’.
+occupierType.individuals.label = Un neu fwy o unigolion
+occupierType.company.label = Cwmni
+occupierType.nobody.label = Neb, mae’r eiddo yn wag
+companyName.label = Enw’r cwmni (meddiannydd)
+occupierCompanyContact.label = Enw cyswllt y meddiannydd
 label.firstOccupationDate=Pa bryd y gwnaethon nhw ddechrau meddiannu’r eiddo?
 label.firstOccupationDate.agent=Pa bryd y gwnaethon nhw ddechrau meddiannu’r eiddo?
 label.firstOccupationDate.help=Nodwch y dyddiad y daeth y person neu’r cwmni’n feddiannydd yr eiddo, hyd yn oed os na ddechreuodd fasnachu neu dalu rhent ar y dyddiad hwnnw.
-label.mainOccupierName=Enw’r prif ddeiliad
-label.propertyOwnedByYou=A ydych yn berchen ar yr eiddo?
-label.propertyOwnedByYou.agent=A yw eich cleient yn berchen ar yr eiddo?
-label.propertyRentedBy=A ydych yn talu rhent am yr eiddo?
-label.propertyRentedBy.agent=A yw eich cleient yn talu rhent am yr eiddo?
-label.propertyRentedByYou=A ydych yn talu rhent am yr eiddo?
-label.propertyRentedByYou.agent=A yw eich cleient yn talu rhent am yr eiddo?
-label.propertyType=At ba ddiben y defnyddir yr eiddo?
-label.occupierType=Pwy yw meddiannydd yr eiddo?
-label.occupierCompanyName=Enw’r cwmni
+mainOccupierName.label = Enw’r prif ddeiliad
+propertyOwnedByYou.label = A ydych yn berchen ar yr eiddo?
+propertyOwnedByYou.label.agent = A yw eich cleient yn berchen ar yr eiddo?
+propertyRentedByYou.label = A ydych yn talu rhent am yr eiddo?
+propertyRentedByYou.label.agent = A yw eich cleient yn talu rhent am yr eiddo?
+propertyType.label = At ba ddiben y defnyddir yr eiddo?
+occupierCompanyName.label = Enw’r cwmni
 label.noJs.occupierCompanyName=Dylech ond ateb hyn os ydych wedi dewis ‘Cwmni’
 label.noJs.firstOccupationDate=Dylech ond ateb hyn os ydych wedi dewis ‘Un neu fwy o unigolion’ neu ‘Cwmni’
 label.noJs.propertyRentedBy=Dylech ond ateb hyn os ydych wedi dewis ‘Nac ydy ‘
-label.noRentDetails=Dywedwch wrthym pam nad ydych yn talu rhent ar yr eiddo yma
-label.noRentDetails.agent=Dywedwch wrthym pam nad oes gan eich cleient i dalu rhent ar yr eiddo hwn
+noRentDetails.label = Dywedwch wrthym pam nad ydych yn talu rhent ar yr eiddo yma
+noRentDetails.label.agent = Dywedwch wrthym pam nad oes gan eich cleient i dalu rhent ar yr eiddo hwn
 
 error.propertyType.required=Nodwch at beth y caiff yr eiddo ei ddefnyddio
 error.propertyType.maxLength=Mae’n rhaid i ddefnydd yr eiddo fod yn 100 o gymeriadau neu lai
@@ -859,7 +861,7 @@ saveForLater.haveYouForgotten=Os ydych wedi anghofio eich cyfrinair, bydd angen 
 saveForLater.logout=Allgofnodi
 saveForLater.or=neu
 saveForLater.createPassword=Creu cyfrinair i adfer eich gwybodaeth
-saveForLater.next=Cadw cyfrinair
+button.savePassword.label = Cadw cyfrinair
 
 #SAVEDFORM
 ###############################
@@ -918,8 +920,6 @@ heading.summary.pdf.footnote=Hysbysiad yw hwn o dan baragraff 5(1) o atodlen 9 i
 ###############################
 heading.giveFeedback=Rhoi adborth ar gyfer manylion rhent a phrydles
 copy.giveFeedback=Gadewch awgrymiadau neu sylwadau ynglŷn â’n gwasanaeth.
-button.label.submit.feedback=Anfon adborth
-button.label.submitFeedback=Cyflwyno eich adborth
 link.feedback=Adborth
 label.help.link=Rhowch wybod am broblem gyda’r dudalen hon
 label.help.title=Help ar gyfer y dudalen
@@ -961,12 +961,13 @@ hint.vacated.form=<p>Anfonwch:</p>\
 
 #NOT connected journey
 ######################
-label.email=Cyfeiriad e-bost
-label.phoneNumber=Rhif ffôn
+email.label = Cyfeiriad e-bost
+phoneNumber.label = Rhif ffôn
 notConnected.heading = Dileu eich cysylltiad â’r eiddo hwn
 notConnected.subheading = Byddwn yn defnyddio’r manylion hyn os bydd angen i ni gysylltu â chi.
 notConnected.additionalInformation = Gwybodaeth ychwanegol
-notConnected.additionalInformationHelp = Er enghraifft, enw’r perchennog neu’r meddiannydd presennol.
+notConnected.additionalInformation.label = Gwybodaeth ychwanegol (dewisol)
+notConnected.additionalInformation.hint = Er enghraifft, enw’r perchennog neu’r meddiannydd presennol.
 notConnected.emailOrPhone = Rhaid i chi roi rhif ffôn neu gyfeiriad e-bost
 notConnected.error.nameInvalid = Gallwch ond nodi’r cymeriadau hyn: A-Y, a-y, -, ., (), ", comaau, a bylchau
 
@@ -976,7 +977,7 @@ notConnected.whatNext2 = Ni fyddwch yn cael unrhyw lythyrau pellach oni bai eu b
 notConnected.whatNext3 = Dylech hefyd roi gwybod i’ch awdurdod lleol am y ffaith nad ydych yn gysylltiedig â’r \
   eiddo hwn bellach neu efallai y gofynnir i chi roi’r manylion hyn eto.
 
-notConnected.previouslyConnected = Ydych chi erioed wedi cael cysylltiad â’r eiddo?
+notConnected.haveYouBeenConnected.label = Ydych chi erioed wedi cael cysylltiad â’r eiddo?
 previously-connected.mandatory = Dewiswch ‘Iawn’ os oedd cysylltiad yn arfer bod gennych
 
 
@@ -987,12 +988,6 @@ previously-connected.mandatory = Dewiswch ‘Iawn’ os oedd cysylltiad yn arfer
 contactAddressType.mainAddress=Eich cyfeiriad
 contactAddressType.alternativeAddress=Rwyf am i chi gysylltu â mi mewn cyfeiriad amgen
 contactAddressType.contactsAddress=Rwyf am i chi gysylltu â rhywun arall ar fy rhan
-userType.occupier=Meddiannydd neu ymddiriedolwr ar ran y meddiannydd
-userType.occupiersAgent=Asiant y meddiannydd
-userType.owner=Perchennog neu ymddiriedolwr ar ran y perchennog
-userType.ownerOccupier=Perchennog a meddiannydd
-userType.ownersAgent=Asiant y perchennog
-userType.vacated=Nid y perchennog mwyach neu wedi gadael yn ddiweddar
 leaseAgreementTypes.verbal=Dim cytundeb neu gytundeb ar lafar
 leaseAgreementTypes.leaseTenancy=Prydles neu gytundeb tenantiaeth
 leaseAgreementTypes.licenceOther=Trwydded neu fath arall o gytundeb ysgrifenedig
@@ -1147,7 +1142,7 @@ index.rentDetails=eich rhent, yn cynnwys dyddiad a osodiwyd
 index.landlordDetails=enw eich landlord, os chi yw y tenant
 index.reviewDetails=unrhyw gyfnodau adolygu rhent
 index.rentFreePeriodDetails=unrhyw gyfnodau di-rent neu gymhellion eraill
-index.start=Dechrau nawr
+button.start.label = Dechrau nawr
 index.before=Cyn i chi ddechrau
 index.before.p1=Mae’n cymryd tua 30 munud i ddefnyddio’r gwasanaeth hwn.
 index.before.p2=Nid oes rhaid i chi ei gwblhau mewn un cam. Gallwch safio yr hyn rydych chi wedi’i wneud a dychwelyd i orffen yn nes ymlaen.

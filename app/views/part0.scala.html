@@ -15,65 +15,39 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import models.serviceContracts.submissions.AddressConnectionType
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Text, Legend}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.{RadioItem, Radios}
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.*
 @import views.html.components.PrimaryLayout
 
 @this(
-    layout: PrimaryLayout,
-    govukButton: GovukButton,
-    govukRadios: GovukRadios,
-    formWithCSRF: FormWithCSRF,
-    formHelp: includes.formHelp
+        layout: PrimaryLayout,
+        govukButton: GovukButton,
+        govukRadios: GovukRadios,
+        formWithCSRF: FormWithCSRF,
+        formHelp: includes.formHelp
 )
 
+@(form: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@heading = @{messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))}
+@heading = @{
+    messages("section0.intro.text", summary.address.map(_.singleLine).getOrElse(""))
+}
 
 @layout(
     pageTitle = heading,
     showH1 = false,
-    theForm = theForm
+    theForm = form
 ) {
 
-    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0),
-        args = Symbol("class") -> "section0", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0), args = Symbol("novalidate") -> "novalidate") {
 
         @helper.CSRF.formField
 
-        @govukRadios(
-            Radios(
-                name = "isRelated",
-                idPrefix = Option("isRelated"),
-                items = Seq(
-                    AddressConnectionType.yes.toString -> messages("label.yes.oes"),
-                    AddressConnectionType.`yes-change-address`.toString -> Messages("label.yes.change.address"),
-                    AddressConnectionType.no.toString -> messages("label.no.nac.oes")
-                ).map(i => RadioItem(
-                    content = Text(i._2),
-                    checked = theForm("isRelated").value.contains(i._1),
-                    value   = Option(i._1)
-                )),
-                errorMessage = theForm.errors.asTextErrorMessageForField("isRelated"),
-                fieldset = Option(
-                    Fieldset(
-                        legend = Option(
-                            Legend(
-                                content = Text(heading),
-                                isPageHeading = true,
-                                classes = "govuk-fieldset__legend--l"
-                            )
-                        )
-                    )
-                )
-            )
-        )
-        @includes.continueButton(govukButton)
+        @govukRadios(RadioField.radios(form, "section0", "isRelated", AddressConnectionType.values, labelText = heading))
+
+        @govukButton(SubmitButton("continue"))
     }
 
     @formHelp()

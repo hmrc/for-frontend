@@ -14,8 +14,52 @@
  * limitations under the License.
  *@
 
-@import models.pages.NotConnectedSummary
+@import helpers.summary.*
+@import models.pages.*
 
 @(notConnectedSummary: NotConnectedSummary)(implicit messages: Messages)
 
-@views.html.includes.summary.notConnected(notConnectedSummary)
+<dl class="govuk-summary-list">
+
+    @notConnectedSummaryBlock(messages("notConnected.haveYouBeenConnected.label"),
+        "/sending-rental-information/previously-connected?edit=haveYouBeenConnected#haveYouBeenConnected",
+        "haveYouBeenConnected") {
+        @{
+            if(notConnectedSummary.previouslyConnected.get.previouslyConnected) {
+                "Yes"
+            } else {
+                "No"
+            }
+        }
+    }
+
+    @notConnectedSummaryBlock(messages("fullName.label"),
+        "/sending-rental-information/not-connected?edit=fullName#fullName",
+        "fullName") {
+        @notConnectedSummary.notConnected.get.fullName
+    }
+
+    @if(notConnectedSummary.notConnected.get.emailAddress.nonEmpty) {
+        @notConnectedSummaryBlock(messages("email.label"),
+            "/sending-rental-information/not-connected?edit=email#email",
+            "email") {
+            @notConnectedSummary.notConnected.get.emailAddress.getOrElse("-")
+        }
+    }
+
+    @if(notConnectedSummary.notConnected.get.phoneNumber.nonEmpty) {
+        @notConnectedSummaryBlock(messages("phoneNumber.label"),
+            "/sending-rental-information/not-connected?edit=phoneNumber#phoneNumber", "phoneNumber") {
+            @notConnectedSummary.notConnected.get.phoneNumber.getOrElse("-")
+        }
+    }
+
+    @if(notConnectedSummary.notConnected.get.additionalInformation.nonEmpty) {
+        @notConnectedSummaryBlock(messages("notConnected.additionalInformation"),
+            "/sending-rental-information/not-connected?edit=additionalInformation#additionalInformation",
+            "additionalInformation") {
+            @notConnectedSummary.notConnected.get.additionalInformation
+        }
+    }
+
+</dl>

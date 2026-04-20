@@ -20,11 +20,10 @@
         layout: PrimaryLayout
 )
 
-@()(implicit request: RequestHeader,  messages: Messages)
-
+@()(implicit request: RequestHeader, messages: Messages)
 
 @layout(
- pageTitle = messages("heading.sessionTimeout")
+    pageTitle = messages("heading.sessionTimeout")
 ) {
 
     <p class="govuk-body">@Messages("sessionTimeout.copy")</p>

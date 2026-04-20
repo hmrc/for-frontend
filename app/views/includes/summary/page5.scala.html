@@ -14,31 +14,31 @@
  * limitations under the License.
  *@
 
-@import helpers.summary._
-@import models.pages._
-@import models.serviceContracts.submissions._
+@import helpers.summary.*
+@import models.pages.*
+@import models.serviceContracts.submissions.*
 
 @(p5: PageFive, isAgent: Boolean)(implicit messages: Messages)
 
 <h2 class="govuk-heading-m">@messages("section5.heading")</h2>
 <dl class="govuk-summary-list">
-	@summaryBlock(messages("label.landlordFullName"), 5, "landlordFullName") {
-		@p5.landlordFullName
-	}
+    @summaryBlock(messages("label.landlordFullName"), 5, "landlordFullName") {
+        @p5.landlordFullName
+    }
 
-	@p5.landlordAddress.map { la =>
-	  @summaryBlock(messages("label.address"), 5, "landlordAddress_buildingNameNumber") {
-	    @displayAddress(la)
-	  }
-	}
+    @p5.landlordAddress.map { la =>
+        @summaryBlock(messages("label.address"), 5, "landlordAddress_buildingNameNumber") {
+            @Html(la.multiLine)
+        }
+    }
 
-	@summaryBlock(messages(if(isAgent) messages("label.LandlordConnectionTypes.agent") else messages("label.LandlordConnectionTypes")), 5, "landlordConnectType") {
-		@messages(s"landlordConnectionType.${p5.landlordConnectionType}")
-	}
+    @summaryBlock(messages(if(isAgent) messages("label.LandlordConnectionTypes.agent") else messages("label.LandlordConnectionTypes")), 5, "landlordConnectType") {
+        @messages(s"landlordConnectionType.${p5.landlordConnectionType}")
+    }
 
-	@if(p5.landlordConnectionType == LandlordConnectionType.other) {
-		@summaryBlock(messages(if(isAgent) messages("label.landlordConnectText.agent") else messages("label.landlordConnectText")), 5, "landlordConnectText") {
-			@p5.landlordConnectText.getOrElse("")
-		}
-	}
+    @if(p5.landlordConnectionType == LandlordConnectionType.other) {
+        @summaryBlock(messages(if(isAgent) messages("label.landlordConnectText.agent") else messages("label.landlordConnectText")), 5, "landlordConnectText") {
+            @p5.landlordConnectText.getOrElse("")
+        }
+    }
 </dl>

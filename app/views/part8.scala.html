@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import models.serviceContracts.submissions.*
 @import models.pages.Summary
+@import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Fieldset, Legend, Text}
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
@@ -25,15 +25,20 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
-
 @(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@heading = @{if(summary.isAgent){ messages("section8.heading.agent") }else{ messages("section8.heading")}}
+@heading = @{
+    if(summary.isAgent) {
+        messages("section8.heading.agent")
+    } else {
+        messages("section8.heading")
+    }
+}
 
 @previousPage = @{
     if(summary.lease.exists(_.leaseAgreementType == LeaseAgreementType.verbal)) 6
@@ -42,52 +47,48 @@
 
 @layout(
     pageTitle = heading,
-    backLinkUrl = dataCapturePages.routes.PageController.showPage(previousPage).url ,
+    backLinkUrl = dataCapturePages.routes.PageController.showPage(previousPage).url,
     summary = summary,
     theForm = theForm
-){
+) {
 
-    @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(8),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId") {
+    @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(8)) {
 
         <!-- Was the rent fixed between you (or your agent) and the landlord? -->
         @govukRadios(
             Radios(
                 name = "wasRentFixedBetween",
-                idPrefix = Option("wasRentFixedBetween"),
+                idPrefix = "wasRentFixedBetween",
                 classes = "radio-button-that-show-hides",
                 items = Seq(
                     "true" -> messages("label.yes.do"),
                     "false" -> messages("label.no.naddo")
-                ).map( radioItem => RadioItem (
+                ).map(radioItem => RadioItem(
                     content = Text(radioItem._2),
                     checked = radioItem._1.equals(theForm("wasRentFixedBetween").value.getOrElse("")),
-                    value=Option(radioItem._1)
+                    value = radioItem._1
                 )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("wasRentFixedBetween"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(if(summary.isAgent) messages("label.wasRentFixedBetween.agent") else messages("label.wasRentFixedBetween")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
         @govukRadios(
             Radios(
                 name = "notReviewRentFixed",
-                idPrefix = Option("notReviewRentFixed"),
+                idPrefix = "notReviewRentFixed",
                 items = NotReviewRentFixedType.values.toIndexedSeq.map(notReviewRentType =>
                     RadioItem(
                         content = Text(messages(s"notReviewRentFixedTypes.$notReviewRentType")),
                         checked = theForm("notReviewRentFixed").value.contains(notReviewRentType.toString),
-                        value   = Option(notReviewRentType.toString)
+                        value = notReviewRentType.toString
                     )
                 ),
                 attributes = Map(
@@ -95,46 +96,42 @@
                     "data-show-when-value-equals" -> "false"
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("notReviewRentFixed"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.notReviewRentFixed")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         @govukRadios(
             Radios(
                 name = "rentSetByType",
-                idPrefix = Option("rentSetByType"),
+                idPrefix = "rentSetByType",
                 items = RentSetByType.values.toIndexedSeq.map(rentSetBy =>
                     RadioItem(
                         content = Text(messages(s"rentSetByTypes.$rentSetBy")),
                         checked = theForm("rentSetByType").value.contains(rentSetBy.toString),
-                        value   = Option(rentSetBy.toString)
+                        value = rentSetBy.toString
                     )
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("rentSetByType"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.rentSetByType")),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
-    
-    @includes.continueSaveForLaterButtons(govukButton)
-    
+
+        @continueSaveForLaterButtons()
+
     }
     @formHelp()
 }

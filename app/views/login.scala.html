@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+@import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.model.input.TextField
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -28,12 +26,11 @@
         formWithCSRF: FormWithCSRF
 )
 
-
-@(theForm: Form[LoginDetails])(implicit request: RequestHeader, messages: Messages)
+@(form: Form[LoginDetails])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("login.heading"),
-    theForm = theForm
+    theForm = form
 ) {
 
     <p class="govuk-body">@messages("label.letter")</p>
@@ -41,34 +38,12 @@
     @formWithCSRF(action = routes.LoginController.submit, args = Symbol("novalidate") -> "novalidate") {
         @helper.CSRF.formField
 
-        @govukInput(
-            Input(
-                id = "referenceNumber",
-                name = "referenceNumber",
-                value = theForm("referenceNumber").value,
-                classes = "govuk-input--width-20",
-                label = Label(
-                    content = Text(messages("label.referenceNumber"))
-                ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("referenceNumber")
-            )
-        )
+        @govukInput(TextField.input(form, "", "referenceNumber", inputWidth = 20))
 
-        @govukInput(
-            Input(
-                id = "postcode",
-                name = "postcode",
-                value = theForm("postcode").value,
-                classes = "govuk-input--width-10",
-                label = Label(
-                    content = Text(messages("label.postcode"))
-                ),
-                errorMessage =  theForm.errors.asTextErrorMessageForField("postcode")
-            )
-        )
+        @govukInput(TextField.input(form, "", "postcode", inputWidth = 10))
 
-        <input type="hidden" name="start-time" value="@theForm("start-time").value" />
+        <input type="hidden" name="start-time" value="@form("start-time").value" />
 
-        @includes.continueButton(govukButton)
+        @govukButton(SubmitButton("continue"))
     }
 }

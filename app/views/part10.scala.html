@@ -24,183 +24,173 @@
 @this(
         layout: PrimaryLayout,
         govukRadios: GovukRadios,
-        govukButton: GovukButton,
         govukInput: GovukInput,
         govukDateInput: GovukDateInput,
         govukCharacterCount: GovukCharacterCount,
         formWithCSRF: FormWithCSRF,
+        continueSaveForLaterButtons: includes.continueSaveForLaterButtons,
         formHelp: includes.formHelp
 )
 
+@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
-@(theForm: Form[?], summary: Summary)(implicit request: RequestHeader,  messages: Messages)
-
-@labelSuffix  = @{ if(summary.isAgent) ".agent" else "" }
+@labelSuffix = @{
+    if(summary.isAgent) ".agent" else ""
+}
 
 @layout(
     pageTitle = messages("section10.heading"),
     backLinkUrl = dataCapturePages.routes.PageController.showPage(9).url,
     summary = summary,
     theForm = theForm
-){
+) {
 
     @formWithCSRF(
-        action = dataCapturePages.routes.PageController.savePage(10),
-        args = Symbol("class") -> "myForm", Symbol("id") -> "myFormId", Symbol("novalidate") -> "novalidate"
+        action = dataCapturePages.routes.PageController.savePage(10)
     ) {
-
-    @govukRadios(
-        Radios(
-            name = "livingAccommodation",
-            idPrefix = Option("livingAccommodation"),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            items = Seq(
-                "true" -> messages("label.yes.ydy"),
-                "false" -> messages("label.no.nac.ydy")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("livingAccommodation").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            hint = Hint(content = Text(messages("hint.livingAccommodation"))),
-            errorMessage = theForm.errors.asTextErrorMessageForField("livingAccommodation"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages("label.livingAccommodation" + labelSuffix)),
-                            classes = "govuk-!-font-weight-bold"
-                        )
-                    )
-                )
-            )
-        )
-    )
-
-    @govukRadios(
-        Radios(
-            name = "partRent",
-            idPrefix = Option("partRent"),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            items = Seq(
-                "true" -> messages("label.yes.ie"),
-                "false" -> messages("label.no.nage")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("partRent").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            hint = Hint(content = Text(messages("hint.partRent" + labelSuffix))),
-            errorMessage = theForm.errors.asTextErrorMessageForField("partRent"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(if(summary.isAgent)  messages("label.partRent.agent")  else  messages("label.partRent", summary.address.map(_.singleLine).getOrElse(""))),
-                            classes = "govuk-!-font-weight-bold"
-                        )
-                    )
-                )
-            )
-        )
-    )
-
-    @govukRadios(
-        Radios(
-            name = "otherProperty",
-            idPrefix = Option("otherProperty"),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            items = Seq(
-                "true" -> messages("label.yes.ydy"),
-                "false" -> messages("label.no.nac.ydy")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("otherProperty").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            hint = Hint(content = Text(messages("hint.otherProperty"))),
-            errorMessage = theForm.errors.asTextErrorMessageForField("otherProperty"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages("label.otherProperty" + labelSuffix)),
-                            classes = "govuk-!-font-weight-bold"
-                        )
-                    )
-                )
-            )
-        )
-    )
-
-    @govukRadios(
-        Radios(
-            name = "landOnly",
-            idPrefix = Option("landOnly"),
-            classes = "radio-button-that-show-hides govuk-radios--inline",
-            items = Seq(
-                "true" -> messages("label.yes.ie"),
-                "false" -> messages("label.no.nage")
-            ).map( radioItem => {
-                RadioItem (
-                    content = Text(radioItem._2),
-                    checked = radioItem._1.equals(theForm("landOnly").value.getOrElse("")),
-                    value   = Option(radioItem._1)
-                )
-            }
-            ),
-            hint = Hint(content = Text(messages("hint.landOnly"))),
-            errorMessage = theForm.errors.asTextErrorMessageForField("landOnly"),
-            fieldset = Option(
-                Fieldset(
-                    legend = Option(
-                        Legend(
-                            content = Text(messages("label.landOnly" + labelSuffix)),
-                            classes = "govuk-!-font-weight-bold"
-                        )
-                    )
-                )
-            )
-        )
-    )
 
         @govukRadios(
             Radios(
-                name = "shellUnit",
-                idPrefix = Option("shellUnit"),
+                name = "livingAccommodation",
+                idPrefix = "livingAccommodation",
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                items = Seq(
+                    "true" -> messages("label.yes.ydy"),
+                    "false" -> messages("label.no.nac.ydy")
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("livingAccommodation").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.livingAccommodation"))),
+                errorMessage = theForm.errors.asTextErrorMessageForField("livingAccommodation"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.livingAccommodation" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
+            )
+        )
+
+        @govukRadios(
+            Radios(
+                name = "partRent",
+                idPrefix = "partRent",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.ie"),
                     "false" -> messages("label.no.nage")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("partRent").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.partRent" + labelSuffix))),
+                errorMessage = theForm.errors.asTextErrorMessageForField("partRent"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(if(summary.isAgent) messages("label.partRent.agent") else messages("label.partRent", summary.address.map(_.singleLine).getOrElse(""))),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
+            )
+        )
+
+        @govukRadios(
+            Radios(
+                name = "otherProperty",
+                idPrefix = "otherProperty",
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                items = Seq(
+                    "true" -> messages("label.yes.ydy"),
+                    "false" -> messages("label.no.nac.ydy")
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("otherProperty").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.otherProperty"))),
+                errorMessage = theForm.errors.asTextErrorMessageForField("otherProperty"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.otherProperty" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
+            )
+        )
+
+        @govukRadios(
+            Radios(
+                name = "landOnly",
+                idPrefix = "landOnly",
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                items = Seq(
+                    "true" -> messages("label.yes.ie"),
+                    "false" -> messages("label.no.nage")
+                ).map(radioItem => {
+                    RadioItem(
+                        content = Text(radioItem._2),
+                        checked = radioItem._1.equals(theForm("landOnly").value.getOrElse("")),
+                        value = radioItem._1
+                    )
+                }
+                ),
+                hint = Hint(content = Text(messages("hint.landOnly"))),
+                errorMessage = theForm.errors.asTextErrorMessageForField("landOnly"),
+                fieldset =
+                    Fieldset(
+                        legend =
+                            Legend(
+                                content = Text(messages("label.landOnly" + labelSuffix)),
+                                classes = "govuk-!-font-weight-bold"
+                            )
+                    )
+            )
+        )
+
+        @govukRadios(
+            Radios(
+                name = "shellUnit",
+                idPrefix = "shellUnit",
+                classes = "radio-button-that-show-hides govuk-radios--inline",
+                items = Seq(
+                    "true" -> messages("label.yes.ie"),
+                    "false" -> messages("label.no.nage")
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("shellUnit").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 hint = Hint(content = Text(messages("hint.shellUnit"))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("shellUnit"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.shellUnit" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
@@ -213,73 +203,71 @@
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">@messages("label.rentDetails")</legend>
 
             <div data-hidden-by="livingAccommodation" data-show-when-value-equals="true" data-hides-this="true" class="govuk-hint">
-                @messages("hint.rentDetails.livingAccommodation")
+            @messages("hint.rentDetails.livingAccommodation")
             </div>
             <div data-hidden-by="partRent" data-show-when-value-equals="true" data-hides-this="true" class="govuk-hint">
-                @messages("hint.rentDetails.partRent")
+            @messages("hint.rentDetails.partRent")
             </div>
             <div data-hidden-by="otherProperty" data-show-when-value-equals="true" data-hides-this="true" class="govuk-hint">
-                @messages("hint.rentDetails.otherProperty")
+            @messages("hint.rentDetails.otherProperty")
             </div>
             <div data-hidden-by="landOnly" data-show-when-value-equals="true" data-hides-this="true" class="govuk-hint">
-                @messages("hint.rentDetails.landOnly")
+            @messages("hint.rentDetails.landOnly")
             </div>
             <div data-hidden-by="shellUnit" data-show-when-value-equals="true" data-hides-this="true" class="govuk-hint">
-                @messages("hint.rentDetails.shellUnit")
+            @messages("hint.rentDetails.shellUnit")
             </div>
 
-        @govukCharacterCount(
-            CharacterCount(
-                id = "rentDetails",
-                name = "rentDetails",
-                value = theForm("rentDetails").value,
-                rows = 6,
-                maxLength = 249,
-                errorMessage = theForm.errors.asTextErrorMessageForField("rentDetails"),
-                attributes = Map(
-                    "data-hidden-by" -> "livingAccommodation|otherProperty|partRent|landOnly|shellUnit",
-                    "data-show-when-value-equals" -> "true|true|true|true|true")
+            @govukCharacterCount(
+                CharacterCount(
+                    id = "rentDetails",
+                    name = "rentDetails",
+                    value = theForm("rentDetails").value,
+                    rows = 6,
+                    maxLength = 249,
+                    errorMessage = theForm.errors.asTextErrorMessageForField("rentDetails"),
+                    attributes = Map(
+                        "data-hidden-by" -> "livingAccommodation|otherProperty|partRent|landOnly|shellUnit",
+                        "data-show-when-value-equals" -> "true|true|true|true|true")
+                )
             )
-        )
         </fieldset>
 
         @govukRadios(
             Radios(
                 name = "parking.rentIncludeParking",
-                idPrefix = Option("parking.rentIncludeParking"),
+                idPrefix = "parking.rentIncludeParking",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.ydy"),
                     "false" -> messages("label.no.nac.ydy")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("parking.rentIncludeParking").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 hint = Hint(content = Text(messages("hint.label.parking.rentIncludeParking" + labelSuffix))),
                 errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentIncludeParking"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.parking.rentIncludeParking" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         <fieldset
-            data-show-when-value-equals="true"
-            data-hidden-by="parking.rentIncludeParking"
-            data-hides-this="true"
-            class="form-group parking.rentIncludeParking"
-            id="parking.rentIncludeParkingDetails">
+        data-show-when-value-equals="true"
+        data-hidden-by="parking.rentIncludeParking"
+        data-hides-this="true"
+        class="form-group parking.rentIncludeParking"
+        id="parking.rentIncludeParkingDetails">
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">@messages("label.parking.rentIncludeParkingDetails")</legend>
 
 
@@ -295,8 +283,8 @@
                         id = "parking.rentIncludeParkingDetails.openSpaces",
                         name = "parking.rentIncludeParkingDetails.openSpaces",
                         value = theForm("parking.rentIncludeParkingDetails.openSpaces").value,
-                        inputmode="numeric",
-                        pattern="[0-9]*",
+                        inputmode = "numeric",
+                        pattern = "[0-9]*",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentIncludeParkingDetails.openSpaces"),
                         classes = "govuk-input--width-5",
                         label = Label(content = Text(messages("label.openSpaces")))
@@ -308,9 +296,9 @@
                         id = "parking.rentIncludeParkingDetails.coveredSpaces",
                         name = "parking.rentIncludeParkingDetails.coveredSpaces",
                         value = theForm("parking.rentIncludeParkingDetails.coveredSpaces").value,
-                        classes="govuk-input--width-5",
-                        inputmode="numeric",
-                        pattern="[0-9]*",
+                        classes = "govuk-input--width-5",
+                        inputmode = "numeric",
+                        pattern = "[0-9]*",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentIncludeParkingDetails.coveredSpaces"),
 
                         label = Label(content = Text(messages("label.coveredSpaces")))
@@ -322,10 +310,10 @@
                         id = "parking.rentIncludeParkingDetails.garages",
                         name = "parking.rentIncludeParkingDetails.garages",
                         value = theForm("parking.rentIncludeParkingDetails.garages").value,
-                        classes="govuk-input--width-5",
-                        inputmode="numeric",
+                        classes = "govuk-input--width-5",
+                        inputmode = "numeric",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentIncludeParkingDetails.garages"),
-                        pattern="[0-9]*",
+                        pattern = "[0-9]*",
                         label = Label(content = Text(messages("label.garages")))
                     )
                 )
@@ -336,39 +324,37 @@
         @govukRadios(
             Radios(
                 name = "parking.rentSeparateParking",
-                idPrefix = Option("parking.rentSeparateParking"),
+                idPrefix = "parking.rentSeparateParking",
                 classes = "radio-button-that-show-hides govuk-radios--inline",
                 items = Seq(
                     "true" -> messages("label.yes.ydy"),
                     "false" -> messages("label.no.nac.ydy")
-                ).map( radioItem => {
-                    RadioItem (
+                ).map(radioItem => {
+                    RadioItem(
                         content = Text(radioItem._2),
                         checked = radioItem._1.equals(theForm("parking.rentSeparateParking").value.getOrElse("")),
-                        value   = Option(radioItem._1)
+                        value = radioItem._1
                     )
                 }
                 ),
                 errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentSeparateParking"),
-                fieldset = Option(
+                fieldset =
                     Fieldset(
-                        legend = Option(
+                        legend =
                             Legend(
                                 content = Text(messages("label.parking.rentSeparateParking" + labelSuffix)),
                                 classes = "govuk-!-font-weight-bold"
                             )
-                        )
                     )
-                )
             )
         )
 
         <fieldset
-            data-show-when-value-equals="true"
-            data-hidden-by="parking.rentSeparateParking"
-            data-hides-this="true"
-            class="form-group  parking.rentSeparateParking"
-            id="parking.rentSeparateParkingDetails">
+        data-show-when-value-equals="true"
+        data-hidden-by="parking.rentSeparateParking"
+        data-hides-this="true"
+        class="form-group  parking.rentSeparateParking"
+        id="parking.rentSeparateParkingDetails">
 
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">@messages("label.parking.rentSeparateParkingDetails" + labelSuffix)</legend>
             <p class="hidden">@messages("label.noJs.rentSeparateParkingDetails")</p>
@@ -380,8 +366,8 @@
                         id = "parking.rentSeparateParkingDetails.openSpaces",
                         name = "parking.rentSeparateParkingDetails.openSpaces",
                         value = theForm("parking.rentSeparateParkingDetails.openSpaces").value,
-                        inputmode="numeric",
-                        pattern="[0-9]*",
+                        inputmode = "numeric",
+                        pattern = "[0-9]*",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentSeparateParkingDetails.openSpaces"),
                         classes = "govuk-input--width-5",
                         label = Label(content = Text(messages("label.openSpaces")))
@@ -393,11 +379,11 @@
                         id = "parking.rentSeparateParkingDetails.coveredSpaces",
                         name = "parking.rentSeparateParkingDetails.coveredSpaces",
                         value = theForm("parking.rentSeparateParkingDetails.coveredSpaces").value,
-                        inputmode="numeric",
-                        pattern="[0-9]*",
+                        inputmode = "numeric",
+                        pattern = "[0-9]*",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentSeparateParkingDetails.coveredSpaces"),
 
-                        classes="govuk-input--width-5",
+                        classes = "govuk-input--width-5",
                         label = Label(content = Text(messages("label.coveredSpaces")))
                     )
                 )
@@ -407,28 +393,28 @@
                         id = "parking.rentSeparateParkingDetails.garages",
                         name = "parking.rentSeparateParkingDetails.garages",
                         value = theForm("parking.rentSeparateParkingDetails.garages").value,
-                        inputmode="numeric",
+                        inputmode = "numeric",
                         errorMessage = theForm.errors.asTextErrorMessageForField("parking.rentSeparateParkingDetails.garages"),
-                        pattern="[0-9]*",
-                        classes="govuk-input--width-5",
+                        pattern = "[0-9]*",
+                        classes = "govuk-input--width-5",
                         label = Label(content = Text(messages("label.garages")))
                     )
                 )
             }
-        <div style="clear:left;" class="govuk-!-margin-top-4">
-            @govukInput(
-                CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidth = 5)
-            )
+            <div style="clear: left;" class="govuk-!-margin-top-4">
+                @govukInput(
+                    CurrencyField.input(theForm, "", "parking.annualSeparateParking", inputWidth = 5)
+                )
 
-            @includes.dateFields(
-                form = theForm,
-                field = "parking.annualSeparateParkingDate",
-                govukDate = govukDateInput)
-        </div>
+                @includes.dateFields(
+                    form = theForm,
+                    field = "parking.annualSeparateParkingDate",
+                    govukDate = govukDateInput)
+            </div>
         </fieldset>
 
-    @includes.continueSaveForLaterButtons(govukButton)
-    
+        @continueSaveForLaterButtons()
+
     }
-     @formHelp()
+    @formHelp()
 }
