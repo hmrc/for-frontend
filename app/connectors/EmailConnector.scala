@@ -51,5 +51,5 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(using ec:
         )),
         "force"      -> JsBoolean(false)
       )
-      http.post[JsObject](s"$emailUrl/send-templated-email/", json).map(_ => ())
+      http.post[JsObject](s"$emailUrl/hmrc/email", json).map(_ => ())
     } getOrElse Future.unit
