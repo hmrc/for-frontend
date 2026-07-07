@@ -20,7 +20,6 @@ import models.serviceContracts.submissions.NotConnected
 import play.api.data.Forms.mapping
 import play.api.data.{FieldMapping, Form, FormError, Mapping}
 import play.api.data.format.Formatter
-import play.api.data.validation.Constraints.emailAddress
 import play.api.data.validation.{Constraint, Constraints, Valid}
 import play.api.data.Forms.*
 import play.api.libs.json.{Json, OFormat}
@@ -57,7 +56,7 @@ object NotConnectedPropertyForm:
     Form(
       mapping(
         "fullName"              -> nonEmptyText.verifying(Constraints.pattern(fullNameRegex, error = "notConnected.error.nameInvalid")),
-        "email"                 -> atLeastOneMapping("phoneNumber", emailAddress),
+        "email"                 -> atLeastOneMapping("phoneNumber", MappingSupport.emailAddressAtLeastOneDotInDomain),
         "phoneNumber"           -> atLeastOneMapping("email", MappingSupport.phoneNumber.constraints*),
         "additionalInformation" -> optional(text)
       )(NotConnected.apply)(o => Some(Tuple.fromProductTyped(o)))

@@ -31,6 +31,19 @@ import scala.util.{Success, Try}
 
 object MappingSupport:
 
+  private val emailAddressAtLeastOneDotInDomainRegex =
+    """^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$""".r
+
+  val emailAddressAtLeastOneDotInDomain: Constraint[String] = Constraint[String]("constraint.email") {
+    e =>
+      if e == null || e.trim.isEmpty then Invalid(ValidationError("error.email"))
+      else
+        emailAddressAtLeastOneDotInDomainRegex
+          .findFirstMatchIn(e)
+          .map(_ => Valid)
+          .getOrElse(Invalid(ValidationError("error.email")))
+  }
+
   private val strictEmailConstraint = Constraint[String] {
     value =>
       Try(InternetAddress(value, true)) match

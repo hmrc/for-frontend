@@ -3,9 +3,9 @@ import sbt.*
 
 object AppDependencies {
 
-  private val bootstrapVersion    = "10.7.0"
-  private val playFrontendVersion = "13.4.0"
-  private val voServiceVersion    = "0.10.0"
+  private val bootstrapVersion    = "10.8.0"
+  private val playFrontendVersion = "13.9.0"
+  private val voServiceVersion    = "0.12.0"
   private val mongoVersion        = "2.12.0"
   private val jQueryVersion       = "4.0.0"
   private val mailApiVersion      = "2.0.2"
