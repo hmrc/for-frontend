@@ -16,32 +16,36 @@
 
 package controllers
 
-import base.TestBaseSpec
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
-import org.scalatest.flatspec.AnyFlatSpec
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.Helpers.refNumAction
 import views.html.error.error
 import views.html.previouslyConnected
 
 import scala.concurrent.ExecutionContext
 
-class PreviouslyConnectedControllerSpec extends TestBaseSpec:
+class PreviouslyConnectedControllerSpec extends BaseSpec:
 
   given ExecutionContext = ExecutionContext.Implicits.global
 
-  "PreviouslyConnectedController" should "redirect after form submission" in {
+  "PreviouslyConnectedController" should {
+    "redirect after form submission" in {
+      val cache                  = mock[MongoSessionRepository]
+      val formDocumentRepository = mock[FormDocumentRepository]
 
-    val cache                  = mock[MongoSessionRepository]
-    val formDocumentRepository = mock[FormDocumentRepository]
+      val controller = PreviouslyConnectedController(
+        stubMessagesControllerComponents(),
+        cache,
+        formDocumentRepository,
+        refNumAction(),
+        mock[previouslyConnected],
+        mock[error]
+      )
 
-    val controller =
-      PreviouslyConnectedController(stubMessagesControllerComponents(), cache, formDocumentRepository, refNumAction(), mock[previouslyConnected], mock[error])
+      val response = controller.onPageSubmit(FakeRequest())
 
-    val request = FakeRequest()
-
-    val response = controller.onPageSubmit(request)
-
-    status(response) shouldBe SEE_OTHER
+      status(response) shouldBe SEE_OTHER
+    }
   }

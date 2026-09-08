@@ -16,37 +16,35 @@
 
 package controllers
 
-import base.TestBaseSpec
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
-import org.scalatest.flatspec.AnyFlatSpec
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.Helpers.refNumAction
 import views.html.notConnected
 
 import scala.concurrent.ExecutionContext
 
-class NotConnectedControllerSpec extends TestBaseSpec:
+class NotConnectedControllerSpec extends BaseSpec:
 
   given ExecutionContext = ExecutionContext.Implicits.global
 
-  "NotConnectedController" should "move to check your answers" in {
+  "NotConnectedController" should {
+    "move to check your answers" in {
+      val cache                  = mock[MongoSessionRepository]
+      val formDocumentRepository = mock[FormDocumentRepository]
 
-    val cache                  = mock[MongoSessionRepository]
-    val formDocumentRepository = mock[FormDocumentRepository]
+      val controller = NotConnectedController(
+        formDocumentRepository,
+        refNumAction(),
+        cache,
+        stubMessagesControllerComponents(),
+        mock[notConnected],
+        mock[views.html.error.error]
+      )
 
-    val controller = NotConnectedController(
-      formDocumentRepository,
-      refNumAction(),
-      cache,
-      stubMessagesControllerComponents(),
-      mock[notConnected],
-      mock[views.html.error.error]
-    )
+      val result = controller.onPageSubmit(FakeRequest())
 
-    val fakeRequest = FakeRequest()
-
-    val result = controller.onPageSubmit(fakeRequest)
-
-    status(result) shouldBe SEE_OTHER
+      status(result) shouldBe SEE_OTHER
+    }
   }

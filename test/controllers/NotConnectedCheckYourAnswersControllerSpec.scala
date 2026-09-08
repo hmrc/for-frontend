@@ -16,43 +16,41 @@
 
 package controllers
 
-import base.TestBaseSpec
 import connectors.{Audit, SubmissionConnector}
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
-import org.scalatest.flatspec.AnyFlatSpec
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.Helpers.refNumAction
 import views.html.{confirmNotConnected, notConnectedCheckYourAnswers}
 
 import scala.concurrent.ExecutionContext
 
-class NotConnectedCheckYourAnswersControllerSpec extends TestBaseSpec:
+class NotConnectedCheckYourAnswersControllerSpec extends BaseSpec:
 
   given ExecutionContext = ExecutionContext.Implicits.global
 
-  "NotConnectedCheckYourAnswersController" should "Audit submission" in {
+  "NotConnectedCheckYourAnswersController" should {
+    "audit submission" in {
+      val formDocumentRepository = mock[FormDocumentRepository]
+      val submissionConnector    = mock[SubmissionConnector]
+      val cache                  = mock[MongoSessionRepository]
+      val audit                  = mock[Audit]
 
-    val formDocumentRepository = mock[FormDocumentRepository]
-    val submissionConnector    = mock[SubmissionConnector]
-    val cache                  = mock[MongoSessionRepository]
-    val audit                  = mock[Audit]
+      val controller = NotConnectedCheckYourAnswersController(
+        formDocumentRepository,
+        submissionConnector,
+        refNumAction(),
+        cache,
+        audit,
+        stubMessagesControllerComponents(),
+        mock[notConnectedCheckYourAnswers],
+        mock[confirmNotConnected],
+        mock[views.html.error.error]
+      )
 
-    val controller = NotConnectedCheckYourAnswersController(
-      formDocumentRepository,
-      submissionConnector,
-      refNumAction(),
-      cache,
-      audit,
-      stubMessagesControllerComponents(),
-      mock[notConnectedCheckYourAnswers],
-      mock[confirmNotConnected],
-      mock[views.html.error.error]
-    )
+      val response = controller.onPageSubmit(FakeRequest())
 
-    val request = FakeRequest()
-
-    val response = controller.onPageSubmit(request)
-
-    status(response) shouldBe SEE_OTHER
+      status(response) shouldBe SEE_OTHER
+    }
   }

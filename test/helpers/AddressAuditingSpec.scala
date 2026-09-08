@@ -16,14 +16,10 @@
 
 package helpers
 
-import base.TestBaseSpec
 import connectors.Audit
 import models.RoughDate
 import models.pages.{PageFour, SubletDetails, Summary}
 import models.serviceContracts.submissions.{Address, AddressConnectionType, SubletType}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,43 +27,44 @@ import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Disabled
 import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 
 import scala.compiletime.uninitialized
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressAuditingSpec extends TestBaseSpec:
+class AddressAuditingSpec extends BaseSpec:
 
   import TestData.*
 
-  behavior of "Address Auditing"
+  "Address Auditing" should {
+    "send a manualAddressSubmitted audit when the user submits a corrected property address" in {
+      val s = summaryWithPropertyAddress(Some(propertyAddress), Some(oneLineChanged))
+      TestAddressAuditing(s, FakeRequest())
 
-  it should "send a manualAddressSubmitted audit when the user submits a corrected property address" in {
-    val s = summaryWithPropertyAddress(Some(propertyAddress), Some(oneLineChanged))
-    TestAddressAuditing(s, FakeRequest())
-
-    StubAuditor.mustHaveSentAudit(
-      "manualAddressSubmitted",
-      Map(
-        "submittedLine1"    -> oneLineChanged.buildingNameNumber,
-        "submittedLine2"    -> oneLineChanged.street1.getOrElse(""),
-        "submittedPostcode" -> oneLineChanged.postcode
+      StubAuditor.mustHaveSentAudit(
+        "manualAddressSubmitted",
+        Map(
+          "submittedLine1"    -> oneLineChanged.buildingNameNumber,
+          "submittedLine2"    -> oneLineChanged.street1.getOrElse(""),
+          "submittedPostcode" -> oneLineChanged.postcode
+        )
       )
-    )
-  }
+    }
 
-  it should "send a manualAddressSubmitted audit when the user submits a corrected sublet address" in {
-    val s = summaryWithSubletAddress(Some(propertyAddress), oneLineChanged)
-    TestAddressAuditing(s, FakeRequest())
+    "send a manualAddressSubmitted audit when the user submits a corrected sublet address" in {
+      val s = summaryWithSubletAddress(Some(propertyAddress), oneLineChanged)
+      TestAddressAuditing(s, FakeRequest())
 
-    StubAuditor.mustHaveSentAudit(
-      "manualAddressSubmitted",
-      Map(
-        "submittedLine1"    -> oneLineChanged.buildingNameNumber,
-        "submittedLine2"    -> oneLineChanged.street1.getOrElse(""),
-        "submittedPostcode" -> oneLineChanged.postcode
+      StubAuditor.mustHaveSentAudit(
+        "manualAddressSubmitted",
+        Map(
+          "submittedLine1"    -> oneLineChanged.buildingNameNumber,
+          "submittedLine2"    -> oneLineChanged.street1.getOrElse(""),
+          "submittedPostcode" -> oneLineChanged.postcode
+        )
       )
-    )
+    }
   }
 
   private def summaryWithPropertyAddress(voAddress: Option[Address], corrected: Option[Address]): Summary =
@@ -119,6 +116,37 @@ class AddressAuditingSpec extends TestBaseSpec:
       Nil
     )
 
+  object StubAuditor extends Audit:
+
+    private case class AuditEvent(event: String, detail: Map[String, String])
+    private var lastSentAudit: AuditEvent = uninitialized
+
+    override def apply(event: String, detail: Map[String, String])(using hc: HeaderCarrier): Future[AuditResult] =
+      lastSentAudit = AuditEvent(event, detail)
+      Future.successful(Disabled)
+
+    def mustHaveSentAudit(event: String, detail: Map[String, String]): Unit =
+      lastSentAudit       should not equal null
+      lastSentAudit.event should equal(event)
+      detail foreach { d =>
+        lastSentAudit.detail should contain(d)
+      }
+      lastSentAudit = null
+
+    implicit override def ec: ExecutionContext = ExecutionContext.Implicits.global
+
+    override def auditingConfig: AuditingConfig = mock[AuditingConfig]
+
+    override def auditChannel: AuditChannel = mock[AuditChannel]
+
+    override def datastreamMetrics: DatastreamMetrics = mock[DatastreamMetrics]
+
+    override def configuration: Configuration = mock[Configuration]
+
+    override def servicesConfig: ServicesConfig = mock[ServicesConfig]
+
+  object TestAddressAuditing extends AddressAuditing(StubAuditor)
+
 object TestData:
   val propertyAddress: Address = Address("1 The Road", Some("The Town"), None, "AA11 1AA")
   val unchanged: Address       = Address("1 The Road", Some("The Town"), None, "AA11 1AA")
@@ -126,35 +154,3 @@ object TestData:
   val oneLineChanged: Address  = Address("1A The Road", Some("The Town"), None, "AA11 1AA")
   val twoLinesChanged: Address = Address("1 The Other Road", Some("The Other Town"), None, "AA11 1AA")
   val overseas: Address        = Address("1 The Road", Some("Atlantis"), None, "The Sea")
-
-object TestAddressAuditing extends AddressAuditing(StubAuditor):
-  protected val audit: Audit = StubAuditor
-
-object StubAuditor extends Audit with should.Matchers with MockitoSugar:
-
-  private case class AuditEvent(event: String, detail: Map[String, String])
-  private var lastSentAudit: AuditEvent = uninitialized
-
-  override def apply(event: String, detail: Map[String, String])(using hc: HeaderCarrier): Future[AuditResult] =
-    lastSentAudit = AuditEvent(event, detail)
-    Future.successful(Disabled)
-
-  def mustHaveSentAudit(event: String, detail: Map[String, String]): Unit =
-    lastSentAudit       should not equal null
-    lastSentAudit.event should equal(event)
-    detail foreach { d =>
-      lastSentAudit.detail should contain(d)
-    }
-    lastSentAudit = null
-
-  implicit override def ec: ExecutionContext = ExecutionContext.Implicits.global
-
-  override def auditingConfig: AuditingConfig = mock[AuditingConfig]
-
-  override def auditChannel: AuditChannel = mock[AuditChannel]
-
-  override def datastreamMetrics: DatastreamMetrics = mock[DatastreamMetrics]
-
-  override def configuration: Configuration = mock[Configuration]
-
-  override def servicesConfig: ServicesConfig = mock[ServicesConfig]

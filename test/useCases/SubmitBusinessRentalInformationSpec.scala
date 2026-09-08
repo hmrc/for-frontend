@@ -17,26 +17,23 @@
 package useCases
 
 import actions.RefNumRequest
-import base.MockitoExtendedSugar
 import connectors.{Audit, Document, Page}
 import helpers.AddressAuditing
 import models.*
 import models.serviceContracts.submissions.*
-import org.scalatest.matchers.should
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.RecoverMethods.recoverToExceptionIf
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 import utils.stubs.*
 
 import java.time.LocalDate
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.*
 import scala.language.postfixOps
 
-class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matchers with MockitoExtendedSugar:
+class SubmitBusinessRentalInformationSpec extends BaseSpec:
 
   import TestData.*
 
@@ -52,47 +49,46 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
 
     "a submission for the refNum is received" should {
       val submit = SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit, auditAddresses)
-      Await.result(submit(refNum), 10 seconds)
+      submit(refNum).futureValue
 
-      "The information will be formatted using the submission schema and posted to the back-end" in
+      "the information will be formatted using the submission schema and posted to the back-end" in
         subConnector.verifyWasSubmitted(refNum, submission)
     }
-
   }
 
   "An error is returned when a document for the refNum does not exist" in {
     val invalidRefNum = "adlkjfalsjd"
-    val ex            = intercept[RentalInformationCouldNotBeRetrieved] {
+    val ex            = recoverToExceptionIf[RentalInformationCouldNotBeRetrieved] {
       val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
-      Await.result(submit(invalidRefNum), 10 seconds)
-    }
-    assert(ex.refNum === invalidRefNum)
+      submit(invalidRefNum)
+    }.futureValue
+    ex.refNum shouldBe invalidRefNum
   }
 
-  object TestData:
+object TestData:
 
-    val submission: Submission = Submission(
-      None,
-      Some(CustomerDetails("fn", UserType.occupier, ContactDetails("01234567890", "abc@mailinator.com"))),
-      Some(TheProperty("Stuff", OccupierType.individuals, None, None, false, None, None)),
-      Some(Sublet(false, List.empty)),
-      Some(Landlord("abc", Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionType.noConnected, None)),
-      Some(LeaseOrAgreement(LeaseAgreementType.verbal, Some(false), None, Some(false), List.empty, Some(RoughDate(None, None, 2011)), Some(false), None)),
-      Some(RentReviews(false, None)),
-      Some(RentAgreement(false, None, RentSetByType.newLease)),
-      Some(Rent(Some(20.1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 1), false, RentBaseType.openMarket, None)),
-      Some(WhatRentIncludes(false, true, false, false, false, None, Parking(false, None, false, None, None, None))),
-      Some(IncentivesAndPayments(false, None, true, None, true, None)),
-      Some(Responsibilities(ResponsibleType.landlord, ResponsibleType.landlord, ResponsibleType.landlord, false, true, false, List.empty)),
-      Some(PropertyAlterations(false, List.empty, None)),
-      Some(OtherFactors(false, Some("xyz")))
-    )
+  val submission: Submission = Submission(
+    None,
+    Some(CustomerDetails("fn", UserType.occupier, ContactDetails("01234567890", "abc@mailinator.com"))),
+    Some(TheProperty("Stuff", OccupierType.individuals, None, None, false, None, None)),
+    Some(Sublet(false, List.empty)),
+    Some(Landlord("abc", Some(Address("abc", None, Some("xyz"), "blah")), LandlordConnectionType.noConnected, None)),
+    Some(LeaseOrAgreement(LeaseAgreementType.verbal, Some(false), None, Some(false), List.empty, Some(RoughDate(None, None, 2011)), Some(false), None)),
+    Some(RentReviews(false, None)),
+    Some(RentAgreement(false, None, RentSetByType.newLease)),
+    Some(Rent(Some(20.1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 1), false, RentBaseType.openMarket, None)),
+    Some(WhatRentIncludes(false, true, false, false, false, None, Parking(false, None, false, None, None, None))),
+    Some(IncentivesAndPayments(false, None, true, None, true, None)),
+    Some(Responsibilities(ResponsibleType.landlord, ResponsibleType.landlord, ResponsibleType.landlord, false, true, false, List.empty)),
+    Some(PropertyAlterations(false, List.empty, None)),
+    Some(OtherFactors(false, Some("xyz")))
+  )
 
-    val refNum = "a3akdfjas"
+  val refNum = "a3akdfjas"
 
-    val pages: Seq[Page]   = Nil
-    val document: Document = Document(refNum, nowInUK, pages)
+  val pages: Seq[Page]   = Nil
+  val document: Document = Document(refNum, nowInUK, pages)
 
-    val subConnector: StubSubmissionConnector = StubSubmissionConnector()
-    val builder: StubSubmissionBuilder        = StubSubmissionBuilder()
-    val sessionId                             = "sdfjasdljfasldjfasd"
+  val subConnector: StubSubmissionConnector = StubSubmissionConnector()
+  val builder: StubSubmissionBuilder        = StubSubmissionBuilder()
+  val sessionId                             = "sdfjasdljfasldjfasd"
