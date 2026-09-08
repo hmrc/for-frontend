@@ -2,7 +2,7 @@ import org.irundaia.sass.Minified
 import uk.gov.hmrc.DefaultBuildSettings.{itSettings, targetJvm}
 
 ThisBuild / majorVersion := 3
-ThisBuild / scalaVersion := "3.8.4"
+ThisBuild / scalaVersion := "3.9.0"
 ThisBuild / targetJvm := "jvm-21"
 ThisBuild / scalacOptions ++= Seq("-feature", "-Wconf:msg=Flag .* set repeatedly:s")
 
