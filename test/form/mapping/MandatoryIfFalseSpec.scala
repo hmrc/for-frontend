@@ -16,34 +16,32 @@
 
 package form.mapping
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
 import play.api.data.Forms.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class MandatoryIfEqual extends AnyFlatSpec with should.Matchers:
+class MandatoryIfFalseSpec extends BaseSpec:
 
   import ConditionalMappings.*
 
+  case class Model(source: Boolean, target: Option[String])
+
   val form: Form[Model] = Form(mapping(
-    "country" -> nonEmptyText,
-    "town"    -> mandatoryIfEqual("country", "England", nonEmptyText)
+    "source" -> boolean,
+    "target" -> mandatoryIfFalse("source", nonEmptyText)
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  case class Model(country: String, town: Option[String])
+  "mandatoryIfFalse" should {
+    "mandate the target field if the source field is false, with field-level errors" in {
+      val data = Map("source" -> "false")
+      val res  = form.bind(data)
 
-  behavior of "mandatory if equal"
+      res.errors.head.key shouldBe "target"
+    }
 
-  it should "mandate the target field if the source has the required value" in {
-    val data = Map("country" -> "England")
-    val res  = form.bind(data)
+    "not mandate the target field if the source field is not false" in {
+      val res = form.bind(Map.empty[String, String])
 
-    assert(res.errors.head.key === "town")
-  }
-
-  it should "not mandate the target field if the source field does not have the required value" in {
-    val data = Map("country" -> "Scotland")
-    val res  = form.bind(data)
-
-    assert(res.errors.isEmpty)
+      res.errors.isEmpty shouldBe true
+    }
   }

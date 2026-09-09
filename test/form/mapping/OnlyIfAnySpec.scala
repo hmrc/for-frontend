@@ -16,15 +16,15 @@
 
 package form.mapping
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import org.scalatest.OptionValues.*
 import play.api.data.Form
 import play.api.data.Forms.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class OnlyIfAny extends AnyFlatSpec with should.Matchers:
+class OnlyIfAnySpec extends BaseSpec:
 
   import ConditionalMappings.*
+
+  case class Model(s1: String, s2: String, s3: String, target: Option[String])
 
   val form = Form(mapping(
     "s1"     -> nonEmptyText,
@@ -33,23 +33,21 @@ class OnlyIfAny extends AnyFlatSpec with should.Matchers:
     "target" -> onlyIfAny(Seq("s1" -> "magicValue", "s2" -> "magicValue", "s3" -> "magicValue"), optional(nonEmptyText))
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  case class Model(s1: String, s2: String, s3: String, target: Option[String])
+  "onlyIfAny" should {
+    "apply the mapping to the target field if any of the source fields have their required value" in {
+      val data = Map("s1" -> "abc", "s2" -> "abc", "s3" -> "abc", "target" -> "magic")
+      Seq("s1", "s2", "s3") foreach { f =>
+        val d   = data.updated(f, "magicValue")
+        val res = form.bind(d)
 
-  behavior of "only if any"
-
-  it should "apply the mapping to the target field if any of the source fields have their required value" in {
-    val data = Map("s1" -> "abc", "s2" -> "abc", "s3" -> "abc", "target" -> "magic")
-    Seq("s1", "s2", "s3") foreach { f =>
-      val d   = data.updated(f, "magicValue")
-      val res = form.bind(d)
-
-      assert(res.value.value.target.value === "magic")
+        res.value.get.target shouldBe Some("magic")
+      }
     }
-  }
 
-  it should "not apply the mapping to the target field neither of the source fields have the required value" in {
-    val data = Map("s1" -> "abc", "s2" -> "abc", "s3" -> "abc", "target" -> "magic")
-    val res  = form.bind(data)
+    "not apply the mapping to the target field neither of the source fields have the required value" in {
+      val data = Map("s1" -> "abc", "s2" -> "abc", "s3" -> "abc", "target" -> "magic")
+      val res  = form.bind(data)
 
-    assert(res.value.value.target === None)
+      res.value.get.target shouldBe None
+    }
   }
