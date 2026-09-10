@@ -19,157 +19,165 @@ package form
 import models.*
 import models.pages.*
 import models.serviceContracts.submissions.{Address, SubletType}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.{Form, FormError}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PageFourMappingSpec extends AnyFlatSpec with should.Matchers:
+import form.PageFourForm.pageFourForm
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-  import PageFourForm.*
+class PageFourMappingSpec extends BaseSpec:
+
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "Page four mapping" should "validate sublet tenant address when sublet is true and is tenants address" in
-    validateAddress(pageFourForm, fullData, "sublet[0].tenantAddress")
+  "Page four mapping" should {
+    "validate sublet tenant address when sublet is true and is tenants address" in
+      validateAddress(pageFourForm, fullData, "sublet[0].tenantAddress")
 
-  it should "allow letters, numbers, spaces and special chars with upto 50 chars for a name" in
-    validateFullName(pageFourForm, fullData, keys.tenantFullName, Some("error.sublet.tenantFullName.maxLength"))
+    "allow letters, numbers, spaces and special chars with upto 50 chars for a name" in
+      validateFullName(pageFourForm, fullData, keys.tenantFullName, Some("error.sublet.tenantFullName.maxLength"))
 
-  it should "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet" in
-    validateLettersNumsSpecCharsUptoLength(keys.subletPropertyPartDescription, 100, pageFourForm, fullData, Some("error.subletPropertyPartDescription.maxLength"))
+    "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet" in
+      validateLettersNumsSpecCharsUptoLength(
+        keys.subletPropertyPartDescription,
+        100,
+        pageFourForm,
+        fullData,
+        Some("error.subletPropertyPartDescription.maxLength")
+      )
 
-  it should "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet reason" in
-    validateLettersNumsSpecCharsUptoLength(
-      keys.subletPropertyReasonDescription,
-      100,
-      pageFourForm,
-      fullData,
-      Some("error.subletPropertyReasonDescription.maxLength")
-    )
+    "allow letters, numbers, spaced and special chars upto 100 chars for property part sublet reason" in
+      validateLettersNumsSpecCharsUptoLength(
+        keys.subletPropertyReasonDescription,
+        100,
+        pageFourForm,
+        fullData,
+        Some("error.subletPropertyReasonDescription.maxLength")
+      )
 
-  it should "validate the annual rent as a valid annual rent" in
-    validateCurrency(keys.annualRentExcludingVat, pageFourForm, fullData, ".sublet.annualRent")
+    "validate the annual rent as a valid annual rent" in
+      validateCurrency(keys.annualRentExcludingVat, pageFourForm, fullData, ".sublet.annualRent")
 
-  it should "only allow valid dates for the rent fixed date" in
-    validatePastDate(keys.rentFixedDate, pageFourForm, fullData, ".sublet.rentFixedDate")
+    "only allow valid dates for the rent fixed date" in
+      validatePastDate(keys.rentFixedDate, pageFourForm, fullData, ".sublet.rentFixedDate")
 
-  it should "return a required error for sublet type" in {
-    val data = fullData - keys.subletType
-    val form = bind(data)
+    "return a required error for sublet type" in {
+      val data = fullData - keys.subletType
+      val form = bind(data)
 
-    mustContainError(keys.subletType, Errors.subletTypeRequired, form)
-  }
+      mustContainError(keys.subletType, Errors.subletTypeRequired, form)
+    }
 
-  it should "not return required error for sublet information when we sublet whole property" in {
-    val data = (fullData - keys.subletPropertyPartDescription) + (keys.subletType -> SubletType.all.toString)
-    val form = bind(data)
+    "not return required error for sublet information when we sublet whole property" in {
+      val data = (fullData - keys.subletPropertyPartDescription) + (keys.subletType -> SubletType.all.toString)
+      val form = bind(data)
 
-    form.errors should be(empty)
+      form.errors shouldBe empty
 
-  }
+    }
 
-  it should "return required error fields for all sublet information when there is a sublet" in {
-    val data = Map(keys.propertyIsSublet -> "true")
-    val form = bind(data)
+    "return required error fields for all sublet information when there is a sublet" in {
+      val data = Map(keys.propertyIsSublet -> "true")
+      val form = bind(data)
 
-    mustContainError(keys.rentFixedDateMonth, "error.sublet.rentFixedDate.month.required", form)
-    mustContainError(keys.rentFixedDateYear, "error.sublet.rentFixedDate.year.required", form)
-    mustContainError(keys.subletPropertyReasonDescription, "error.subletPropertyReasonDescription.required", form)
-    mustContainError(keys.subletType, Errors.subletTypeRequired, form)
-  }
+      mustContainError(keys.rentFixedDateMonth, "error.sublet.rentFixedDate.month.required", form)
+      mustContainError(keys.rentFixedDateYear, "error.sublet.rentFixedDate.year.required", form)
+      mustContainError(keys.subletPropertyReasonDescription, "error.subletPropertyReasonDescription.required", form)
+      mustContainError(keys.subletType, Errors.subletTypeRequired, form)
+    }
 
-  it should "return a required error for sublet tenant address when sublet address is tenants address" in {
-    val data = fullData -- allAddressFields
-    val form = bind(data)
+    "return a required error for sublet tenant address when sublet address is tenants address" in {
+      val data = fullData -- allAddressFields
+      val form = bind(data)
 
-    mustContainError(keys.addrBuildingNameNumber, "error.buildingNameNumber.required", form)
-    mustContainError(keys.addrPostcode, "error.postcode.required", form)
-    mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
-  }
+      mustContainError(keys.addrBuildingNameNumber, "error.buildingNameNumber.required", form)
+      mustContainError(keys.addrPostcode, "error.postcode.required", form)
+      mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
+    }
 
-  it should "bind to a PageFourData with no sublet information when the property is not sublet" in {
-    val expectedData = PageFour(propertyIsSublet = false, List.empty)
-    val form         = bind(fullData.updated(keys.propertyIsSublet, "false"))
+    "bind to a PageFourData with no sublet information when the property is not sublet" in {
+      val expectedData = PageFour(propertyIsSublet = false, List.empty)
+      val form         = bind(fullData.updated(keys.propertyIsSublet, "false"))
 
-    mustBind(form)(data => data should be(expectedData))
-  }
+      mustBind(form)(data => data shouldBe expectedData)
+    }
 
-  it should "bind to a PageFourData with full sublet information when the property is sublet" in {
-    val expectedSubletData = SubletDetails(
-      tenantFullName = "Korky the Cat",
-      tenantAddress = Address("12", Some("Some Street"), Some("Some Place"), "AA11 1AA"),
-      subletPropertyPartDescription = Option("basement flat"),
-      subletPropertyReasonDescription = "residential",
-      annualRent = BigDecimal(123.45),
-      rentFixedDate = new RoughDate(2, 2015),
-      subletType = SubletType.part
-    )
+    "bind to a PageFourData with full sublet information when the property is sublet" in {
+      val expectedSubletData = SubletDetails(
+        tenantFullName = "Korky the Cat",
+        tenantAddress = Address("12", Some("Some Street"), Some("Some Place"), "AA11 1AA"),
+        subletPropertyPartDescription = Option("basement flat"),
+        subletPropertyReasonDescription = "residential",
+        annualRent = BigDecimal(123.45),
+        rentFixedDate = new RoughDate(2, 2015),
+        subletType = SubletType.part
+      )
 
-    val expectedData = PageFour(propertyIsSublet = true, List(expectedSubletData))
+      val expectedData = PageFour(propertyIsSublet = true, List(expectedSubletData))
 
-    val form = bind(fullData.updated(keys.propertyIsSublet, "true"))
+      val form = bind(fullData.updated(keys.propertyIsSublet, "true"))
 
-    mustBind(form)(data => data should be(expectedData))
-  }
+      mustBind(form)(data => data shouldBe expectedData)
+    }
 
-  it should "return a required error for tenant full name when property is sublet but tenant full name is missing" in {
-    val submittedData = fullData - keys.tenantFullName
-    val form          = bind(submittedData)
+    "return a required error for tenant full name when property is sublet but tenant full name is missing" in {
+      val submittedData = fullData - keys.tenantFullName
+      val form          = bind(submittedData)
 
-    mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
-  }
+      mustContainError(keys.tenantFullName, "error.sublet.tenantFullName.required", form)
+    }
 
-  it should "result in a validation error when the part of property is sublet but Property Part Description is missing" in {
-    val submittedData = fullData - keys.subletPropertyPartDescription
-    val res           = bind(submittedData)
+    "result in a validation error when the part of property is sublet but Property Part Description is missing" in {
+      val submittedData = fullData - keys.subletPropertyPartDescription
+      val res           = bind(submittedData)
 
-    res.errors should not be empty
-    res.errors should have size 1
+      res.errors should not be empty
+      res.errors should have size 1
 
-    hasError(res.errors, keys.subletPropertyPartDescription, Errors.required)
-    res.value.isDefined should be(false)
-    res.data            should be(submittedData)
-  }
+      hasError(res.errors, keys.subletPropertyPartDescription, Errors.required)
+      res.value.isDefined shouldBe false
+      res.data            shouldBe submittedData
+    }
 
-  it should "result in a validation error when the property is sublet but Property Reason Description is missing" in {
-    val submittedData = fullData - keys.subletPropertyReasonDescription
-    val res           = bind(submittedData)
+    "result in a validation error when the property is sublet but Property Reason Description is missing" in {
+      val submittedData = fullData - keys.subletPropertyReasonDescription
+      val res           = bind(submittedData)
 
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
 
-    hasError(res.errors, keys.subletPropertyReasonDescription, Errors.required)
-    res.value.isDefined should be(false)
-    res.data            should be(submittedData)
-  }
+      hasError(res.errors, keys.subletPropertyReasonDescription, Errors.required)
+      res.value.isDefined shouldBe false
+      res.data            shouldBe submittedData
+    }
 
-  it should "return a required error for annual rent when the property is sublet and rent length type is supplied but annual rent is missing" in {
-    val submittedData = fullData - keys.annualRentExcludingVat
-    val form          = bind(submittedData)
+    "return a required error for annual rent when the property is sublet and rent length type is supplied but annual rent is missing" in {
+      val submittedData = fullData - keys.annualRentExcludingVat
+      val form          = bind(submittedData)
 
-    mustContainError(keys.annualRentExcludingVat, "error.required.sublet.annualRent", form)
-  }
+      mustContainError(keys.annualRentExcludingVat, "error.required.sublet.annualRent", form)
+    }
 
-  it should "result in a single validation error when the property is sublet but both rent fixed fields are missing" in {
-    val submittedData = fullData - keys.rentFixedDateMonth - keys.rentFixedDateYear
-    val res           = bind(submittedData)
+    "result in a single validation error when the property is sublet but both rent fixed fields are missing" in {
+      val submittedData = fullData - keys.rentFixedDateMonth - keys.rentFixedDateYear
+      val res           = bind(submittedData)
 
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(2)
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 2
 
-    hasError(res.errors, keys.rentFixedDateYear, Errors.required)
-    res.value.isDefined should be(false)
-    res.data            should be(submittedData)
-  }
+      hasError(res.errors, keys.rentFixedDateYear, Errors.required)
+      res.value.isDefined shouldBe false
+      res.data            shouldBe submittedData
+    }
 
-  it should "not allow more than 5 sublets" in {
-    val with5SteppedRents = addSublets(4, fullData)
-    mustBind(bind(with5SteppedRents))(_ => ())
+    "not allow more than 5 sublets" in {
+      val with5SteppedRents = addSublets(4, fullData)
+      mustBind(bind(with5SteppedRents))(_ => ())
 
-    val with6SteppedRents = addSublets(5, fullData)
-    val form              = bind(with6SteppedRents)
-    mustOnlyContainError("sublet", Errors.tooManySublets, form)
+      val with6SteppedRents = addSublets(5, fullData)
+      val form              = bind(with6SteppedRents)
+      mustOnlyContainError("sublet", Errors.tooManySublets, form)
+    }
   }
 
   object TestData:

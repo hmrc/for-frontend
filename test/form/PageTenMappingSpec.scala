@@ -16,169 +16,173 @@
 
 package form
 
+import form.PageTenForm.*
 import models.*
 import models.serviceContracts.submissions.{Parking, ParkingDetails, WhatRentIncludes}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import play.api.data.{Form, FormError}
 import org.scalatest.Assertion
+import play.api.data.{Form, FormError}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-class PageTenMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageTenMappingSpec extends BaseSpec:
 
-  import PageTenForm.*
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "A page ten form" should "bind to what rent includes" in {
-    val expectedData = WhatRentIncludes(
-      partRent = true,
-      otherProperty = true,
-      livingAccommodation = true,
-      landOnly = true,
-      shellUnit = true,
-      rentDetails = Some("RENT DETAILS"),
-      Parking(
-        true,
-        Some(ParkingDetails(0, 0, 2)),
-        true,
-        Some(ParkingDetails(0, 0, 9)),
-        Some(599.84),
-        Some(RoughDate(None, Some(6), 2012))
+  "PageTenForm" should {
+    "bind to what rent includes" in {
+      val expectedData = WhatRentIncludes(
+        partRent = true,
+        otherProperty = true,
+        livingAccommodation = true,
+        landOnly = true,
+        shellUnit = true,
+        rentDetails = Some("RENT DETAILS"),
+        Parking(
+          true,
+          Some(ParkingDetails(0, 0, 2)),
+          true,
+          Some(ParkingDetails(0, 0, 9)),
+          Some(599.84),
+          Some(RoughDate(None, Some(6), 2012))
+        )
       )
-    )
 
-    val form = bind(fullData)
-    mustBind(form)(x => assert(x === expectedData))
-  }
+      val form = bind(fullData)
+      mustBind(form)(_ shouldBe expectedData)
+    }
 
-  it should "never allow empty parking values when parking is specified" in {
-    val f = bind(realExampleData)
-    mustContainError("parking.rentIncludeParkingDetails", "error.required.parking.rentIncludeParkingDetails", f)
-    mustContainError("parking.rentSeparateParkingDetails", "error.required.parking.rentSeparateParkingDetails", f)
-    mustContainError("parking.annualSeparateParking", "error.required.annualSeparateParkingAmount", f)
-    mustContainError("parking.annualSeparateParkingDate.month", "error.annualSeparateParkingDate.month.required", f)
-    mustContainError("parking.annualSeparateParkingDate.year", "error.annualSeparateParkingDate.year.required", f)
-  }
+    "never allow empty parking values when parking is specified" in {
+      val f = bind(realExampleData)
 
-  it should "return a mandatory error when a value for rentIncludeParking is not supplied" in {
-    val data: Map[String, String] = Map.empty
-    val form                      = bind(data)
+      mustContainError("parking.rentIncludeParkingDetails", "error.required.parking.rentIncludeParkingDetails", f)
+      mustContainError("parking.rentSeparateParkingDetails", "error.required.parking.rentSeparateParkingDetails", f)
+      mustContainError("parking.annualSeparateParking", "error.required.annualSeparateParkingAmount", f)
+      mustContainError("parking.annualSeparateParkingDate.month", "error.annualSeparateParkingDate.month.required", f)
+      mustContainError("parking.annualSeparateParkingDate.year", "error.annualSeparateParkingDate.year.required", f)
+    }
 
-    mustContainError(rentIncludeParkingKey, Errors.includesParkingRequired, form)
-  }
+    "return a mandatory error when a value for rentIncludeParking is not supplied" in {
+      val data: Map[String, String] = Map.empty
+      val form                      = bind(data)
 
-  it should "return a mandatory boolean error when a value for rentSeparateParking is not supplied" in {
-    val data = fullData - rentSeparateParkingKey
-    val form = bind(data)
+      mustContainError(rentIncludeParkingKey, Errors.includesParkingRequired, form)
+    }
 
-    mustContainError(rentSeparateParkingKey, Errors.tenantPaysForParkingRequired, form)
-  }
-
-  it should "return a required field error when the rent included parking details are all 0" in {
-    val data = fullData.updated(rentIncludedParkingGarages, "0")
-      .updated(rentIncludedParkingOpen, "0")
-      .updated(rentIncludedParkingCovered, "0")
-    val form = bind(data)
-
-    mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
-  }
-
-  it should "return a required field error when the rent included parking details are all empty" in {
-    val data = fullData.updated(rentIncludedParkingGarages, "")
-      .updated(rentIncludedParkingOpen, "")
-      .updated(rentIncludedParkingCovered, "")
-    val form = bind(data)
-
-    mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
-  }
-
-  it should "allow up to 249 letters, numbers, spaces, and special characters for rent details" in
-    validateLettersNumsSpecCharsUptoLength(Keys.rentDetails, 249, pageTenForm, fullData, Some("error.rentDetails.maxLength"))
-
-  it should "allow upto 4 digits for all car parking quantities" in {
-    validateUptoNDigits(
-      rentIncludedParkingGarages,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentIncludeParkingDetails.garages"),
-      Some("error.invalid_number.parking.rentIncludeParkingDetails.garages")
-    )
-    validateUptoNDigits(
-      rentIncludedParkingOpen,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentIncludeParkingDetails.openSpaces"),
-      Some("error.invalid_number.parking.rentIncludeParkingDetails.openSpaces")
-    )
-    validateUptoNDigits(
-      rentIncludedParkingCovered,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentIncludeParkingDetails.coveredSpaces"),
-      Some("error.invalid_number.parking.rentIncludeParkingDetails.coveredSpaces")
-    )
-
-    validateUptoNDigits(
-      rentSeparateParkingGarages,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentSeparateParkingDetails.garages"),
-      Some("error.invalid_number.parking.rentSeparateParkingDetails.garages")
-    )
-    validateUptoNDigits(
-      rentSeparateParkingOpen,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentSeparateParkingDetails.openSpaces"),
-      Some("error.invalid_number.parking.rentSeparateParkingDetails.openSpaces")
-    )
-    validateUptoNDigits(
-      rentSeparateParkingCovered,
-      4,
-      pageTenForm,
-      fullData,
-      Some("error.maxValue.parking.rentSeparateParkingDetails.coveredSpaces"),
-      Some("error.invalid_number.parking.rentSeparateParkingDetails.coveredSpaces")
-    )
-  }
-
-  it should "validate annual payment as 9 digits and 2 decimals" in
-    validateCurrency(annualSeparateParking, pageTenForm, fullData, ".annualSeparateParkingAmount")
-
-  it should "validate annual separate parking date as a date in the past" in
-    validatePastDate(annualSeparateParkingPaymentFixedDate, pageTenForm, fullData, ".annualSeparateParkingDate")
-
-  it should "return a required error when rent details are required but not given" in {
-    val fields = Seq(Keys.partRent, Keys.otherProperty, Keys.livingAccommodation, Keys.landOnly, Keys.shellUnit)
-
-    fields.foreach { field =>
-      val data = dataNoDetailsRequired.updated(field, "true") - Keys.rentDetails
+    "return a mandatory boolean error when a value for rentSeparateParking is not supplied" in {
+      val data = fullData - rentSeparateParkingKey
       val form = bind(data)
 
-      mustContainError(Keys.rentDetails, "error.rentDetails.required", form)
+      mustContainError(rentSeparateParkingKey, Errors.tenantPaysForParkingRequired, form)
+    }
+
+    "return a required field error when the rent included parking details are all 0" in {
+      val data = fullData.updated(rentIncludedParkingGarages, "0")
+        .updated(rentIncludedParkingOpen, "0")
+        .updated(rentIncludedParkingCovered, "0")
+      val form = bind(data)
+
+      mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
+    }
+
+    "return a required field error when the rent included parking details are all empty" in {
+      val data = fullData.updated(rentIncludedParkingGarages, "")
+        .updated(rentIncludedParkingOpen, "")
+        .updated(rentIncludedParkingCovered, "")
+      val form = bind(data)
+
+      mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
+    }
+
+    "allow up to 249 letters, numbers, spaces, and special characters for rent details" in
+      validateLettersNumsSpecCharsUptoLength(Keys.rentDetails, 249, pageTenForm, fullData, Some("error.rentDetails.maxLength"))
+
+    "allow upto 4 digits for all car parking quantities" in {
+      validateUptoNDigits(
+        rentIncludedParkingGarages,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentIncludeParkingDetails.garages"),
+        Some("error.invalid_number.parking.rentIncludeParkingDetails.garages")
+      )
+      validateUptoNDigits(
+        rentIncludedParkingOpen,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentIncludeParkingDetails.openSpaces"),
+        Some("error.invalid_number.parking.rentIncludeParkingDetails.openSpaces")
+      )
+      validateUptoNDigits(
+        rentIncludedParkingCovered,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentIncludeParkingDetails.coveredSpaces"),
+        Some("error.invalid_number.parking.rentIncludeParkingDetails.coveredSpaces")
+      )
+
+      validateUptoNDigits(
+        rentSeparateParkingGarages,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentSeparateParkingDetails.garages"),
+        Some("error.invalid_number.parking.rentSeparateParkingDetails.garages")
+      )
+      validateUptoNDigits(
+        rentSeparateParkingOpen,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentSeparateParkingDetails.openSpaces"),
+        Some("error.invalid_number.parking.rentSeparateParkingDetails.openSpaces")
+      )
+      validateUptoNDigits(
+        rentSeparateParkingCovered,
+        4,
+        pageTenForm,
+        fullData,
+        Some("error.maxValue.parking.rentSeparateParkingDetails.coveredSpaces"),
+        Some("error.invalid_number.parking.rentSeparateParkingDetails.coveredSpaces")
+      )
+    }
+
+    "validate annual payment as 9 digits and 2 decimals" in
+      validateCurrency(annualSeparateParking, pageTenForm, fullData, ".annualSeparateParkingAmount")
+
+    "validate annual separate parking date as a date in the past" in
+      validatePastDate(annualSeparateParkingPaymentFixedDate, pageTenForm, fullData, ".annualSeparateParkingDate")
+
+    "return a required error when rent details are required but not given" in {
+      val fields = Seq(Keys.partRent, Keys.otherProperty, Keys.livingAccommodation, Keys.landOnly, Keys.shellUnit)
+
+      fields.foreach { field =>
+        val data = dataNoDetailsRequired.updated(field, "true") - Keys.rentDetails
+        val form = bind(data)
+
+        mustContainError(Keys.rentDetails, "error.rentDetails.required", form)
+      }
+    }
+
+    "bind without errors when the rent details are not required and not given" in {
+      val form = bind(dataNoDetailsRequired - Keys.rentDetails)
+
+      doesNotContainErrors(form)
     }
   }
 
-  it should "bind without errors when the rent details are not required and not given" in {
-    val form = bind(dataNoDetailsRequired - Keys.rentDetails)
+  "When rentIncludeParking is true but no rent included parking details have been supplied" should {
+    "return a required error for rentIncludeParkingDetails" in {
+      val data = fullData - rentIncludedParkingGarages - rentSeparateParkingOpen - rentIncludedParkingCovered
+      val form = bind(data)
 
-    doesNotContainErrors(form)
+      mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
+    }
   }
 
-  "when rentIncludeParking is true but no rent included parking details have been supplied" should "return a required error for rentIncludeParkingDetails" in {
-    val data = fullData - rentIncludedParkingGarages - rentSeparateParkingOpen - rentIncludedParkingCovered
-    val form = bind(data)
-
-    mustContainError(rentIncludedParkingDetailsPrefix, "error.required.parking.rentIncludeParkingDetails", form)
-  }
-
-  "when rentSeparateParking is true but no rent separate or annual parking details have been supplied" should
+  "When rentSeparateParking is true but no rent separate or annual parking details have been supplied" should {
     "return a required error for rentSeparateParkingDetails" in {
       val data = fullData - rentSeparateParkingGarages - annualSeparateParking
       val form = bind(data)
@@ -186,20 +190,25 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers:
       mustContainError(rentSeparateParkingDetailsPrefix, "error.required.parking.rentSeparateParkingDetails", form)
       mustContainError(annualSeparateParking, "error.required.annualSeparateParkingAmount", form)
     }
-
-  "When rentSeparateParking is true but no annual separate parking amount has been supplied" should "return a required error for annualSeparateParking" in {
-    val data = fullData - annualSeparateParking
-    val form = bind(data)
-
-    mustContainError(annualSeparateParking, "error.required.annualSeparateParkingAmount", form)
   }
 
-  "When rentSeparateParking is true but no payment fixed date is supplied" should "return a required error for annual separate parking payment fixed date" in {
-    val data = fullData - annualSeparateParkingMonths - annualSeparateParkingYear
-    val form = bind(data)
+  "When rentSeparateParking is true but no annual separate parking amount has been supplied" should {
+    "return a required error for annualSeparateParking" in {
+      val data = fullData - annualSeparateParking
+      val form = bind(data)
 
-    mustContainError(annualSeparateParkingMonths, "error.annualSeparateParkingDate.month.required", form)
-    mustContainError(annualSeparateParkingYear, "error.annualSeparateParkingDate.year.required", form)
+      mustContainError(annualSeparateParking, "error.required.annualSeparateParkingAmount", form)
+    }
+  }
+
+  "When rentSeparateParking is true but no payment fixed date is supplied" should {
+    "return a required error for annual separate parking payment fixed date" in {
+      val data = fullData - annualSeparateParkingMonths - annualSeparateParkingYear
+      val form = bind(data)
+
+      mustContainError(annualSeparateParkingMonths, "error.annualSeparateParkingDate.month.required", form)
+      mustContainError(annualSeparateParkingYear, "error.annualSeparateParkingDate.year.required", form)
+    }
   }
 
   checkMissingField(Keys.partRent, Errors.isRentPaidForPartRequired)
@@ -207,8 +216,6 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers:
   checkMissingField(Keys.livingAccommodation, Errors.includesLivingAccommodationRequired)
   checkMissingField(Keys.landOnly, Errors.rentBasedOnLandOnlyRequired)
   checkMissingField(Keys.shellUnit, Errors.rentBasedOnEmptyBuildingRequired)
-
-  val fields: Seq[String] = Seq(Keys.partRent, Keys.otherProperty, Keys.livingAccommodation, Keys.landOnly, Keys.shellUnit)
 
   object TestData:
 
@@ -272,10 +279,13 @@ class PageTenMappingSpec extends AnyFlatSpec with should.Matchers:
       res shouldBe true
 
     def checkMissingField(key: String, code: String = Errors.required): Unit =
-      "a  form missing the " + key + " field" should "bind result in 1 validation error" in {
-        val testData = fullData - key
-        val res      = bind(testData)
-        res.hasErrors   shouldBe true
-        res.errors.size shouldBe 1
-        hasError(res.errors, key, code)
+      "a  form missing the " + key + " field" should {
+        "bind result in 1 validation error" in {
+          val testData = fullData - key
+          val res      = bind(testData)
+
+          res.hasErrors   shouldBe true
+          res.errors.size shouldBe 1
+          hasError(res.errors, key, code)
+        }
       }

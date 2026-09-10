@@ -16,129 +16,130 @@
 
 package form
 
+import form.PageTwelveForm.*
 import models.pages.PageTwelve
 import models.serviceContracts.submissions.{ChargeDetails, ResponsibleType}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-class PageTwelveMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageTwelveMappingSpec extends BaseSpec:
 
-  import PageTwelveForm.*
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "Page Twelve Mapping" should "bind with the fields and not return issues" in
-    mustBind(bind(baseData))(_ => ())
+  "PageTwelveForm" should {
+    "bind with the fields and not return issues" in
+      mustBind(bind(baseData))(_ => ())
 
-  it should "bind with the fields and return no errors, when the unnecessary details for ndr are not there" in {
-    val data = baseData.updated("ndrCharges", "false") - "ndrDetails"
+    "bind with the fields and return no errors, when the unnecessary details for ndr are not there" in {
+      val data = baseData.updated("ndrCharges", "false") - "ndrDetails"
 
-    mustBind(bind(data))(_ => ())
-  }
+      mustBind(bind(data))(_ => ())
+    }
 
-  it should "bind with the fields and return errors, when the cost for ndr services and costs is not there" in {
-    val data = baseData - "ndrDetails"
-    val form = bind(data).convertGlobalToFieldErrors()
+    "bind with the fields and return errors, when the cost for ndr services and costs is not there" in {
+      val data = baseData - "ndrDetails"
+      val form = bind(data).convertGlobalToFieldErrors()
 
-    mustContainError("ndrDetails", "error.required.businessRatesPerYear", form)
-  }
+      mustContainError("ndrDetails", "error.required.businessRatesPerYear", form)
+    }
 
-  it should "bind with the fields and return no errors, when the unnecessary details for other included services are not there" in {
-    val data = baseData.updated("includedServices", "false") - "includedServices.chargeDescription" - "includedServices.chargeCost"
+    "bind with the fields and return no errors, when the unnecessary details for other included services are not there" in {
+      val data = baseData.updated("includedServices", "false") - "includedServices.chargeDescription" - "includedServices.chargeCost"
 
-    mustBind(bind(data))(_ => ())
-  }
+      mustBind(bind(data))(_ => ())
+    }
 
-  it should "bind with the fields and return errors, when the necessary cost details for other included services are not there" in {
-    val data = baseData - getKeyService(0).cost
-    val form = bind(data)
+    "bind with the fields and return errors, when the necessary cost details for other included services are not there" in {
+      val data = baseData - getKeyService(0).cost
+      val form = bind(data)
 
-    mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
-  }
+      mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
+    }
 
-  it should "bind with the fields and return errors, when the necessary description details for other included services are not there" in {
-    val data = baseData - getKeyService(0).description
-    val form = bind(data)
+    "bind with the fields and return errors, when the necessary description details for other included services are not there" in {
+      val data = baseData - getKeyService(0).description
+      val form = bind(data)
 
-    mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
-  }
+      mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
+    }
 
-  it should "allow upto 8 services" in {
-    val d = addServices(7, baseData)
-    mustBind(bind(d))(x => assert(x === responsibilitiesWith8Services))
+    "allow upto 8 services" in {
+      val d = addServices(7, baseData)
+      mustBind(bind(d))(_ shouldBe responsibilitiesWith8Services)
 
-    val form = bind(addServices(8, baseData))
-    mustContainError("includedServicesDetails", Errors.tooManyServices, form)
-  }
+      val form = bind(addServices(8, baseData))
+      mustContainError("includedServicesDetails", Errors.tooManyServices, form)
+    }
 
-  it should "bind with the fields and return errors, when missing responsibility for outside repairs" in {
-    val data = baseData - "responsibleOutsideRepairs"
-    val form = bind(data)
+    "bind with the fields and return errors, when missing responsibility for outside repairs" in {
+      val data = baseData - "responsibleOutsideRepairs"
+      val form = bind(data)
 
-    mustOnlyContainError("responsibleOutsideRepairs", Errors.responsibleOutsideRepairsRequired, form)
-  }
+      mustOnlyContainError("responsibleOutsideRepairs", Errors.responsibleOutsideRepairsRequired, form)
+    }
 
-  it should "bind with the fields and return errors, when missing responsibility for inside repairs" in {
-    val data = baseData - "responsibleInsideRepairs"
-    val form = bind(data)
+    "bind with the fields and return errors, when missing responsibility for inside repairs" in {
+      val data = baseData - "responsibleInsideRepairs"
+      val form = bind(data)
 
-    mustOnlyContainError("responsibleInsideRepairs", Errors.responsibleInsideRepairsRequired, form)
-  }
+      mustOnlyContainError("responsibleInsideRepairs", Errors.responsibleInsideRepairsRequired, form)
+    }
 
-  it should "bind with the fields and return errors, when missing responsibility for building insurance" in {
-    val data = baseData - "responsibleBuildingInsurance"
-    val form = bind(data)
+    "bind with the fields and return errors, when missing responsibility for building insurance" in {
+      val data = baseData - "responsibleBuildingInsurance"
+      val form = bind(data)
 
-    mustOnlyContainError("responsibleBuildingInsurance", Errors.responsibleBuildingInsuranceRequired, form)
-  }
+      mustOnlyContainError("responsibleBuildingInsurance", Errors.responsibleBuildingInsuranceRequired, form)
+    }
 
-  it should "bind with the fields and return errors, when missing business rates" in {
-    val data = baseData - "ndrCharges"
-    val form = bind(data)
+    "bind with the fields and return errors, when missing business rates" in {
+      val data = baseData - "ndrCharges"
+      val form = bind(data)
 
-    mustOnlyContainError("ndrCharges", Errors.businessRatesRequired, form)
-  }
+      mustOnlyContainError("ndrCharges", Errors.businessRatesRequired, form)
+    }
 
-  it should "bind with the fields and return no errors, when the unnecessary cost details for water charges are not there" in {
-    val data = baseData.updated("waterCharges", "false") - "waterChargesCost"
-    val form = bind(data)
+    "bind with the fields and return no errors, when the unnecessary cost details for water charges are not there" in {
+      val data = baseData.updated("waterCharges", "false") - "waterChargesCost"
+      val form = bind(data)
 
-    doesNotContainErrors(form)
-  }
+      doesNotContainErrors(form)
+    }
 
-  it should "bind with the fields and return errors, when the necessary cost details for water charges are not there" in {
-    val data = baseData - "waterChargesCost"
-    val res  = bind(data).convertGlobalToFieldErrors()
+    "bind with the fields and return errors, when the necessary cost details for water charges are not there" in {
+      val data = baseData - "waterChargesCost"
+      val res  = bind(data).convertGlobalToFieldErrors()
 
-    mustContainError("waterChargesCost", "error.required.waterChargesPerYear", res)
-  }
+      mustContainError("waterChargesCost", "error.required.waterChargesPerYear", res)
+    }
 
-  it should "validate the included non-domestic rate amount" in
-    validateCurrency("ndrDetails", pageTwelveForm, baseData, ".businessRatesPerYear")
+    "validate the included non-domestic rate amount" in
+      validateCurrency("ndrDetails", pageTwelveForm, baseData, ".businessRatesPerYear")
 
-  it should "validate the included water services amount" in
-    validateCurrency("waterChargesCost", pageTwelveForm, baseData, ".waterChargesPerYear")
+    "validate the included water services amount" in
+      validateCurrency("waterChargesCost", pageTwelveForm, baseData, ".waterChargesPerYear")
 
-  it should "validate the details of the first included service" in
-    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, baseData, Some("error.detailsOfService.maxLength"))
+    "validate the details of the first included service" in
+      validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, baseData, Some("error.detailsOfService.maxLength"))
 
-  it should "validate the cost of the first included service" in
-    validateCurrency(getKeyService(0).cost, pageTwelveForm, baseData, ".serviceChargesPerYear")
+    "validate the cost of the first included service" in
+      validateCurrency(getKeyService(0).cost, pageTwelveForm, baseData, ".serviceChargesPerYear")
 
-  it should "validate the description of services is no more than 50 characters" in
-    validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, dataWithSecondService, Some("error.detailsOfService.maxLength"))
+    "validate the description of services is no more than 50 characters" in
+      validateLettersNumsSpecCharsUptoLength(getKeyService(0).description, 50, pageTwelveForm, dataWithSecondService, Some("error.detailsOfService.maxLength"))
 
-  it should "validate the cost of the second included service" in
-    validateCurrency(getKeyService(1).cost, pageTwelveForm, dataWithSecondService, ".serviceChargesPerYear")
+    "validate the cost of the second included service" in
+      validateCurrency(getKeyService(1).cost, pageTwelveForm, dataWithSecondService, ".serviceChargesPerYear")
 
-  it should "show sub-field level errors for first service detail when service details are required" in {
-    val data = baseData - getKeyService(0).description - getKeyService(0).cost
-    val form = bind(data)
+    "show sub-field level errors for first service detail when service details are required" in {
+      val data = baseData - getKeyService(0).description - getKeyService(0).cost
+      val form = bind(data)
 
-    mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
-    mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
+      mustContainError(getKeyService(0).description, "error.detailsOfService.required", form)
+      mustContainError(getKeyService(0).cost, "error.required.serviceChargesPerYear", form)
+    }
   }
 
   object TestData:

@@ -17,11 +17,10 @@
 package form
 
 import models.serviceContracts.submissions.NotConnected
-import org.scalatest.OptionValues.*
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import play.api.data.FormError
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers:
+class NotConnectedPropertyFormSpec extends BaseSpec:
 
   val baseDate: Map[String, String] = Map(
     "fullName"              -> "John Doe",
@@ -30,74 +29,76 @@ class NotConnectedPropertyFormSpec extends AnyFlatSpec with should.Matchers:
     "additionalInformation" -> "Some additional information"
   )
 
-  "Form mapping" should "map form with all values" in {
+  "NotConnectedPropertyForm" should {
+    "map form with all values" in {
+      val formWithData = NotConnectedPropertyForm.form.bind(baseDate)
 
-    val formWithData = NotConnectedPropertyForm.form.bind(baseDate)
+      formWithData.errors shouldBe empty
 
-    formWithData.errors shouldBe empty
-
-    formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe
-      NotConnected(
-        "John Doe",
-        Some("john@example.com"),
-        Some("078333232211"),
-        Some("Some additional information")
+      formWithData.value shouldBe Some(
+        NotConnected(
+          "John Doe",
+          Some("john@example.com"),
+          Some("078333232211"),
+          Some("Some additional information")
+        )
       )
-  }
+    }
 
-  it should "map form without email" in {
+    "map form without email" in {
+      val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "email")
 
-    val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "email")
+      formWithData.errors shouldBe empty
 
-    formWithData.errors shouldBe empty
-
-    formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe
-      NotConnected(
-        "John Doe",
-        None,
-        Some("078333232211"),
-        Some("Some additional information")
+      formWithData.value shouldBe Some(
+        NotConnected(
+          "John Doe",
+          None,
+          Some("078333232211"),
+          Some("Some additional information")
+        )
       )
-  }
+    }
 
-  it should "map form without phoneNumber" in {
+    "map form without phoneNumber" in {
+      val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "phoneNumber")
 
-    val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "phoneNumber")
+      formWithData.errors shouldBe empty
 
-    formWithData.errors shouldBe empty
-
-    formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe
-      NotConnected(
-        "John Doe",
-        Some("john@example.com"),
-        None,
-        Some("Some additional information")
+      formWithData.value shouldBe Some(
+        NotConnected(
+          "John Doe",
+          Some("john@example.com"),
+          None,
+          Some("Some additional information")
+        )
       )
-  }
+    }
 
-  it should "map form without additional information" in {
+    "map form without additional information" in {
+      val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "additionalInformation")
 
-    val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "additionalInformation")
+      formWithData.errors shouldBe empty
 
-    formWithData.errors shouldBe empty
-
-    formWithData.value       shouldBe defined
-    formWithData.value.value shouldBe
-      NotConnected(
-        "John Doe",
-        Some("john@example.com"),
-        Some("078333232211"),
-        None
+      formWithData.value shouldBe Some(
+        NotConnected(
+          "John Doe",
+          Some("john@example.com"),
+          Some("078333232211"),
+          None
+        )
       )
-  }
+    }
 
-  it should "fail mapping without phoneNumber and email" in {
-    val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "phoneNumber" - "email")
+    "fail mapping without phoneNumber and email" in {
+      val formWithData = NotConnectedPropertyForm.form.bind(baseDate - "phoneNumber" - "email")
 
-    formWithData.value shouldBe None
+      formWithData.errors   should have size 2
+      formWithData.errors shouldBe Seq(
+        FormError("email", Seq("notConnected.emailOrPhone")),
+        FormError("phoneNumber", Seq("notConnected.emailOrPhone"))
+      )
 
-    formWithData.errors should have size 2
+      formWithData.value shouldBe None
+    }
   }

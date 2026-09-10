@@ -16,41 +16,42 @@
 
 package form
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import form.PageOneForm.pageOneForm
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.MappingSpecs.*
 
-class PageOneFormMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageOneFormMappingSpec extends BaseSpec:
 
   import TestData.*
-  import form.PageOneForm.*
-  import utils.MappingSpecs.*
 
-  "page one mapping" should "validate the address fields following the standard address convention for this application" in {
-    val formData: Map[String, String] =
-      Map(errorKey.addressBuildingName -> "buildingNameText", errorKey.addressPostcode -> "AA11 1AA", "street1" -> "street1", "street2" -> "street2")
+  "PageOneForm" should {
+    "validate the address fields following the standard address convention for this application" in {
+      val formData: Map[String, String] =
+        Map(errorKey.addressBuildingName -> "buildingNameText", errorKey.addressPostcode -> "AA11 1AA", "street1" -> "street1", "street2" -> "street2")
 
-    validateAddress(pageOneForm, formData)
-  }
+      validateAddress(pageOneForm, formData)
+    }
 
-  "page one mapping" should "map to fully populated data object if all form fields are present and isAddresCorrect is false" in {
-    val formData: Map[String, String] = Map(
-      errorKey.addressBuildingName -> "buildingNameText",
-      errorKey.addressPostcode     -> "AA11 1AA",
-      "street1"                    -> "street1",
-      "street2"                    -> "street2"
-    )
-    val boundForm                     = pageOneForm.bind(formData).convertGlobalToFieldErrors()
+    "map to fully populated data object if all form fields are present and isAddersCorrect is false" in {
+      val formData: Map[String, String] = Map(
+        errorKey.addressBuildingName -> "buildingNameText",
+        errorKey.addressPostcode     -> "AA11 1AA",
+        "street1"                    -> "street1",
+        "street2"                    -> "street2"
+      )
+      val boundForm                     = pageOneForm.bind(formData).convertGlobalToFieldErrors()
 
-    boundForm.hasErrors should be(false)
+      boundForm.hasErrors shouldBe false
 
-    boundForm.value.isDefined should be(true)
+      boundForm.value.isDefined shouldBe true
 
-    val pageOneData = boundForm.value.get
+      val pageOneData = boundForm.value.get
 
-    pageOneData.buildingNameNumber should be("buildingNameText")
-    pageOneData.street1            should be(Some("street1"))
-    pageOneData.street2            should be(Some("street2"))
-    pageOneData.postcode           should be("AA11 1AA")
+      pageOneData.buildingNameNumber shouldBe "buildingNameText"
+      pageOneData.street1            shouldBe Some("street1")
+      pageOneData.street2            shouldBe Some("street2")
+      pageOneData.postcode           shouldBe "AA11 1AA"
+    }
   }
 
   object TestData:

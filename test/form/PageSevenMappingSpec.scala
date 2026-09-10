@@ -16,32 +16,31 @@
 
 package form
 
+import form.PageSevenForm.pageSevenForm
 import models.pages.PageSeven
 import models.serviceContracts.submissions.ReviewIntervalType
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import org.scalatest.Assertion
 import play.api.data.{Form, FormError}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageSevenMappingSpec extends BaseSpec:
 
-  import PageSevenForm.*
-  import utils.MappingSpecs.*
+  private val leaseContainsRentReviews = "leaseContainsRentReviews"                                           -> "true"
+  private val reviewIntervalType       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalType.other.toString
+  private val reviewIntervalYears      = "rentReviewDetails.reviewIntervalTypeSpecify.years"                  -> "11"
+  private val reviewIntervalMonths     = "rentReviewDetails.reviewIntervalTypeSpecify.months"                 -> "12"
+  private val lastReviewDateMonth      = "rentReviewDetails.lastReviewDate.month"                             -> "3"
+  private val lastReviewDateYear       = "rentReviewDetails.lastReviewDate.year"                              -> "2000"
+  private val canRentReduced           = "rentReviewDetails.canRentReduced"                                   -> "true"
+  private val rentResultOfRentReview   = "rentReviewDetails.rentResultOfRentReview"                           -> "true"
+  private val whenWasRentReviewMonth   = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.month" -> "2"
+  private val whenWasRentReviewYear    = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year"  -> "2001"
+  private val rentAgreedBetween        = "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween"       -> "false"
+  private val rentFixedBy              = "rentReviewDetails.rentReviewResultsDetails.rentFixedBy"             -> "arbitrator"
 
-  val leaseContainsRentReviews: (String, String) = "leaseContainsRentReviews"                                           -> "true"
-  val reviewIntervalType: (String, String)       = "rentReviewDetails.reviewIntervalType"                               -> ReviewIntervalType.other.toString
-  val reviewIntervalYears: (String, String)      = "rentReviewDetails.reviewIntervalTypeSpecify.years"                  -> "11"
-  val reviewIntervalMonths: (String, String)     = "rentReviewDetails.reviewIntervalTypeSpecify.months"                 -> "12"
-  val lastReviewDateMonth: (String, String)      = "rentReviewDetails.lastReviewDate.month"                             -> "3"
-  val lastReviewDateYear: (String, String)       = "rentReviewDetails.lastReviewDate.year"                              -> "2000"
-  val canRentReduced: (String, String)           = "rentReviewDetails.canRentReduced"                                   -> "true"
-  val rentResultOfRentReview: (String, String)   = "rentReviewDetails.rentResultOfRentReview"                           -> "true"
-  val whenWasRentReviewMonth: (String, String)   = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.month" -> "2"
-  val whenWasRentReviewYear: (String, String)    = "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year"  -> "2001"
-  val rentAgreedBetween: (String, String)        = "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween"       -> "false"
-  val rentFixedBy: (String, String)              = "rentReviewDetails.rentReviewResultsDetails.rentFixedBy"             -> "arbitrator"
-
-  val baseData: Map[String, String] = Map(
+  private val baseData: Map[String, String] = Map(
     leaseContainsRentReviews,
     reviewIntervalType,
     reviewIntervalYears,
@@ -56,78 +55,86 @@ class PageSevenMappingSpec extends AnyFlatSpec with should.Matchers:
     rentFixedBy
   )
 
-  def bind(formData: Map[String, String]): Form[PageSeven] =
+  private def bind(formData: Map[String, String]): Form[PageSeven] =
     pageSevenForm.bind(formData).convertGlobalToFieldErrors()
 
-  def containsError(errors: Seq[FormError], key: String, message: String): Boolean =
+  private def containsError(errors: Seq[FormError], key: String, message: String): Assertion =
     val exists = errors.exists { err =>
       err.key == key && err.messages.contains(message)
     }
-    exists should be(true)
-    exists
+    exists shouldBe true
 
-  "PageSevenData" should "bind with the fields and not return issues" in {
-    val res = bind(baseData)
-    doesNotContainErrors(res)
-  }
+  "PageSevenForm" should {
+    "bind with the fields and not return issues" in {
+      val res = bind(baseData)
 
-  "PageSevenData" should "bind with the fields and return issues when review frequency is not selected" in {
-    val data = baseData - "rentReviewDetails.reviewIntervalType"
-    val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
-    containsError(res.errors, "rentReviewDetails.reviewIntervalType", Errors.rentReviewFrequencyRequired)
-  }
+      doesNotContainErrors(res)
+    }
 
-  "PageSevenData" should "bind with the fields and return issues when the year field of the last review date is missing" in {
-    val data = baseData - "rentReviewDetails.lastReviewDate.year"
-    val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
-    mustContainError("rentReviewDetails.lastReviewDate.year", "error.lastRentReviewDate.year.required", res)
-  }
-  "PageSevenData" should "bind with the fields and return issues when boolean can rent be reduced due to rent review value is missing" in {
-    val data = baseData - "rentReviewDetails.canRentReduced"
-    val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    res.errors.size    should be(1)
-    containsError(res.errors, "rentReviewDetails.canRentReduced", Errors.rentCanBeReducedOnReviewRequired)
-  }
+    "bind with the fields and return issues when review frequency is not selected" in {
+      val data = baseData - "rentReviewDetails.reviewIntervalType"
+      val res  = bind(data)
 
-  "PageSevenData" should "bind with the fields and return issues when connection type selection missing" in {
-    val data = baseData - "rentReviewDetails.rentResultOfRentReview"
-    val res  = bind(data)
-    res.errors.isEmpty should be(false)
-    containsError(res.errors, "rentReviewDetails.rentResultOfRentReview", Errors.isRentResultOfReviewRequired)
-  }
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
+      containsError(res.errors, "rentReviewDetails.reviewIntervalType", Errors.rentReviewFrequencyRequired)
+    }
 
-  "PageSevenData" should "bind with the fields and return issues when the date for the last effective rent review is missing" in {
-    val data = baseData - "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year"
-    val res  = bind(data)
-    res.errors.size    should be(1)
-    res.errors.isEmpty should be(false)
-    mustContainError("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.rentResultOfReview.year.required", res)
-  }
+    "bind with the fields and return issues when the year field of the last review date is missing" in {
+      val data = baseData - "rentReviewDetails.lastReviewDate.year"
+      val res  = bind(data)
 
-  "PageSevenData" should "not bind with the fields and return an error when the person who agreed the rent input is not selected" in {
-    val data = baseData - "rentReviewDetails.rentReviewResultsDetails.rentFixedBy"
-    val res  = bind(data).convertGlobalToFieldErrors()
-    mustContainError("rentReviewDetails.rentReviewResultsDetails.rentFixedBy", Errors.rentFixedByRequired, res)
-  }
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
+      mustContainError("rentReviewDetails.lastReviewDate.year", "error.lastRentReviewDate.year.required", res)
+    }
 
-  "Page Seven Mapping" should "validate the Rent Interval duration" in
-    validatesDuration("rentReviewDetails.reviewIntervalTypeSpecify", pageSevenForm, baseData, ".rentReviewIntervalOther")
+    "bind with the fields and return issues when boolean can rent be reduced due to rent review value is missing" in {
+      val data = baseData - "rentReviewDetails.canRentReduced"
+      val res  = bind(data)
 
-  it should "validate the last review date" in
-    validatePastDate("rentReviewDetails.lastReviewDate", pageSevenForm, baseData, ".lastRentReviewDate")
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
+      containsError(res.errors, "rentReviewDetails.canRentReduced", Errors.rentCanBeReducedOnReviewRequired)
+    }
 
-  it should "validate the rent review date" in
-    validatePastDate("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", pageSevenForm, baseData, ".rentResultOfReview")
+    "bind with the fields and return issues when connection type selection missing" in {
+      val data = baseData - "rentReviewDetails.rentResultOfRentReview"
+      val res  = bind(data)
 
-  it should "not validate the rent interval duration when only leaseContainsRentReviews is specified" in {
-    val data = Map(leaseContainsRentReviews)
+      res.errors.isEmpty shouldBe false
+      containsError(res.errors, "rentReviewDetails.rentResultOfRentReview", Errors.isRentResultOfReviewRequired)
+    }
 
-    val res = bind(data).convertGlobalToFieldErrors()
+    "bind with the fields and return issues when the date for the last effective rent review is missing" in {
+      val data = baseData - "rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year"
+      val res  = bind(data)
 
-    mustNotContainErrorFor("rentReviewDetails.reviewIntervalTypeSpecify.months", res)
+      res.errors.size    shouldBe 1
+      res.errors.isEmpty shouldBe false
+      mustContainError("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview.year", "error.rentResultOfReview.year.required", res)
+    }
+
+    "not bind with the fields and return an error when the person who agreed the rent input is not selected" in {
+      val data = baseData - "rentReviewDetails.rentReviewResultsDetails.rentFixedBy"
+      val res  = bind(data).convertGlobalToFieldErrors()
+
+      mustContainError("rentReviewDetails.rentReviewResultsDetails.rentFixedBy", Errors.rentFixedByRequired, res)
+    }
+
+    "validate the Rent Interval duration" in
+      validatesDuration("rentReviewDetails.reviewIntervalTypeSpecify", pageSevenForm, baseData, ".rentReviewIntervalOther")
+
+    "validate the last review date" in
+      validatePastDate("rentReviewDetails.lastReviewDate", pageSevenForm, baseData, ".lastRentReviewDate")
+
+    "validate the rent review date" in
+      validatePastDate("rentReviewDetails.rentReviewResultsDetails.whenWasRentReview", pageSevenForm, baseData, ".rentResultOfReview")
+
+    "not validate the rent interval duration when only leaseContainsRentReviews is specified" in {
+      val data = Map(leaseContainsRentReviews)
+      val res  = bind(data).convertGlobalToFieldErrors()
+
+      mustNotContainErrorFor("rentReviewDetails.reviewIntervalTypeSpecify.months", res)
+    }
   }

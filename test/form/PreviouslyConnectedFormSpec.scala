@@ -17,32 +17,28 @@
 package form
 
 import models.serviceContracts.submissions.PreviouslyConnected
-import org.scalatest.OptionValues
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PreviouslyConnectedFormSpec extends AnyFlatSpec with should.Matchers with OptionValues:
+class PreviouslyConnectedFormSpec extends BaseSpec:
 
-  val formData: Map[String, String] = Map(
+  private val formData: Map[String, String] = Map(
     "haveYouBeenConnected" -> "true"
   )
 
-  "Form mapping" should "map form with all values" in {
-    val formWithData = PreviouslyConnectedForm.formMapping.bind(formData)
+  "PreviouslyConnectedForm" should {
+    "map form with all values" in {
+      val formWithData = PreviouslyConnectedForm.formMapping.bind(formData)
 
-    formWithData.errors shouldBe empty
+      formWithData.errors shouldBe empty
+      formWithData.value  shouldBe defined
+      formWithData.value  shouldBe Some(PreviouslyConnected(true))
+    }
 
-    formWithData.value shouldBe defined
+    "show error when empty form is submitted" in {
+      val formWithData = PreviouslyConnectedForm.formMapping.bind(Map[String, String]())
 
-    formWithData.value.value shouldBe PreviouslyConnected(true)
-  }
-
-  it should "show error when empty form is submitted" in {
-    val formWithData = PreviouslyConnectedForm.formMapping.bind(Map[String, String]())
-
-    formWithData.value should not be defined
-
-    formWithData.errors should not be empty
-
-    formWithData.errors should have size 1
+      formWithData.errors should not be empty
+      formWithData.errors should have size 1
+      formWithData.value  should not be defined
+    }
   }

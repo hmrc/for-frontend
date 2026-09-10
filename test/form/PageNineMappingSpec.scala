@@ -16,38 +16,40 @@
 
 package form
 
+import form.PageNineForm.pageNineForm
 import models.*
 import models.pages.*
 import models.serviceContracts.submissions.*
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import org.scalatest.Assertion
 import play.api.data.{Form, FormError}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
 import java.time.LocalDate
-import org.scalatest.Assertion
 
-class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageNineMappingSpec extends BaseSpec:
 
-  import PageNineForm.*
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "A fully populated form" should "bind to a PageNineData" in {
-    val expectedData = PageNine(
-      totalRent = AnnualRent(123.45),
-      rentBecomePayable = LocalDate.of(2001, 5, 1),
-      rentActuallyAgreed = LocalDate.of(2001, 5, 1),
-      negotiatingNewRent = false,
-      rentBasis = RentBaseType.other,
-      rentBasisOtherDetails = Some("oneTwoThree")
-    )
+  "PageNineForm" should {
+    "bind to a PageNine data" in {
+      val expectedData = PageNine(
+        totalRent = AnnualRent(123.45),
+        rentBecomePayable = LocalDate.of(2001, 5, 1),
+        rentActuallyAgreed = LocalDate.of(2001, 5, 1),
+        negotiatingNewRent = false,
+        rentBasis = RentBaseType.other,
+        rentBasisOtherDetails = Some("oneTwoThree")
+      )
 
-    val res = bind(fullData)
+      val res = bind(fullData)
 
-    doesNotContainErrors(res)
-    res.value.get should be(expectedData)
+      doesNotContainErrors(res)
+      res.value.get shouldBe expectedData
+    }
   }
+
   checkMissingField(keys.annualRentExcludingVat, "error.required.annualRentExcludingVat")
 
   checkMissingField(keys.rentActuallyAgreedDay, "error.rentActuallyAgreed.day.required")
@@ -61,32 +63,38 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
   checkMissingField(keys.rentBecomePayableMonth, "error.rentBecomePayable.month.required")
 
   RentBaseType.values.filter(x => x != RentBaseType.openMarket && x != RentBaseType.indexation).foreach { rentBasis =>
-    "A form with 'rent basis' of '" + rentBasis + "' but a missing 'rent basis other' field" should "return required error for rent based on details" in {
-      val testData = fullData.updated(keys.rentBasedOn, rentBasis.toString) - keys.rentBasedOnDetails
-      val res      = bind(testData)
+    "A form with 'rent basis' of '" + rentBasis + "' but a missing 'rent basis other' field" should {
+      "return required error for rent based on details" in {
+        val testData = fullData.updated(keys.rentBasedOn, rentBasis.toString) - keys.rentBasedOnDetails
+        val res      = bind(testData)
 
-      mustContainError("rentBasedOnDetails", "error.rentBasedOnDetails.required", res)
+        mustContainError("rentBasedOnDetails", "error.rentBasedOnDetails.required", res)
+      }
     }
   }
 
-  "A form with a rent basis of open market and no rent based on details" should "not error" in {
-    val data = fullData.updated(keys.rentBasedOn, RentBaseType.openMarket.toString) - keys.rentBasedOnDetails
-    val form = bind(data)
+  "A form with a rent basis of open market and no rent based on details" should {
+    "not error" in {
+      val data = fullData.updated(keys.rentBasedOn, RentBaseType.openMarket.toString) - keys.rentBasedOnDetails
+      val form = bind(data)
 
-    doesNotContainErrors(form)
+      doesNotContainErrors(form)
+    }
   }
 
-  "Page Nine mapping" should "validate the rent start date" in
-    validateFullDateInPast("rentBecomePayable", pageNineForm, fullData, ".rentBecomePayable")
+  "PageNineForm mapping" should {
+    "validate the rent start date" in
+      validateFullDateInPast("rentBecomePayable", pageNineForm, fullData, ".rentBecomePayable")
 
-  it should "validate the rent agreed date" in
-    validateFullDateInPast("rentActuallyAgreed", pageNineForm, fullData, ".rentActuallyAgreed")
+    "validate the rent agreed date" in
+      validateFullDateInPast("rentActuallyAgreed", pageNineForm, fullData, ".rentActuallyAgreed")
 
-  it should "validate the annual rent" in
-    validateAnnualRent(keys.totalRent, pageNineForm, fullData, ".annualRentExcludingVat")
+    "validate the annual rent" in
+      validateAnnualRent(keys.totalRent, pageNineForm, fullData, ".annualRentExcludingVat")
 
-  it should "validate the rent based on ... details" in
-    validateLettersNumsSpecCharsUptoLength(keys.rentBasedOnDetails, 250, pageNineForm, fullData, Some("error.rentBasedOnDetails.maxLength"))
+    "validate the rent based on ... details" in
+      validateLettersNumsSpecCharsUptoLength(keys.rentBasedOnDetails, 250, pageNineForm, fullData, Some("error.rentBasedOnDetails.maxLength"))
+  }
 
   object TestData:
 
@@ -126,11 +134,13 @@ class PageNineMappingSpec extends AnyFlatSpec with should.Matchers:
 
     def hasError(errors: Seq[FormError], key: String, message: String): Assertion =
       val res = errors.exists(err => err.key == key && err.messages.contains(message))
-      res should be(true)
+      res shouldBe true
 
     def checkMissingField(key: String, code: String = Errors.required): Unit =
-      "a  form missing the " + key + " field" should "bind result in 1 validation error" in {
-        val testData = fullData - key
-        val res      = bind(testData)
-        mustContainError(key, code, res)
+      "a  form missing the " + key + " field" should {
+        "bind result in 1 validation error" in {
+          val testData = fullData - key
+          val res      = bind(testData)
+          mustContainError(key, code, res)
+        }
       }

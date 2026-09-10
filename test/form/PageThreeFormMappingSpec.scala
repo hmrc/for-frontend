@@ -20,99 +20,111 @@ import form.PageThreeForm.*
 import models.*
 import models.pages.PageThree
 import models.serviceContracts.submissions.OccupierType
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.FormBindingTestAssertions.*
 import utils.MappingSpecs.*
 
-class PageThreeFormMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageThreeFormMappingSpec extends BaseSpec:
 
   import TestData.*
 
-  "A fully populated form "                                          should "bind to PageThreeData" in
-    mustBind(bind(formData1))(x => assert(x === data1))
-  "If occupier type is Company and no company name is supplied then" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyName
-    val bound   = bind(dataMap).convertGlobalToFieldErrors()
-
-    mustContainError(keys.occupierCompanyName, "error.companyName.required", bound)
+  "A fully populated form " should {
+    "bind to PageThreeData" in
+      mustBind(bind(formData1))(_ shouldBe data1)
   }
 
-  "If occupier type is Company and no first occupation date is supplied the" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
-    val form    = bind(dataMap)
+  "If occupier type is Company and no company name is supplied then" should {
+    "error" in {
+      val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyName
+      val bound   = bind(dataMap).convertGlobalToFieldErrors()
 
-    mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
-    mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required", form)
-    form.errors.size should be(2)
+      mustContainError(keys.occupierCompanyName, "error.companyName.required", bound)
+    }
   }
 
-  "If occupier type is Individual and no first occupation date is supplied then" should "error" in {
-    val dataMap = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
-    val form    = bind(dataMap)
+  "If occupier type is Company and no first occupation date is supplied the" should {
+    "error" in {
+      val dataMap = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
+      val form    = bind(dataMap)
 
-    mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
-    mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required", form)
+      mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
+      mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required", form)
+      form.errors.size shouldBe 2
+    }
   }
 
-  "Page Three mapping" should "allow up to 100 letters, numbers, spaces, and special characters for 'Other' property type details" in
-    validateLettersNumsSpecCharsUptoLength(keys.propertyType, 100, pageThreeForm, formData1, Some("error.propertyType.maxLength"))
+  "If occupier type is Individual and no first occupation date is supplied then" should {
+    "error" in {
+      val dataMap = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.firstOccupationDateMonth - keys.firstOccupationDateYear
+      val form    = bind(dataMap)
 
-  it should "validate the first occupation date when the occupier type is individuals" in {
-    val formData = formData1.updated(keys.occupierType, OccupierType.individuals.toString).updated(keys.mainOccupierName, "Jimmy Choo")
-    validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
+      mustContainError(keys.firstOccupationDateMonth, "error.firstOccupationDate.month.required", form)
+      mustContainError(keys.firstOccupationDateYear, "error.firstOccupationDate.year.required", form)
+    }
   }
 
-  it should "validate the first occupation date when the occupier type is company" in {
-    val formData = formData1.updated(keys.occupierType, OccupierType.company.toString)
-    validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
-  }
+  "PageThreeForm mapping" should {
+    "allow up to 100 letters, numbers, spaces, and special characters for 'Other' property type details" in
+      validateLettersNumsSpecCharsUptoLength(keys.propertyType, 100, pageThreeForm, formData1, Some("error.propertyType.maxLength"))
 
-  it should "allow up to 50 letters, numbers, spaces, and special characters for Company name" in
-    validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyName, 50, pageThreeForm, formData1, Some("error.companyName.maxLength"))
+    "validate the first occupation date when the occupier type is individuals" in {
+      val formData = formData1.updated(keys.occupierType, OccupierType.individuals.toString).updated(keys.mainOccupierName, "Jimmy Choo")
 
-  it should "require occupier company contact for selected occupier type Company" in {
-    val data = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyContact
-    val form = bind(data)
+      validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
+    }
 
-    mustContainError(keys.occupierCompanyContact, "error.occupierCompanyContact.required", form)
-  }
+    "validate the first occupation date when the occupier type is company" in {
+      val formData = formData1.updated(keys.occupierType, OccupierType.company.toString)
 
-  it should "not require occupier company contact for selected occupier type Individuals" in {
-    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.occupierCompanyContact
-    val form = bind(data)
+      validatePastDate("firstOccupationDate", pageThreeForm, formData, ".firstOccupationDate")
+    }
 
-    mustNotContainErrorFor(keys.occupierCompanyContact, form)
-  }
+    "allow up to 50 letters, numbers, spaces, and special characters for Company name" in
+      validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyName, 50, pageThreeForm, formData1, Some("error.companyName.maxLength"))
 
-  it should "allow up to 50 letters, numbers, spaces, and special characters for occupier company contact" in
-    validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyContact, 50, pageThreeForm, formData1, Some("error.occupierCompanyContact.maxLength"))
+    "require occupier company contact for selected occupier type Company" in {
+      val data = formData1.updated(keys.occupierType, OccupierType.company.toString) - keys.occupierCompanyContact
+      val form = bind(data)
 
-  it should "require an answer to property is rented by you, when specifying property not owned by you" in {
-    val data = formData1.updated(keys.propertyOwnedByYou, "false") - keys.propertyRentedByYou
-    val form = bind(data)
+      mustContainError(keys.occupierCompanyContact, "error.occupierCompanyContact.required", form)
+    }
 
-    mustContainError(keys.propertyRentedByYou, Errors.propertyRentedByYouRequired, form)
-  }
+    "not require occupier company contact for selected occupier type Individuals" in {
+      val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.occupierCompanyContact
+      val form = bind(data)
 
-  it should "require a main contact name when occupier type is one or more individuals" in {
-    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
-    val form = bind(data)
+      mustNotContainErrorFor(keys.occupierCompanyContact, form)
+    }
 
-    mustContainError(keys.mainOccupierName, "error.occupiersName.required", form)
-  }
+    "allow up to 50 letters, numbers, spaces, and special characters for occupier company contact" in
+      validateLettersNumsSpecCharsUptoLength(keys.occupierCompanyContact, 50, pageThreeForm, formData1, Some("error.occupierCompanyContact.maxLength"))
 
-  it should "allow upto 50 chars as a main occupier name" in {
-    val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
+    "require an answer to property is rented by you, when specifying property not owned by you" in {
+      val data = formData1.updated(keys.propertyOwnedByYou, "false") - keys.propertyRentedByYou
+      val form = bind(data)
 
-    validateLettersNumsSpecCharsUptoLength(keys.mainOccupierName, 50, pageThreeForm, data, Some("error.occupiersName.maxLength"))
-  }
+      mustContainError(keys.propertyRentedByYou, Errors.propertyRentedByYouRequired, form)
+    }
 
-  it should "ignore leading and trailling whitespace in date fields" in {
-    val data = formData1.updated(keys.firstOccupationDateMonth, " 3 ")
-      .updated(keys.firstOccupationDateYear, " 2011 ")
-    mustBind(bind(data))(_ => ())
+    "require a main contact name when occupier type is one or more individuals" in {
+      val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
+      val form = bind(data)
+
+      mustContainError(keys.mainOccupierName, "error.occupiersName.required", form)
+    }
+
+    "allow upto 50 chars as a main occupier name" in {
+      val data = formData1.updated(keys.occupierType, OccupierType.individuals.toString) - keys.mainOccupierName
+
+      validateLettersNumsSpecCharsUptoLength(keys.mainOccupierName, 50, pageThreeForm, data, Some("error.occupiersName.maxLength"))
+    }
+
+    "ignore leading and trailing whitespace in date fields" in {
+      val data = formData1.updated(keys.firstOccupationDateMonth, " 3 ")
+        .updated(keys.firstOccupationDateYear, " 2011 ")
+      mustBind(bind(data))(_ => ())
+    }
   }
 
   object TestData:
