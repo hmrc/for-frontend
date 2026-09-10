@@ -21,86 +21,90 @@ import form.PageThreeForm
 import models.*
 import models.serviceContracts.submissions.*
 import org.scalatest.OptionValues.*
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import org.scalatest.prop.TableDrivenPropertyChecks.*
 import org.scalatest.prop.TableFor2
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 
-class SubmissionBuilderSpec extends AnyFlatSpec with should.Matchers:
+class SubmissionBuilderSpec extends BaseSpec:
 
   import TestData.*
 
-  behavior of "Submission builder"
+  "DefaultSubmissionBuilder" should {
+    "build submissions from in-progress documents" in {
+      DefaultSubmissionBuilder().build(doc1) shouldBe submission1
+    }
 
-  it should "build submissions from in-progress documents" in {
-    DefaultSubmissionBuilder().build(doc1) shouldBe submission1
-  }
+    "leave pages as none where there is no data for them" in {
+      DefaultSubmissionBuilder().build(doc2) shouldBe submission2
+    }
 
-  it should "leave pages as none where there is no data for them" in {
-    DefaultSubmissionBuilder().build(doc2) shouldBe submission2
-  }
+    "assign the correct data to the correct page, no matter what order the pages are supplied in" in {
+      DefaultSubmissionBuilder().build(doc3) shouldBe submission1
+    }
 
-  it should "assign the correct data to the correct page, no matter what order the pages are supplied in" in {
-    DefaultSubmissionBuilder().build(doc3) shouldBe submission1
-  }
+    "parse a verbal lease agreement when page six is a verbal agreement" in {
+      DefaultSubmissionBuilder().build(docWithVerbalAgreement) shouldBe submissionWithVerbalAgreement
+    }
 
-  it should "parse a verbal lease agreement when page six is a verbal agreement" in {
-    DefaultSubmissionBuilder().build(docWithVerbalAgreement) shouldBe submissionWithVerbalAgreement
-  }
+    "create ndr and water charges services if their details are supplied" in {
+      val sub      = DefaultSubmissionBuilder().build(docWithNdrChargesAndWaterCharges)
+      val services = sub.responsibilities.get.includedServicesDetails
 
-  it should "create ndr and water charges services if their details are supplied" in {
-    val sub      = DefaultSubmissionBuilder().build(docWithNdrChargesAndWaterCharges)
-    val services = sub.responsibilities.get.includedServicesDetails
-    assert(services.exists(s => s.chargeDescription == "Non-domestic Rates" && s.chargeCost == 41.23))
-    assert(services.exists(s => s.chargeDescription == "Water Charges" && s.chargeCost == 456.76))
-  }
+      services.exists(s => s.chargeDescription == "Non-domestic Rates" && s.chargeCost == 41.23) shouldBe true
+      services.exists(s => s.chargeDescription == "Water Charges" && s.chargeCost == 456.76)     shouldBe true
+    }
 
-  it should "map overriden property address as tenants address when tenants address is main property address and main property address has been overriden" in {
-    val sub = DefaultSubmissionBuilder().build(docWithTenantsPropertyAddressAndOverriddenMainAddress)
-    sub.sublet.map(_.sublets.head.tenantAddress).value shouldBe tenantsPropertyAddress
-  }
+    "map overridden property address as tenants address when tenants address is main property address and main property address has been overridden" in {
+      val sub = DefaultSubmissionBuilder().build(docWithTenantsPropertyAddressAndOverriddenMainAddress)
 
-  it should "set occupier name as 'Nobody' if the property is not occupied" in {
-    val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.nobody.toString))
-    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    sub.theProperty.flatMap(_.occupierName).value shouldBe "Nobody"
-  }
+      sub.sublet.map(_.sublets.head.tenantAddress).value shouldBe tenantsPropertyAddress
+    }
 
-  it should "set occupier name as first 50 chars of (company name + contact name) if a company occupies the property" in {
-    val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.company.toString))
-      .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
-      .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
-    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo Enterprise Integration Ventures - Kyle "
-  }
+    "set occupier name as 'Nobody' if the property is not occupied" in {
+      val ks  = PageThreeForm.keys
+      val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.nobody.toString))
+      val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
 
-  it should "set occupier name as main occupier's name if 'one or more individuals' occupies the property" in {
-    val ks  = PageThreeForm.keys
-    val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.individuals.toString))
-      .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
-    val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
-    sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo"
-  }
+      sub.theProperty.flatMap(_.occupierName).value shouldBe "Nobody"
+    }
 
-  it should "remove all non-short path information if the user is on the short path (they may have previoysly been on a different path)" in {
-    val fullSubmission       = doc1
-    val convertedToShortPath = fullSubmission.add(Page(3, page3ShortPath))
-    val sub                  = DefaultSubmissionBuilder().build(convertedToShortPath)
-    assert(sub.landlord.isEmpty)
-    assert(sub.lease.isEmpty)
-    assert(sub.rentReviews.isEmpty)
-    assert(sub.rentAgreement.isEmpty)
-    assert(sub.rent.isEmpty)
-    assert(sub.rentIncludes.isEmpty)
-    assert(sub.incentives.isEmpty)
-    assert(sub.responsibilities.isEmpty)
-    assert(sub.alterations.isEmpty)
-    assert(sub.otherFactors.isEmpty)
+    "set occupier name as first 50 chars of (company name + contact name) if a company occupies the property" in {
+      val ks  = PageThreeForm.keys
+      val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.company.toString))
+        .updated(ks.occupierCompanyName, Seq("Jimmy Choo Enterprise Integration Ventures"))
+        .updated(ks.occupierCompanyContact, Seq("Kyle Kingsbury"))
+      val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
+
+      sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo Enterprise Integration Ventures - Kyle "
+    }
+
+    "set occupier name as main occupier's name if 'one or more individuals' occupies the property" in {
+      val ks  = PageThreeForm.keys
+      val p3  = page3FormData.updated(ks.occupierType, Seq(OccupierType.individuals.toString))
+        .updated(ks.mainOccupierName, Seq("Jimmy Choo"))
+      val sub = DefaultSubmissionBuilder().build(doc1.add(Page(3, p3)))
+
+      sub.theProperty.flatMap(_.occupierName).value shouldBe "Jimmy Choo"
+    }
+
+    "remove all non-short path information if the user is on the short path (they may have previoysly been on a different path)" in {
+      val fullSubmission       = doc1
+      val convertedToShortPath = fullSubmission.add(Page(3, page3ShortPath))
+      val sub                  = DefaultSubmissionBuilder().build(convertedToShortPath)
+
+      sub.landlord.isEmpty         shouldBe true
+      sub.lease.isEmpty            shouldBe true
+      sub.rentReviews.isEmpty      shouldBe true
+      sub.rentAgreement.isEmpty    shouldBe true
+      sub.rent.isEmpty             shouldBe true
+      sub.rentIncludes.isEmpty     shouldBe true
+      sub.incentives.isEmpty       shouldBe true
+      sub.responsibilities.isEmpty shouldBe true
+      sub.alterations.isEmpty      shouldBe true
+      sub.otherFactors.isEmpty     shouldBe true
+    }
   }
 
   object TestData:

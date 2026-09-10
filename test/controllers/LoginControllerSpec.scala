@@ -49,7 +49,7 @@ class LoginControllerSpec extends BaseSpec:
 
       val loginToHodFunction =
         (referenceNumber: ReferenceNumber, _: Postcode, _: StartTime) =>
-          assert(referenceNumber.equals("01234567000"))
+          referenceNumber shouldBe "01234567000"
           Future.successful(NoExistingDocument("token", testAddress))
 
       val loginToHod = mock[LoginToHODAction]

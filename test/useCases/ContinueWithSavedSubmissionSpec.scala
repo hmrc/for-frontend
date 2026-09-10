@@ -16,32 +16,34 @@
 
 package useCases
 
-import utils.UnitTest
 import connectors.Document
 import crypto.MongoHasher
 import models.journeys.SummaryPage
 import models.pages.Summary
 import play.api.Configuration
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
+import utils.BehaviourVerification
 
 import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.*
 import scala.concurrent.Future
 
-class ContinueWithSavedSubmissionSpec extends UnitTest:
+class ContinueWithSavedSubmissionSpec extends BaseSpec with BehaviourVerification:
 
   implicit private val mongoHasher: MongoHasher =
     MongoHasher(Configuration("oneway.hash.key" -> "UkFMRCBTYXZlRm9yTGF0ZXIgcGFzd29yZCB2ZXJ5IGNvb2wgYW5kIHNlY3JldCBvbmUgd2F5IGhhc2gga2V5"))
 
   "Continue with saved submission" when {
-    val pwd                        = "anicepassword"
-    val ref                        = "11122233344"
-    val now                        = ZonedDateTime.of(2015, 3, 5, 12, 25, 0, 0, ZoneOffset.UTC)
-    val doc                        = Document(ref, nowInUK, saveForLaterPassword = Some(mongoHasher.hash(pwd)), journeyResumptions = Seq(now.minusDays(1)))
-    val tok                        = "BASIC abcdefg=="
+    val pwd = "anicepassword"
+    val ref = "11122233344"
+    val now = ZonedDateTime.of(2015, 3, 5, 12, 25, 0, 0, ZoneOffset.UTC)
+    val doc = Document(ref, nowInUK, saveForLaterPassword = Some(mongoHasher.hash(pwd)), journeyResumptions = Seq(now.minusDays(1)))
+    val tok = "BASIC abcdefg=="
+    val sum = Summary(ref, nowInUK, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(tok)))
-    val sum                        = Summary(ref, nowInUK, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
 
     "a document has been saved and the passwords match" should {
       var updated: (HeaderCarrier, ReferenceNumber, Document)                           = null
@@ -53,14 +55,16 @@ class ContinueWithSavedSubmissionSpec extends UnitTest:
           _ => SummaryPage,
           () => now
         )
-      val r                                                                             = await(c.apply(pwd, ref))
 
-      "return the next page to go to" in
-        assert(r === PasswordsMatch(SummaryPage))
+      val r = c.apply(pwd, ref).futureValue
+
+      "return the next page to go to" in {
+        r shouldBe PasswordsMatch(SummaryPage)
+      }
 
       "load the saved document into the current session updating the journey resumptions with the current date and time" in {
         val docWithNowResumption = doc.copy(saveForLaterPassword = None, journeyResumptions = doc.journeyResumptions :+ now)
-        assert(updated === (hc, ref, docWithNowResumption))
+        updated shouldBe (hc, ref, docWithNowResumption)
       }
     }
 
@@ -75,26 +79,30 @@ class ContinueWithSavedSubmissionSpec extends UnitTest:
           () => now
         )
 
-      val r = await(c.apply("invalidPassword", ref))
+      val r = c.apply("invalidPassword", ref).futureValue
 
-      "return a failed login" in
-        assert(r === IncorrectPassword)
+      "return a failed login" in {
+        r shouldBe IncorrectPassword
+      }
 
-      "not update the document in the current session" in
-        assert(updated === null)
+      "not update the document in the current session" in {
+        updated shouldBe null
+      }
     }
 
     "there is no matching document" should {
       var updated: (HeaderCarrier, ReferenceNumber, Document)                           = null
       val c: (SaveForLaterPassword, ReferenceNumber) => Future[SaveForLaterLoginResult] =
         ContinueWithSavedSubmission(none, set(updated = _), _ => sum, _ => SummaryPage, () => now)
-      val r                                                                             = await(c.apply(pwd, ref))
 
-      "a retrieval error is returned" in
-        assert(r === ErrorRetrievingSavedDocument)
+      val r = c.apply(pwd, ref).futureValue
 
-      "the current session is not modified" in
-        assert(updated === null)
+      "a retrieval error is returned" in {
+        r shouldBe ErrorRetrievingSavedDocument
+      }
+
+      "the current session is not modified" in {
+        updated shouldBe null
+      }
     }
-
   }
