@@ -18,14 +18,12 @@ package models.pages
 
 import connectors.{Document, Page}
 import models.serviceContracts.submissions.OccupierType
-import org.scalatest.OptionValues
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 
-class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with OptionValues:
+class SummaryDeserializationSpec extends BaseSpec:
 
-  val pages: Seq[Page] = Seq(
+  private val pages: Seq[Page] = Seq(
     Page(
       3,
       Map(
@@ -55,7 +53,7 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
     )
   )
 
-  val doc: Document = Document(
+  private val doc: Document = Document(
     referenceNumber = "1111",
     journeyStarted = nowInUK,
     pages = pages,
@@ -64,15 +62,15 @@ class SummaryDeserializationSpec extends AnyFlatSpec with should.Matchers with O
     journeyResumptions = Seq()
   )
 
-  "Summary builder" should "deserialize document with redundant fields " in {
-    val summaryBuilder: SummaryBuilder = SummaryBuilder
-    val summary                        = summaryBuilder.build(doc)
+  "SummaryBuilder" should {
+    "deserialize document with redundant fields " in {
+      val summary = SummaryBuilder.build(doc)
 
-    summary.theProperty                    shouldBe defined
-    summary.theProperty.value.propertyType shouldBe "hotel"
-    summary.theProperty.value.occupierType shouldBe OccupierType.individuals
+      summary.theProperty                  shouldBe defined
+      summary.theProperty.get.propertyType shouldBe "hotel"
+      summary.theProperty.get.occupierType shouldBe OccupierType.individuals
 
-    summary.rent                        shouldBe defined
-    summary.rent.value.totalRent.amount shouldBe BigDecimal("10000")
-
+      summary.rent                      shouldBe defined
+      summary.rent.get.totalRent.amount shouldBe BigDecimal("10000")
+    }
   }

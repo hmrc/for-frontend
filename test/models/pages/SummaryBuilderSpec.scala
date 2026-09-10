@@ -17,20 +17,20 @@
 package models.pages
 
 import connectors.Document
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 
-class SummaryBuilderSpec extends AnyFlatSpec with should.Matchers:
+class SummaryBuilderSpec extends BaseSpec:
 
-  behavior of "Summary builder"
+  "SummaryBuilder" should {
+    "map the reference number number, journey started date, and journey resumptions" in {
+      val now         = nowInUK.minusDays(5)
+      val resumptions = Seq(nowInUK.minusDays(4), nowInUK.minusDays(3), nowInUK.minusDays(2))
+      val d           = Document("11122233344", now, Seq.empty, None, Some("secretPassword"), journeyResumptions = resumptions)
+      val s           = SummaryBuilder.build(d)
 
-  it should "map the reference number number, journey started date, and journey resumptions" in {
-    val now         = nowInUK.minusDays(5)
-    val resumptions = Seq(nowInUK.minusDays(4), nowInUK.minusDays(3), nowInUK.minusDays(2))
-    val d           = Document("11122233344", now, Seq.empty, None, Some("secretPassword"), journeyResumptions = resumptions)
-    val s           = SummaryBuilder.build(d)
-    assert(s.referenceNumber === "11122233344")
-    assert(s.journeyStarted === now)
-    assert(s.journeyResumptions === resumptions)
+      s.referenceNumber    shouldBe "11122233344"
+      s.journeyStarted     shouldBe now
+      s.journeyResumptions shouldBe resumptions
+    }
   }
