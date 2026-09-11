@@ -16,50 +16,49 @@
 
 package form
 
-import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.EitherValues
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import play.api.data.FormError
 import org.scalatest.prop.TableFor2
-import play.api.data.Mapping
+import play.api.data.{FormError, Mapping}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PostcodeMappingSpec extends AnyFlatSpec with should.Matchers with EitherValues with TableDrivenPropertyChecks:
+class PostcodeMappingSpec extends BaseSpec:
 
-  val positiveTestData: TableFor2[String, String] = Table(
-    ("raw postcode", "formated postcode"),
-    ("   ML7 +++\n  8LQ   ++", "ML7 8LQ"),
-    ("ML7 8LQ", "ML7 8LQ"),
-    ("ML7.8LQ", "ML7 8LQ"),
-    ("ML7+8LQ", "ML7 8LQ"),
-    ("SW1A.1AA", "SW1A 1AA"),
-    ("XM4.5HQ", "XM4 5HQ"),
-    ("M L 7    8 L Q ", "ML7 8LQ"),
-    ("m l 7 +\n  8 l q ", "ML7 8LQ")
-  )
+  private val positiveTestData: TableFor2[String, String] =
+    Table(
+      ("raw postcode", "formated postcode"),
+      ("   ML7 +++\n  8LQ   ++", "ML7 8LQ"),
+      ("ML7 8LQ", "ML7 8LQ"),
+      ("ML7.8LQ", "ML7 8LQ"),
+      ("ML7+8LQ", "ML7 8LQ"),
+      ("SW1A.1AA", "SW1A 1AA"),
+      ("XM4.5HQ", "XM4 5HQ"),
+      ("M L 7    8 L Q ", "ML7 8LQ"),
+      ("m l 7 +\n  8 l q ", "ML7 8LQ")
+    )
 
-  val negativeTestData: TableFor2[String, Seq[FormError]] = Table(
-    ("raw postcode", "Error message"),
-    ("ML +++\n  8LQ   ++", Seq(FormError("", "postcode.format", Seq("ML +++\n  8LQ   ++")))),
-    ("+", Seq(FormError("", "postcode.format", Seq("+")))),
-    ("", Seq(FormError("", "postcode.missing")))
-  )
+  private val negativeTestData: TableFor2[String, Seq[FormError]] =
+    Table(
+      ("raw postcode", "Error message"),
+      ("ML +++\n  8LQ   ++", Seq(FormError("", "postcode.format", Seq("ML +++\n  8LQ   ++")))),
+      ("+", Seq(FormError("", "postcode.format", Seq("+")))),
+      ("", Seq(FormError("", "postcode.missing")))
+    )
 
-  val postcode: Mapping[String] = PostcodeMapping.postcode("postcode.missing", "postcode.format")
+  private val postcodeMapping: Mapping[String] = PostcodeMapping.postcode("postcode.missing", "postcode.format")
 
-  "PostcodeMapper" should "Map correct postcode" in {
-    val formData = Map("" -> "BN12 4AX")
-    postcode.bind(formData).value shouldBe "BN12 4AX"
+  "PostcodeMapping" should {
+    "map correct postcode" in {
+      val formData = Map("" -> "BN12 4AX")
+
+      postcodeMapping.bind(formData).value shouldBe "BN12 4AX"
+    }
+
+    "successfully format and validate all correct postcodes" in
+      forAll(positiveTestData) { (rawPostcode: String, formattedPostcode: String) =>
+        postcodeMapping.bind(Map("" -> rawPostcode)).value shouldBe formattedPostcode
+      }
+
+    "reject all incorrect postcodes" in
+      forAll(negativeTestData) { (rawPostcode: String, postcodeError: Seq[FormError]) =>
+        postcodeMapping.bind(Map("" -> rawPostcode)).left.value should contain.only(postcodeError*)
+      }
   }
-
-  it should "sucessfully format and validate all correct postcodes" in
-    forAll(positiveTestData) { (rawPostcode: String, formattedPostcode: String) =>
-      postcode.bind(Map("" -> rawPostcode))
-        .value shouldBe formattedPostcode
-    }
-
-  it should "reject all incorrect postcodes" in
-    forAll(negativeTestData) { (rawPostcode: String, postcodeError: Seq[FormError]) =>
-      postcode.bind(Map("" -> rawPostcode))
-        .left.value should contain.only(postcodeError*)
-    }

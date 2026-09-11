@@ -39,7 +39,7 @@ class StubSubmissionConnector extends SubmissionConnector with should.Matchers:
   def verifyWasSubmitted(refNum: String, sub: Submission): Unit =
     submissions.get(refNum) match
       case None    => fail(s"No submission for $refNum")
-      case Some(x) => assert(x === sub)
+      case Some(x) => x shouldBe sub
 
   override def submitNotConnected(refNumber: String, submission: NotConnectedSubmission)(using hc: HeaderCarrier): Future[Unit] = ???
 

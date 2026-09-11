@@ -16,31 +16,28 @@
 
 package models
 
+import models.serviceContracts.submissions.{Address, NotConnectedSubmission}
+import play.api.libs.json.JsString
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+
 import java.time.Instant
 
-import models.serviceContracts.submissions.{Address, NotConnectedSubmission}
-import org.scalatest.EitherValues
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import play.api.libs.json.JsString
-
-class NotConnectedSerializationSpec extends AnyFlatSpec with should.Matchers with EitherValues:
+class NotConnectedSerializationSpec extends BaseSpec:
 
   /*
     GMT: Wednesday, 31 July 2019 15:18:15
     Your time zone: Wednesday, 31 July 2019 16:18:15 GMT+01:00 DST
    */
-  val UNIX_DATETIME: Long    = 1564586295L
-  val UNIX_MILLISECOND: Long = 258L
-  val ISO_TIME               = "2019-07-31T15:18:15.258Z"
-  val INSTANT: Instant       = Instant.ofEpochMilli((UNIX_DATETIME * 1000) + UNIX_MILLISECOND)
+  private val UNIX_DATETIME: Long    = 1564586295L
+  private val UNIX_MILLISECOND: Long = 258L
+  private val ISO_TIME               = "2019-07-31T15:18:15.258Z"
+  private val INSTANT: Instant       = Instant.ofEpochMilli((UNIX_DATETIME * 1000) + UNIX_MILLISECOND)
 
-  "NotConnectedSubmission" should " map Java8 Instant to ISO 8601 format" in {
+  "NotConnectedSubmission" should {
+    "map Java Instant to ISO 8601 format" in {
+      val notConnected = NotConnectedSubmission("222", Address("10", None, None, "BN 12 4AX"), "xxx", None, None, None, INSTANT, false)
+      val result       = NotConnectedSubmission.format.writes(notConnected)
 
-    val notConnected = NotConnectedSubmission("222", Address("10", None, None, "BN 12 4AX"), "xxx", None, None, None, INSTANT, false)
-
-    val result = NotConnectedSubmission.format.writes(notConnected)
-
-    result.value("createdAt") shouldBe JsString(ISO_TIME)
-
+      result.value("createdAt") shouldBe JsString(ISO_TIME)
+    }
   }

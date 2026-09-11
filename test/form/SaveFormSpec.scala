@@ -21,69 +21,66 @@ import form.persistence.SaveFormInRepository
 import models.RoughDate
 import models.pages.*
 import models.serviceContracts.submissions.*
-import org.scalatest.matchers.should
-import org.scalatest.wordspec.AnyWordSpec
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 import utils.stubs.StubFormDocumentRepo
 
 import java.time.LocalDate
-import scala.concurrent.Await
-import scala.concurrent.duration.*
-import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.*
+import scala.language.postfixOps
 
-class SaveFormSpec extends AnyWordSpec with should.Matchers:
+class SaveFormSpec extends BaseSpec:
 
   import TestData.*
 
-  "SaveForm" when {
+  "When no document exists" should {
+    val sessionId = "asdkjfa078380898fdsa"
+    val r         = StubFormDocumentRepo()
+    val s         = SaveFormInRepository(r, StubSummaryBuilder())
+    val x         = s(Some(testData), sessionId, refNumWithNoDoc, 1).futureValue
 
-    "no document exists" should {
-      val sessionId = "asdkjfa078380898fdsa"
-      val r         = StubFormDocumentRepo()
-      val s         = SaveFormInRepository(r, StubSummaryBuilder())
-      val x         = Await.result(s(Some(testData), sessionId, refNumWithNoDoc, 1), 5 seconds)
-
-      "not save anything" in
-        assert(r.storedPages.isEmpty)
-
-      "return none" in
-        assert(x === None)
+    "not save anything" in {
+      r.storedPages.isEmpty shouldBe true
     }
 
-    "a document exists" should {
-      val sessionId = "sdlkjfaweiroiwe"
-      val r         = StubFormDocumentRepo((sessionId, refNumWithDoc, testDoc))
-      val b         = StubSummaryBuilder((testDocWithTestDataAddedToPage1, summaryForTestDocWithTestData))
-      val s         = SaveFormInRepository(r, b)
-      val x         = Await.result(s(Some(testData), sessionId, refNumWithDoc, 1), 5 seconds)
+    "return none" in {
+      x shouldBe None
+    }
+  }
 
-      "add a new page to the document with the supplied fields as a flat Json object" in
-        assert(r.storedPages.last._3 === page1WithTestData)
+  "When a document exists" should {
+    val sessionId = "some-session-id"
+    val r         = StubFormDocumentRepo((sessionId, refNumWithDoc, testDoc))
+    val b         = StubSummaryBuilder((testDocWithTestDataAddedToPage1, summaryForTestDocWithTestData))
+    val s         = SaveFormInRepository(r, b)
+    val x         = s(Some(testData), sessionId, refNumWithDoc, 1).futureValue
 
-      "return the trimmed fields that were saved and the updated summary" in {
-        assert(x.get._1 === testDataTrimmed - "csrfToken")
-        assert(x.get._2 === summaryForTestDocWithTestData)
-      }
+    "add a new page to the document with the supplied fields as a flat Json object" in {
+      r.storedPages.last._3 shouldBe page1WithTestData
     }
 
-    "the form data contains empty entries supplied because JavaScript is not enabled" should {
-      val sessionId = "asfd937r2839ra3e7sd"
-      val r         = StubFormDocumentRepo((sessionId, emptyFieldsRefNum, emptyFieldsTestDoc))
-      val b         = StubSummaryBuilder((emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6, summaryWithNonEmptyFieldsAddedToPage6))
-      val s         = SaveFormInRepository(r, b)
-      val x         = Await.result(s(Some(page6TestData), sessionId, emptyFieldsRefNum, 6), 5 seconds)
+    "return the trimmed fields that were saved and the updated summary" in {
+      x.get._1 shouldBe testDataTrimmed - "csrfToken"
+      x.get._2 shouldBe summaryForTestDocWithTestData
+    }
+  }
 
-      "add the new page to the document as usual, but will throw away the empty fields" in {
-        assert(r.storedPages.last._1 === sessionId)
-        assert(r.storedPages.last._2 === emptyFieldsRefNum)
-        assert(r.storedPages.last._3 === page6WithNonEmptyTestDataFields)
-      }
+  "When the form data contains empty entries supplied because JavaScript is not enabled" should {
+    val sessionId = "asfd937r2839ra3e7sd"
+    val r         = StubFormDocumentRepo((sessionId, emptyFieldsRefNum, emptyFieldsTestDoc))
+    val b         = StubSummaryBuilder((emptyFieldsTestDocWithNonEmptyFieldsAddedToPage6, summaryWithNonEmptyFieldsAddedToPage6))
+    val s         = SaveFormInRepository(r, b)
+    val x         = s(Some(page6TestData), sessionId, emptyFieldsRefNum, 6).futureValue
 
-      "return only the fields that were saved and the empty summary" in {
-        assert(x.get._1 === page6NonEmptyTestData)
-        assert(x.get._2 === summaryWithNonEmptyFieldsAddedToPage6)
-      }
+    "add the new page to the document as usual, but will throw away the empty fields" in {
+      r.storedPages.last._1 shouldBe sessionId
+      r.storedPages.last._2 shouldBe emptyFieldsRefNum
+      r.storedPages.last._3 shouldBe page6WithNonEmptyTestDataFields
+    }
+
+    "return only the fields that were saved and the empty summary" in {
+      x.get._1 shouldBe page6NonEmptyTestData
+      x.get._2 shouldBe summaryWithNonEmptyFieldsAddedToPage6
     }
   }
 

@@ -16,14 +16,15 @@
 
 package form.mapping
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
 import play.api.data.Forms.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class MandatoryIfAllEqual extends AnyFlatSpec with should.Matchers:
+class MandatoryIfAllEqualSpec extends BaseSpec:
 
   import ConditionalMappings.*
+
+  case class Model(s1: String, s2: String, s3: String, target: Option[String])
 
   val form: Form[Model] = Form(mapping(
     "s1"     -> nonEmptyText,
@@ -32,23 +33,21 @@ class MandatoryIfAllEqual extends AnyFlatSpec with should.Matchers:
     "target" -> mandatoryIfAllEqual(Seq("s1" -> "s1val", "s2" -> "s2val", "s3" -> "s3val"), nonEmptyText)
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  case class Model(s1: String, s2: String, s3: String, target: Option[String])
+  "mandatoryIfAllEqual" should {
+    "mandate the target field if all of the source fields match their required value" in {
+      val data = Map("s1" -> "s1val", "s2" -> "s2val", "s3" -> "s3val")
+      val res  = form.bind(data)
 
-  behavior of "mandatory if all equal"
+      res.errors.head.key shouldBe "target"
+    }
 
-  it should "mandate the target field if all of the source fields match their required value" in {
-    val data = Map("s1" -> "s1val", "s2" -> "s2val", "s3" -> "s3val")
-    val res  = form.bind(data)
+    "not mandate the target fields if any of the source fields do not match their required value" in {
+      val data = Map("s1" -> "s1val", "s2" -> "s2val", "s3" -> "s3val")
+      Seq("s1", "s2", "s3") foreach { f =>
+        val data2 = data.updated(f, "not-required-value")
+        val res   = form.bind(data2)
 
-    assert(res.errors.head.key === "target")
-  }
-
-  it should "not mandate the target fields if any of the source fields do not match their required value" in {
-    val data = Map("s1" -> "s1val", "s2" -> "s2val", "s3" -> "s3val")
-    Seq("s1", "s2", "s3") foreach { f =>
-      val data2 = data.updated(f, "notrequiredvalue")
-      val res   = form.bind(data2)
-
-      assert(res.errors.isEmpty)
+        res.errors.isEmpty shouldBe true
+      }
     }
   }

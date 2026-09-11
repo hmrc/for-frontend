@@ -17,62 +17,67 @@
 package form
 
 import controllers.LoginDetails
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.FormBindingTestAssertions.*
 
 import java.time.{ZoneOffset, ZonedDateTime}
 
-class LoginMappingSpec extends AnyFlatSpec with should.Matchers:
+class LoginMappingSpec extends BaseSpec:
 
-  val loginForm: Form[LoginDetails] = controllers.LoginController.loginForm
+  private val loginForm: Form[LoginDetails] = controllers.LoginController.loginForm
 
-  behavior of "Login Mapping"
+  "Login form mapping" should {
+    "bind to ISO date time strings for the start-time" in {
+      val data = Map(
+        "referenceNumber" -> "12345678 /*BLAH 000",
+        "postcode"        -> "AA11 1AA",
+        "start-time"      -> "2016-01-04T08:58:42.113"
+      )
 
-  it should "bind to ISO date time strings for the start-time" in {
-    val data = Map(
-      "referenceNumber" -> "12345678 /*BLAH 000",
-      "postcode"        -> "AA11 1AA",
-      "start-time"      -> "2016-01-04T08:58:42.113"
-    )
-
-    mustBind(loginForm.bind(data)) { x =>
-      assert(x.startTime === ZonedDateTime.of(2016, 1, 4, 8, 58, 42, 113000000, ZoneOffset.UTC))
+      mustBind(loginForm.bind(data))(
+        _.startTime shouldBe ZonedDateTime.of(2016, 1, 4, 8, 58, 42, 113000000, ZoneOffset.UTC)
+      )
     }
-  }
 
-  it should "after trimming non numeric chars should be 10 or 11 digits in reference numbers" in {
-    val data = Map(
-      "referenceNumber" -> "12345678  */ 000",
-      "postcode"        -> "AA11 1AA",
-      "start-time"      -> "2016-01-04T08:58:42.113"
-    )
+    "after trimming non numeric chars should be 10 or 11 digits in reference numbers" in {
+      val data = Map(
+        "referenceNumber" -> "12345678  */ 000",
+        "postcode"        -> "AA11 1AA",
+        "start-time"      -> "2016-01-04T08:58:42.113"
+      )
 
-    mustBind(loginForm.bind(data))(x => assert(x.referenceNumber === "12345678  */ 000"))
+      mustBind(loginForm.bind(data))(
+        _.referenceNumber shouldBe "12345678  */ 000"
+      )
 
-    val d1 = data.updated("referenceNumber", "123456789")
-    mustContainError("referenceNumber", Errors.invalidRefNum, loginForm.bind(d1))
+      val d1 = data.updated("referenceNumber", "123456789")
+      mustContainError("referenceNumber", Errors.invalidRefNum, loginForm.bind(d1))
 
-    val d2 = data.updated("referenceNumber", "123456789012")
-    mustContainError("referenceNumber", Errors.invalidRefNum, loginForm.bind(d2))
+      val d2 = data.updated("referenceNumber", "123456789012")
+      mustContainError("referenceNumber", Errors.invalidRefNum, loginForm.bind(d2))
 
-    val d3 = data.updated("referenceNumber", "12345678901")
-    mustBind(loginForm.bind(d3))(x => assert(x.referenceNumber === "12345678901"))
+      val d3 = data.updated("referenceNumber", "12345678901")
+      mustBind(loginForm.bind(d3))(
+        _.referenceNumber shouldBe "12345678901"
+      )
 
-    val d4 = data.updated("referenceNumber", "1234567890")
-    mustNotContainErrorFor("referenceNumber", loginForm.bind(d4))
-  }
+      val d4 = data.updated("referenceNumber", "1234567890")
+      mustNotContainErrorFor("referenceNumber", loginForm.bind(d4))
+    }
 
-  it should "postcode works in upper or lowercase" in {
-    val data = Map(
-      "referenceNumber" -> "12345678 000",
-      "postcode"        -> "AA11 1AA",
-      "start-time"      -> "2016-01-04T08:58:42.113"
-    )
+    "postcode works in upper or lowercase" in {
+      val data = Map(
+        "referenceNumber" -> "12345678 000",
+        "postcode"        -> "AA11 1AA",
+        "start-time"      -> "2016-01-04T08:58:42.113"
+      )
 
-    mustBind(loginForm.bind(data))(x => assert(x.postcode === "AA11 1AA"))
+      mustBind(loginForm.bind(data))(
+        _.postcode shouldBe "AA11 1AA"
+      )
 
-    val d4 = data.updated("postcode", "aa11 1aa")
-    mustNotContainErrorFor("postcode", loginForm.bind(d4))
+      val d4 = data.updated("postcode", "aa11 1aa")
+      mustNotContainErrorFor("postcode", loginForm.bind(d4))
+    }
   }

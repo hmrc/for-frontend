@@ -18,23 +18,21 @@ package useCases
 
 import connectors.Document
 import controllers.toFut
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
-import utils.UnitTest
+import utils.BehaviourVerification
 
 import java.security.SecureRandom
 import java.util.UUID
-import scala.collection.StringOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SaveInProgressSubmissionForLaterSpec extends UnitTest:
+class SaveInProgressSubmissionForLaterSpec extends BaseSpec with BehaviourVerification:
 
   private val random = SecureRandom()
 
-  "Save an in progress document for later" when {
+  "SaveInProgressSubmissionForLater" when {
     val pas      = s"thisisapassorwd${random.nextDouble}"
     val ref      = "1111111222"
     val sid      = UUID.randomUUID.toString
@@ -46,13 +44,16 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest:
       var updated: (HeaderCarrier, ReferenceNumber, Document)     = null
       val s: (Document, HeaderCarrier) => Future[ReferenceNumber] =
         SaveInProgressSubmissionForLater.apply(() => pas, expect(savedDoc), (a, b, c) => updated = (a, b, c))
-      val r                                                       = await(s.apply(doc, hc))
 
-      "generate a password using the password generator, and store the document with the generated password" in
-        assert(r === pas)
+      val r = s.apply(doc, hc).futureValue
 
-      "update the document in the current session with the password" in
-        assert(updated === (hc, ref, savedDoc))
+      "generate a password using the password generator, and store the document with the generated password" in {
+        r shouldBe pas
+      }
+
+      "update the document in the current session with the password" in {
+        updated shouldBe (hc, ref, savedDoc)
+      }
     }
 
     "saving a new document for a reference number that has already saved a document" should {
@@ -64,26 +65,7 @@ class SaveInProgressSubmissionForLaterSpec extends UnitTest:
       "use the existing password if a document already has a save for later password" in {
         val s: (Document, HeaderCarrier) => Future[ReferenceNumber] =
           SaveInProgressSubmissionForLater.apply(() => newP, set[Document, Unit](_ => ()), (_, _, _) => Future.unit)
-        assert(await(s.apply(doc, hc)) === oldP)
+        s.apply(doc, hc).futureValue shouldBe oldP
       }
     }
   }
-
-class Generate7LengthLowercaseAlphaNumPasswordSpec extends AnyFlatSpec with should.Matchers:
-
-  behavior of "Generate 7 length lowercase alpha numeric password spec"
-
-  it should "Generate a password consisting of unambiguous lowercase chars and numbers with a length of 7" in {
-    (1 to 100) foreach { _ =>
-      val pw = Generate7LengthLowercaseAlphaNumPassword()
-      assert(pw.length === 7)
-      for (c <- StringOps(pw))
-        assert(isAllowed(c) === true, s"$c is not a valid character for passwords")
-    }
-  }
-
-  private def isAllowed(c: Char) = (c.isDigit || isLowercaseLetter(c)) && (isNonAmbiguousDigit(c) || isNonAmbiguousLowercaseLetter(c))
-
-  private def isLowercaseLetter(c: Char)             = c.toString.matches("[a-z]")
-  private def isNonAmbiguousDigit(c: Char)           = !Seq('0', '1').contains(c)
-  private def isNonAmbiguousLowercaseLetter(c: Char) = !Seq('i', 'l', 'o').contains(c)

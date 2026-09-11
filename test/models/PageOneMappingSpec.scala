@@ -17,22 +17,19 @@
 package models
 
 import models.serviceContracts.submissions.Address
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.libs.json.{JsResult, JsSuccess, Json}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PageOneMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageOneMappingSpec extends BaseSpec:
 
-  val json2          = """{"buildingNameNumber":"Some House","street1":"Some Street","street2":"Some City","postcode":"AA11 1AA"}"""
-  val data2: Address = Address("Some House", Some("Some Street"), Some("Some City"), "AA11 1AA")
+  private val json2          = """{"buildingNameNumber":"Some House","street1":"Some Street","street2":"Some City","postcode":"AA11 1AA"}"""
+  private val data2: Address = Address("Some House", Some("Some Street"), Some("Some City"), "AA11 1AA")
 
-  def toJson(data: Address): String =
-    val json = Json.toJson(data).toString
-    json
-
-  def fromJson(json: String): JsResult[Address] =
+  private def fromJson(json: String): JsResult[Address] =
     Json.fromJson[Address](Json.parse(json))
 
-  "Address with a fully filled in address" should "create a fully filled Address" in {
-    fromJson(json2) should be(JsSuccess(data2))
+  "Address with a fully filled in address" should {
+    "create a fully filled Address" in {
+      fromJson(json2) shouldBe JsSuccess(data2)
+    }
   }

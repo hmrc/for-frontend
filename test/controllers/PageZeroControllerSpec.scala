@@ -16,18 +16,11 @@
 
 package controllers
 
-import base.MockitoExtendedSugar
 import connectors.{Audit, Document}
 import controllers.dataCapturePages.PageZeroController
-import form.persistence.FormDocumentRepository
-import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderNames
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import util.DateUtil.nowInUK
 import utils.Helpers.refNumAction
 import utils.stubs.StubFormDocumentRepo
@@ -35,27 +28,18 @@ import views.html.part0
 
 import java.util.UUID
 
-class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoExtendedSugar:
+class PageZeroControllerSpec extends BaseAppSpec:
 
   private val testRefNum         = "1234567890"
   private val sessionId          = UUID.randomUUID.toString
   private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, nowInUK)))
   private val audit              = mock[Audit]
 
-  override def fakeApplication(): Application =
-    GuiceApplicationBuilder()
-      .overrides(
-        bind[Audit].toInstance(audit),
-        bind[FormDocumentRepository].toInstance(documentRepository)
-      )
-      .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> false))
-      .build()
-
-  "Page zero controller" should {
+  "PageZeroController" should {
     "redirect to page 1 if user want to change address" in {
       val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
-      val request = FakeRequest()
+      val request = postRequest
         .withHeaders(HeaderNames.xSessionId -> sessionId)
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
@@ -63,17 +47,17 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
           "continue-button" -> ""
         )
 
-      val res = await(pageZeroController.save()(request))
+      val res = pageZeroController.save(request).futureValue
 
-      status(res) mustBe SEE_OTHER
+      status(res) shouldBe SEE_OTHER
 
-      header("location", res).value mustBe "/sending-rental-information/page/1"
+      header("location", res) shouldBe Some("/sending-rental-information/page/1")
     }
 
     "redirect to page 2 if user doesn't want to change address" in {
       val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
-      val request = FakeRequest()
+      val request = postRequest
         .withHeaders(HeaderNames.xSessionId -> sessionId)
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
@@ -81,17 +65,16 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
           "continue-button" -> ""
         )
 
-      val res = await(pageZeroController.save()(request))
+      val res = pageZeroController.save(request).futureValue
 
-      status(res) mustBe SEE_OTHER
-      header("location", res).value mustBe "/sending-rental-information/page/2"
-
+      status(res)             shouldBe SEE_OTHER
+      header("location", res) shouldBe Some("/sending-rental-information/page/2")
     }
 
     "redirect to not connected page if user is not connected with property " in {
       val pageZeroController = PageZeroController(audit, documentRepository, refNumAction(), stubMessagesControllerComponents(), mock[part0])
 
-      val request = FakeRequest()
+      val request = postRequest
         .withHeaders(HeaderNames.xSessionId -> sessionId)
         .withSession("refNum" -> testRefNum)
         .withFormUrlEncodedBody(
@@ -99,10 +82,9 @@ class PageZeroControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Mock
           "continue-button" -> ""
         )
 
-      val res = await(pageZeroController.save()(request))
+      val res = pageZeroController.save(request).futureValue
 
-      status(res) mustBe SEE_OTHER
-      header("location", res).value mustBe "/sending-rental-information/previously-connected"
+      status(res)             shouldBe SEE_OTHER
+      header("location", res) shouldBe Some("/sending-rental-information/previously-connected")
     }
-
   }

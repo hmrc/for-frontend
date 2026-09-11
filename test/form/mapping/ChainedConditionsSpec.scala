@@ -16,14 +16,15 @@
 
 package form.mapping
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
 import play.api.data.Forms.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class ChainedConditions extends AnyFlatSpec with should.Matchers:
+class ChainedConditionsSpec extends BaseSpec:
 
   import ConditionalMappings.*
+
+  case class Model(name: String, age: Int, favouriteColour: Option[String])
 
   val form = Form(mapping(
     "name"            -> nonEmptyText,
@@ -34,20 +35,18 @@ class ChainedConditions extends AnyFlatSpec with should.Matchers:
     )
   )(Model.apply)(o => Some(Tuple.fromProductTyped(o))))
 
-  case class Model(name: String, age: Int, favouriteColour: Option[String])
+  "Chained conditional mappings" should {
+    "apply mappings if all of the chained criteria are satisfied" in {
+      val data = Map("name" -> "Francoise", "age" -> "21")
+      val res  = form.bind(data)
 
-  behavior of "chained mappings"
+      res.errors.head.key shouldBe "favouriteColour"
+    }
 
-  it should "apply mappings if all of the chained criteria are satisfied" in {
-    val data = Map("name" -> "Francoise", "age" -> "21")
-    val res  = form.bind(data)
+    "not apply mappings if any part of the chained criteria is not satisfied" in {
+      val data = Map("name" -> "Francoise", "age" -> "20")
+      val res  = form.bind(data)
 
-    assert(res.errors.head.key === "favouriteColour")
-  }
-
-  it should "not apply mappings if any part of the chained critieria is not satisfied" in {
-    val data = Map("name" -> "Francoise", "age" -> "20")
-    val res  = form.bind(data)
-
-    assert(res.errors.isEmpty)
+      res.errors.isEmpty shouldBe true
+    }
   }

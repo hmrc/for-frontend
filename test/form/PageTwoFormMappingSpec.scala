@@ -16,68 +16,67 @@
 
 package form
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import form.PageTwoForm.pageTwoForm
 import play.api.data.FormError
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.CommonSpecs
+import utils.FormBindingTestAssertions.*
 
-class PageTwoFormMappingSpec extends AnyFlatSpec with should.Matchers with CommonSpecs:
+class PageTwoFormMappingSpec extends BaseSpec with CommonSpecs:
 
   import TestData.*
-  import form.PageTwoForm.*
-  import utils.FormBindingTestAssertions.*
 
-  behavior of "page two form mapping"
+  "PageTwoForm" should {
+    "show required errors for fullName, userType, email and phone when given empty data" in {
+      val formData: Map[String, String] = Map()
+      val form                          = pageTwoForm.bind(formData)
 
-  "page two mapping" should "show required errors for fullName, userType, email and phone when given empty data" in {
-    val formData: Map[String, String] = Map()
-    val form                          = pageTwoForm.bind(formData)
+      mustContainRequiredErrorFor(errorKey.fullName, form)
+      mustContainError(errorKey.userType, Errors.userTypeRequired, form)
+      mustContainError(errorKey.email1, Errors.contactEmailRequired, form)
+      mustContainError(errorKey.phone, Errors.contactPhoneRequired, form)
+    }
 
-    mustContainRequiredErrorFor(errorKey.fullName, form)
-    mustContainError(errorKey.userType, Errors.userTypeRequired, form)
-    mustContainError(errorKey.email1, Errors.contactEmailRequired, form)
-    mustContainError(errorKey.phone, Errors.contactPhoneRequired, form)
+    "error if fullName is missing" in {
+      val formData = baseFormData - errorKey.fullName
+      val form     = pageTwoForm.bind(formData)
+
+      mustContainRequiredErrorFor(errorKey.fullName, form)
+    }
+
+    "error if userType is missing" in {
+      val formData = baseFormData - errorKey.userType
+      val form     = pageTwoForm.bind(formData)
+
+      mustContainError(errorKey.userType, Errors.userTypeRequired, form)
+    }
+
+    "error if invalid userType is provided" in {
+      val formData = baseFormData.updated("userType", "owner1")
+      val form     = pageTwoForm.bind(formData)
+
+      mustContainError(errorKey.userType, Errors.userTypeRequired, form)
+    }
+
+    "error if email address is longer than 50 characters" in {
+      val formData: Map[String, String] = baseFormData
+        .updated("contactDetails.email1", tooLongEmail)
+      val form                          = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
+
+      mustContainError(errorKey.email1, errorKey.email1TooLong, form)
+    }
+
+    "validate the phone number" in {
+      val valid = Seq("012345678901", "+4412345678901", "012345 678 901", "012345-678-901", "(012345) 678 901")
+      validateNoError("contactDetails.phone", valid, pageTwoForm, baseFormData)
+
+      val form = pageTwoForm.bind(baseFormData - errorKey.phone).convertGlobalToFieldErrors()
+      mustContainError(errorKey.phone, Errors.contactPhoneRequired, form)
+    }
+
+    "validate full name" in
+      validateLettersNumsSpecCharsUptoLength(errorKey.fullName, 50, pageTwoForm, baseFormData)
   }
-
-  it should "error if fullName is missing " in {
-    val formData = baseFormData - errorKey.fullName
-    val form     = pageTwoForm.bind(formData)
-
-    mustContainRequiredErrorFor(errorKey.fullName, form)
-  }
-
-  it should "error if userType is missing" in {
-    val formData = baseFormData - errorKey.userType
-    val form     = pageTwoForm.bind(formData)
-
-    mustContainError(errorKey.userType, Errors.userTypeRequired, form)
-  }
-
-  it should "error if invalid userType is provided" in {
-    val formData = baseFormData.updated("userType", "owner1")
-    val form     = pageTwoForm.bind(formData)
-
-    mustContainError(errorKey.userType, Errors.userTypeRequired, form)
-  }
-
-  it should "error if email adress is longer than 50 characters" in {
-    val formData: Map[String, String] = baseFormData
-      .updated("contactDetails.email1", tooLongEmail)
-    val form                          = pageTwoForm.bind(formData).convertGlobalToFieldErrors()
-
-    mustContainError(errorKey.email1, errorKey.email1TooLong, form)
-  }
-
-  it should "validate the phone number" in {
-    val valid = Seq("012345678901", "+4412345678901", "012345 678 901", "012345-678-901", "(012345) 678 901")
-    validateNoError("contactDetails.phone", valid, pageTwoForm, baseFormData)
-
-    val form = pageTwoForm.bind(baseFormData - errorKey.phone).convertGlobalToFieldErrors()
-    mustContainError(errorKey.phone, Errors.contactPhoneRequired, form)
-  }
-
-  it should "validate full name" in
-    validateLettersNumsSpecCharsUptoLength(errorKey.fullName, 50, pageTwoForm, baseFormData)
 
   object TestData:
 

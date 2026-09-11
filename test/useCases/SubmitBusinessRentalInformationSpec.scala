@@ -17,26 +17,23 @@
 package useCases
 
 import actions.RefNumRequest
-import base.MockitoExtendedSugar
 import connectors.{Audit, Document, Page}
 import helpers.AddressAuditing
 import models.*
 import models.serviceContracts.submissions.*
-import org.scalatest.matchers.should
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.RecoverMethods.recoverToExceptionIf
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import util.DateUtil.nowInUK
 import utils.stubs.*
 
 import java.time.LocalDate
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.*
 import scala.language.postfixOps
 
-class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matchers with MockitoExtendedSugar:
+class SubmitBusinessRentalInformationSpec extends BaseSpec:
 
   import TestData.*
 
@@ -52,21 +49,23 @@ class SubmitBusinessRentalInformationSpec extends AnyWordSpec with should.Matche
 
     "a submission for the refNum is received" should {
       val submit = SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit, auditAddresses)
-      Await.result(submit(refNum), 10 seconds)
+      submit(refNum).futureValue
 
-      "The information will be formatted using the submission schema and posted to the back-end" in
+      "the information will be formatted using the submission schema and posted to the back-end" in
         subConnector.verifyWasSubmitted(refNum, submission)
     }
-
   }
 
-  "An error is returned when a document for the refNum does not exist" in {
-    val invalidRefNum = "adlkjfalsjd"
-    val ex            = intercept[RentalInformationCouldNotBeRetrieved] {
-      val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
-      Await.result(submit(invalidRefNum), 10 seconds)
+  "When a document for the refNum does not exist" should {
+    "return error" in {
+      val invalidRefNum = "adlkjfalsjd"
+      val ex            = recoverToExceptionIf[RentalInformationCouldNotBeRetrieved] {
+        val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
+        submit(invalidRefNum)
+      }.futureValue
+
+      ex.refNum shouldBe invalidRefNum
     }
-    assert(ex.refNum === invalidRefNum)
   }
 
   object TestData:

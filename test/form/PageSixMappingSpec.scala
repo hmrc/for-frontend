@@ -19,243 +19,253 @@ package form
 import models.*
 import models.pages.*
 import models.serviceContracts.submissions.*
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
 import util.DateUtil.nowInUK
+import PageSixForm.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
 import java.time.LocalDate
 
-class PageSixMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageSixMappingSpec extends BaseSpec:
 
-  import PageSixForm.*
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "A page six form" should "bind to page six with a written agreement" in {
-    val p6 = PageSix(
-      LeaseAgreementType.licenceOther,
-      Some(WrittenAgreement(
-        leaseAgreementHasBreakClause = true,
-        breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
-        agreementIsStepped = true,
-        steppedDetails = List(SteppedDetails(stepFrom = LocalDate.of(2000, 12, 2), stepTo = LocalDate.of(2001, 2, 12), amount = 123.45)),
-        startDate = new RoughDate(month = 3, year = nowInUK.minusYears(8).getYear),
-        rentOpenEnded = false,
-        leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
-      )),
-      VerbalAgreement()
-    )
+  "A page six form" should {
+    "bind to page six with a written agreement" in {
+      val p6 = PageSix(
+        LeaseAgreementType.licenceOther,
+        Some(WrittenAgreement(
+          leaseAgreementHasBreakClause = true,
+          breakClauseDetails = Some("BREAK CLAUSE DETAILS"),
+          agreementIsStepped = true,
+          steppedDetails = List(SteppedDetails(stepFrom = LocalDate.of(2000, 12, 2), stepTo = LocalDate.of(2001, 2, 12), amount = 123.45)),
+          startDate = new RoughDate(month = 3, year = nowInUK.minusYears(8).getYear),
+          rentOpenEnded = false,
+          leaseLength = Some(MonthsYearDuration(months = 4, years = 3))
+        )),
+        VerbalAgreement()
+      )
 
-    mustBind(bind(fullData))(x => assert(x === p6))
-  }
+      mustBind(bind(fullData))(_ shouldBe p6)
+    }
 
-  it should "always require a lease agreement type" in {
-    val data = Map.empty[String, String]
-    val form = bind(data)
+    "always require a lease agreement type" in {
+      val data = Map.empty[String, String]
+      val form = bind(data)
 
-    mustOnlyContainError(keys.leaseAgreementType, Errors.leaseAgreementTypeRequired, form)
-  }
+      mustOnlyContainError(keys.leaseAgreementType, Errors.leaseAgreementTypeRequired, form)
+    }
 
-  it should "allow all fields to be optional when the agreement is verbal or written" in {
-    val data = Map(keys.leaseAgreementType -> LeaseAgreementType.verbal.toString)
+    "allow all fields to be optional when the agreement is verbal or written" in {
+      val data = Map(keys.leaseAgreementType -> LeaseAgreementType.verbal.toString)
 
-    mustBind(bind(data))(x => assert(x === PageSix(LeaseAgreementType.verbal, None, VerbalAgreement())))
-  }
+      mustBind(bind(data))(_ shouldBe PageSix(LeaseAgreementType.verbal, None, VerbalAgreement()))
+    }
 
-  it should "allow a start and open ended value if there is a verbal agreement or one in writing" in {
-    val data   = Map(
-      keys.leaseAgreementType      -> LeaseAgreementType.verbal.toString,
-      s"$verbalStartDate.month"    -> "5",
-      s"$verbalStartDate.year"     -> "2011",
-      verbalRentOpenEnded          -> "false",
-      s"$verbalLeaseLength.years"  -> "3",
-      s"$verbalLeaseLength.months" -> "4"
-    )
-    val verbal = VerbalAgreement(Some(RoughDate(None, Some(5), 2011)), Some(false), Some(MonthsYearDuration(months = 4, years = 3)))
-    val lease  = PageSix(LeaseAgreementType.verbal, None, verbal)
+    "allow a start and open ended value if there is a verbal agreement or one in writing" in {
+      val data   = Map(
+        keys.leaseAgreementType      -> LeaseAgreementType.verbal.toString,
+        s"$verbalStartDate.month"    -> "5",
+        s"$verbalStartDate.year"     -> "2011",
+        verbalRentOpenEnded          -> "false",
+        s"$verbalLeaseLength.years"  -> "3",
+        s"$verbalLeaseLength.months" -> "4"
+      )
+      val verbal = VerbalAgreement(Some(RoughDate(None, Some(5), 2011)), Some(false), Some(MonthsYearDuration(months = 4, years = 3)))
+      val lease  = PageSix(LeaseAgreementType.verbal, None, verbal)
 
-    mustBind(bind(data))(x => assert(x === lease))
-  }
+      mustBind(bind(data))(_ shouldBe lease)
+    }
 
-  it should "require a lease length if the agreement is not open ended for a written contract" in {
-    val data = Map(
-      keys.leaseAgreementType -> LeaseAgreementType.leaseTenancy.toString,
-      writtenRentOpenEnded    -> "false"
-    )
-    val form = bind(data)
+    "require a lease length if the agreement is not open ended for a written contract" in {
+      val data = Map(
+        keys.leaseAgreementType -> LeaseAgreementType.leaseTenancy.toString,
+        writtenRentOpenEnded    -> "false"
+      )
+      val form = bind(data)
 
-    mustContainError(writtenLeaseLength + ".months", "error.writtenAgreement.leaseLength.months.required", form)
-    mustContainError(writtenLeaseLength + ".years", "error.writtenAgreement.leaseLength.years.required", form)
-  }
+      mustContainError(writtenLeaseLength + ".months", "error.writtenAgreement.leaseLength.months.required", form)
+      mustContainError(writtenLeaseLength + ".years", "error.writtenAgreement.leaseLength.years.required", form)
+    }
 
-  it should "require a lease length if the agreement is not open ended for a verbal contract" in {
-    val data = Map(
-      keys.leaseAgreementType -> LeaseAgreementType.verbal.toString,
-      verbalRentOpenEnded     -> "false"
-    )
-    val form = bind(data)
+    "require a lease length if the agreement is not open ended for a verbal contract" in {
+      val data = Map(
+        keys.leaseAgreementType -> LeaseAgreementType.verbal.toString,
+        verbalRentOpenEnded     -> "false"
+      )
+      val form = bind(data)
 
-    mustContainError(verbalLeaseLength + ".months", "error.months.required", form)
-    mustContainError(verbalLeaseLength + ".years", "error.years.required", form)
-  }
+      mustContainError(verbalLeaseLength + ".months", "error.months.required", form)
+      mustContainError(verbalLeaseLength + ".years", "error.years.required", form)
+    }
 
-  it should "require all fields to be mandatory if the lease agreement type is a tenancy agreement" in {
-    val data = Map("leaseAgreementType" -> LeaseAgreementType.leaseTenancy.toString)
-    val form = bind(data)
+    "require all fields to be mandatory if the lease agreement type is a tenancy agreement" in {
+      val data = Map("leaseAgreementType" -> LeaseAgreementType.leaseTenancy.toString)
+      val form = bind(data)
 
-    mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
-    mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
-    mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
-    mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
-  }
+      mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
+      mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
+      mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
+      mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
+      mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
+    }
 
-  it should "require all fields to be mandatory if the lease agreement type is other type of written agreement" in {
-    val data = Map("leaseAgreementType" -> LeaseAgreementType.licenceOther.toString)
-    val form = bind(data)
+    "require all fields to be mandatory if the lease agreement type is other type of written agreement" in {
+      val data = Map("leaseAgreementType" -> LeaseAgreementType.licenceOther.toString)
+      val form = bind(data)
 
-    mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
-    mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
-    mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
-    mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
-    mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
-  }
+      mustContainError(writtenLeaseAgreementHasBreakClause, Errors.leaseAgreementBreakClauseRequired, form)
+      mustContainError(writtenAgreementIsStepped, Errors.leaseAgreementIsSteppedRequired, form)
+      mustContainError(writtenStartDate + ".year", "error.writtenAgreement.startDate.year.required", form)
+      mustContainError(writtenStartDate + ".month", "error.writtenAgreement.startDate.month.required", form)
+      mustContainError(writtenRentOpenEnded, Errors.leaseAgreementOpenEndedRequired, form)
+    }
 
-  it should "return an break clause required error when 'has break clause' is true and there are no break clause details" in {
-    val testData = fullData.updated(keys.leaseAgreementType, LeaseAgreementType.licenceOther.toString) - writtenBreakClauseDetails
-    val form     = bind(testData)
+    "return an break clause required error when 'has break clause' is true and there are no break clause details" in {
+      val testData = fullData.updated(keys.leaseAgreementType, LeaseAgreementType.licenceOther.toString) - writtenBreakClauseDetails
+      val form     = bind(testData)
 
-    mustContainError(writtenBreakClauseDetails, "error.writtenAgreement.breakClauseDetails.required", form)
-  }
+      mustContainError(writtenBreakClauseDetails, "error.writtenAgreement.breakClauseDetails.required", form)
+    }
 
-  it should "return a stepped details error when 'has stepped agreement' is true but there are no stepped agreement details" in {
-    val testData = fullData.updated(
-      writtenAgreementIsStepped,
-      "true"
-    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.month" -
-      s"${keys.writtenAgreement}.steppedDetails[0].stepTo.year"
+    "return a stepped details error when 'has stepped agreement' is true but there are no stepped agreement details" in {
+      val testData = fullData.updated(
+        writtenAgreementIsStepped,
+        "true"
+      ) - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepTo.month" -
+        s"${keys.writtenAgreement}.steppedDetails[0].stepTo.year"
 
-    val res = bind(testData)
-    res.errors.size should be(3)
-  }
+      val res = bind(testData)
+      res.errors.size shouldBe 3
+    }
 
-  it should "return a stepped details error when 'has stepped agreement' is true and stepped agreement details are missing" in {
-    val testData = fullData.updated(
-      writtenAgreementIsStepped,
-      "true"
-    ) - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.month" -
-      s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.year"
+    "return a stepped details error when 'has stepped agreement' is true and stepped agreement details are missing" in {
+      val testData = fullData.updated(
+        writtenAgreementIsStepped,
+        "true"
+      ) - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.day" - s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.month" -
+        s"${keys.writtenAgreement}.steppedDetails[0].stepFrom.year"
 
-    val res = bind(testData)
-    res.errors.size should be(3)
-  }
+      val res = bind(testData)
+      res.errors.size shouldBe 3
+    }
 
-  it should "return a stepped price details error if 'has stepped agreement' is true but stepped agreement price details are missing" in {
-    val testData = fullData.updated(writtenAgreementIsStepped, "true") - getKeyStepped(0).amount
+    "return a stepped price details error if 'has stepped agreement' is true but stepped agreement price details are missing" in {
+      val testData = fullData.updated(writtenAgreementIsStepped, "true") - getKeyStepped(0).amount
 
-    val form = bind(testData)
-    mustContainError(s"${keys.writtenAgreement}.steppedDetails[0].amount", "error.required.writtenAgreement.steppedDetails.amount", form)
-  }
+      val form = bind(testData)
+      mustContainError(s"${keys.writtenAgreement}.steppedDetails[0].amount", "error.required.writtenAgreement.steppedDetails.amount", form)
+    }
 
-  it should "require a lease length when a rent agreed date is supplied" in {
-    val d = fullData - writtenLeaseYears - writtenLeaseMonths
+    "require a lease length when a rent agreed date is supplied" in {
+      val d    = fullData - writtenLeaseYears - writtenLeaseMonths
+      val form = bind(d)
 
-    val form = bind(d)
-    mustContainError(writtenLeaseYears, "error.writtenAgreement.leaseLength.years.required", form)
-    mustContainError(writtenLeaseMonths, "error.writtenAgreement.leaseLength.months.required", form)
-    form.errors.size should be(2)
-  }
+      mustContainError(writtenLeaseYears, "error.writtenAgreement.leaseLength.years.required", form)
+      mustContainError(writtenLeaseMonths, "error.writtenAgreement.leaseLength.months.required", form)
+      form.errors.size shouldBe 2
+    }
 
-  it should "not require a lease length when no rent agreed date is supplied" in {
-    val d = fullData.updated(writtenRentOpenEnded, "true") - writtenLeaseYears - writtenLeaseMonths
+    "not require a lease length when no rent agreed date is supplied" in {
+      val d = fullData.updated(writtenRentOpenEnded, "true") - writtenLeaseYears - writtenLeaseMonths
 
-    doesNotContainErrors(bind(d))
-  }
+      doesNotContainErrors(bind(d))
+    }
 
-  it should "not validate verbal contract fields if a written agreement is chosen" in {
-    val d = fullData.updated(verbalRentOpenEnded, "false") - verbalLeaseYears - verbalLeaseMonths
+    "not validate verbal contract fields if a written agreement is chosen" in {
+      val d = fullData.updated(verbalRentOpenEnded, "false") - verbalLeaseYears - verbalLeaseMonths
 
-    doesNotContainErrors(bind(d))
-  }
+      doesNotContainErrors(bind(d))
+    }
 
-  it should "validate the lease agreement start date as a date in the past" in
-    validatePastDate(writtenStartDate, pageSixForm, fullData, ".writtenAgreement.startDate")
+    "validate the lease agreement start date as a date in the past" in
+      validatePastDate(writtenStartDate, pageSixForm, fullData, ".writtenAgreement.startDate")
 
-  it should "validate the lease duration" in
-    validatesDuration(writtenLeaseLength, pageSixForm, fullData, ".writtenAgreement.leaseLength")
+    "validate the lease duration" in
+      validatesDuration(writtenLeaseLength, pageSixForm, fullData, ".writtenAgreement.leaseLength")
 
-  it should "validate the break clause details as free text" in
-    validateLettersNumsSpecCharsUptoLength(writtenBreakClauseDetails, 124, pageSixForm, fullData, Some("error.writtenAgreement.breakClauseDetails.maxLength"))
+    "validate the break clause details as free text" in
+      validateLettersNumsSpecCharsUptoLength(writtenBreakClauseDetails, 124, pageSixForm, fullData, Some("error.writtenAgreement.breakClauseDetails.maxLength"))
 
-  it should "validate stepped rent amount as currency allowing non-negative amounts" in
-    validateCurrency(getKeyStepped(0).amount, pageSixForm, fullData, ".writtenAgreement.steppedDetails.amount")
+    "validate stepped rent amount as currency allowing non-negative amounts" in
+      validateCurrency(getKeyStepped(0).amount, pageSixForm, fullData, ".writtenAgreement.steppedDetails.amount")
 
-  it should "validate stepped rent from date as a date" in {
-    val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> nowInUK.plusYears(1).getYear.toString)
-    val fieldSeq = Seq(getKeyStepped(0).stepFrom, getKeyStepped(0).stepTo)
-    validateDate(fieldSeq, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
-  }
+    "validate stepped rent from date as a date" in {
+      val formData = fullData + (getKeyStepped(0).stepTo + ".year" -> nowInUK.plusYears(1).getYear.toString)
+      val fieldSeq = Seq(getKeyStepped(0).stepFrom, getKeyStepped(0).stepTo)
 
-  it should "validate the second stepped rent step amount as currency" in
-    validateCurrency(getKeyStepped(0).amount, pageSixForm, fullDataWithNoOverlap, ".writtenAgreement.steppedDetails.amount")
+      validateDate(fieldSeq, pageSixForm, formData, ".writtenAgreement.steppedDetails.stepFrom")
+    }
 
-  it should "not allow more than 7 stepped rents" in {
-    val with7SteppedRents = addSteppedRents(6, fullData)
-    mustBind(bind(with7SteppedRents))(_ => ())
+    "validate the second stepped rent step amount as currency" in
+      validateCurrency(getKeyStepped(0).amount, pageSixForm, fullDataWithNoOverlap, ".writtenAgreement.steppedDetails.amount")
 
-    val with8SteppedRents = addSteppedRents(7, fullData)
-    val form              = bind(with8SteppedRents)
-    mustOnlyContainError(s"${keys.writtenAgreement}.steppedDetails", Errors.tooManySteppedRents, form)
-  }
+    "not allow more than 7 stepped rents" in {
+      val with7SteppedRents = addSteppedRents(6, fullData)
+      mustBind(bind(with7SteppedRents))(_ => ())
 
-  it should "validate the step to date is not before the step from date" in {
-    val data = fullDataWithNoOverlap.updated(getKeyStepped(0).stepFrom + ".year", "2019")
-    val f    = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateIsAfterFromDate, f)
-  }
+      val with8SteppedRents = addSteppedRents(7, fullData)
+      val form              = bind(with8SteppedRents)
+      mustOnlyContainError(s"${keys.writtenAgreement}.steppedDetails", Errors.tooManySteppedRents, form)
+    }
 
-  it should "validate the stepped rent dates do not overlap" in {
-    val data = fullDataWithNoOverlap.updated(getKeyStepped(1).stepFrom + ".year", "2020")
-    val f    = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepTo.day", Errors.toDateIsAfterFromDate, f)
-  }
+    "validate the step to date is not before the step from date" in {
+      val data = fullDataWithNoOverlap.updated(getKeyStepped(0).stepFrom + ".year", "2019")
+      val f    = bind(data)
 
-  it should "validate that step to rent year is no more than 10 years ahead" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2011")
-    val f    = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
-  }
+      mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateIsAfterFromDate, f)
+    }
 
-  it should "validate that step to rent month is no more than 10 years ahead" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "2")
-    val f    = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
-  }
+    "validate the stepped rent dates do not overlap" in {
+      val data = fullDataWithNoOverlap.updated(getKeyStepped(1).stepFrom + ".year", "2020")
+      val f    = bind(data)
 
-  it should "validate that step to rent day is no more than 10 years ahead" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "31")
-    val f    = bind(data)
-    mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
-  }
+      mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[1].stepTo.day", Errors.toDateIsAfterFromDate, f)
+    }
 
-  it should "not provide an error when the stepped from and stepped to day is within 10 years" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "1")
-    val f    = bind(data)
-    doesNotContainErrors(f)
-  }
+    "validate that step to rent year is no more than 10 years ahead" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2011")
+      val f    = bind(data)
 
-  it should "not provide an error when the stepped from and stepped to month is within 10 years" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "1")
-    val f    = bind(data)
-    doesNotContainErrors(f)
-  }
+      mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
+    }
 
-  it should "not provide an error when the stepped from and stepped to years are within 10 years" in {
-    val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2005")
-    val f    = bind(data)
-    doesNotContainErrors(f)
+    "validate that step to rent month is no more than 10 years ahead" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "2")
+      val f    = bind(data)
+
+      mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
+    }
+
+    "validate that step to rent day is no more than 10 years ahead" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "31")
+      val f    = bind(data)
+
+      mustContainPrefixedError(s"${keys.writtenAgreement}.steppedDetails[0].stepTo.day", Errors.toDateToFarFuture, f)
+    }
+
+    "not provide an error when the stepped from and stepped to day is within 10 years" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".day", "1")
+      val f    = bind(data)
+
+      doesNotContainErrors(f)
+    }
+
+    "not provide an error when the stepped from and stepped to month is within 10 years" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".month", "1")
+      val f    = bind(data)
+
+      doesNotContainErrors(f)
+    }
+
+    "not provide an error when the stepped from and stepped to years are within 10 years" in {
+      val data = dataOverTenYears.updated(getKeyStepped(0).stepTo + ".year", "2005")
+      val f    = bind(data)
+
+      doesNotContainErrors(f)
+    }
   }
 
   object TestData:

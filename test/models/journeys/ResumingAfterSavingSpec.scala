@@ -16,31 +16,30 @@
 
 package models.journeys
 
-import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import utils.SummaryBuilder.*
 import models.pages.Summary
 import org.scalatest.prop.{TableFor1, TableFor2}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.SummaryBuilder.*
 
-class ResumingAfterSavingSpec extends AnyFlatSpec with should.Matchers with TableDrivenPropertyChecks:
+class ResumingAfterSavingSpec extends BaseSpec:
 
   import TestData.*
 
-  behavior of "Page to resume at"
+  "pageToResumeAt" should {
+    "return summary page when resuming complete but undeclared submissions" in
+      forAll(completeJourneys) { cj =>
+        Journey.pageToResumeAt(cj) shouldBe SummaryPage
+      }
 
-  it should "return summary page when resuming complete but undeclared submissions" in
-    forAll(completeJourneys) { cj =>
-      assert(Journey.pageToResumeAt(cj) === SummaryPage)
+    "return earliest incomplete page when resuming journeys for incomplete submissions" in
+      forAll(incompleteJourneys) { case (journey, page) =>
+        Journey.pageToResumeAt(journey) shouldBe PageToGoTo(page)
+      }
+
+    "return to page one when it has been made invalid by editing when resuming complete but undeclared submissions" in {
+      Journey.pageToResumeAt(completeShortPathJourneyWithEditedPageOne) shouldBe PageToGoTo(1)
     }
-
-  it should "return earliest incomplete page when resuming journeys for incomplete submissions" in
-    forAll(incompleteJourneys) { case (journey, page) =>
-      assert(Journey.pageToResumeAt(journey) === PageToGoTo(page))
-    }
-
-  it should "return to page one when it has been made invalid by editing when resuming complete but undeclared submissions" in
-    assert(Journey.pageToResumeAt(completeShortPathJourneyWithEditedPageOne) === PageToGoTo(1))
+  }
 
   object TestData:
     val completeJourneys: TableFor1[Summary] = Table("journey", completeShortPathJourney, completeFullPathJourney)

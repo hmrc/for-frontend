@@ -16,76 +16,78 @@
 
 package form
 
+import form.PageFiveForm.*
 import models.pages.PageFive
 import models.serviceContracts.submissions.LandlordConnectionType
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.data.Form
+import uk.gov.hmrc.vo.unit.test.BaseSpec
+import utils.FormBindingTestAssertions.*
+import utils.MappingSpecs.*
 
-class PageFiveMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageFiveMappingSpec extends BaseSpec:
 
-  import PageFiveForm.*
   import TestData.*
-  import utils.FormBindingTestAssertions.*
-  import utils.MappingSpecs.*
 
-  "PageFive form" should "bind with the fields and not return issues" in
-    mustBind(bind(baseData))(_ => ())
+  "PageFiveForm" should {
+    "bind with the fields and not return issues" in
+      mustBind(bind(baseData))(_ => ())
 
-  it should "require the field landlordFulName" in {
-    val data = baseData - "landlordFullName"
-    val form = bind(data)
+    "require the field landlordFulName" in {
+      val data = baseData - "landlordFullName"
+      val form = bind(data)
 
-    mustContainError("landlordFullName", "error.landlordFullName.required", form)
-  }
+      mustContainError("landlordFullName", "error.landlordFullName.required", form)
+    }
 
-  it should "allow letters, numbers, spaces and special chars with upto 50 chars for landlord's name" in
-    validateFullName(pageFiveForm, baseData, "landlordFullName", Some("error.landlordFullName.maxLength"))
+    "allow letters, numbers, spaces and special chars with upto 50 chars for landlord's name" in
+      validateFullName(pageFiveForm, baseData, "landlordFullName", Some("error.landlordFullName.maxLength"))
 
-  it should "allow address to be optional" in {
-    val data = baseData -- addressFields
-    mustBind(bind(data))(x => assert(x.landlordAddress.isDefined === false))
-  }
+    "allow address to be optional" in {
+      val data = baseData -- addressFields
 
-  it should "allow letters, numbers, spaced and special chars up to 100 chars for connection details" in
-    validateLettersNumsSpecCharsUptoLength("landlordConnectText", 100, pageFiveForm, baseData, Some("error.landlordConnectText.maxLength"))
+      mustBind(bind(data))(_.landlordAddress.isDefined shouldBe false)
+    }
 
-  it should "bind with the fields and return issues when connection type selection missing" in {
-    val data = baseData - "landlordConnectType"
-    val form = bind(data)
+    "allow letters, numbers, spaced and special chars up to 100 chars for connection details" in
+      validateLettersNumsSpecCharsUptoLength("landlordConnectText", 100, pageFiveForm, baseData, Some("error.landlordConnectText.maxLength"))
 
-    mustOnlyContainError("landlordConnectType", Errors.LandlordConnectionTypeRequired, form)
-  }
+    "bind with the fields and return issues when connection type selection missing" in {
+      val data = baseData - "landlordConnectType"
+      val form = bind(data)
 
-  it should "return required error if landlord connection text is missing and connection type is other" in {
-    val data = baseData - "landlordConnectText"
-    val form = bind(data)
+      mustOnlyContainError("landlordConnectType", Errors.LandlordConnectionTypeRequired, form)
+    }
 
-    mustContainError("landlordConnectText", "error.landlordConnectText.required", form)
-  }
+    "return required error if landlord connection text is missing and connection type is other" in {
+      val data = baseData - "landlordConnectText"
+      val form = bind(data)
 
-  it should "bind with the fields and return with no errors" in {
-    val data = baseData
-    val form = bind(data)
+      mustContainError("landlordConnectText", "error.landlordConnectText.required", form)
+    }
 
-    doesNotContainErrors(form)
-  }
+    "bind with the fields and return with no errors" in {
+      val data = baseData
+      val form = bind(data)
 
-  it should "never return validation errors for address" in {
-    val data = baseData
-      .updated("original.landlordAddress.buildingNameNumber", "1")
-      .updated("original.landlordAddress.street1", "The Road")
-      .updated("original.landlordAddress.postcode", "AA11 1AA")
-    val form = bind(data)
+      doesNotContainErrors(form)
+    }
 
-    doesNotContainErrors(form)
-  }
+    "never return validation errors for address" in {
+      val data = baseData
+        .updated("original.landlordAddress.buildingNameNumber", "1")
+        .updated("original.landlordAddress.street1", "The Road")
+        .updated("original.landlordAddress.postcode", "AA11 1AA")
+      val form = bind(data)
 
-  it should "not return validation errors for even when postcode alone is filled out" in {
-    val data = baseData - addressBuildingName._1 - addressStreet1._1 - addressStreet2._1
-    val form = bind(data)
+      doesNotContainErrors(form)
+    }
 
-    doesNotContainErrors(form)
+    "not return validation errors for even when postcode alone is filled out" in {
+      val data = baseData - addressBuildingName._1 - addressStreet1._1 - addressStreet2._1
+      val form = bind(data)
+
+      doesNotContainErrors(form)
+    }
   }
 
   object TestData:

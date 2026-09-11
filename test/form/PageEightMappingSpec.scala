@@ -16,64 +16,66 @@
 
 package form
 
+import form.PageEightForm.pageEightForm
 import models.serviceContracts.submissions.RentAgreement
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import org.scalatest.Assertion
 import play.api.data.{Form, FormError}
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.FormBindingTestAssertions.*
 
-class PageEightMappingSpec extends AnyFlatSpec with should.Matchers:
+class PageEightMappingSpec extends BaseSpec:
 
-  import PageEightForm._
+  private val wasFixedBetween: (String, String)    = "wasRentFixedBetween" -> "false"
+  private val notReviewRentFixed: (String, String) = "notReviewRentFixed"  -> "interim"
+  private val rentSetBy: (String, String)          = "rentSetByType"       -> "newLease"
 
-  val wasFixedBetween: (String, String)    = "wasRentFixedBetween" -> "false"
-  val notReviewRentFixed: (String, String) = "notReviewRentFixed"  -> "interim"
-  val rentSetBy: (String, String)          = "rentSetByType"       -> "newLease"
+  private val baseData: Map[String, String] = Map(wasFixedBetween, notReviewRentFixed, rentSetBy)
 
-  val baseData: Map[String, String] = Map(wasFixedBetween, notReviewRentFixed, rentSetBy)
-
-  def bind(formData: Map[String, String]): Form[RentAgreement] =
+  private def bind(formData: Map[String, String]): Form[RentAgreement] =
     pageEightForm.bind(formData).convertGlobalToFieldErrors()
 
-  def containsError(errors: Seq[FormError], key: String, message: String): Boolean =
+  private def containsError(errors: Seq[FormError], key: String, message: String): Assertion =
     val exists = errors.exists { err =>
       err.key == key && err.messages.contains(message)
     }
     exists shouldBe true
-    exists
 
-  "PageEightData" should "bind with the fields and not return issues" in {
-    val res = bind(baseData)
-    res.errors.isEmpty shouldBe true
-  }
+  "Page eight data" should {
+    "bind with the fields and not return issues" in {
+      val res = bind(baseData)
 
-  "PageEightData" should
+      res.errors.isEmpty shouldBe true
+    }
+
     "bind with the fields and return no issues when no value input for the way that rent was fixed, when it is between yourself and landlord" in {
       val data = baseData.updated("wasRentFixedBetween", "true") - "notReviewRentFixed"
       val res  = bind(data)
+
       res.errors.isEmpty shouldBe true
-      res.errors.size    shouldBe 0
     }
 
-  "PageEightData" should "bind with the fields and return issues when no selection is chosen for if the rent was fixed between you and landlord" in {
-    val data = baseData - "wasRentFixedBetween"
-    val res  = bind(data)
-    res.errors.isEmpty shouldBe false
-    res.errors.size    shouldBe 1
-    containsError(res.errors, "wasRentFixedBetween", Errors.wasTheRentFixedBetweenRequired)
-  }
+    "bind with the fields and return issues when no selection is chosen for if the rent was fixed between you and landlord" in {
+      val data = baseData - "wasRentFixedBetween"
+      val res  = bind(data)
 
-  "PageEightData" should
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
+      containsError(res.errors, "wasRentFixedBetween", Errors.wasTheRentFixedBetweenRequired)
+    }
+
     "not bind with the fields and return issues when no value input for the way that rent was fixed, when not between yourself and landlord" in {
       val data = baseData - "notReviewRentFixed"
       val res  = bind(data).convertGlobalToFieldErrors()
+
       mustContainError("notReviewRentFixed", Errors.whoWasTheRentFixedBetweenRequired, res)
     }
 
-  "PageEightData" should "bind with the fields and return issues when no value input for the way that rent was set" in {
-    val data = baseData - "rentSetByType"
-    val res  = bind(data)
-    res.errors.isEmpty shouldBe false
-    res.errors.size    shouldBe 1
-    containsError(res.errors, "rentSetByType", Errors.isThisRentRequired)
+    "bind with the fields and return issues when no value input for the way that rent was set" in {
+      val data = baseData - "rentSetByType"
+      val res  = bind(data)
+
+      res.errors.isEmpty shouldBe false
+      res.errors.size    shouldBe 1
+      containsError(res.errors, "rentSetByType", Errors.isThisRentRequired)
+    }
   }

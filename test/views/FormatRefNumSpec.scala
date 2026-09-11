@@ -16,16 +16,17 @@
 
 package views
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import template.FormatRefNum
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class FormatRefNumSpec extends AnyFlatSpec with should.Matchers:
+class FormatRefNumSpec extends BaseSpec:
 
-  behavior of "format ref num"
+  "FormatRefNum" should {
+    "display an 8-digit-prefix ref number as xxxxxxxx/xxx" in {
+      FormatRefNum("12345678900") shouldBe "12345678/900"
+    }
 
-  it should "display an 8-digit-prefix ref number as xxxxxxxx/xxx" in
-    assert(FormatRefNum("12345678900") === "12345678/900")
-
-  it should "display a 7-digit-prefix ref number as xxxxxxx/xxx" in
-    assert(FormatRefNum("1234567890") === "1234567/890")
+    "display a 7-digit-prefix ref number as xxxxxxx/xxx" in {
+      FormatRefNum("1234567890") shouldBe "1234567/890"
+    }
+  }

@@ -21,14 +21,15 @@ import models.FORLoginResponse
 import models.serviceContracts.submissions.Address
 import security.LoginToHOD.{Postcode, StartTime}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 import useCases.ReferenceNumber
-import utils.UnitTest
+import utils.BehaviourVerification
 
 import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class LoginToHODSpec extends UnitTest:
+class LoginToHODSpec extends BaseSpec with BehaviourVerification:
 
   import TestData.*
 
@@ -43,14 +44,16 @@ class LoginToHODSpec extends UnitTest:
           respondWith(auth, refNum)(Some(savedDoc)),
           set[HeaderCarrier, ReferenceNumber, Document, Unit](updated = _)
         )
-      val r                                                                = await(l.apply(refNum, postcode, now))
+
+      val r = l.apply(refNum, postcode, now).futureValue
 
       "return the saved document" in {
         r shouldBe DocumentPreviouslySaved(loginResponse.forAuthToken, loginResponse.address)
       }
 
-      "loads an empty document with the retrieved credentials and the current time as the journey start time into the session in case the user cannot login or wants to start again" in
-        assert(updated === (hc, refNum, Document(refNum, now, address = Some(loginResponse.address))))
+      "loads an empty document in case the user cannot login or wants to start again" in {
+        updated shouldBe (hc, refNum, Document(refNum, now, address = Some(loginResponse.address)))
+      }
     }
 
     "there is no previously stored document" should {
@@ -61,14 +64,16 @@ class LoginToHODSpec extends UnitTest:
           none,
           set[HeaderCarrier, ReferenceNumber, Document, Unit](updated = _)
         )
-      val r                                                                = await(l.apply(refNum, postcode, now))
+
+      val r = l.apply(refNum, postcode, now).futureValue
 
       "indicate there is no saved document" in {
         r shouldBe NoExistingDocument(loginResponse.forAuthToken, loginResponse.address)
       }
 
-      "loads an empty document with the retrieved credentials into the session" in
-        assert(updated === (hc, refNum, Document(refNum, now, address = Some(loginResponse.address))))
+      "loads an empty document with the retrieved credentials into the session" in {
+        updated shouldBe (hc, refNum, Document(refNum, now, address = Some(loginResponse.address)))
+      }
     }
   }
 

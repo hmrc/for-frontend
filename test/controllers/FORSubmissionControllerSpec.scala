@@ -20,14 +20,13 @@ import actions.RefNumRequest
 import form.persistence.FormDocumentRepository
 import models.serviceContracts.submissions.Submission
 import org.scalatest.GivenWhenThen
-import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.{FakeRequest, Injecting}
+import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import useCases.SubmitBusinessRentalInformation
 import utils.stubs.StubFormDocumentRepoProvider
 
@@ -36,26 +35,33 @@ import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with GivenWhenThen with GuiceOneAppPerSuite with Injecting:
+class FORSubmissionControllerSpec extends BaseAppSpec with GivenWhenThen:
 
-  import TestData.*
+  private val refNum    = "adfiwerq08342kfad"
+  private val sessionId = "sessionid"
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
+    .configure(
+      "auditing.enabled" -> false,
+      "metrics.enabled"  -> false
+    )
     .overrides(
       bind[SubmitBusinessRentalInformation].to[StubSubmitBRI].in[Singleton],
       bind[FormDocumentRepository].toProvider[StubFormDocumentRepoProvider].in[Singleton]
     )
-    .configure(Map("auditing.enabled" -> false, "metrics.enabled" -> false)).build()
+    .build()
 
-  def submit: StubSubmitBRI = inject[SubmitBusinessRentalInformation].asInstanceOf[StubSubmitBRI]
+  private val submit: StubSubmitBRI               = inject[SubmitBusinessRentalInformation].asInstanceOf[StubSubmitBRI]
+  private val controller: FORSubmissionController = inject[FORSubmissionController]
 
-  def controller: FORSubmissionController = inject[FORSubmissionController]
+  "When a submission is received and the declaration has been agreed to" should {
+    "return 302 response redirecting to the confirmation page" in {
+      val request = FakeRequest()
+        .withSession("refNum" -> refNum)
+        .withFormUrlEncodedBody("declaration" -> "true")
+        .withHeaders(HeaderNames.xSessionId -> sessionId)
 
-  "When a submission is received and the declaration has been agreed to" should
-    "A 302 response redirecting to the confirmation page is returned" in {
-      val request  =
-        FakeRequest().withSession("refNum" -> refNum).withFormUrlEncodedBody("declaration" -> "true").withHeaders(HeaderNames.xSessionId -> sessionId)
-      val response = Await.result(controller.submit()(request), 5 seconds)
+      val response = controller.submit()(request).futureValue
 
       response.header.status                should equal(302)
       response.header.headers("Location") shouldBe controllers.feedback.routes.SurveyController.confirmation.url
@@ -63,20 +69,17 @@ class FORSubmissionControllerSpec extends AnyFlatSpec with should.Matchers with 
       And("The Business rental information submission process is initiated")
       submit.assertBRISubmittedFor(refNum)
     }
+  }
 
-  "When a submission is received and the declaration has not been agreed to" should
-    "A redirect to the declaration error page is returned" in {
-
+  "When a submission is received and the declaration has not been agreed to" should {
+    "return redirect to the declaration error page" in {
       val request  = FakeRequest().withSession("refNum" -> refNum).withFormUrlEncodedBody("declaration" -> "false")
       val response = Await.result(controller.submit()(request), 5 seconds)
 
       response.header.status                should equal(302)
       response.header.headers("Location") shouldBe controllers.routes.ApplicationController.declarationError.url
     }
-
-  object TestData:
-    val refNum    = "adfiwerq08342kfad"
-    val sessionId = "sessionid"
+  }
 
 class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers:
 

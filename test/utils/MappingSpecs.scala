@@ -132,7 +132,7 @@ trait DateMappingSpecs:
     containError(field + ".year", s"error$fieldErrorPart.year.required", form, formData)
     yearCanOnlyBe4Digits(field, form, formData)
     yearMustBe1900OrLater(field, form, formData, fieldErrorPart)
-    ignoresLeadingAndTraillingWhitespace(field, form, formData)
+    ignoresLeadingAndTrailingWhitespace(field, form, formData)
 
   private def validateAnyDateStepRent[T](field: Seq[String], form: Form[T], formData: Map[String, String], fieldErrorPart: String): Unit =
     monthCanOnlyBe1to12(field(0), form, formData)
@@ -140,7 +140,7 @@ trait DateMappingSpecs:
     containError(field(0) + ".year", s"error$fieldErrorPart.year.required", form, formData)
     yearCanOnlyBe4Digits(field(0), form, formData)
     yearMustBe1900OrLaterStepRent(field, form, formData, fieldErrorPart)
-    ignoresLeadingAndTraillingWhitespace(field(0), form, formData)
+    ignoresLeadingAndTrailingWhitespace(field(0), form, formData)
 
   private def validateDay[T](field: String, form: Form[T], formData: Map[String, String], fieldErrorPart: String): Unit =
     dayCanOnlyBe1to31(field, form, formData)
@@ -195,7 +195,7 @@ trait DateMappingSpecs:
       doesNotContainErrors(f)
     }
 
-  private def ignoresLeadingAndTraillingWhitespace[T](field: String, form: Form[T], formData: Map[String, String]): Unit =
+  private def ignoresLeadingAndTrailingWhitespace[T](field: String, form: Form[T], formData: Map[String, String]): Unit =
     val yearKey  = field + ".year"
     val monthKey = field + ".month"
 
@@ -497,5 +497,5 @@ trait CommonSpecs:
       val data = formData.updated(field, x)
       val f    = form.bind(data).convertGlobalToFieldErrors()
       doesNotContainErrors(f)
-      assert(f.data(field) === x)
+      f.data(field) shouldBe x
     }
