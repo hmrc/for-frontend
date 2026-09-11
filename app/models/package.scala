@@ -17,6 +17,7 @@
 import models.pages.*
 import models.serviceContracts.submissions.*
 import play.api.libs.json.*
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
 
 package object models:
 
