@@ -36,7 +36,6 @@
     <p class="govuk-body">@messages("label.letter")</p>
 
     @formWithCSRF(action = routes.LoginController.submit, args = Symbol("novalidate") -> "novalidate") {
-        @helper.CSRF.formField
 
         @govukInput(TextField.input(form, "", "referenceNumber", inputWidth = 20))
 

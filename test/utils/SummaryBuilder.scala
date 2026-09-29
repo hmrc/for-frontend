@@ -41,9 +41,10 @@ object SummaryBuilder:
     page11: Option[IncentivesAndPayments] = None,
     page12: Option[PageTwelve] = None,
     page13: Option[PropertyAlterations] = None,
-    page14: Option[OtherFactors] = None
+    page14: Option[OtherFactors] = None,
+    address: Option[Address] = None
   ): Summary =
-    Summary("", nowInUK, page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12, page13, page14)
+    Summary("", nowInUK, page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12, page13, page14, address)
 
   private val editedPageOneForm =
     Map("address.buildingNameNumber" -> "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "address.postcode" -> "BN12 4AX")
@@ -138,7 +139,10 @@ object SummaryBuilder:
   private val pageThirteenData = PropertyAlterations(false, List.empty, None)
   private val pageFourteenData = OtherFactors(false, None)
 
-  val completeShortPathJourney: Summary = SummaryBuilder(Some(pageZeroData), pageOneData, Some(pageTwoData), Some(propertyOwned), Some(propertyNotSublet))
+  val prefilledAddress: Address = Address("001", Some("GORING ROAD, GORING-BY-SEA, WORTHING"), Some("WEST SUSSEX"), "BN12 4AX")
+
+  val completeShortPathJourney: Summary =
+    SummaryBuilder(Some(pageZeroData), pageOneData, Some(pageTwoData), Some(propertyOwned), Some(propertyNotSublet), address = Some(prefilledAddress))
 
   val completeFullPathJourney: Summary = SummaryBuilder(
     Some(pageZeroData),
@@ -155,7 +159,8 @@ object SummaryBuilder:
     Some(pageElevenData),
     Some(pageTwelveData),
     Some(pageThirteenData),
-    Some(pageFourteenData)
+    Some(pageFourteenData),
+    Some(prefilledAddress)
   )
 
   val incompletePageOneJourney: Summary      = SummaryBuilder()

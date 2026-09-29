@@ -43,8 +43,6 @@
 
     @formWithCSRF(action = dataCapturePages.routes.PageController.savePage(0), args = Symbol("novalidate") -> "novalidate") {
 
-        @helper.CSRF.formField
-
         @govukRadios(RadioField.radios(form, "section0", "isRelated", AddressConnectionType.values, labelText = heading))
 
         @govukButton(SubmitButton("continue"))
