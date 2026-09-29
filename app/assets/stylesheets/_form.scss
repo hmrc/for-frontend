@@ -1,6 +1,6 @@
 fieldset {
   border: none;
-  padding: 0px;
+  padding: 0;
 }
 
 .multi-fields-group {
@@ -26,9 +26,11 @@ fieldset {
 }
 
 .print-only {
-  display:none;
+  display: none;
 }
 
 @media print {
-  .print-only {display:block;}
+  .print-only {
+    display: block;
+  }
 }

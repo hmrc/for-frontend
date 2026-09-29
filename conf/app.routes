@@ -5,7 +5,7 @@
 
 GET         /                               controllers.ApplicationController.index
 
-GET         /confirmation                   controllers.feedback.SurveyController.confirmation
+GET         /confirmation                   controllers.ConfirmationController.confirmation
 GET         /declaration                    controllers.ApplicationController.declaration
 GET         /declarationError               controllers.ApplicationController.declarationError
 POST        /declaration                    controllers.FORSubmissionController.submit
@@ -59,15 +59,5 @@ GET         /408                            controllers.ApplicationController.er
 GET         /409                            controllers.ApplicationController.error409
 GET         /410                            controllers.ApplicationController.error410
 GET         /500                            controllers.ApplicationController.error500
-
-# SURVEY
-GET         /survey                         controllers.feedback.SurveyController.onPageView(journey: String)
-POST        /survey                         controllers.feedback.SurveyController.formCompleteFeedback
-
-# IN-PAGE FEEDBACK
-GET         /thankyou-for-your-feedback     controllers.feedback.FeedbackController.feedbackThankyou
-GET 		/feedback           	        controllers.feedback.FeedbackController.feedback
-GET 		/notConnectedFeedback  	        controllers.feedback.FeedbackController.notConnectedFeedback
-POST 		/feedback           	        controllers.feedback.FeedbackController.handleFeedbackSubmit
 
 GET         /important-information          controllers.ApplicationController.importantInformation

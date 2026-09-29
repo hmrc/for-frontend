@@ -11,7 +11,6 @@ login.heading=Enter your reference number
 failedLogin.heading=Login error
 lockedOut.heading=Locked out
 button.submit.label = Submit
-button.submitFeedback.label = Submit your feedback
 optional=(optional)
 help.date.month.year=For example, {0}
 help.optional.date.month.year=For example, {0} (optional)
@@ -796,9 +795,6 @@ confirm.copy.list.2=You do not need to contact us, but we may need to contact yo
 label.quoteRefNum=If you have any questions about your form send an email, quoting your reference number {0}, to
 label.formHelpEmail=formhelpvo@hmrc.gov.uk
 label.submitAnotherForm=Submit another form
-label.FeedbackLastPage=To help us improve our services please provide your feedback by clicking here
-label.giveFeedback=Click here to send us feedback
-label.feedback.headingAfterSubmitting=Feedback
 label.finish=Finish
 label.satisfactionSurvey=Overall, how would you describe your experience with the form?
 label.satisfaction=Overall, how would you describe your experience with the form?
@@ -808,11 +804,8 @@ label.detailsOptional=How can we improve this service? (Optional)
 hint.limit=Limit is 1200 characters
 text.survey.bottomCopy=Don’t include any personal or financial information, for example your National Insurance or credit card numbers.
 text.survey.bottomImprove=To help us improve this service, include as much information as possible. For example if a question was confusing, let us know which one.
-confirm.link.feedback=What did you think of this service? (takes 30 seconds)
-confirm.link.feedbackNoSeconds=What did you think of this service?
-#SURVEY THANKYOU
-###############################
-heading.feedback.thankyou=Thank you for your feedback
+feedback.link.text = What did you think of this service?
+feedback.link.legend = (takes 30 seconds)
 
 #DECLARATION
 ###############################
@@ -907,35 +900,12 @@ heading.summary.pdf.footnote=This is a Notice served under paragraph 5(1) of sch
 
 #FEEDBACK
 ###############################
-heading.giveFeedback=Give feedback for rent and lease details
-copy.giveFeedback=Leave your suggestions or comments about our service.
-link.feedback=Feedback
 label.help.link=Report a problem with this page
 label.help.title=Page help
 copy.form.help=If you need help completing this form, tell us what the problem is in the comments section.
 copy.form.help.dont.include=Don’t include any personal or financial information (such as your rent details).
 copy.form.help.thankyou=We have received your request. If you have asked for help we’ll be in touch shortly.
-label.feedback.p1=We use feedback to make our services better.
-copy.feedback=If you need help completing this form, use the ‘Get help with this form’ link on each page.
-label.feedback.error=There was an error sending your feedback.
-copy.form.help.thankyouvacated=Thank you for submitting this feedback, there will be no need for you to continue with the on-line form and we will contact you if we need more information.
-
-#Feedback page
-label.feedback.heading=Give Feedback
-copy.feedback.thankyou=Thank you for your feedback
 copy.feedback.anotherForm=Submit another form
-feedback.satisfaction.label=Overall, how did you feel about this service?
-feedback.rating.5=Very satisfied
-feedback.rating.4=Satisfied
-feedback.rating.3=Neither satisfied or dissatisfied
-feedback.rating.2=Dissatisfied
-feedback.rating.1=Very dissatisfied
-label.feedback.comments=How could we improve this service? (optional)
-feedback.comments.hint=Do not include any personal or financial information. For example, your National Insurance or credit card numbers
-feedback.comments.label=Comments (optional)
-
-feedback.rating.required=Select how satisfied you are with this service
-feedback.commments.maxLength=Comments must be 1200 characters or fewer
 
 #VACATED FORM
 ###############################

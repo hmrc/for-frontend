@@ -11,7 +11,6 @@ login.heading=Rhowch eich cyfeirnod
 failedLogin.heading=Gwall mewngofnodi
 lockedOut.heading=Wedi eich cloi allan
 button.submit.label = Cyflwyno
-button.submitFeedback.label = Cyflwyno eich adborth
 optional=(dewisol)
 help.date.month.year=Er enghraifft, {0}
 help.optional.date.month.year=Er enghraifft, {0} (dewisol)
@@ -812,8 +811,6 @@ confirm.copy.list.2=Nid oes angen i chi gysylltu â ni, ond efallai y bydd angen
 
 label.quoteRefNum=gan ddyfynnu eich cyfeirnod {0}.
 label.submitAnotherForm=Cyflwyno ffurflen arall
-label.feedback.headingAfterSubmitting=Adborth
-label.submitAnotherForm=Cyflwyno ffurflen arall
 
 label.satisfactionSurvey=Yn gyffredinol, sut y byddech yn disgrifio’ch profiad gyda’r ffurflen hon?
 label.satisfactionSurveyComments=Sut y gallwn wella’r gwasanaeth hwn? (dewisol)
@@ -823,7 +820,8 @@ label.satisfaction.1=Ar y cyfan, sut oeddwch chi’n teimlo ynglŷn â’r gwasa
 hint.limit=Yr uchafswm yw 1200 o nodau
 text.survey.bottomCopy=Peidiwch â chynnwys unrhyw wybodaeth bersonol nac ariannol, er enghraifft eich rhif Yswiriant Gwladol neu rifau cardiau credyd.
 text.survey.bottomImprove=Er mwyn ein helpu i wella’r gwasanaeth hwn, dylech gynnwys cymaint o wybodaeth â phosibl. Er enghraifft, os oedd cwestiwn yn ddryslyd, gadewch i ni wybod pa un.
-confirm.link.feedback=Beth oeddech chi’n feddwl o’r gwasanaeth hwn? (mae’n cymryd 30 eiliad)
+feedback.link.text = Beth yw eich barn am y gwasanaeth hwn?
+feedback.link.legend = (bydd yn cymryd 30 eiliad)
 
 #DECLARATION
 ###############################
@@ -918,32 +916,12 @@ heading.summary.pdf.footnote=Hysbysiad yw hwn o dan baragraff 5(1) o atodlen 9 i
 
 #FEEDBACK
 ###############################
-heading.giveFeedback=Rhoi adborth ar gyfer manylion rhent a phrydles
-copy.giveFeedback=Gadewch awgrymiadau neu sylwadau ynglŷn â’n gwasanaeth.
-link.feedback=Adborth
 label.help.link=Rhowch wybod am broblem gyda’r dudalen hon
 label.help.title=Help ar gyfer y dudalen
 copy.form.help=Os oes angen help arnoch i gwblhau’r ffurflen hon, dywedwch wrthym beth yw’r broblem yn yr adran sylwadau.
 copy.form.help.dont.include=Peidiwch â chynnwys unrhyw wybodaeth bersonol na gwybodaeth ariannol (fel eich manylion rhent).
 copy.form.help.thankyou=Rydym wedi cael eich cais. Os ydych wedi gofyn am help, byddwn yn cysylltu â chi yn y man.
-label.feedback.heading=Adborth
-label.feedback.p1=Rydym yn defnyddio adborth er mwyn gwella ein gwasanaethau.
-copy.feedback=Os oes angen help arnoch i gwblhau’r ffurflen hon, defnyddiwch y ddolen ‘Cael help gyda’r dudalen hon’ sydd ar  bob tudalen.
-copy.feedback.thankyou=Diolch am eich adborth
 copy.feedback.anotherForm=Cyflwyno ffurflen arall
-label.feedback.error=Cafwyd gwall wrth anfon eich adborth.
-#Feedback form
-feedback.satisfaction.label=Ar y cyfan, sut oeddwch chi’n teimlo ynglŷn â’r gwasanaeth hwn?
-feedback.rating.5=Bodlon iawn
-feedback.rating.4=Bodlon
-feedback.rating.3=Ddim yn fodlon nac yn anfodlon
-feedback.rating.2=Anfodlon
-feedback.rating.1=Anfodlon iawn
-label.feedback.comments=Sut fedrwn ni wella’r gwasanaeth hwn? (dewisol)
-feedback.comments.hint=Peidiwch â chynnwys unrhyw wybodaeth bersonol nac ariannol. Er enghraifft, eich rhif Yswiriant Gwladol neu rif eich cerdyn credyd.
-feedback.comments.label=Sylwadau (dewisol)
-feedback.rating.required=Dewiswch pa mor fodlon ydych chi gyda’r gwasanaeth hwn
-feedback.commments.maxLength=Rhaid i’r sylwadau fod yn 1200 nod neu lai
 
 #VACATED FORM
 ###############################
