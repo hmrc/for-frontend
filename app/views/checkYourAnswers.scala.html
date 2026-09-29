@@ -41,7 +41,10 @@
         @govukButton(LinkButton("continue", routes.ApplicationController.declaration.url))
         @govukButton(LinkSecondaryButton("save", routes.SaveForLaterController.saveForLater(request.path).url))
     </div>
-    <a href="#" class="govuk-link print-link">@messages("label.print.printorsave")</a>
+
+    <p class="govuk-body">
+        <a href="#" class="govuk-link print-link">@messages("label.print.printorsave")</a>
+    </p>
 
     @views.html.includes.signFooter(summary)
 
