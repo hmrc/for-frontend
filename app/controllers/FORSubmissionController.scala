@@ -49,9 +49,7 @@ class FORSubmissionController @Inject() (
     val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     for {
       _ <- submitBusinessRentalInformation(refNum)(using hc, request)
-    } yield
-      // Metrics.submissions.mark() //TODO - Solve metrics
-      Found(controllers.feedback.routes.SurveyController.confirmation.url)
+    } yield Found(routes.ConfirmationController.confirmation.url)
   } recoverWith { case UpstreamErrorResponse(_, 409, _, _) => Conflict(errorView(409)) }
 
   private def rejectSubmission = Future.successful {

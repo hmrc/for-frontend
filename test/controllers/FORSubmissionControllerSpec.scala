@@ -64,7 +64,7 @@ class FORSubmissionControllerSpec extends BaseAppSpec with GivenWhenThen:
       val response = controller.submit()(request).futureValue
 
       response.header.status                should equal(302)
-      response.header.headers("Location") shouldBe controllers.feedback.routes.SurveyController.confirmation.url
+      response.header.headers("Location") shouldBe controllers.routes.ConfirmationController.confirmation.url
 
       And("The Business rental information submission process is initiated")
       submit.assertBRISubmittedFor(refNum)

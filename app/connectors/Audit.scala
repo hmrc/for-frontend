@@ -17,14 +17,12 @@
 package connectors
 
 import com.google.inject.ImplementedBy
-import controllers.feedback.Survey.SurveyFeedback
 import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.Submission
 import play.api.Configuration
 import play.api.i18n.Messages
 import play.api.libs.json.*
-import play.api.mvc.RequestHeader
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions.*
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
@@ -34,7 +32,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 @ImplementedBy(classOf[ForAuditConnector])
 trait Audit extends AuditConnector:
@@ -71,33 +68,6 @@ trait Audit extends AuditConnector:
     val sub = implicitly[OWrites[Submission]].writes(submission)
     val de  = ExtendedDataEvent(auditSource = AUDIT_SOURCE, auditType = event, detail = sub)
     sendExtendedEvent(de)
-
-  def sendSurveyFeedback(f: SurveyFeedback, refNum: String)(using hc: HeaderCarrier, request: RequestHeader): Future[AuditResult] =
-    apply(
-      "SurveySatisfaction",
-      Map("satisfaction" -> f.satisfaction.rating.toString, "referenceNumber" -> refNum, "journey" -> f.journey.name, "surveyUrl" -> toAbsoluteUrl(f.surveyUrl))
-    ).flatMap { _ =>
-      apply("SurveyFeedback", Map("feedback" -> f.details, "referenceNumber" -> refNum, "journey" -> f.journey.name))
-    }
-
-  def sendFeedback(f: Feedback, refNumOpt: Option[String])(using hc: HeaderCarrier, request: RequestHeader): Future[AuditResult] =
-    val refNum         = refNumOpt.getOrElse("")
-    val rating: Int    = f.rating.flatMap(r => Try(r.toInt).toOption).getOrElse(0)
-    val satisfaction   = Satisfaction.values.find(_.rating == rating).getOrElse(Satisfaction.satisfied)
-    val surveyFeedback = SurveyFeedback(satisfaction, f.comments.getOrElse(""), JourneyName.feedbackPage, getReferrerUrl)
-    sendSurveyFeedback(surveyFeedback, refNum)
-
-  private def platformFrontendHost(using request: RequestHeader): String =
-    val protocol = servicesConfig.getConfString("for-hod-adapter.protocol", "http")
-
-    configuration.getOptional[String]("platform.frontend.host")
-      .getOrElse(s"$protocol://${request.host}")
-
-  private def toAbsoluteUrl(urlOrPath: String)(using request: RequestHeader): String =
-    if urlOrPath.contains("http") then urlOrPath else s"$platformFrontendHost$urlOrPath"
-
-  private def getReferrerUrl(using request: RequestHeader): String =
-    toAbsoluteUrl(request.uri)
 
 object Audit:
   val referenceNumber = "referenceNumber"

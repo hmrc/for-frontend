@@ -29,7 +29,6 @@ class AppConfig @Inject() (val configuration: Configuration) extends VOServiceCo
   override def serviceLocalRoot: Call = routes.ApplicationController.index
   override def serviceMenuHome: Call  = routes.ApplicationController.index
   override def theFirstPage: Call     = routes.LoginController.show
-  override def feedbackPage: Call     = controllers.feedback.routes.FeedbackController.feedback // TODO: Remove to use feedbackFrontendForm
 
   override def signOutCall: Option[Call] = Some(routes.SaveForLaterController.timeout)
 
@@ -49,7 +48,7 @@ class AppConfig @Inject() (val configuration: Configuration) extends VOServiceCo
     routes.LoginController.show,
     routes.ApplicationController.importantInformation,
     routes.NotConnectedCheckYourAnswersController.onConfirmationView,
-    controllers.feedback.routes.SurveyController.confirmation,
+    routes.ConfirmationController.confirmation,
     routes.SaveForLaterController.saveForLater(""),
     routes.SaveForLaterController.customPasswordSaveForLater(""),
     routes.SaveForLaterController.timeout

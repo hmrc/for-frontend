@@ -101,7 +101,6 @@ object MappingSupport:
   val alterationSetByTypeMapping: Mapping[AlterationSetByType]       = enumMappingRequired(AlterationSetByType, Errors.whichWorksWereDoneRequired)
   val subletTypeMapping: Mapping[SubletType]                         = enumMappingRequired(SubletType, Errors.subletTypeRequired)
   val satisfactionMapping: Mapping[Satisfaction]                     = enumMappingRequired(Satisfaction, Errors.noValueSelected)
-  val journeyMapping: Mapping[JourneyName]                           = enumMappingRequired(JourneyName, Errors.noValueSelected)
 
   val postcode: Mapping[String]      = PostcodeMapping.postcode()
   val loginPostcode: Mapping[String] = PostcodeMapping.postcode(Errors.invalidPostcodeOnLetter, Errors.invalidPostcodeOnLetter)

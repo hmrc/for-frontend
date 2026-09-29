@@ -15,27 +15,20 @@
  *@
 
 @import models.pages.NotConnectedSummary
-@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-@import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.view.html.FeedbackLink
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
-        govukRadios: GovukRadios,
-        govukButton: GovukButton,
-        govukCharacterCount: GovukCharacterCount,
-        formWithCSRF: FormWithCSRF
+        feedbackLink: FeedbackLink
 )
 
-@(theForm: Form[?], notConnectedSummary: Option[NotConnectedSummary])(implicit request: RequestHeader, messages: Messages)
+@(notConnectedSummary: Option[NotConnectedSummary])(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("label.confirm.heading"),
     showH1 = false,
-    summary = notConnectedSummary.map(_.summary),
-    theForm = theForm
+    summary = notConnectedSummary.map(_.summary)
 ) {
 
     <div class="govuk-panel govuk-panel--confirmation no-print">
@@ -60,7 +53,6 @@
     @includes.notConnectedCheckYourAnswersTable(notConnectedSummary.get)
     </div>
 
-
     <section class="govuk-!-display-none-print">
         <p class="govuk-body">
             <a href="login">@messages("copy.feedback.anotherForm")</a>
@@ -68,55 +60,7 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m">@messages("heading.giveFeedback")</h2>
+        @feedbackLink("notconnected")
 
-        <p class="govuk-body">
-        @formWithCSRF(action = feedback.routes.SurveyController.formCompleteFeedback) {
-
-            <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.notConnected.name)"/>
-            <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>
-
-            @govukRadios(
-                Radios(
-                    name = "satisfaction",
-                    idPrefix = "satisfaction",
-                    items = Satisfaction.values.toIndexedSeq.map(satisfaction =>
-                        RadioItem(
-                            content = Text(messages(s"satisfactionSurveyType.$satisfaction")),
-                            checked = theForm("satisfaction").value.contains(satisfaction.toString),
-                            value = satisfaction.toString
-                        )
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("satisfaction"),
-                    fieldset =
-                        Fieldset(
-                            legend =
-                                Legend(
-                                    content = Text(messages("label.satisfaction.1")),
-                                    isPageHeading = true,
-                                    classes = "govuk-fieldset--s"
-                                )
-                        )
-                )
-            )
-
-            @govukCharacterCount(
-                CharacterCount(
-                    id = "details",
-                    name = "details",
-                    value = theForm("details").value,
-                    rows = 8,
-                    maxLength = 1200,
-                    errorMessage = theForm.errors.asTextErrorMessageForField("details"),
-                    label = Label(
-                        content = Text(messages("label.feedback.comments"))
-                    ),
-                    hint = Hint(content = Text(messages("text.survey.bottomCopy")))
-                )
-            )
-
-            @govukButton(SubmitButton("submitFeedback"))
-        }
-        </p>
     </section>
 }

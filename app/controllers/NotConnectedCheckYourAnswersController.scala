@@ -18,11 +18,10 @@ package controllers
 
 import actions.{RefNumAction, RefNumRequest}
 import connectors.{Audit, SubmissionConnector}
-import controllers.feedback.Survey
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import models.pages.{NotConnectedSummary, Summary, SummaryBuilder}
 import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission, PreviouslyConnected}
-import models.{Addresses, JourneyName}
+import models.Addresses
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.Logging
@@ -97,15 +96,11 @@ class NotConnectedCheckYourAnswersController @Inject() (
   }
 
   def onConfirmationView: Action[AnyContent] = refNumAction.async { implicit request =>
-    val feedbackForm = Survey.completedFeedbackForm.bind(
-      Map("journey" -> JourneyName.notConnected.name, "surveyUrl" -> request.uri)
-    ).discardingErrors
-
     findSummary.flatMap { summary =>
       findNotConnected(summary.get).flatMap {
         case Some(notConnectedSummary) =>
-          removeSession.map(_ => Ok(confirmNotConnectedView(feedbackForm, Some(notConnectedSummary))))
-        case None                      => Future.successful(Ok(confirmNotConnectedView(feedbackForm, None)))
+          removeSession.map(_ => Ok(confirmNotConnectedView(Some(notConnectedSummary))))
+        case None                      => Future.successful(Ok(confirmNotConnectedView(None)))
       }
     }
   }

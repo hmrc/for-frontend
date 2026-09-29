@@ -15,26 +15,20 @@
  *@
 
 @import models.pages.Summary
-@import uk.gov.hmrc.govukfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import uk.gov.hmrc.vo.service.model.button.SubmitButton
+@import uk.gov.hmrc.vo.service.view.html.FeedbackLink
 @import views.html.components.PrimaryLayout
 
 @this(
         layout: PrimaryLayout,
-        govukRadios: GovukRadios,
-        govukButton: GovukButton,
-        govukCharacterCount: GovukCharacterCount,
-        formWithCSRF: FormWithCSRF
+        feedbackLink: FeedbackLink
 )
 
-@(theForm: Form[?], email: Option[String], summary: Summary)(implicit request: RequestHeader, messages: Messages)
+@(email: Option[String], summary: Summary)(implicit request: RequestHeader, messages: Messages)
 
 @layout(
     pageTitle = messages("label.confirm.heading"),
     showH1 = false,
-    summary = summary,
-    theForm = theForm
+    summary = summary
 ) {
 
     <div class="govuk-panel govuk-panel--confirmation no-print">
@@ -64,55 +58,7 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m">@messages("heading.giveFeedback")</h2>
+        @feedbackLink("submit")
 
-        @formWithCSRF(action = feedback.routes.SurveyController.formCompleteFeedback) {
-
-            <input type="hidden" id="journey" name="journey" value="@theForm("journey").value.getOrElse(JourneyName.normalJourney.name)"/>
-            <input type="hidden" id="surveyUrl" name="surveyUrl" value="@theForm("surveyUrl").value.getOrElse("")"/>
-
-            @govukRadios(
-                Radios(
-                    name = "satisfaction",
-                    idPrefix = "satisfaction",
-                    items = Satisfaction.values.toIndexedSeq.map(satisfaction =>
-                        RadioItem(
-                            content = Text(messages(s"satisfactionSurveyType.$satisfaction")),
-                            checked = theForm("satisfaction").value.contains(satisfaction.toString),
-                            value = satisfaction.toString
-                        )
-                    ),
-                    errorMessage = theForm.errors.asTextErrorMessageForField("satisfaction"),
-                    fieldset =
-                        Fieldset(
-                            legend =
-                                Legend(
-                                    content = Text(messages("label.satisfaction.1")),
-                                    isPageHeading = true,
-                                    classes = "govuk-fieldset--s"
-                                )
-                        )
-                )
-            )
-
-            @govukCharacterCount(
-                CharacterCount(
-                    id = "details",
-                    name = "details",
-                    value = theForm("details").value,
-                    rows = 8,
-                    maxLength = 1200,
-                    errorMessage = theForm.errors.asTextErrorMessageForField("details"),
-                    label = Label(
-                        content = Text(messages("label.feedback.comments"))
-                    ),
-                    hint = Hint(content = Text(messages("text.survey.bottomCopy")))
-                )
-            )
-
-            <p class="govuk-body">
-            @govukButton(SubmitButton("submitFeedback"))
-            </p>
-        }
     </section>
 }
