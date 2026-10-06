@@ -18,6 +18,7 @@
 @import models.pages.Summary
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 @import uk.gov.hmrc.vo.service.model.button.{LinkButton, LinkSecondaryButton}
+@import uk.gov.hmrc.vo.service.view.html.PrintLink
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -42,9 +43,7 @@
         @govukButton(LinkSecondaryButton("save", routes.SaveForLaterController.saveForLater(request.path).url))
     </div>
 
-    <p class="govuk-body">
-        <a href="#" class="govuk-link print-link">@messages("label.print.printorsave")</a>
-    </p>
+    @PrintLink("label.print.printorsave")
 
     @views.html.includes.signFooter(summary)
 

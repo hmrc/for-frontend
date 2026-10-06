@@ -94,7 +94,7 @@ class Part3Spec extends QuestionViewBehaviours[PageThree]:
     }
 
     "contain continue button with the value Continue" in {
-      val doc = asDocument(createViewUsingForm(form))
+      val doc         = asDocument(createViewUsingForm(form))
       val loginButton = doc.getElementById("continue-button").text()
       assert(loginButton == messages("button.continue.label"))
     }

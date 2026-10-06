@@ -39,7 +39,13 @@ class Part4Spec extends QuestionViewBehaviours[PageFour]:
 
     behave like normalPage(createView, messageKeyPrefix)
 
-    behave like pageWithTextFields(createViewUsingForm, "sublet[0].tenantFullName", "sublet[0].subletPropertyReasonDescription", "sublet[0].annualRent", "sublet[0].tenantAddress.buildingNameNumber")
+    behave like pageWithTextFields(
+      createViewUsingForm,
+      "sublet[0].tenantFullName",
+      "sublet[0].subletPropertyReasonDescription",
+      "sublet[0].annualRent",
+      "sublet[0].tenantAddress.buildingNameNumber"
+    )
 
     "contain radio buttons for the property sublet yes" in {
       val doc = asDocument(createViewUsingForm(form))
@@ -91,7 +97,7 @@ class Part4Spec extends QuestionViewBehaviours[PageFour]:
     }
 
     "contain continue button with the value Continue" in {
-      val doc = asDocument(createViewUsingForm(form))
+      val doc         = asDocument(createViewUsingForm(form))
       val loginButton = doc.getElementById("continue-button").text()
       assert(loginButton == messages("button.continue.label"))
     }

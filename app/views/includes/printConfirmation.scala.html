@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.vo.service.view.html.PrintLink
+
 @()(implicit messages: Messages)
 
 <div class="govuk-!-display-none-print govuk-inset-text">
-    <p class="govuk-body">
-        <a href="#" class="govuk-link print-link">@messages("print.link")</a>
-    </p>
+    @PrintLink("print.link")
+
     <p class="govuk-body">@messages("print.link.cantPrintLater")</p>
 </div>

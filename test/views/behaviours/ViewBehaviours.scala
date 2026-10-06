@@ -32,7 +32,7 @@ trait ViewBehaviours extends ViewSpecBase:
     "behave like a normal page" when {
       "rendered" should {
         "have the correct banner title" in {
-          val doc = asDocument(view())
+          val doc  = asDocument(view())
           val link = doc.select(".govuk-service-navigation__service-name a").first()
           link.text shouldBe messagesApi("service.name")(using lang)
         }
@@ -63,6 +63,6 @@ trait ViewBehaviours extends ViewSpecBase:
     }
 
   protected def checkServiceNameInHeaderBanner(view: () => HtmlFormat.Appendable): Assertion =
-    val doc    = asDocument(view())
-    val link   = doc.select(".govuk-service-navigation__service-name a").first()
+    val doc  = asDocument(view())
+    val link = doc.select(".govuk-service-navigation__service-name a").first()
     link.text shouldBe messagesApi("service.name")(using lang)
