@@ -34,7 +34,7 @@
 @media print {
   .govuk-summary-list__actions,
   .govuk-button, .button, button, .govuk-back-link,
-  .dontprint, footer, .help-container {
+  footer, .help-container {
     display: none !important;
   }
 }

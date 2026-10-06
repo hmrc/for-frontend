@@ -38,7 +38,7 @@
 
     @includes.checkYourAnswersTable(summary)
 
-    <div class="govuk-button-group dontprint">
+    <div class="govuk-button-group govuk-!-display-none-print">
         @govukButton(LinkButton("continue", routes.ApplicationController.declaration.url))
         @govukButton(LinkSecondaryButton("save", routes.SaveForLaterController.saveForLater(request.path).url))
     </div>

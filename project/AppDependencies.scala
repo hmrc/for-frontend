@@ -5,7 +5,7 @@ object AppDependencies {
 
   private val bootstrapVersion    = "10.8.0"
   private val playFrontendVersion = "13.16.0"
-  private val voServiceVersion    = "0.14.0-SNAPSHOT"
+  private val voServiceVersion    = "0.15.0"
   private val mongoVersion        = "2.14.0"
   private val jQueryVersion       = "4.0.0"
   private val mailApiVersion      = "2.0.2"
