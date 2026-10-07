@@ -53,25 +53,49 @@ class Part7Spec extends QuestionViewBehaviours[PageSeven]:
 
     "contain radio buttons for how often rent reviewed 3 years" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.reviewIntervalType", "rentReviewDetails.reviewIntervalType", ReviewIntervalType.values(0).toString, false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.reviewIntervalType",
+        "rentReviewDetails.reviewIntervalType",
+        ReviewIntervalType.values(0).toString,
+        false
+      )
       assertContainsText(doc, messages("label.yes.ydy"))
     }
 
     "contain radio buttons for how often rent reviewed 5 years" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.reviewIntervalType-2", "rentReviewDetails.reviewIntervalType", ReviewIntervalType.values(1).toString, false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.reviewIntervalType-2",
+        "rentReviewDetails.reviewIntervalType",
+        ReviewIntervalType.values(1).toString,
+        false
+      )
       assertContainsText(doc, messages("label.no.nac.ydy"))
     }
 
     "contain radio buttons for how often rent reviewed 7 years" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.reviewIntervalType-3", "rentReviewDetails.reviewIntervalType", ReviewIntervalType.values(2).toString, false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.reviewIntervalType-3",
+        "rentReviewDetails.reviewIntervalType",
+        ReviewIntervalType.values(2).toString,
+        false
+      )
       assertContainsText(doc, messages("label.yes.ydy"))
     }
 
     "contain radio buttons for how often rent reviewed other" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.reviewIntervalType-4", "rentReviewDetails.reviewIntervalType", ReviewIntervalType.values(3).toString, false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.reviewIntervalType-4",
+        "rentReviewDetails.reviewIntervalType",
+        ReviewIntervalType.values(3).toString,
+        false
+      )
       assertContainsText(doc, messages("label.no.nac.ydy"))
     }
 
@@ -121,18 +145,30 @@ class Part7Spec extends QuestionViewBehaviours[PageSeven]:
 
     "contain radio buttons for rent fixed yes" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween", "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween", "true", false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
+        "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
+        "true",
+        false
+      )
       assertContainsText(doc, messages("label.yes.ydy"))
     }
 
     "contain radio buttons for rent fixed no" in {
       val doc = asDocument(createViewUsingForm(form))
-      assertContainsRadioButton(doc, "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween-2", "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween", "false", false)
+      assertContainsRadioButton(
+        doc,
+        "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween-2",
+        "rentReviewDetails.rentReviewResultsDetails.rentAgreedBetween",
+        "false",
+        false
+      )
       assertContainsText(doc, messages("label.no.nac.ydy"))
     }
 
     "contain continue button with the value Continue" in {
-      val doc = asDocument(createViewUsingForm(form))
+      val doc         = asDocument(createViewUsingForm(form))
       val loginButton = doc.getElementById("continue-button").text()
       assert(loginButton == messages("button.continue.label"))
     }

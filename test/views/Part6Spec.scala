@@ -39,7 +39,12 @@ class Part6Spec extends QuestionViewBehaviours[PageSix]:
 
     behave like normalPage(createView, messageKeyPrefix)
 
-    behave like pageWithTextFields(createViewUsingForm, "writtenAgreement.breakClauseDetails", "writtenAgreement.steppedDetails[0].amount", "writtenAgreement.steppedDetails[1].amount")
+    behave like pageWithTextFields(
+      createViewUsingForm,
+      "writtenAgreement.breakClauseDetails",
+      "writtenAgreement.steppedDetails[0].amount",
+      "writtenAgreement.steppedDetails[1].amount"
+    )
 
     "contain radio buttons for lease agreement tenancy" in {
       val doc = asDocument(createViewUsingForm(form))
@@ -58,8 +63,6 @@ class Part6Spec extends QuestionViewBehaviours[PageSix]:
       assertContainsRadioButton(doc, "leaseAgreementType-3", "leaseAgreementType", LeaseAgreementType.values(2).toString, false)
       assertContainsText(doc, messages("leaseAgreementTypes.verbal"))
     }
-
-
 
     // Tennancy/Licence agreement
     "Contains an error summary for licence agreement date month" in {
@@ -213,9 +216,6 @@ class Part6Spec extends QuestionViewBehaviours[PageSix]:
       assertRenderedByCssSelector(doc, ".govuk-error-summary")
     }
 
-
-
-
 //
 //    "Contains an error summary for landlord address street1" in {
 //      val doc = asDocument(createViewUsingForm(form.withError(FormError("landlordAddress.street1", "error"))))
@@ -251,7 +251,7 @@ class Part6Spec extends QuestionViewBehaviours[PageSix]:
 //    }
 
     "contain continue button with the value Continue" in {
-      val doc = asDocument(createViewUsingForm(form))
+      val doc         = asDocument(createViewUsingForm(form))
       val loginButton = doc.getElementById("continue-button").text()
       assert(loginButton == messages("button.continue.label"))
     }

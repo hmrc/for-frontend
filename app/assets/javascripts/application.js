@@ -20,7 +20,6 @@ var ref;
 
         /** Init functions **/
         //voRALD.js
-        VORALD.printLinkSetup();
         VORALD.printPageShouldPrintOnLoad();
         VORALD.addField();
         VORALD.removeField();

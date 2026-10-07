@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
+@import uk.gov.hmrc.vo.service.view.html.PrintLink
 @import util.DateUtil.fullDateFormatter
 @import views.html.components.PrimaryLayout
 
@@ -76,9 +77,8 @@
         @helper.CSRF.formField
         <input type="hidden" name="password" value="@password" />
     </form>
-    <p>
-        <a href="#" class="govuk-link print-link hide-if-no-js">@messages("saveForLater.print")</a>
-    </p>
+
+    @PrintLink("saveForLater.print")
 
     @formHelp()
 }

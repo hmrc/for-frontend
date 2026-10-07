@@ -40,7 +40,11 @@ class Part0Spec extends QuestionViewBehaviours[AddressConnectionType]:
 
         "display the correct browser title" in {
           val doc = asDocument(createView())
-          assertEqualsValue(doc, "title", s"${messages("section0.intro.text", prefilledAddress.singleLine)} - ${messages("service.name")} - ${messages("gov.name")}")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"${messages("section0.intro.text", prefilledAddress.singleLine)} - ${messages("service.name")} - ${messages("gov.name")}"
+          )
         }
 
         "display the correct page title" in {

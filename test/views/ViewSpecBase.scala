@@ -45,8 +45,8 @@ trait ViewSpecBase extends BaseAppSpec:
 
   def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Assertion =
     val headers = doc.getElementsByTag("h1")
-    headers.size                                 should equal (1)
-    headers.first.text.replaceAll("\u00a0", " ") should be (messages(expectedMessageKey, args*).replaceAll("&nbsp;", " "))
+    headers.size                                 should equal(1)
+    headers.first.text.replaceAll("\u00a0", " ") should be(messages(expectedMessageKey, args*).replaceAll("&nbsp;", " "))
 
   def assertContainsText(doc: Document, text: String): Assertion =
     assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")

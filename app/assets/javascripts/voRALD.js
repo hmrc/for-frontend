@@ -15,38 +15,6 @@
         $helpFormWrapper.find('h2, p').remove();
     };
 
-    VORALD.scrollDirection = 1;
-
-    VORALD.isChromeOnMac = function() {
-        return navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Mac OS') !== -1;
-    };
-
-    VORALD.printLinkSetup = function () {
-        $('.print-link').on('click', function (event) {
-            event.preventDefault();
-
-            // Overcome to Save as PDF in Chrome in full-screen mode on Mac
-            if (VORALD.isChromeOnMac()) {
-                const direction =
-                    window.scrollY < 150 ? 1 : (window.scrollY > $('#main-content').innerHeight() - 350 ? -1 : VORALD.scrollDirection);
-                window.scrollBy(0, direction * 150);
-                VORALD.scrollDirection = -direction;
-
-                setTimeout(function () {
-                    if (document.queryCommandSupported('print')) {
-                        document.execCommand('print', true, null);
-                    } else {
-                        window.focus();
-                        window.print();
-                    }
-                }, 1500);
-            } else {
-                window.focus();
-                window.print();
-            }
-        });
-    };
-
     VORALD.printPageShouldPrintOnLoad = function(){
         if($('div.govuk-grid-column-full.print-your-answers').length > 0){
             window.print();

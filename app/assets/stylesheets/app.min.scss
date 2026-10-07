@@ -1,3 +1,8 @@
+@import 'lib/vo-frontend-service/stylesheets/frontend';
+
+@import 'print_page_screen';
+@import 'form';
+@import 'spinner';
 
 .hidden {
   display: none;
@@ -36,7 +41,3 @@ div#helpFormWrapper {
   margin-right: 20px;
   margin-bottom: 0;
 }
-
-@import "print_page_screen";
-@import "form";
-@import "spinner";
