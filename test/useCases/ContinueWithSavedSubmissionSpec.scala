@@ -22,8 +22,8 @@ import models.journeys.SummaryPage
 import models.pages.Summary
 import play.api.Configuration
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 import utils.BehaviourVerification
 
 import java.time.{ZoneOffset, ZonedDateTime}

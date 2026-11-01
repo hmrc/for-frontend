@@ -16,14 +16,14 @@
 
 package connectors
 
+import jakarta.inject.{Inject, Singleton}
 import play.api.i18n.Messages
-import util.DateUtil.fullDateFormatter
 import play.api.libs.json.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.LocalDate
-import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,7 +40,7 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(using ec:
     messages: Messages
   ): Future[Unit] =
     email.map { e =>
-      val formattedExpiryDate = fullDateFormatter.format(expiryDate)
+      val formattedExpiryDate = expiryDate.formatLongDate
       val json                = Json.obj(
         "to"         -> JsArray(Seq(JsString(e))),
         "templateId" -> JsString("rald_alert"),

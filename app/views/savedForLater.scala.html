@@ -17,8 +17,8 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukWarningText
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.warningtext.WarningText
+@import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 @import uk.gov.hmrc.vo.service.view.html.PrintLink
-@import util.DateUtil.fullDateFormatter
 @import views.html.components.PrimaryLayout
 
 @import java.time.LocalDate
@@ -59,9 +59,7 @@
 
     <p class="govuk-body">
         @messages("saveForLater.paragraph")
-        @{
-            fullDateFormatter.format(expiryDate)
-        }
+        @{expiryDate.formatLongDate}
     </p>
 
     <p>

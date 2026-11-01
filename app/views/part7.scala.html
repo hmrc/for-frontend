@@ -18,7 +18,7 @@
 @import models.serviceContracts.submissions.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
-@import util.DateUtil
+@import util.DateExampleUtil
 @import views.html.components.PrimaryLayout
 
 @this(
@@ -127,7 +127,7 @@
                 form = theForm,
                 field = "rentReviewDetails.lastReviewDate",
                 govukDate = govukDateInput,
-                helpText = "<p>" + messages("hint.lastReviewDate") + "</p><p>" + messages("help.date.month.year", DateUtil.exampleMonthYear(1)) + "</p>"
+                helpText = "<p>" + messages("hint.lastReviewDate") + "</p><p>" + messages("help.date.month.year", DateExampleUtil.exampleMonthYear(1)) + "</p>"
             )
             @govukRadios(
                 Radios(

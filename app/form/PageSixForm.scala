@@ -23,11 +23,11 @@ import form.mapping.*
 import form.mapping.ConditionalMappings.*
 import models.pages.{PageSix, VerbalAgreement, WrittenAgreement}
 import models.serviceContracts.submissions.*
-import play.api.data.Forms.{default, localDate, mapping, optional, text, tuple}
 import play.api.data.*
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.Forms.{default, localDate, mapping, optional, text, tuple}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
-import util.DateUtil.fullDateFormatter
+import play.api.data.validation.{Constraint, Invalid, Valid}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.LocalDate
 
@@ -66,8 +66,8 @@ object PageSixForm:
         Invalid(Seq(createFieldValidationError(
           s"${keys.to}.day",
           Errors.toDateToFarFuture,
-          fullDateFormatter.format(stepFrom.plusDays(1)),
-          fullDateFormatter.format(maxFutureDate)
+          stepFrom.plusDays(1).formatLongDate,
+          maxFutureDate.formatLongDate
         )))
   }
 

@@ -17,8 +17,8 @@
 package models.pages
 
 import connectors.Document
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 
 class SummaryBuilderSpec extends BaseSpec:
 

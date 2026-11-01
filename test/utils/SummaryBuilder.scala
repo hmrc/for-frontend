@@ -20,7 +20,7 @@ import form.PageOneForm.*
 import models.*
 import models.pages.*
 import models.serviceContracts.submissions.*
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.LocalDate
 

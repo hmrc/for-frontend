@@ -24,7 +24,7 @@ import play.api.data.{FormError, Mapping}
 
 import scala.util.Try
 import ConditionalMapping.*
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.{LocalDate, LocalDateTime}
 

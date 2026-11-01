@@ -29,7 +29,7 @@ import security.NoExistingDocument
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.vo.unit.test.BaseSpec
 import useCases.ReferenceNumber
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import utils.Helpers.fakeRequest2MessageRequest
 import views.html.{login, loginFailed}
 

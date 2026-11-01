@@ -21,8 +21,8 @@ import form.persistence.SaveFormInRepository
 import models.RoughDate
 import models.pages.*
 import models.serviceContracts.submissions.*
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 import utils.stubs.StubFormDocumentRepo
 
 import java.time.LocalDate

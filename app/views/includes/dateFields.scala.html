@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukDateInput
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
-@import util.DateUtil
+@import util.DateExampleUtil
 
 @(form: Form[?],
         field: String,
@@ -100,8 +100,8 @@
         items = dateInputItems,
         hint = Hint(
             content = HtmlContent(helpText.getOrElse(
-                if(showDays) messages("help.date.day.month.year", DateUtil.exampleDayMonthYear(1))
-                else messages("help.date.month.year", DateUtil.exampleMonthYear(1))
+                if(showDays) messages("help.date.day.month.year", DateExampleUtil.exampleDayMonthYear(1))
+                else messages("help.date.month.year", DateExampleUtil.exampleMonthYear(1))
             ))
         ),
         fieldset = Fieldset(
