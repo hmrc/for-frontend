@@ -25,8 +25,8 @@ import org.scalatest.RecoverMethods.recoverToExceptionIf
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 import utils.stubs.*
 
 import java.time.LocalDate

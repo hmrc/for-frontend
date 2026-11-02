@@ -16,7 +16,7 @@
 
 package controllers
 
-import javax.inject.*
+import jakarta.inject.*
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.*

@@ -18,7 +18,7 @@ package helpers
 
 import connectors.Audit
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import models.pages.Summary
 import models.serviceContracts.submissions.Address
 import play.api.mvc.Request

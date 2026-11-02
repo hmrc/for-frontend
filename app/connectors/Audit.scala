@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, Audi
 import uk.gov.hmrc.play.audit.model.{DataEvent, ExtendedDataEvent}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[ForAuditConnector])
@@ -54,7 +54,7 @@ trait Audit extends AuditConnector:
     * Summary doesn't have defined formatter,
     * it is constructed manually when is deserialized from session or DB.
     */
-  private val summaryWriter = Json.writes[Summary]
+  private val summaryWriter: OWrites[Summary] = Json.writes
 
   def sendSavedForLater(summary: Summary, exitPath: String)(using hc: HeaderCarrier): Future[AuditResult] =
     val json = Json.toJson(summary)(using summaryWriter).as[JsObject] ++ Addresses.addressJson(summary)

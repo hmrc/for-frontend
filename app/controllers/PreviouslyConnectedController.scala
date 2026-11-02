@@ -22,7 +22,7 @@ import controllers.PreviouslyConnectedController.cacheKey
 import controllers.dataCapturePages.ForDataCapturePage
 import form.PreviouslyConnectedForm.formMapping
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.PreviouslyConnected
 import models.serviceContracts.submissions.PreviouslyConnected.format

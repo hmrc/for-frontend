@@ -22,7 +22,7 @@ import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import models.serviceContracts.submissions.LeaseAgreementType

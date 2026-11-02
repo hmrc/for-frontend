@@ -23,7 +23,7 @@ import form.Errors
 import form.persistence.FormDocumentRepository
 import models.Addresses
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import models.pages.*
 import play.api.data.Form
 import play.api.data.Forms.*

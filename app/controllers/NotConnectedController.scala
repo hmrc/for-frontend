@@ -21,7 +21,7 @@ import controllers.NotConnectedController.cacheKey
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import form.NotConnectedPropertyForm.form
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import models.pages.{NotConnectedSummary, SummaryBuilder}
 import models.serviceContracts.submissions.NotConnected
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

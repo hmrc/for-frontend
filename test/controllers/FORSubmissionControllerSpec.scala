@@ -30,7 +30,7 @@ import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import useCases.SubmitBusinessRentalInformation
 import utils.stubs.StubFormDocumentRepoProvider
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps

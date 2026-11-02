@@ -18,7 +18,7 @@ package utils
 
 import form.*
 import play.api.data.Form
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import utils.FormBindingTestAssertions.*
 
 import java.time.YearMonth

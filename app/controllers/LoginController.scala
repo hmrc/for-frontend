@@ -20,6 +20,7 @@ import config.LoginToHODAction
 import connectors.Audit
 import form.persistence.FormDocumentRepository
 import form.{Errors, MappingSupport}
+import jakarta.inject.Inject
 import models.*
 import models.pages.SummaryBuilder
 import models.serviceContracts.submissions.Address
@@ -33,12 +34,11 @@ import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import views.html.{login, loginFailed}
 
 import java.time.{ZoneOffset, ZonedDateTime}
 import java.util.UUID
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 case class LoginDetails(referenceNumber: String, postcode: String, startTime: ZonedDateTime)
@@ -174,6 +174,6 @@ class LoginController @Inject() (
     )
 
 object FailedLoginResponse:
-  implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]
+  implicit val f: Format[FailedLoginResponse] = Json.format
 
 case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)

@@ -23,7 +23,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.http.{BadRequestException, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

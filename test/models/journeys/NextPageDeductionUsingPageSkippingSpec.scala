@@ -20,8 +20,8 @@ import models.*
 import models.journeys.Journey.*
 import models.pages.*
 import models.serviceContracts.submissions.*
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 

@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, NotFoundException, 
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import useCases.ReferenceNumber
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

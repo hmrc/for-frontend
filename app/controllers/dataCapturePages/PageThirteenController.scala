@@ -21,7 +21,7 @@ import connectors.Audit
 import form.PageThirteenForm.pageThirteenForm
 import form.persistence.FormDocumentRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.PropertyAlterations

@@ -24,7 +24,7 @@ import form.CustomUserPasswordForm
 import form.persistence.FormDocumentRepository
 import models.Addresses
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import models.journeys.*
 import models.pages.SummaryBuilder
 import play.api.Configuration

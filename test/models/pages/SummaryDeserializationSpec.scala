@@ -18,8 +18,8 @@ package models.pages
 
 import connectors.{Document, Page}
 import models.serviceContracts.submissions.OccupierType
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 
 class SummaryDeserializationSpec extends BaseSpec:
 

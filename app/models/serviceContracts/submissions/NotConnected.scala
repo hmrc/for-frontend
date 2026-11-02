@@ -21,4 +21,4 @@ import play.api.libs.json.*
 case class NotConnected(fullName: String, emailAddress: Option[String], phoneNumber: Option[String], additionalInformation: Option[String])
 
 object NotConnected:
-  implicit val format: OFormat[NotConnected] = Json.format[NotConnected]
+  implicit val format: OFormat[NotConnected] = Json.format

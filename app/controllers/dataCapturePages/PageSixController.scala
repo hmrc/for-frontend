@@ -29,7 +29,7 @@ import play.twirl.api.Html
 import config.SessionId
 import play.api.libs.json.OFormat
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps

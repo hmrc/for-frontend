@@ -23,7 +23,7 @@ import uk.gov.hmrc.mongo.cache.{CacheItem, DataKey, MongoCacheRepository}
 import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 
 import java.util.concurrent.TimeUnit.SECONDS
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 

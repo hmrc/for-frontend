@@ -16,12 +16,12 @@
 
 package form
 
+import form.PageSixForm.*
 import models.*
 import models.pages.*
 import models.serviceContracts.submissions.*
 import play.api.data.Form
-import util.DateUtil.nowInUK
-import PageSixForm.*
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.FormBindingTestAssertions.*
 import utils.MappingSpecs.*

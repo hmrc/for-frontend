@@ -23,5 +23,5 @@ case class Error(field: String, error: String, schemaUsed: String)
 case class UpstreamError(errors: Seq[Error])
 
 object UpstreamError:
-  implicit val errorFormat: OFormat[Error]    = Json.format[Error]
-  implicit val format: OFormat[UpstreamError] = Json.format[UpstreamError]
+  implicit val errorFormat: OFormat[Error]    = Json.format
+  implicit val format: OFormat[UpstreamError] = Json.format

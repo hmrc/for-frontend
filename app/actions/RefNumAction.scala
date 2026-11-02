@@ -16,7 +16,7 @@
 
 package actions
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import play.api.i18n.MessagesApi
 import play.api.mvc.Results.*
 import play.api.mvc.*

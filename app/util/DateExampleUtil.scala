@@ -16,24 +16,18 @@
 
 package util
 
-import java.time.{ZoneId, ZonedDateTime}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
+
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
   * @author Yuriy Tumakha
   */
-object DateUtil:
-
-  private val ukTimezone: ZoneId = ZoneId.of("Europe/London")
+object DateExampleUtil:
 
   private val dayMonthYearExampleFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy", Locale.UK)
   private val monthYearExampleFormatter: DateTimeFormatter    = DateTimeFormatter.ofPattern("M yyyy", Locale.UK)
-
-  val fullDateFormatter: DateTimeFormatter     = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK)
-  val isoZonedDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.UK)
-
-  def nowInUK: ZonedDateTime = ZonedDateTime.now(ukTimezone)
 
   def exampleDayMonthYear(minusYears: Int): String =
     nowInUK.minusYears(minusYears).format(dayMonthYearExampleFormatter)

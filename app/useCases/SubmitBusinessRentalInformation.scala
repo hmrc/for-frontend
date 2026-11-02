@@ -30,7 +30,7 @@ import play.api.libs.json.{JsObject, Json}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[SubmitBusinessRentalInformationToBackendApi])

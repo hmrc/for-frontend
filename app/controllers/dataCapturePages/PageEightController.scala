@@ -21,7 +21,7 @@ import connectors.Audit
 import form.PageEightForm.pageEightForm
 import form.persistence.FormDocumentRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.RentAgreement

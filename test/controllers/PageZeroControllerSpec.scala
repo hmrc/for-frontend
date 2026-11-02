@@ -21,7 +21,7 @@ import controllers.dataCapturePages.PageZeroController
 import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderNames
 import uk.gov.hmrc.vo.unit.test.BaseAppSpec
-import util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import utils.Helpers.refNumAction
 import utils.stubs.StubFormDocumentRepo
 import views.html.part0

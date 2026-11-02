@@ -19,7 +19,7 @@ package crypto
 import play.api.Configuration
 import uk.gov.hmrc.crypto.{Hasher, OnewayCryptoFactory, PlainText, Scrambled, Verifier}
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
   * @author Yuriy Tumakha

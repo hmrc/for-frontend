@@ -21,7 +21,7 @@ import java.util.Base64
 import com.google.inject.ImplementedBy
 import connectors.{Document, Page}
 import controllers.toFut
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import play.api.libs.json.{Format, Json}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -85,6 +85,6 @@ class SessionScopedFormDocumentRepository @Inject() (cache: MongoSessionReposito
     cache.removeCache(documentId)
 
 object DocumentWrapper:
-  implicit val f: Format[DocumentWrapper] = Json.format[DocumentWrapper]
+  implicit val f: Format[DocumentWrapper] = Json.format
 
 case class DocumentWrapper(b64JsonBlob: String)

@@ -28,7 +28,7 @@ import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import views.html.part5
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class PageFiveController @Inject() (
   audit: Audit,

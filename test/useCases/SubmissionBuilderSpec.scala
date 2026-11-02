@@ -22,8 +22,8 @@ import models.*
 import models.serviceContracts.submissions.*
 import org.scalatest.OptionValues.*
 import org.scalatest.prop.TableFor2
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 
 import java.time.LocalDate
 

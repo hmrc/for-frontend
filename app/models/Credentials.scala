@@ -27,4 +27,4 @@ case class Credentials(
 )
 
 object Credentials:
-  implicit val format: OFormat[Credentials] = Json.format[Credentials]
+  implicit val format: OFormat[Credentials] = Json.format

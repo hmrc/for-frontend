@@ -27,8 +27,8 @@ import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Disabled
 import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
-import util.DateUtil.nowInUK
 
 import scala.compiletime.uninitialized
 import scala.concurrent.{ExecutionContext, Future}
