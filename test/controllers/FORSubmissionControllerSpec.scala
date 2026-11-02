@@ -17,10 +17,12 @@
 package controllers
 
 import form.persistence.FormDocumentRepository
+import jakarta.inject.Singleton
 import models.serviceContracts.submissions.Submission
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.should
 import play.api.Application
+import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -28,8 +30,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import useCases.SubmitBusinessRentalInformation
 import utils.stubs.StubFormDocumentRepoProvider
-import jakarta.inject.Singleton
-import play.api.i18n.Messages
 
 import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}

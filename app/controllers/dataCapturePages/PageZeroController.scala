@@ -17,21 +17,20 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import controllers.dataCapturePages.ForDataCapturePage.FormAction
 import form.PageZeroForm.pageZeroForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
 import models.pages.Summary
 import models.serviceContracts.submissions.AddressConnectionType
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import views.html.part0
 
 class PageZeroController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,

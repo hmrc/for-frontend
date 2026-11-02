@@ -17,21 +17,22 @@
 package controllers
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.{Audit, SubmissionConnector}
+import config.SessionId
+import connectors.SubmissionConnector
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
+import jakarta.inject.{Inject, Singleton}
+import models.Addresses
+import models.event.NotConnectedSubmissionFailed
 import models.pages.{NotConnectedSummary, Summary, SummaryBuilder}
 import models.serviceContracts.submissions.{NotConnected, NotConnectedSubmission, PreviouslyConnected}
-import models.Addresses
-import play.api.i18n.Messages
-import play.api.libs.json.Json
 import play.api.Logging
+import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 import java.time.Instant
-import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,7 +41,7 @@ class NotConnectedCheckYourAnswersController @Inject() (
   submissionConnector: SubmissionConnector,
   refNumAction: RefNumAction,
   cache: MongoSessionRepository,
-  audit: Audit,
+  audit: AuditService,
   cc: MessagesControllerComponents,
   notConnectedCheckYourAnswers: views.html.notConnectedCheckYourAnswers,
   confirmNotConnectedView: views.html.confirmNotConnected,
@@ -79,17 +80,32 @@ class NotConnectedCheckYourAnswersController @Inject() (
   def onPageSubmit: Action[AnyContent] = refNumAction.async { implicit request =>
     findSummary.flatMap {
       case Some(summary) =>
-        val json = Json.obj(Audit.referenceNumber -> summary.referenceNumber) ++
-          Addresses.addressJson(summary) ++
-          Audit.languageJson
+        val messages = summon[Messages]
+
         submitToHod(summary).map { _ =>
-          audit.sendExplicitAudit("NotConnectedSubmission", json)
+          audit.send(
+            models.event.NotConnectedSubmission(
+              language = messages.lang.language,
+              referenceNumber = summary.referenceNumber,
+              address = summary.address,
+              updatedAddress = Addresses.updatedAddress(summary)
+            )
+          )
+
           Redirect(routes.NotConnectedCheckYourAnswersController.onConfirmationView)
         }.recover {
-          case _: Exception =>
-            logger.error(s"Could not send data to HOD - ${request.refNum} - ${hc.sessionId}")
-            audit.sendExplicitAudit("NotConnectedSubmissionFailed", json)
-            NotFound(errorView(404))
+          case ex: Exception =>
+            logger.error(s"Could not send data to HOD - ${request.refNum} - ${hc.sessionId}", ex)
+            audit.send(
+              NotConnectedSubmissionFailed(
+                error = ex.getMessage,
+                language = messages.lang.language,
+                referenceNumber = summary.referenceNumber,
+                address = summary.address,
+                updatedAddress = Addresses.updatedAddress(summary)
+              )
+            )
+            InternalServerError(errorView(500))
         }
       case None          => NotFound(errorView(404))
     }

@@ -16,8 +16,9 @@
 
 package form
 
-import play.api.data.{FormError, Forms, Mapping}
 import play.api.data.format.Formatter
+import play.api.data.{FormError, Forms, Mapping}
+
 import scala.util.matching.Regex
 
 object PostcodeMapping:

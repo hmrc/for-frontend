@@ -16,10 +16,11 @@
 
 package controllers
 
-import connectors.{Audit, Document}
+import connectors.Document
 import controllers.dataCapturePages.PageZeroController
 import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderNames
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import utils.Helpers.refNumAction
@@ -33,7 +34,7 @@ class PageZeroControllerSpec extends BaseAppSpec:
   private val testRefNum         = "1234567890"
   private val sessionId          = UUID.randomUUID.toString
   private val documentRepository = StubFormDocumentRepo((sessionId, testRefNum, Document(testRefNum, nowInUK)))
-  private val audit              = mock[Audit]
+  private val audit              = mock[AuditService]
 
   "PageZeroController" should {
     "redirect to page 1 if user want to change address" in {

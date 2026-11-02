@@ -98,16 +98,7 @@ class SubmitBusinessRentalInformationToBackendApi @Inject() (
     s.sublet.foreach(p4 => p4.sublet.foreach(sub => auditManualAddress(s.referenceNumber, sub.tenantAddress)))
 
   private def auditManualAddress(referenceNumber: String, address: Address)(using hc: HeaderCarrier): Unit =
-    audit.send(
-      ManualAddressSubmitted(
-        referenceNumber = referenceNumber,
-        submittedLine1 = address.buildingNameNumber,
-        submittedLine2 = address.street1.getOrElse(""),
-        submittedLine3 = address.street2.getOrElse(""),
-        submittedPostcode = address.postcode,
-        transactionName = "sending_rental_information"
-      )
-    )
+    audit.send(ManualAddressSubmitted(referenceNumber, address))
 
 @ImplementedBy(classOf[DefaultSubmissionBuilder])
 trait SubmissionBuilder:

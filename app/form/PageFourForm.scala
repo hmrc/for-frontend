@@ -23,8 +23,8 @@ import form.mapping.ConditionalMappings.*
 import models.pages.{PageFour, SubletDetails}
 import models.serviceContracts.submissions.SubletType
 import play.api.data.Forms.{default, mapping, text}
-import play.api.data.{Form, Mapping}
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
+import play.api.data.{Form, Mapping}
 
 object PageFourForm:
 

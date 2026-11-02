@@ -17,26 +17,26 @@
 package controllers
 
 import actions.RefNumAction
-import connectors.{Audit, EmailConnector, HODConnector}
+import connectors.{EmailConnector, HODConnector}
 import controllers.dataCapturePages.{RedirectTo, UrlFor}
 import crypto.MongoHasher
 import form.CustomUserPasswordForm
 import form.persistence.FormDocumentRepository
 import models.Addresses
-
 import jakarta.inject.{Inject, Singleton}
 import models.journeys.*
 import models.pages.SummaryBuilder
 import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms.*
-import play.api.libs.json.Json
 import views.html.{customPasswordSaveForLater, saveForLaterLogin, savedForLater}
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import config.SessionId
+import models.event.{SavedForLater, UserTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import useCases.ContinueWithSavedSubmission.ContinueWithSavedSubmission
 import useCases.{ErrorRetrievingSavedDocument, IncorrectPassword, PasswordsMatch}
 
@@ -49,7 +49,7 @@ object SaveForLaterController:
 @Singleton
 class SaveForLaterController @Inject() (
   cc: MessagesControllerComponents,
-  audit: Audit,
+  audit: AuditService,
   refNumAction: RefNumAction,
   emailConnector: EmailConnector,
   configuration: Configuration,
@@ -77,7 +77,7 @@ class SaveForLaterController @Inject() (
         if doc.saveForLaterPassword.isDefined then
           val saveSubmissionForLater = config.SaveForLater(doc.saveForLaterPassword.get)
           saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
-            audit.sendSavedForLater(sum, exitPath)
+            audit.send(SavedForLater(sum, exitPath))
             val email = sum.customerDetails.map(_.contactDetails.email)
             emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
 
@@ -101,7 +101,7 @@ class SaveForLaterController @Inject() (
           validData =>
             val saveSubmissionForLater = config.SaveForLater(validData.password)
             saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
-              audit.sendSavedForLater(sum, exitPath)
+              audit.send(SavedForLater(sum, exitPath))
               val email = sum.customerDetails.map(_.contactDetails.email)
               emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
 
@@ -147,13 +147,20 @@ class SaveForLaterController @Inject() (
       case Some(doc) =>
         val saveSubmissionForLater = doc.saveForLaterPassword.fold(config.SaveForLater())(config.SaveForLater(_))
         saveSubmissionForLater(hc)(doc, hc).flatMap { pw =>
-          val sum        = SummaryBuilder.build(doc)
-          val json       = Json.obj(Audit.referenceNumber -> sum.referenceNumber) ++ Addresses.addressJson(sum)
-          audit.sendExplicitAudit("UserTimeout", json)
-          val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
-          val email      = sum.customerDetails.map(_.contactDetails.email)
+          val summary = SummaryBuilder.build(doc)
 
-          emailConnector.sendEmail(sum.referenceNumber, sum.addressVOBelievesIsCorrect.postcode, email, expiryDate)
+          audit.send(
+            UserTimeout(
+              referenceNumber = summary.referenceNumber,
+              address = summary.address,
+              updatedAddress = Addresses.updatedAddress(summary)
+            )
+          )
+
+          val expiryDate = LocalDate.now.plusDays(expiryDateInDays)
+          val email      = summary.customerDetails.map(_.contactDetails.email)
+
+          emailConnector.sendEmail(summary.referenceNumber, summary.addressVOBelievesIsCorrect.postcode, email, expiryDate)
           Ok(savedForLater(pw, expiryDate, hasTimedOut = true))
         }
       case None      => Redirect(routes.LoginController.logout)

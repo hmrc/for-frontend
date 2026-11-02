@@ -16,6 +16,7 @@
 
 package models.event
 
+import models.serviceContracts.submissions.Address
 import play.api.libs.json.{Json, OWrites}
 import uk.gov.hmrc.vo.service.model.event.AuditEvent
 
@@ -33,3 +34,13 @@ case class ManualAddressSubmitted(
 
 object ManualAddressSubmitted:
   implicit val writes: OWrites[ManualAddressSubmitted] = Json.writes
+
+  def apply(referenceNumber: String, address: Address): ManualAddressSubmitted =
+    ManualAddressSubmitted(
+      referenceNumber = referenceNumber,
+      submittedLine1 = address.buildingNameNumber,
+      submittedLine2 = address.street1.getOrElse(""),
+      submittedLine3 = address.street2.getOrElse(""),
+      submittedPostcode = address.postcode,
+      transactionName = "sending_rental_information"
+    )

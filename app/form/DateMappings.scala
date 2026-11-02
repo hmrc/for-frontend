@@ -16,17 +16,16 @@
 
 package form
 
+import form.ConditionalMapping.*
 import models.RoughDate
 import models.serviceContracts.submissions.MonthsYearDuration
 import play.api.data.Forms.*
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{FormError, Mapping}
-
-import scala.util.Try
-import ConditionalMapping.*
 import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.{LocalDate, LocalDateTime}
+import scala.util.Try
 
 object DateMappings:
 

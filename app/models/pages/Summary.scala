@@ -17,6 +17,7 @@
 package models.pages
 
 import models.serviceContracts.submissions.*
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.ZonedDateTime
 
@@ -58,6 +59,9 @@ case class Summary(
     case Some(AddressConnectionType.`yes-change-address`) =>
       address.map(_.singleLine) != propertyAddress.map(_.singleLine)
     case _                                                => false
+
+object Summary:
+  implicit val format: OFormat[Summary] = Json.format
 
 case class NoMainAddress(refNum: String) extends Exception(refNum)
 case object NoReferenceNumber extends Exception
