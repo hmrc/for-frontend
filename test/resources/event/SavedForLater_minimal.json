@@ -1,0 +1,12 @@
+{
+  "exitPath": "/sending-rental-information/page/6",
+  "summary": {
+    "referenceNumber": "9999000777",
+    "journeyStarted": "2026-12-31T13:08:45Z",
+    "journeyResumptions": []
+  },
+  "address": {
+    "buildingNameNumber": "13",
+    "postcode": "AA11 1AA"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "language": "en",
+  "referenceNumber": "01234567000",
+  "address": {
+    "buildingNameNumber": "13",
+    "street1": "Street",
+    "street2": "City",
+    "postcode": "AA11 1AA"
+  },
+  "updatedAddress": {
+    "buildingNameNumber": "13A",
+    "street1": "New street",
+    "street2": "City",
+    "postcode": "AA11 1AA"
+  }
+}

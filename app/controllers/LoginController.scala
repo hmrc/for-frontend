@@ -17,6 +17,7 @@
 package controllers
 
 import config.LoginToHODAction
+import controllers.LoginController.nowUTC
 import form.persistence.FormDocumentRepository
 import form.{Errors, MappingSupport}
 import jakarta.inject.Inject
@@ -34,7 +35,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, UpstreamErrorRes
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.vo.service.connectors.AuditService
-import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import views.html.{login, loginFailed}
 
 import java.time.{ZoneOffset, ZonedDateTime}
@@ -44,6 +44,8 @@ import scala.concurrent.{ExecutionContext, Future}
 case class LoginDetails(referenceNumber: String, postcode: String, startTime: ZonedDateTime)
 
 object LoginController:
+
+  private def nowUTC: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
   val loginForm: Form[LoginDetails] = Form(
     mapping(
@@ -64,9 +66,9 @@ object LoginController:
         }
       ),
       "start-time"      -> default(
-        localDateTime("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        localDateTime("yyyy-MM-dd'T'HH:mm:ss")
           .transform[ZonedDateTime](_.atZone(ZoneOffset.UTC), _.toLocalDateTime),
-        nowInUK
+        nowUTC
       )
     )(LoginDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
@@ -87,7 +89,7 @@ class LoginController @Inject() (
   import LoginController.loginForm
 
   def show: Action[AnyContent] = Action { implicit request =>
-    Ok(login(loginForm.fill(LoginDetails("", "", nowInUK))))
+    Ok(login(loginForm.fill(LoginDetails("", "", nowUTC))))
   }
 
   def logout: Action[AnyContent] = Action { implicit request =>

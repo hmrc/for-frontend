@@ -1,0 +1,267 @@
+{
+  "exitPath": "/sending-rental-information/page/6",
+  "summary": {
+    "referenceNumber": "9999000777",
+    "journeyStarted": "2026-12-31T13:08:45Z",
+    "addressConnection": "yes",
+    "propertyAddress": {
+      "buildingNameNumber": "13A",
+      "street1": "New street",
+      "street2": "City",
+      "postcode": "AA11 1AA"
+    },
+    "customerDetails": {
+      "fullName": "Full name",
+      "userType": "owner",
+      "contactDetails": {
+        "phone": "1234567",
+        "email": "user@email.com"
+      }
+    },
+    "theProperty": {
+      "propertyType": "Property type",
+      "occupierType": "company",
+      "occupierCompanyName": "Company name",
+      "occupierCompanyContact": "Occupier company contact",
+      "firstOccupationDate": {
+        "day": 28,
+        "month": 12,
+        "year": 2026
+      },
+      "mainOccupierName": "Main occupier name",
+      "propertyOwnedByYou": true,
+      "propertyRentedByYou": false,
+      "noRentDetails": "no"
+    },
+    "sublet": {
+      "propertyIsSublet": true,
+      "sublet": [
+        {
+          "tenantFullName": "Tenant full name",
+          "tenantAddress": {
+            "buildingNameNumber": "99B",
+            "street1": "Tenant address line 1",
+            "street2": "City",
+            "postcode": "ZZ1 1ZZ"
+          },
+          "subletType": "part",
+          "subletPropertyPartDescription": "Sublet part description",
+          "subletPropertyReasonDescription": "Sublet reason",
+          "annualRent": 1000.0,
+          "rentFixedDate": {
+            "day": 29,
+            "month": 12,
+            "year": 2026
+          }
+        }
+      ]
+    },
+    "landlord": {
+      "landlordFullName": "Landlord full name",
+      "landlordAddress": {
+        "buildingNameNumber": "33",
+        "street1": "Landlord address line 1",
+        "street2": "City",
+        "postcode": "NN1 9AB"
+      },
+      "landlordConnectionType": "other",
+      "landlordConnectText": "Other connection"
+    },
+    "lease": {
+      "leaseAgreementType": "leaseTenancy",
+      "writtenAgreementDetails": {
+        "startDate": {
+          "day": 25,
+          "month": 12,
+          "year": 2026
+        },
+        "rentOpenEnded": true,
+        "leaseLength": {
+          "months": 6,
+          "years": 0
+        },
+        "leaseAgreementHasBreakClause": true,
+        "breakClauseDetails": "Break clause details",
+        "agreementIsStepped": true,
+        "steppedDetails": [
+          {
+            "stepFrom": "2025-01-01",
+            "stepTo": "2025-12-31",
+            "amount": 3000.01
+          },
+          {
+            "stepFrom": "2026-01-01",
+            "stepTo": "2026-12-31",
+            "amount": 3500.99
+          }
+        ]
+      },
+      "verbalAgreementDetails": {
+        "startDate": {
+          "day": 25,
+          "month": 12,
+          "year": 2026
+        },
+        "rentOpenEnded": true,
+        "leaseLength": {
+          "months": 6,
+          "years": 0
+        }
+      },
+      "lastReviewDate": "2025-08-25",
+      "rentReviewDate": "2026-08-26"
+    },
+    "rentReviews": {
+      "leaseContainsRentReviews": true,
+      "pageSevenDetails": {
+        "reviewIntervalType": "every3Years",
+        "reviewIntervalTypeSpecify": {
+          "months": 0,
+          "years": 3
+        },
+        "lastReviewDate": {
+          "day": 25,
+          "month": 12,
+          "year": 2026
+        },
+        "canRentReduced": true,
+        "rentResultOfRentReview": false,
+        "reviewDetails": {
+          "whenWasRentReview": {
+            "day": 25,
+            "month": 12,
+            "year": 2026
+          },
+          "rentAgreedBetween": true,
+          "rentFixedBy": "independent"
+        }
+      },
+      "agreementStartDate": "2025-08-11"
+    },
+    "rentAgreement": {
+      "wasRentFixedBetween": true,
+      "notReviewRentFixed": "interim",
+      "rentSetByType": "renewedLease"
+    },
+    "rent": {
+      "totalRent": {
+        "amount": 2500.5
+      },
+      "rentBecomePayable": "2025-08-10",
+      "rentActuallyAgreed": "2025-08-20",
+      "negotiatingNewRent": true,
+      "rentBasis": "percentageOpenMarket",
+      "rentBasisOtherDetails": "RentBasis other details"
+    },
+    "rentIncludes": {
+      "partRent": true,
+      "otherProperty": true,
+      "livingAccommodation": true,
+      "landOnly": false,
+      "shellUnit": false,
+      "rentDetails": "Rent details",
+      "parking": {
+        "rentIncludesParking": true,
+        "rentIncludedParkingDetails": {
+          "openSpaces": 100,
+          "coveredSpaces": 200,
+          "garages": 12
+        },
+        "rentHasSeparateParking": true,
+        "rentSeparateParkingDetails": {
+          "openSpaces": 300,
+          "coveredSpaces": 20,
+          "garages": 100
+        },
+        "annualSeparateParkingAmount": 999.99,
+        "annualSeparateParkingFixedDate": {
+          "day": 26,
+          "month": 12,
+          "year": 2026
+        }
+      }
+    },
+    "incentives": {
+      "rentFreePeriod": true,
+      "rentFreePeriodDetails": {
+        "lengthInMonths": 2,
+        "description": "Free 2 months period"
+      },
+      "payCapitalSum": true,
+      "capitalPaidDetails": {
+        "capitalSum": 1500.22,
+        "paymentDate": {
+          "day": 31,
+          "month": 1,
+          "year": 2026
+        }
+      },
+      "receiveCapitalSum": true,
+      "capitalReceivedDetails": {
+        "capitalSum": 2500.33,
+        "paymentDate": {
+          "day": 22,
+          "month": 2,
+          "year": 2026
+        }
+      }
+    },
+    "responsibilities": {
+      "responsibleOutsideRepairs": "landlord",
+      "responsibleInsideRepairs": "tenant",
+      "responsibleBuildingInsurance": "both",
+      "ndrCharges": true,
+      "ndrDetails": 100.11,
+      "waterCharges": true,
+      "waterChargesCost": 200.22,
+      "includedServices": true,
+      "includedServicesDetails": [
+        {
+          "chargeDescription": "Extra charge description",
+          "chargeCost": 100.33
+        }
+      ]
+    },
+    "alterations": {
+      "propertyAlterations": true,
+      "propertyAlterationsDetails": [
+        {
+          "date": {
+            "day": 9,
+            "month": 1,
+            "year": 2026
+          },
+          "alterationType": "addLift",
+          "cost": 999.44
+        }
+      ],
+      "alterationsRequired": true
+    },
+    "otherFactors": {
+      "anyOtherFactors": true,
+      "anyOtherFactorsDetails": "Other factors details"
+    },
+    "address": {
+      "buildingNameNumber": "13",
+      "street1": "Street",
+      "street2": "City",
+      "postcode": "AA11 1AA"
+    },
+    "journeyResumptions": [
+      "2026-12-30T13:08:45Z",
+      "2026-12-31T13:08:45Z"
+    ]
+  },
+  "address": {
+    "buildingNameNumber": "13",
+    "street1": "Street",
+    "street2": "City",
+    "postcode": "AA11 1AA"
+  },
+  "updatedAddress": {
+    "buildingNameNumber": "13A",
+    "street1": "New street",
+    "street2": "City",
+    "postcode": "AA11 1AA"
+  }
+}

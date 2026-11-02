@@ -32,11 +32,11 @@ class LoginMappingSpec extends BaseSpec:
       val data = Map(
         "referenceNumber" -> "12345678 /*BLAH 000",
         "postcode"        -> "AA11 1AA",
-        "start-time"      -> "2016-01-04T08:58:42.113"
+        "start-time"      -> "2016-01-04T08:58:42"
       )
 
       mustBind(loginForm.bind(data))(
-        _.startTime shouldBe ZonedDateTime.of(2016, 1, 4, 8, 58, 42, 113000000, ZoneOffset.UTC)
+        _.startTime shouldBe ZonedDateTime.of(2016, 1, 4, 8, 58, 42, 0, ZoneOffset.UTC)
       )
     }
 
@@ -44,7 +44,7 @@ class LoginMappingSpec extends BaseSpec:
       val data = Map(
         "referenceNumber" -> "12345678  */ 000",
         "postcode"        -> "AA11 1AA",
-        "start-time"      -> "2016-01-04T08:58:42.113"
+        "start-time"      -> "2016-01-04T08:58:42"
       )
 
       mustBind(loginForm.bind(data))(
@@ -70,7 +70,7 @@ class LoginMappingSpec extends BaseSpec:
       val data = Map(
         "referenceNumber" -> "12345678 000",
         "postcode"        -> "AA11 1AA",
-        "start-time"      -> "2016-01-04T08:58:42.113"
+        "start-time"      -> "2016-01-04T08:58:42"
       )
 
       mustBind(loginForm.bind(data))(
