@@ -17,6 +17,7 @@
 package models.pages
 
 import models.serviceContracts.submissions.*
+import play.api.libs.json.{Json, OFormat}
 
 case class PageTwelve(
   responsibleOutsideRepairs: ResponsibleType,
@@ -29,3 +30,6 @@ case class PageTwelve(
   includedServices: Boolean,
   includedServicesDetails: List[ChargeDetails]
 )
+
+object PageTwelve:
+  implicit val format: OFormat[PageTwelve] = Json.format

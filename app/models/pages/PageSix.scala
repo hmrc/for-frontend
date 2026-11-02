@@ -18,6 +18,7 @@ package models.pages
 
 import models.RoughDate
 import models.serviceContracts.submissions.{LeaseAgreementType, MonthsYearDuration, SteppedDetails}
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -29,6 +30,9 @@ case class PageSix(
   rentReviewDate: Option[LocalDate] = None
 )
 
+object PageSix:
+  implicit val format: OFormat[PageSix] = Json.format
+
 case class WrittenAgreement(
   startDate: RoughDate,
   rentOpenEnded: Boolean,
@@ -39,8 +43,14 @@ case class WrittenAgreement(
   steppedDetails: List[SteppedDetails] = List()
 )
 
+object WrittenAgreement:
+  implicit val format: OFormat[WrittenAgreement] = Json.format
+
 case class VerbalAgreement(
   startDate: Option[RoughDate] = None,
   rentOpenEnded: Option[Boolean] = None,
   leaseLength: Option[MonthsYearDuration] = None
 )
+
+object VerbalAgreement:
+  implicit val format: OFormat[VerbalAgreement] = Json.format

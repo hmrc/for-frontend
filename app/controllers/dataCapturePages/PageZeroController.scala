@@ -23,11 +23,9 @@ import form.PageZeroForm.pageZeroForm
 import form.persistence.FormDocumentRepository
 
 import jakarta.inject.Inject
-import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.AddressConnectionType
 import play.api.data.Form
-import play.api.libs.json.*
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import play.twirl.api.Html
 import views.html.part0
@@ -39,8 +37,6 @@ class PageZeroController @Inject() (
   cc: MessagesControllerComponents,
   part0: part0
 ) extends ForDataCapturePage[AddressConnectionType](audit, formDocumentRepository, refNumAction, cc):
-
-  implicit override val format: Format[AddressConnectionType] = formatAddressConnection
 
   val emptyForm: Form[AddressConnectionType] = pageZeroForm
   val pageNumber: Int                        = 0

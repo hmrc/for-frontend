@@ -17,8 +17,12 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class RentReviews(leaseContainsRentReviews: Boolean, rentReviewDetails: Option[RentReviewDetails])
+
+object RentReviews:
+  implicit val format: OFormat[RentReviews] = Json.format
 
 case class RentReviewDetails(
   reviewIntervalTypeSpecify: Option[MonthsYearDuration],
@@ -28,4 +32,10 @@ case class RentReviewDetails(
   reviewDetails: Option[RentReviewResultDetails]
 )
 
+object RentReviewDetails:
+  implicit val format: OFormat[RentReviewDetails] = Json.format
+
 case class RentReviewResultDetails(whenWasRentReview: RoughDate, rentAgreedBetween: Boolean, rentFixedBy: Option[RentFixedType])
+
+object RentReviewResultDetails:
+  implicit val format: OFormat[RentReviewResultDetails] = Json.format

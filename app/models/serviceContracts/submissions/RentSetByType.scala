@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -25,3 +28,6 @@ enum RentSetByType:
     renewedLease,
     leaseback,
     surrender
+
+object RentSetByType:
+  implicit val format: Format[RentSetByType] = Scala3EnumJsonFormat.format

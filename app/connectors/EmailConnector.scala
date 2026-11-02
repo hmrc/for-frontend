@@ -39,17 +39,17 @@ class EmailConnector @Inject() (config: ServicesConfig, http: ForHttp)(using ec:
   )(using hc: HeaderCarrier,
     messages: Messages
   ): Future[Unit] =
-    email.map { e =>
+    email.map { to =>
       val formattedExpiryDate = expiryDate.formatLongDate
       val json                = Json.obj(
-        "to"         -> JsArray(Seq(JsString(e))),
-        "templateId" -> JsString("rald_alert"),
-        "parameters" -> JsObject(Seq(
-          "referenceNumber" -> JsString(s"""${Messages("saveForLater.refNum")}: $refNumber"""),
-          "postcode"        -> JsString(s"""${Messages("saveForLater.postcode")}: $postcode"""),
-          "expiryDate"      -> JsString(s"""${Messages("saveForLater.paragraph")} $formattedExpiryDate""")
-        )),
-        "force"      -> JsBoolean(false)
+        "to"         -> Seq(to),
+        "templateId" -> "rald_alert",
+        "parameters" -> Json.obj(
+          "referenceNumber" -> s"""${messages("saveForLater.refNum")}: $refNumber""",
+          "postcode"        -> s"""${messages("saveForLater.postcode")}: $postcode""",
+          "expiryDate"      -> s"""${messages("saveForLater.paragraph")} $formattedExpiryDate"""
+        ),
+        "force"      -> false
       )
       http.post[JsObject](s"$emailUrl/hmrc/email", json).map(_ => ())
     } getOrElse Future.unit

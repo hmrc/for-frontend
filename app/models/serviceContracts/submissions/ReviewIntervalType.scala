@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -25,3 +28,6 @@ enum ReviewIntervalType:
     every5Years,
     every7Years,
     other
+
+object ReviewIntervalType:
+  implicit val format: Format[ReviewIntervalType] = Scala3EnumJsonFormat.format

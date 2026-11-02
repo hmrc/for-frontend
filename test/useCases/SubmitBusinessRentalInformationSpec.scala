@@ -17,14 +17,14 @@
 package useCases
 
 import actions.RefNumRequest
-import connectors.{Audit, Document, Page}
-import helpers.AddressAuditing
+import connectors.{Document, Page}
 import models.*
 import models.serviceContracts.submissions.*
 import org.scalatest.RecoverMethods.recoverToExceptionIf
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.stubs.*
@@ -40,15 +40,14 @@ class SubmitBusinessRentalInformationSpec extends BaseSpec:
   given HeaderCarrier    = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
   given RefNumRequest[?] = RefNumRequest("refNum", FakeRequest(), DefaultMessagesApi())
 
-  private val audit          = mock[Audit]
-  private val auditAddresses = mock[AddressAuditing]
+  private val audit = mock[AuditService]
 
   "Assuming a complete, valid document (representing FOR submission details) exists for a refNum" when {
     val repo = StubFormDocumentRepo((sessionId, refNum, document))
     builder.stubBuild(document, submission)
 
     "a submission for the refNum is received" should {
-      val submit = SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit, auditAddresses)
+      val submit = SubmitBusinessRentalInformationToBackendApi(repo, builder, subConnector, audit)
       submit(refNum).futureValue
 
       "the information will be formatted using the submission schema and posted to the back-end" in
@@ -60,7 +59,7 @@ class SubmitBusinessRentalInformationSpec extends BaseSpec:
     "return error" in {
       val invalidRefNum = "adlkjfalsjd"
       val ex            = recoverToExceptionIf[RentalInformationCouldNotBeRetrieved] {
-        val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit, auditAddresses)
+        val submit = SubmitBusinessRentalInformationToBackendApi(StubFormDocumentRepo(), builder, subConnector, audit)
         submit(invalidRefNum)
       }.futureValue
 

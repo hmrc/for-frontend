@@ -16,6 +16,8 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class Address(buildingNameNumber: String, street1: Option[String], street2: Option[String], postcode: String):
 
   def singleLine: String =
@@ -23,3 +25,6 @@ case class Address(buildingNameNumber: String, street1: Option[String], street2:
 
   def multiLine: String =
     List(Some(buildingNameNumber), street1, street2, Some(postcode.replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2"))).flatten.mkString("<br /> ")
+
+object Address:
+  implicit val format: OFormat[Address] = Json.format

@@ -18,6 +18,7 @@ package models.pages
 
 import models.RoughDate
 import models.serviceContracts.submissions.OccupierType
+import play.api.libs.json.{Json, OFormat}
 
 case class PageThree(
   propertyType: String,
@@ -30,3 +31,6 @@ case class PageThree(
   propertyRentedByYou: Option[Boolean],
   noRentDetails: Option[String]
 )
+
+object PageThree:
+  implicit val format: OFormat[PageThree] = Json.format

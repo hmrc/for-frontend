@@ -22,10 +22,8 @@ import form.PageTwelveForm.pageTwelveForm
 import form.persistence.FormDocumentRepository
 
 import jakarta.inject.Inject
-import models.*
 import models.pages.{PageTwelve, Summary}
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import views.html.part12
@@ -38,7 +36,6 @@ class PageTwelveController @Inject() (
   part12: part12
 ) extends ForDataCapturePage[PageTwelve](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageTwelve] = p12f
   val emptyForm: Form[PageTwelve] = pageTwelveForm
   val pageNumber: Int             = 12
 

@@ -27,7 +27,7 @@ import models.journeys.*
 import models.pages.{Summary, SummaryBuilder}
 import play.api.Logging
 import play.api.data.Form
-import play.api.libs.json.{Format, JsObject, Json}
+import play.api.libs.json.{JsObject, Json}
 import play.api.libs.typedmap.TypedKey
 import play.api.mvc.Results.Redirect
 import play.api.mvc.*
@@ -48,7 +48,6 @@ abstract class ForDataCapturePage[T](
 ) extends FrontendController(controllerComponents)
   with Logging:
 
-  implicit val format: Format[T]
   implicit val ec: ExecutionContext = controllerComponents.executionContext
 
   def emptyForm: Form[T]

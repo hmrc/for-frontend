@@ -16,4 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class OtherFactors(anyOtherFactors: Boolean, anyOtherFactorsDetails: Option[String])
+
+object OtherFactors:
+  implicit val format: OFormat[OtherFactors] = Json.format

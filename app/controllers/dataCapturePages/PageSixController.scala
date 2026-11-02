@@ -21,13 +21,11 @@ import connectors.Audit
 import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
-import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import config.SessionId
-import play.api.libs.json.OFormat
 
 import jakarta.inject.Inject
 import scala.concurrent.Await
@@ -42,7 +40,6 @@ class PageSixController @Inject() (
   part6: views.html.part6
 ) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageSix] = p6f
   val emptyForm: Form[PageSix] = pageSixForm
   val pageNumber: Int          = 6
 

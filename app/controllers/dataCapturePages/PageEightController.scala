@@ -22,11 +22,9 @@ import form.PageEightForm.pageEightForm
 import form.persistence.FormDocumentRepository
 
 import jakarta.inject.Inject
-import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.RentAgreement
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 
@@ -38,7 +36,6 @@ class PageEightController @Inject() (
   part8: views.html.part8
 ) extends ForDataCapturePage[RentAgreement](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[RentAgreement] = raf
   val emptyForm: Form[RentAgreement] = pageEightForm
   val pageNumber: Int                = 8
 

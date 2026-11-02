@@ -16,4 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class ParkingDetails(openSpaces: Int, coveredSpaces: Int, garages: Int)
+
+object ParkingDetails:
+  implicit val format: OFormat[ParkingDetails] = Json.format

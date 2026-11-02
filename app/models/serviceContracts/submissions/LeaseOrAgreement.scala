@@ -17,6 +17,7 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -31,4 +32,10 @@ case class LeaseOrAgreement(
   leaseLength: Option[MonthsYearDuration]
 )
 
+object LeaseOrAgreement:
+  implicit val format: OFormat[LeaseOrAgreement] = Json.format
+
 case class SteppedDetails(stepFrom: LocalDate, stepTo: LocalDate, amount: BigDecimal)
+
+object SteppedDetails:
+  implicit val format: OFormat[SteppedDetails] = Json.format

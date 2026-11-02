@@ -17,6 +17,7 @@
 package models.pages
 
 import models.serviceContracts.submissions.{Address, LandlordConnectionType}
+import play.api.libs.json.{Json, OFormat}
 
 case class PageFive(
   landlordFullName: String,
@@ -24,3 +25,6 @@ case class PageFive(
   landlordConnectionType: LandlordConnectionType,
   landlordConnectText: Option[String]
 )
+
+object PageFive:
+  implicit val format: OFormat[PageFive] = Json.format

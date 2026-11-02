@@ -22,11 +22,9 @@ import form.PageTwoForm.pageTwoForm
 import form.persistence.FormDocumentRepository
 
 import jakarta.inject.Inject
-import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.CustomerDetails
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import views.html.part2
@@ -39,7 +37,6 @@ class PageTwoController @Inject() (
   part2View: part2
 ) extends ForDataCapturePage[CustomerDetails](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[CustomerDetails] = cdf
   val emptyForm: Form[CustomerDetails] = pageTwoForm
   val pageNumber: Int                  = 2
 

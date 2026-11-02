@@ -17,5 +17,9 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class PaymentDetails(wasTherePayment: Boolean, paymentDate: Option[RoughDate], sum: Option[BigDecimal])
+
+object PaymentDetails:
+  implicit val format: OFormat[PaymentDetails] = Json.format

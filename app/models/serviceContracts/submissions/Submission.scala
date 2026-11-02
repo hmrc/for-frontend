@@ -16,6 +16,8 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class Submission(
   propertyAddress: Option[Address],
   customerDetails: Option[CustomerDetails],
@@ -33,3 +35,6 @@ case class Submission(
   otherFactors: Option[OtherFactors],
   referenceNumber: Option[String] = None
 )
+
+object Submission:
+  implicit val format: OFormat[Submission] = Json.format

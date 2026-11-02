@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -26,3 +29,6 @@ enum UserType:
     occupiersAgent,
     ownersAgent,
     vacated
+
+object UserType:
+  implicit val format: Format[UserType] = Scala3EnumJsonFormat.format

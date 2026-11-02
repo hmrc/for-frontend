@@ -16,6 +16,8 @@
 
 package models
 
+import play.api.libs.json.{Json, OFormat}
+
 import java.time.LocalDate
 
 case class RoughDate(day: Option[Int], month: Option[Int], year: Int):
@@ -25,3 +27,6 @@ case class RoughDate(day: Option[Int], month: Option[Int], year: Int):
   def this(month: Int, year: Int) = this(None, Some(month), year)
 
   def toLocalDate: LocalDate = LocalDate.of(year, month.getOrElse(1), day.getOrElse(1))
+
+object RoughDate:
+  implicit val format: OFormat[RoughDate] = Json.format

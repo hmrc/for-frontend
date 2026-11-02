@@ -16,4 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class RentAgreement(wasRentFixedBetween: Boolean, notReviewRentFixed: Option[NotReviewRentFixedType], rentSetByType: RentSetByType)
+
+object RentAgreement:
+  implicit val format: OFormat[RentAgreement] = Json.format

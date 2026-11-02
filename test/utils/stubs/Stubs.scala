@@ -19,11 +19,8 @@ package utils.stubs
 import com.google.inject.Provider
 import connectors.*
 import form.persistence.FormDocumentRepository
-import helpers.AddressAuditing
-import models.pages.Summary
 import models.serviceContracts.submissions.{NotConnectedSubmission, Submission}
 import org.scalatest.matchers.should
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import useCases.SubmissionBuilder
 
@@ -70,6 +67,3 @@ case class StubFormDocumentRepo(docs: (String, String, Document)*) extends FormD
   override def clear(documentId: String, referenceNumber: String): Future[Unit] = ???
 
   override def remove(documentId: String): Future[Unit] = Future.successful(())
-
-object StubAddressAuditing extends AddressAuditing(null):
-  override def apply(s: Summary, r: Request[?]): Future[Unit] = Future.successful(())

@@ -21,7 +21,6 @@ import play.api.Logging
 import play.api.mvc.*
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import useCases.SubmitBusinessRentalInformation
 
 import jakarta.inject.{Inject, Singleton}
@@ -45,12 +44,14 @@ class FORSubmissionController @Inject() (
     } getOrElse rejectSubmission
   }
 
-  private def submit[T](refNum: String)(using request: RefNumRequest[T]): Future[Result] = {
-    val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    for {
-      _ <- submitBusinessRentalInformation(refNum)(using hc, request)
-    } yield Found(routes.ConfirmationController.confirmation.url)
-  } recoverWith { case UpstreamErrorResponse(_, 409, _, _) => Conflict(errorView(409)) }
+  private def submit[T](refNum: String)(using request: RefNumRequest[T]): Future[Result] =
+    (
+      for
+        _ <- submitBusinessRentalInformation(refNum)
+      yield Found(routes.ConfirmationController.confirmation.url)
+    ).recoverWith {
+      case UpstreamErrorResponse(_, 409, _, _) => Conflict(errorView(409))
+    }
 
   private def rejectSubmission = Future.successful {
     Found(routes.ApplicationController.declarationError.url)

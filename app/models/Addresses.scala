@@ -28,6 +28,16 @@ object Addresses:
       case Some(a) => a
       case None    => throw AddressMissing(summary.referenceNumber)
 
+  def updatedAddress(summary: Summary): Option[Address] =
+    summary.propertyAddress
+      .filter(newAddress =>
+        summary.addressConnection.contains(AddressConnectionType.`yes-change-address`)
+          && !summary.address.contains(newAddress)
+      )
+
+  /**
+    * @deprecated Use directly summary.address and Addresses.updatedAddress(summary)
+    */
   def addressJson(summary: Summary): JsObject =
     summary.address.fold(Json.obj())(address => Json.obj(Audit.address -> address)) ++
       summary.propertyAddress

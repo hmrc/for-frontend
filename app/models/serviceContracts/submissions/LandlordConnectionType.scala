@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -24,3 +27,6 @@ enum LandlordConnectionType:
   case noConnected,
     family,
     other
+
+object LandlordConnectionType:
+  implicit val format: Format[LandlordConnectionType] = Scala3EnumJsonFormat.format
