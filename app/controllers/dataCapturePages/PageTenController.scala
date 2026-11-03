@@ -17,28 +17,24 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageTenForm.pageTenForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
-import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.WhatRentIncludes
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 class PageTenController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part10: views.html.part10
 ) extends ForDataCapturePage[WhatRentIncludes](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[WhatRentIncludes] = wrif
   val emptyForm: Form[WhatRentIncludes] = pageTenForm
   val pageNumber: Int                   = 10
 

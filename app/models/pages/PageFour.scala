@@ -18,8 +18,12 @@ package models.pages
 
 import models.*
 import models.serviceContracts.submissions.*
+import play.api.libs.json.{Json, OFormat}
 
 case class PageFour(propertyIsSublet: Boolean, sublet: List[SubletDetails])
+
+object PageFour:
+  implicit val format: OFormat[PageFour] = Json.format
 
 case class SubletDetails(
   tenantFullName: String,
@@ -30,3 +34,6 @@ case class SubletDetails(
   annualRent: BigDecimal,
   rentFixedDate: RoughDate
 )
+
+object SubletDetails:
+  implicit val format: OFormat[SubletDetails] = Json.format

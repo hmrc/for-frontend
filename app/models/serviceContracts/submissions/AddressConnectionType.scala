@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -24,3 +27,6 @@ enum AddressConnectionType:
   case yes,
     `yes-change-address`,
     no
+
+object AddressConnectionType:
+  implicit val format: Format[AddressConnectionType] = Scala3EnumJsonFormat.format

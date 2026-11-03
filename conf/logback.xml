@@ -10,7 +10,7 @@
 
   <logger name="application" level="DEBUG" />
   <logger name="models" level="DEBUG" />
-  <logger name="uk.gov.hmrc.audit" level="DEBUG" />
+  <logger name="uk.gov" level="DEBUG" />
 
   <root level="INFO">
     <appender-ref ref="STDOUT" />

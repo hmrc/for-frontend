@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -29,3 +32,6 @@ enum AlterationSetByType:
     addedParking,
     addedAirCondition,
     fittingOut
+
+object AlterationSetByType:
+  implicit val format: Format[AlterationSetByType] = Scala3EnumJsonFormat.format

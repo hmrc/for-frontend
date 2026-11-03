@@ -17,6 +17,7 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class IncentivesAndPayments(
   rentFreePeriod: Boolean,
@@ -27,6 +28,15 @@ case class IncentivesAndPayments(
   capitalReceivedDetails: Option[CapitalDetails]
 )
 
+object IncentivesAndPayments:
+  implicit val format: OFormat[IncentivesAndPayments] = Json.format
+
 case class FreePeriodDetails(lengthInMonths: Int, description: String)
 
+object FreePeriodDetails:
+  implicit val format: OFormat[FreePeriodDetails] = Json.format
+
 case class CapitalDetails(capitalSum: BigDecimal, paymentDate: RoughDate)
+
+object CapitalDetails:
+  implicit val format: OFormat[CapitalDetails] = Json.format

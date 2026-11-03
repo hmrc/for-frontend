@@ -16,6 +16,8 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class WhatRentIncludes(
   partRent: Boolean,
   otherProperty: Boolean,
@@ -25,3 +27,6 @@ case class WhatRentIncludes(
   rentDetails: Option[String],
   parking: Parking
 )
+
+object WhatRentIncludes:
+  implicit val format: OFormat[WhatRentIncludes] = Json.format

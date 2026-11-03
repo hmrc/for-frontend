@@ -16,8 +16,13 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class PropertyAlterations(
   propertyAlterations: Boolean,
   propertyAlterationsDetails: List[PropertyAlterationsDetails],
   alterationsRequired: Option[Boolean]
 )
+
+object PropertyAlterations:
+  implicit val format: OFormat[PropertyAlterations] = Json.format

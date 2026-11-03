@@ -17,27 +17,23 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageFourForm.pageFourForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
-import models.*
 import models.pages.*
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 class PageFourController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part4: views.html.part4
 ) extends ForDataCapturePage[PageFour](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageFour] = p4f
   val emptyForm: Form[PageFour] = pageFourForm
   val pageNumber: Int           = 4
 

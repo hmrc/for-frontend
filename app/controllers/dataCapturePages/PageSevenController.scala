@@ -17,20 +17,17 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
-import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import models.serviceContracts.submissions.LeaseAgreementType
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import config.SessionId
-import play.api.libs.json.OFormat
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 import java.time.LocalDate
 import scala.concurrent.Await
@@ -38,14 +35,13 @@ import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 class PageSevenController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part7: views.html.part7
 ) extends ForDataCapturePage[PageSeven](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageSeven] = p7f
   val emptyForm: Form[PageSeven] = pageSevenForm
   val pageNumber: Int            = 7
 

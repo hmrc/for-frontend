@@ -16,6 +16,8 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class Responsibilities(
   responsibleOutsideRepairs: ResponsibleType,
   responsibleInsideRepairs: ResponsibleType,
@@ -26,4 +28,10 @@ case class Responsibilities(
   includedServicesDetails: List[ChargeDetails]
 )
 
+object Responsibilities:
+  implicit val format: OFormat[Responsibilities] = Json.format
+
 case class ChargeDetails(chargeDescription: String, chargeCost: BigDecimal)
+
+object ChargeDetails:
+  implicit val format: OFormat[ChargeDetails] = Json.format

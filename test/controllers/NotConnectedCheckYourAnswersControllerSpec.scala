@@ -16,10 +16,11 @@
 
 package controllers
 
-import connectors.{Audit, SubmissionConnector}
+import connectors.SubmissionConnector
 import form.persistence.{FormDocumentRepository, MongoSessionRepository}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import uk.gov.hmrc.vo.unit.test.BaseSpec
 import utils.Helpers.refNumAction
 import views.html.{confirmNotConnected, notConnectedCheckYourAnswers}
@@ -35,7 +36,7 @@ class NotConnectedCheckYourAnswersControllerSpec extends BaseSpec:
       val formDocumentRepository = mock[FormDocumentRepository]
       val submissionConnector    = mock[SubmissionConnector]
       val cache                  = mock[MongoSessionRepository]
-      val audit                  = mock[Audit]
+      val audit                  = mock[AuditService]
 
       val controller = NotConnectedCheckYourAnswersController(
         formDocumentRepository,

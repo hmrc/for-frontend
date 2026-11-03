@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -26,3 +29,6 @@ enum RentBaseType:
     percentageTurnover,
     indexation,
     other
+
+object RentBaseType:
+  implicit val format: Format[RentBaseType] = Scala3EnumJsonFormat.format

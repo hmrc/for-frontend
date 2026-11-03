@@ -17,13 +17,13 @@
 package controllers
 
 import config.LoginToHODAction
-import connectors.Audit
+import controllers.LoginController.nowUTC
 import form.persistence.FormDocumentRepository
 import form.{Errors, MappingSupport}
 import jakarta.inject.Inject
 import models.*
-import models.pages.SummaryBuilder
-import models.serviceContracts.submissions.Address
+import models.event.{LockedOut, Logout, UserLogin}
+import models.pages.{Summary, SummaryBuilder}
 import play.api.Logging
 import play.api.data.Form
 import play.api.data.Forms.*
@@ -34,7 +34,7 @@ import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId, SessionKeys, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import uk.gov.hmrc.vo.service.conversion.DateConversion.*
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import views.html.{login, loginFailed}
 
 import java.time.{ZoneOffset, ZonedDateTime}
@@ -44,6 +44,8 @@ import scala.concurrent.{ExecutionContext, Future}
 case class LoginDetails(referenceNumber: String, postcode: String, startTime: ZonedDateTime)
 
 object LoginController:
+
+  private def nowUTC: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
   val loginForm: Form[LoginDetails] = Form(
     mapping(
@@ -64,15 +66,15 @@ object LoginController:
         }
       ),
       "start-time"      -> default(
-        localDateTime("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        localDateTime("yyyy-MM-dd'T'HH:mm:ss")
           .transform[ZonedDateTime](_.atZone(ZoneOffset.UTC), _.toLocalDateTime),
-        nowInUK
+        nowUTC
       )
     )(LoginDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
 class LoginController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   documentRepo: FormDocumentRepository,
   loginToHOD: LoginToHODAction,
   cc: MessagesControllerComponents,
@@ -87,26 +89,33 @@ class LoginController @Inject() (
   import LoginController.loginForm
 
   def show: Action[AnyContent] = Action { implicit request =>
-    Ok(login(loginForm.fill(LoginDetails("", "", nowInUK))))
+    Ok(login(loginForm.fill(LoginDetails("", "", nowUTC))))
   }
 
   def logout: Action[AnyContent] = Action { implicit request =>
-    val refNum     = request.session.get("refNum").getOrElse("-")
-    val refNumJson = Json.obj(Audit.referenceNumber -> refNum)
+    val refNum = request.session.get("refNum").getOrElse("-")
 
     given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     hc.sessionId match
       case Some(sessionId) =>
         documentRepo.findById(sessionId.value, refNum).map {
-          case Some(doc) => refNumJson ++ Addresses.addressJson(SummaryBuilder.build(doc))
-          case None      => refNumJson
-        }.map(jsObject => audit.sendExplicitAudit("Logout", jsObject))
-      case None            =>
-        audit.sendExplicitAudit("Logout", refNumJson)
+          case Some(doc) => auditSendLogout(refNum, SummaryBuilder.build(doc))
+          case None      => auditSendLogout(refNum, None)
+        }
+      case None            => auditSendLogout(refNum, None)
 
     Redirect(routes.LoginController.show).withNewSession
   }
+
+  private def auditSendLogout(referenceNumber: String, summary: Option[Summary])(using hc: HeaderCarrier): Unit =
+    audit.send(
+      Logout(
+        referenceNumber = referenceNumber,
+        address = summary.flatMap(_.address),
+        updatedAddress = summary.flatMap(Addresses.updatedAddress)
+      )
+    )
 
   def submit: Action[AnyContent] = Action.async { implicit request =>
     loginForm.bindFromRequest().fold(
@@ -126,10 +135,10 @@ class LoginController @Inject() (
 
     loginToHOD(using hc2, ec)(cleanedRefNumber, cleanPostcode, startTime).flatMap {
       case DocumentPreviouslySaved(token, address) =>
-        auditLogin(cleanedRefNumber, returnUser = true, address)(using hc2)
+        audit.send(UserLogin(returningUser = true, cleanedRefNumber, address))
         withNewSession(Redirect(routes.SaveForLaterController.login), token, cleanedRefNumber, sessionId)
       case NoExistingDocument(token, address)      =>
-        auditLogin(cleanedRefNumber, returnUser = false, address)(using hc2)
+        audit.send(UserLogin(returningUser = false, cleanedRefNumber, address))
         withNewSession(Redirect(dataCapturePages.routes.PageController.showPage(0)), token, cleanedRefNumber, sessionId)
     }.recover {
       case UpstreamErrorResponse(_, 409, _, _)    => Conflict(errorView(409))
@@ -139,26 +148,19 @@ class LoginController @Inject() (
         val remainingAttempts = failed.numberOfRemainingTriesUntilIPLockout
         logger.warn(s"Failed login: RefNum: $cleanedRefNumber Attempts remaining: $remainingAttempts")
         if remainingAttempts < 1 then
-          val clientIP = r.headers.get(trueClientIp).getOrElse("")
-          auditLockedOut(cleanedRefNumber, postcode, cleanPostcode, clientIP)(using hc2)
+          audit.send(
+            LockedOut(
+              referenceNumber = cleanedRefNumber,
+              postcode = postcode,
+              postcodeCleaned = cleanPostcode,
+              lockedIP = r.headers.get(trueClientIp).getOrElse("")
+            )
+          )
 
           Redirect(routes.LoginController.lockedOut)
         else
           Redirect(routes.LoginController.loginFailed(remainingAttempts))
     }
-
-  private def auditLogin(refNumber: String, returnUser: Boolean, address: Address)(using hc: HeaderCarrier): Unit =
-    val json = Json.obj("returningUser" -> returnUser, Audit.referenceNumber -> refNumber, Audit.address -> Json.toJsObject(address))
-    audit.sendExplicitAudit("UserLogin", json)
-
-  private def auditLockedOut(refNumber: String, postcode: String, postcodeCleaned: String, lockedIP: String)(using hc: HeaderCarrier): Unit =
-    val detailJson = Json.obj(
-      Audit.referenceNumber -> refNumber,
-      "postcode"            -> postcode,
-      "postcodeCleaned"     -> postcodeCleaned,
-      "lockedIP"            -> lockedIP
-    )
-    audit.sendExplicitAudit("LockedOut", detailJson)
 
   def lockedOut: Action[AnyContent] = Action { implicit request =>
     Unauthorized(lockedOutView())

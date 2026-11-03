@@ -17,27 +17,23 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageNineForm.pageNineForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
-import models.*
 import models.pages.*
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 class PageNineController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part9: views.html.part9
 ) extends ForDataCapturePage[PageNine](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageNine] = p9f
   val emptyForm: Form[PageNine] = pageNineForm
   val pageNumber: Int           = 9
 

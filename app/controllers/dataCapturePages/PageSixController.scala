@@ -17,32 +17,29 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageSevenForm.pageSevenForm
 import form.PageSixForm.pageSixForm
 import form.persistence.FormDocumentRepository
-import models.*
 import models.pages.{PageSeven, PageSix, Summary}
 import play.api.data.Form
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import config.SessionId
-import play.api.libs.json.OFormat
-
 import jakarta.inject.Inject
+import uk.gov.hmrc.vo.service.connectors.AuditService
+
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 class PageSixController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part6: views.html.part6
 ) extends ForDataCapturePage[PageSix](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PageSix] = p6f
   val emptyForm: Form[PageSix] = pageSixForm
   val pageNumber: Int          = 6
 

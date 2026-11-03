@@ -17,21 +17,18 @@
 package controllers
 
 import actions.RefNumAction
-import config.AppConfig
-import connectors.Audit
+import config.{AppConfig, SessionId}
 import form.Errors
 import form.persistence.FormDocumentRepository
-import models.Addresses
-
 import jakarta.inject.{Inject, Singleton}
+import models.Addresses
+import models.event.ContinueNextPage
 import models.pages.*
 import play.api.data.Form
 import play.api.data.Forms.*
-import play.api.libs.json.Json
 import play.api.mvc.*
-import config.SessionId
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
 import scala.concurrent.ExecutionContext
 
@@ -46,24 +43,23 @@ class ApplicationController @Inject() (
   indexView: views.html.index,
   sessionTimeoutView: views.html.sessionTimeout,
   importantInformationView: views.html.importantInformation,
-  audit: Audit,
+  audit: AuditService,
   appConfig: AppConfig
 )(using ec: ExecutionContext
 ) extends FrontendController(cc):
-
-  private def updatePath(hc: HeaderCarrier, path: String): HeaderCarrier =
-    val otherHeaders = hc.otherHeaders.map(x => if x._1 == "path" then ("path", path) else x)
-    hc.copy(otherHeaders = otherHeaders)
 
   def declaration: Action[AnyContent] = refNumAction.async { implicit request =>
     repository.findById(SessionId(using hc), request.refNum).map {
       case Some(doc) =>
         val summary = SummaryBuilder.build(doc)
 
-        val json = Json.obj(Audit.referenceNumber -> request.refNum) ++ Addresses.addressJson(summary)
-        audit.sendExplicitAudit("ContinueNextPage", json)(
-          using updatePath(implicitly[HeaderCarrier], "/sending-rental-information/check-your-answers"),
-          ec
+        audit.send(
+          ContinueNextPage(
+            url = controllers.routes.ApplicationController.checkYourAnswers.url,
+            referenceNumber = request.refNum,
+            address = summary.address,
+            updatedAddress = Addresses.updatedAddress(summary)
+          )
         )
 
         Ok(declarationView(Form(("", text)), summary))

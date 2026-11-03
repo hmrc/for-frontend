@@ -16,8 +16,13 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class CustomerDetails(
   fullName: String,
   userType: UserType,
   contactDetails: ContactDetails
 )
+
+object CustomerDetails:
+  implicit val format: OFormat[CustomerDetails] = Json.format

@@ -16,12 +16,13 @@
 
 package controllers
 
-import actions.RefNumRequest
 import form.persistence.FormDocumentRepository
+import jakarta.inject.Singleton
 import models.serviceContracts.submissions.Submission
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.should
 import play.api.Application
+import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -30,7 +31,6 @@ import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 import useCases.SubmitBusinessRentalInformation
 import utils.stubs.StubFormDocumentRepoProvider
 
-import jakarta.inject.Singleton
 import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
@@ -103,7 +103,7 @@ class StubSubmitBRI extends SubmitBusinessRentalInformation with should.Matchers
 
   var submittedRefNums: Seq[String] = Seq.empty
 
-  def apply(refNum: String)(using hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] =
+  def apply(refNum: String)(using hc: HeaderCarrier, messages: Messages): Future[Submission] =
     Console.println(s"=== called apply with : $refNum ===")
     Future.successful {
       submittedRefNums = submittedRefNums :+ refNum

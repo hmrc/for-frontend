@@ -17,27 +17,28 @@
 package models.pages
 
 import models.serviceContracts.submissions.*
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.ZonedDateTime
 
 case class Summary(
   referenceNumber: String,
   journeyStarted: ZonedDateTime,
-  addressConnection: Option[AddressConnectionType],
-  propertyAddress: Option[Address],
-  customerDetails: Option[CustomerDetails],
-  theProperty: Option[PageThree],
-  sublet: Option[PageFour],
-  landlord: Option[PageFive],
-  lease: Option[PageSix],
-  rentReviews: Option[PageSeven],
-  rentAgreement: Option[RentAgreement],
-  rent: Option[PageNine],
-  rentIncludes: Option[WhatRentIncludes],
-  incentives: Option[IncentivesAndPayments],
-  responsibilities: Option[PageTwelve],
-  alterations: Option[PropertyAlterations],
-  otherFactors: Option[OtherFactors],
+  addressConnection: Option[AddressConnectionType] = None,
+  propertyAddress: Option[Address] = None,
+  customerDetails: Option[CustomerDetails] = None,
+  theProperty: Option[PageThree] = None,
+  sublet: Option[PageFour] = None,
+  landlord: Option[PageFive] = None,
+  lease: Option[PageSix] = None,
+  rentReviews: Option[PageSeven] = None,
+  rentAgreement: Option[RentAgreement] = None,
+  rent: Option[PageNine] = None,
+  rentIncludes: Option[WhatRentIncludes] = None,
+  incentives: Option[IncentivesAndPayments] = None,
+  responsibilities: Option[PageTwelve] = None,
+  alterations: Option[PropertyAlterations] = None,
+  otherFactors: Option[OtherFactors] = None,
   address: Option[Address] = None,
   journeyResumptions: Seq[ZonedDateTime] = Seq.empty
 ):
@@ -58,6 +59,9 @@ case class Summary(
     case Some(AddressConnectionType.`yes-change-address`) =>
       address.map(_.singleLine) != propertyAddress.map(_.singleLine)
     case _                                                => false
+
+object Summary:
+  implicit val format: OFormat[Summary] = Json.format
 
 case class NoMainAddress(refNum: String) extends Exception(refNum)
 case object NoReferenceNumber extends Exception

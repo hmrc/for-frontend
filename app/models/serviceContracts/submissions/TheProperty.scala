@@ -17,6 +17,7 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class TheProperty(
   propertyType: String,
@@ -27,3 +28,6 @@ case class TheProperty(
   propertyRentedByYou: Option[Boolean],
   noRentDetails: Option[String]
 )
+
+object TheProperty:
+  implicit val format: OFormat[TheProperty] = Json.format

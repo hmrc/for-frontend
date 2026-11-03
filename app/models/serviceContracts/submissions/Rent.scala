@@ -16,6 +16,8 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 import java.time.LocalDate
 
 case class Rent(
@@ -26,3 +28,6 @@ case class Rent(
   rentBasis: RentBaseType,
   rentBasisOtherDetails: Option[String]
 )
+
+object Rent:
+  implicit val format: OFormat[Rent] = Json.format

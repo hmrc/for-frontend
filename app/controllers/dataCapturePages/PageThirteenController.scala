@@ -17,29 +17,25 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageThirteenForm.pageThirteenForm
 import form.persistence.FormDocumentRepository
-
 import jakarta.inject.Inject
-import models.*
 import models.pages.Summary
 import models.serviceContracts.submissions.PropertyAlterations
 import play.api.data.Form
-import play.api.libs.json.OFormat
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import views.html.part13
 
 class PageThirteenController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,
   part13: part13
 ) extends ForDataCapturePage[PropertyAlterations](audit, formDocumentRepository, refNumAction, cc):
 
-  val format: OFormat[PropertyAlterations] = palf
   val emptyForm: Form[PropertyAlterations] = pageThirteenForm
   val pageNumber: Int                      = 13
 

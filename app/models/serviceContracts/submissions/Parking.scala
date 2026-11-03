@@ -17,6 +17,7 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class Parking(
   rentIncludesParking: Boolean,
@@ -26,3 +27,6 @@ case class Parking(
   annualSeparateParkingAmount: Option[BigDecimal],
   annualSeparateParkingFixedDate: Option[RoughDate]
 )
+
+object Parking:
+  implicit val format: OFormat[Parking] = Json.format

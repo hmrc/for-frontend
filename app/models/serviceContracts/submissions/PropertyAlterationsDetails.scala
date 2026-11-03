@@ -17,5 +17,9 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class PropertyAlterationsDetails(date: RoughDate, alterationType: AlterationSetByType, cost: BigDecimal)
+
+object PropertyAlterationsDetails:
+  implicit val format: OFormat[PropertyAlterationsDetails] = Json.format

@@ -17,21 +17,20 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
-import connectors.Audit
 import form.PageFiveForm.pageFiveForm
 import form.persistence.FormDocumentRepository
+import jakarta.inject.Inject
 import models.*
 import models.pages.{PageFive, Summary}
 import play.api.data.Form
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.{AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import views.html.part5
 
-import jakarta.inject.Inject
-
 class PageFiveController @Inject() (
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   cc: MessagesControllerComponents,

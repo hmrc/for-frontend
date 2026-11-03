@@ -17,38 +17,38 @@
 package controllers.dataCapturePages
 
 import actions.{RefNumAction, RefNumRequest}
+import config.SessionId
 import connectors.*
 import controllers.*
 import controllers.dataCapturePages.ForDataCapturePage.*
 import form.*
 import form.persistence.{BuildForm, FormDocumentRepository, SaveForm, SaveFormInRepository}
 import models.Addresses
+import models.event.ContinueNextPage
 import models.journeys.*
 import models.pages.{Summary, SummaryBuilder}
 import play.api.Logging
 import play.api.data.Form
-import play.api.libs.json.{Format, JsObject, Json}
 import play.api.libs.typedmap.TypedKey
-import play.api.mvc.Results.Redirect
 import play.api.mvc.*
+import play.api.mvc.Results.Redirect
 import play.shaded.ahc.io.netty.handler.codec.http.QueryStringDecoder
 import play.twirl.api.Html
-import config.SessionId
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.vo.service.connectors.AuditService
 
-import scala.jdk.CollectionConverters.*
 import scala.concurrent.{ExecutionContext, Future}
+import scala.jdk.CollectionConverters.*
 
 abstract class ForDataCapturePage[T](
-  audit: Audit,
+  audit: AuditService,
   formDocumentRepository: FormDocumentRepository,
   refNumAction: RefNumAction,
   override val controllerComponents: MessagesControllerComponents
 ) extends FrontendController(controllerComponents)
   with Logging:
 
-  implicit val format: Format[T]
   implicit val ec: ExecutionContext = controllerComponents.executionContext
 
   def emptyForm: Form[T]
@@ -110,14 +110,17 @@ abstract class ForDataCapturePage[T](
       case controllers.dataCapturePages.ForDataCapturePage.Unknown  =>
         redirectToPage(pageNumber)
 
-  private def auditFormSubmission(formData: T, summary: Summary)(using request: RefNumRequest[AnyContent]): Unit = // TODO maybe future?? or fire&forget
-    // Get only form data, not additional POST data like CSRF token.
-    val json = Json.toJson(emptyForm.fill(formData).data).as[JsObject] ++
-      Json.obj(Audit.referenceNumber -> request.refNum) ++
-      request.body.asFormUrlEncoded.flatMap(_.get("variant").map(_.headOption)).fold(Json.obj())(variant => Json.obj("variant" -> variant)) ++
-      Addresses.addressJson(summary)
-
-    audit.sendExplicitAudit("ContinueNextPage", json)
+  private def auditFormSubmission(formData: T, summary: Summary)(using request: RefNumRequest[AnyContent]): Unit =
+    audit.send(
+      ContinueNextPage(
+        url = request.path,
+        referenceNumber = request.refNum,
+        address = summary.address,
+        updatedAddress = Addresses.updatedAddress(summary),
+        variant = request.body.asFormUrlEncoded.flatMap(_.get("variant").flatMap(_.headOption)),
+        data = Option(emptyForm.fill(formData).data)
+      )
+    )
 
   private def bindForm(requestData: Map[String, Seq[String]]) = emptyForm.bindFromRequest(requestData).convertGlobalToFieldErrors()
 

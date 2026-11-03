@@ -16,6 +16,9 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+
 /**
   * @author Yuriy Tumakha
   */
@@ -23,3 +26,6 @@ enum SubletType:
 
   case all,
     part
+
+object SubletType:
+  implicit val format: Format[SubletType] = Scala3EnumJsonFormat.format

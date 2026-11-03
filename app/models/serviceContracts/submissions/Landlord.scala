@@ -16,9 +16,14 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class Landlord(
   landlordFullName: String,
   landlordAddress: Option[Address],
   landlordConnectionType: LandlordConnectionType,
   landlordConnectText: Option[String]
 )
+
+object Landlord:
+  implicit val format: OFormat[Landlord] = Json.format

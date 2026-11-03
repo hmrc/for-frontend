@@ -16,20 +16,25 @@
 
 package models.serviceContracts.submissions
 
+import play.api.libs.json.{Json, OFormat}
+
 case class Submission(
-  propertyAddress: Option[Address],
-  customerDetails: Option[CustomerDetails],
-  theProperty: Option[TheProperty],
-  sublet: Option[Sublet],
-  landlord: Option[Landlord],
-  lease: Option[LeaseOrAgreement],
-  rentReviews: Option[RentReviews],
-  rentAgreement: Option[RentAgreement],
-  rent: Option[Rent],
-  rentIncludes: Option[WhatRentIncludes],
-  incentives: Option[IncentivesAndPayments],
-  responsibilities: Option[Responsibilities],
-  alterations: Option[PropertyAlterations],
-  otherFactors: Option[OtherFactors],
+  propertyAddress: Option[Address] = None,
+  customerDetails: Option[CustomerDetails] = None,
+  theProperty: Option[TheProperty] = None,
+  sublet: Option[Sublet] = None,
+  landlord: Option[Landlord] = None,
+  lease: Option[LeaseOrAgreement] = None,
+  rentReviews: Option[RentReviews] = None,
+  rentAgreement: Option[RentAgreement] = None,
+  rent: Option[Rent] = None,
+  rentIncludes: Option[WhatRentIncludes] = None,
+  incentives: Option[IncentivesAndPayments] = None,
+  responsibilities: Option[Responsibilities] = None,
+  alterations: Option[PropertyAlterations] = None,
+  otherFactors: Option[OtherFactors] = None,
   referenceNumber: Option[String] = None
 )
+
+object Submission:
+  implicit val format: OFormat[Submission] = Json.format

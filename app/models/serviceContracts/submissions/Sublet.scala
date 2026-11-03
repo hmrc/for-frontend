@@ -17,8 +17,12 @@
 package models.serviceContracts.submissions
 
 import models.RoughDate
+import play.api.libs.json.{Json, OFormat}
 
 case class Sublet(propertyIsSublet: Boolean, sublets: List[SubletData])
+
+object Sublet:
+  implicit val format: OFormat[Sublet] = Json.format
 
 case class SubletData(
   tenantFullName: String,
@@ -29,3 +33,6 @@ case class SubletData(
   annualRentExcludingVat: Option[BigDecimal],
   rentFixedDate: RoughDate
 )
+
+object SubletData:
+  implicit val format: OFormat[SubletData] = Json.format

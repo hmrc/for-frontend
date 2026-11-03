@@ -18,10 +18,14 @@ package models.pages
 
 import models.RoughDate
 import models.serviceContracts.submissions.{MonthsYearDuration, RentReviewResultDetails, ReviewIntervalType}
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
 case class PageSeven(leaseContainsRentReviews: Boolean, pageSevenDetails: Option[PageSevenDetails], agreementStartDate: Option[LocalDate] = None)
+
+object PageSeven:
+  implicit val format: OFormat[PageSeven] = Json.format
 
 case class PageSevenDetails(
   reviewIntervalType: ReviewIntervalType,
@@ -31,3 +35,6 @@ case class PageSevenDetails(
   rentResultOfRentReview: Boolean,
   reviewDetails: Option[RentReviewResultDetails]
 )
+
+object PageSevenDetails:
+  implicit val format: OFormat[PageSevenDetails] = Json.format

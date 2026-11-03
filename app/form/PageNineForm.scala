@@ -16,13 +16,13 @@
 
 package form
 
+import form.DateMappings.*
+import form.MappingSupport.*
 import form.mapping.ConditionalMappings.*
 import models.pages.PageNine
 import models.serviceContracts.submissions.RentBaseType
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
-import DateMappings.*
-import MappingSupport.*
 import play.api.data.validation.Constraints.{maxLength, nonEmpty}
 
 object PageNineForm:

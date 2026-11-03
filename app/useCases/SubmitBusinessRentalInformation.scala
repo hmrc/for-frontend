@@ -16,80 +16,89 @@
 
 package useCases
 
-import actions.RefNumRequest
 import com.google.inject.ImplementedBy
-import connectors.{Audit, Document, SubmissionConnector}
+import connectors.{Document, SubmissionConnector}
 import form.persistence.FormDocumentRepository
-import helpers.AddressAuditing
 import models.*
 import models.journeys.Paths
 import models.pages.*
 import models.serviceContracts.submissions.*
 import play.api.Logging
-import play.api.libs.json.{JsObject, Json}
 import config.SessionId
 import uk.gov.hmrc.http.HeaderCarrier
-
 import jakarta.inject.{Inject, Singleton}
+import models.event.{FormSubmission, FormSubmissionFailed, ManualAddressSubmitted}
+import play.api.i18n.Messages
+import uk.gov.hmrc.vo.service.connectors.AuditService
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[SubmitBusinessRentalInformationToBackendApi])
 trait SubmitBusinessRentalInformation:
-  def apply(refNum: String)(using hs: HeaderCarrier, request: RefNumRequest[?]): Future[Submission]
+  def apply(refNum: String)(using hc: HeaderCarrier, messages: Messages): Future[Submission]
 
 @Singleton
 class SubmitBusinessRentalInformationToBackendApi @Inject() (
   repository: FormDocumentRepository,
-  builder: SubmissionBuilder,
+  submissionBuilder: SubmissionBuilder,
   subConnector: SubmissionConnector,
-  audit: connectors.Audit,
-  auditAddresses: AddressAuditing
+  audit: AuditService
 )(using ec: ExecutionContext
 ) extends SubmitBusinessRentalInformation
   with Logging:
 
-  def apply(refNum: String)(using hc: HeaderCarrier, request: RefNumRequest[?]): Future[Submission] =
+  def apply(refNum: String)(using hc: HeaderCarrier, messages: Messages): Future[Submission] =
     repository.findById(SessionId(using hc), refNum).flatMap {
-      case someDoc @ Some(doc) =>
-        val submission = builder.build(doc)
+      case Some(doc) =>
+        val submission = submissionBuilder.build(doc)
+        val summary    = SummaryBuilder.build(doc)
+        auditAddresses(summary)
+
         subConnector.submit(refNum, submission)
           .map {
             _ =>
-              auditFormSubmissionAndAddress(success = true, submission, someDoc)
+              audit.send(
+                FormSubmission(
+                  language = messages.lang.language,
+                  submission = submission,
+                  address = summary.address.getOrElse(Address("", None, None, "")),
+                  updatedAddress = Addresses.updatedAddress(summary)
+                )
+              )
               submission
           }
           .recoverWith {
             case ex: Throwable =>
               logger.error("Error on form submission", ex)
-              auditFormSubmissionAndAddress(success = false, submission, someDoc)
+              audit.send(
+                FormSubmissionFailed(
+                  error = ex.getMessage,
+                  language = messages.lang.language,
+                  submission = Option(submission),
+                  address = summary.address,
+                  updatedAddress = Addresses.updatedAddress(summary)
+                )
+              )
               Future.failed(ex)
           }
-      case None                =>
+      case None      =>
         logger.error(s"Rental information could not be retrieved for reference: $refNum")
-        auditFormSubmissionAndAddress(success = false, JsObject.empty.as[Submission], None)
+        audit.send(
+          FormSubmissionFailed(
+            error = s"Rental information could not be retrieved for reference: $refNum",
+            language = messages.lang.language
+          )
+        )
         Future.failed(RentalInformationCouldNotBeRetrieved(refNum))
     }
 
-  private def auditFormSubmissionAndAddress[T](
-    success: Boolean,
-    submission: Submission,
-    docOpt: Option[Document]
-  )(using hc: HeaderCarrier,
-    request: RefNumRequest[T]
-  ): Future[Unit] =
-    val auditType = if success then "FormSubmission" else "FormSubmissionFailed"
+  private def auditAddresses(s: Summary)(using hc: HeaderCarrier): Unit =
+    if s.propertyAddress.isDefined then auditManualAddress(s.referenceNumber, s.addressUserBelievesIsCorrect)
 
-    val submissionJson = Json.toJson(submission).as[JsObject]
+    s.sublet.foreach(p4 => p4.sublet.foreach(sub => auditManualAddress(s.referenceNumber, sub.tenantAddress)))
 
-    val jsObject: JsObject = docOpt.map {
-      doc =>
-        val summary = SummaryBuilder.build(doc)
-        auditAddresses(summary, request)
-        submissionJson ++ Addresses.addressJson(summary)
-    }.getOrElse(submissionJson)
-
-    audit.sendExplicitAudit(auditType, jsObject ++ Audit.languageJson)
-    Future.unit
+  private def auditManualAddress(referenceNumber: String, address: Address)(using hc: HeaderCarrier): Unit =
+    audit.send(ManualAddressSubmitted(referenceNumber, address))
 
 @ImplementedBy(classOf[DefaultSubmissionBuilder])
 trait SubmissionBuilder:

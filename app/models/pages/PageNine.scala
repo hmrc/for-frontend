@@ -18,6 +18,7 @@ package models.pages
 
 import models.*
 import models.serviceContracts.submissions.RentBaseType
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -29,3 +30,6 @@ case class PageNine(
   rentBasis: RentBaseType,
   rentBasisOtherDetails: Option[String]
 )
+
+object PageNine:
+  implicit val format: OFormat[PageNine] = Json.format

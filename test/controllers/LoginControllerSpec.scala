@@ -16,17 +16,18 @@
 
 package controllers
 
-import connectors.Audit
 import form.persistence.FormDocumentRepository
 import models.*
 import models.serviceContracts.submissions.Address
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import config.LoginToHODAction
+import play.api.libs.json.{JsObject, Json}
 import security.LoginToHOD.{Postcode, StartTime}
 import security.NoExistingDocument
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.vo.service.connectors.AuditService
 import uk.gov.hmrc.vo.unit.test.BaseSpec
 import useCases.ReferenceNumber
 import uk.gov.hmrc.vo.service.conversion.DateConversion.*
@@ -44,8 +45,10 @@ class LoginControllerSpec extends BaseSpec:
 
   "LoginController" should {
     "audit successful login" in {
-      val audit = mock[Audit]
-      doNothing().when(audit).sendExplicitAudit(anyString, any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+      val auditConnector = mock[AuditConnector]
+      doNothing().when(auditConnector).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+
+      val audit = AuditService(auditConnector)
 
       val loginToHodFunction =
         (referenceNumber: ReferenceNumber, _: Postcode, _: StartTime) =>
@@ -72,15 +75,17 @@ class LoginControllerSpec extends BaseSpec:
 
       status(response) shouldBe SEE_OTHER
 
-      verify(audit).sendExplicitAudit(
+      verify(auditConnector).sendExplicitAudit(
         eqTo("UserLogin"),
-        eqTo(Json.obj(Audit.referenceNumber -> "01234567000", "returningUser" -> false, "address" -> Json.toJsObject(testAddress)))
+        eqTo(Json.obj("referenceNumber" -> "01234567000", "returningUser" -> false, "address" -> testAddress))
       )(using any[HeaderCarrier], any[ExecutionContext])
     }
 
     "audit logout event" in {
-      val audit = mock[Audit]
-      doNothing().when(audit).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+      val auditConnector = mock[AuditConnector]
+      doNothing().when(auditConnector).sendExplicitAudit(any[String], any[JsObject])(using any[HeaderCarrier], any[ExecutionContext])
+
+      val audit = AuditService(auditConnector)
 
       val loginController = LoginController(
         audit,
@@ -97,6 +102,9 @@ class LoginControllerSpec extends BaseSpec:
 
       status(response) shouldBe SEE_OTHER
 
-      verify(audit).sendExplicitAudit(eqTo("Logout"), eqTo(Json.obj(Audit.referenceNumber -> "-")))(using any[HeaderCarrier], any[ExecutionContext])
+      verify(auditConnector).sendExplicitAudit(
+        eqTo("Logout"),
+        eqTo(Json.obj("referenceNumber" -> "-"))
+      )(using any[HeaderCarrier], any[ExecutionContext])
     }
   }
